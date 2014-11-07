@@ -43,4 +43,6 @@ class Test_ecdfo_check_convex(unittest.TestCase):
 		self.assertTrue((res.T == res).all())
 
 if __name__ == '__main__':
+#	suite = unittest.TestLoader().loadTestsFromTestCase(Test_ecdfo_check_convex)
+#	unittest.TextTestRunner(verbosity=2).run(suite)
 	unittest.main()

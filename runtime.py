@@ -123,6 +123,12 @@ class matlabarray(np.ndarray):
 
     #def __array_finalize__(self,obj):
 
+    def __mul__(self, other):
+        return np.dot(self, other)
+								
+    def __rmul__(self, other):
+        return np.dot(other, self)
+
     def __copy__(self):
         return np.ndarray.copy(self,order="F")
 
@@ -534,15 +540,17 @@ try:
 except:
     pass
 
-def max_(a, d=0, nargout=0):
-    if d or nargout:
-        raise NotImplementedError
-    return np.amax(a)
+def max_(a, d=None):
+    if d is not None:
+        return np.maximum(a,d)
+    else:
+        return np.amax(a)
 
-def min_(a, d=0, nargout=0):
-    if d or nargout:
-        raise NotImplementedError
-    return np.amin(a)
+def min_(a, d=None):#, nargout=0):
+    if d is not None:
+        return np.minimum(a,d)
+    else:
+        return np.amin(a)
 
 def mod_(a,b):
     try:
@@ -646,8 +654,22 @@ def isreal_(A, *args,**kwargs):
 	return np.isreal(A)
 	
 def isnan_(A,*args,**kwargs):
-	return
+	return np.isnan(A)
 	
+def isinf_(A, *args,**kwargs):
+	return np.isinf(A)
+	
+def cond_(A, *args,**kwargs):
+	return np.linalg.cond(A)
+	
+def svd_(A, full_matrices=1, *args,**kwargs):
+	return np.linalg.svd(A, full_matrices)
+	
+def norm_(A, *args,**kwargs):
+	return np.linalg.norm(A)
+	
+def pinv_(A):
+	return np.linalg.pinv(A)	
 
 if __name__ == "__main__":
     import doctest

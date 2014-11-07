@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Nov 06 11:53:16 2014
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% checks the condition of matrix A and if a threshold for the condition
+% number is exceeded, matrix is perturbed by exchanging very small singular
+% values
+%
+% programming: A. Troeltzsch, 2014
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @author: jaco_da
 """
@@ -20,6 +29,13 @@ def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
 
     badcond=0
     eps=1e-14
+    print "Prints----------------"
+    print isempty_
+    print find_
+    print isnan_
+    print isinf_
+    print A
+    print "--------------------------"
     if (isempty_(find_(isnan_(A))) and isempty_(find_(isinf_(A)))):
         condA=cond_(A)
         if (condA > cthreshold):
