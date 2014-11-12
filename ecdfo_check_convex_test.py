@@ -24,7 +24,7 @@ class Test_ecdfo_check_convex(unittest.TestCase):
 		self.assertTrue(np.all(np.linalg.eigvals(res) > 0))
 
 	def test_ecdfo_check_convex2(self):
-		B = np.array([[ 1,  2], [ 2,  1]])
+		B =  matlabarray([[ 1,  2], [ 2,  1]])
 
 		res = ecdfo_check_convex_(B)
 		#print "B", B

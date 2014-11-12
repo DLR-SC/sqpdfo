@@ -112,18 +112,28 @@ class matlabarray(np.ndarray):
     """
 
     def __new__(cls,a=[],dtype=None):
-        obj = np.array(a,
+        cls.obj = np.array(a,
                        dtype=dtype,
                        copy=False,
                        order="F",
                        ndmin=2).view(cls).copy(order="F")
-        if obj.size == 0:
-            obj.shape = (0,0)
-        return obj
+        if cls.obj.size == 0:
+            cls.obj.shape = (0,0)
+        return cls.obj
 
     #def __array_finalize__(self,obj):
 
     def __mul__(self, other):
+        if self.shape == (1,1):
+            print "self[1]", float(self[1]), "other", other									
+            #sys.exit(1)																								
+            return float(self[1]) * other
+            #sys.exit(1)												
+        elif other.shape == (1,1):
+            print "self", float(self), "other[1]", other[1]
+            #sys.exit(1)																								
+            return float(self) * other[1]
+            
         return np.dot(self, other)
 								
     def __rmul__(self, other):
@@ -392,6 +402,17 @@ class char(matlabarray):
         if self.ndim == 2:
             return "\n".join("".join(s) for s in self)
         raise NotImplementedError
+								
+    def __eq__(self, other):
+        #print "npa array self", np.array(self)
+        #print "np array other", np.array(other)								
+        #print "np comparisoon",np.array(self) == np.array(other)
+        if type(other) is list:#len(self) != len(other):
+            return self in other
+        if self.shape != other.shape:
+            return False									
+        print "self", self, "other", other												
+        return (np.array(self) == np.array(other)).all()
 
 
 def abs_(a):
@@ -563,11 +584,14 @@ def ndims_(a):
 def numel_(a):
     return np.asarray(a).size
 
-def ones_(*args,**kwargs):
+def ones_(shape, *args,**kwargs):
+	#return matlabarray(np.ones(shape[1]))
     if not args:
         return 1.0
     if len(args) == 1:
+        print "helllooo!"					
         args += args
+    print tuple(args)								
     return matlabarray(np.ones(args,order="F",**kwargs))
 
 def rand_(*args,**kwargs):
@@ -633,19 +657,28 @@ def true_(*args):
         args += args
     return matlabarray(np.ones(args,dtype=bool,order="F"))
 
-def zeros_(*args,**kwargs):
-    if not args:
-        return 0.0
-    if len(args) == 1:
-        args += args
-    return matlabarray(np.zeros(args,**kwargs))
+def zeros_(shape, *args,**kwargs):
+    #if not args:
+    #    return 0.0
+    #if len(args) == 1:
+    #    args += args
+    #return matlabarray(np.zeros(args,**kwargs))
+    #print "shape", shape
+    zs = np.zeros(shape)
+    print "zs", zs				
+    return matlabarray(zs)
 				
 #------------------------------------------------------------------------------
 #				Added Functions Start here.
 #------------------------------------------------------------------------------
+# -> convert to matlab arrays before returning
+# -> remove additional arguments. *args **kwargs only where necessary makes debugging easier.
 
-def eig_(A, *args,**kwargs):
-	return np.linalg.eig(A)
+def eig_(A, nargout=1, *args,**kwargs):
+	if nargout == 1:
+		return np.linalg.eigvals(A)
+	else:
+		return np.linalg.eig(A)
 	
 def diag_(A, *args,**kwargs):
 	return np.array(np.diag(A))
@@ -669,7 +702,54 @@ def norm_(A, *args,**kwargs):
 	return np.linalg.norm(A)
 	
 def pinv_(A):
-	return np.linalg.pinv(A)	
+	return np.linalg.pinv(A)
+
+def fprintf_(*args,**kwargs):
+	print args, kwargs	
+	
+def eye_(n):
+	return matlabarray(np.eye(n))
+	
+def concatenate_(arrs, axis=0):
+	return matlabarray(np.concatenate(arrs, axis))
+	
+def sort_(A):
+	return np.sort(A)
+	
+def isfield_(obj, name):
+	return obj.__dict__.has_key(str(name))
+	
+def lower___(strng):
+	print "Warning: Lower just returns the string as it is"
+	return strng
+	
+def lower__(strng):
+	return lower___(strng)
+	
+def regexprep___(string1, string2, string3):
+	print "Warning: regexprep__ just returns the string(1) as it is"
+	return string1
+	
+def regexprep__(string1, string2, string3):
+	return regexprep___(string1, string2, string3)
+
+def strtrim___(strng):
+	print "Warning: strtrim___ just returns the string as it is"
+	return strng
+
+def strtrim__(strng):
+	return strtrim___(strng)
+	
+def any_(A):
+	return A.any()
+	
+def sqrt_(x):
+	return np.sqrt(x)
+#def strtrim___(strng):
+#	print "Warning: Lower just returns the string as it is"
+	#return strng
+
+
 
 if __name__ == "__main__":
     import doctest

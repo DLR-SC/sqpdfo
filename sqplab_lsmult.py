@@ -67,6 +67,8 @@ Created on Fri Nov 07 15:21:20 2014
 from __future__ import division
 #try:
 from runtime import *
+from ecdfo_check_convex import *
+from ecdfo_check_cond import *
 #except ImportError:
 #    from smop.runtime import *
 
@@ -97,7 +99,7 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
             fprintf_(char('\\n### sqplab_lsmult: incorrect size of ub\\n\\n'))
             info.flag=values.fail_strange
             return lm,info
-    A=matlabarray([[eye_(n)],[info.ae]])
+    A=concatenate_((eye_(n),info.ae))#matlabarray([[eye_(n)],[info.ae]])
     lo=- inf * ones_(n + me,1)
     up=inf * ones_(n + me,1)
     for i in arange_(1,n).reshape(-1):
@@ -109,6 +111,8 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
             up[i]=0
         if (ub[i] < options.inf) and (abs_(x[i] - ub[i]) < options.dxmin):
             lo[i]=0
+    #print A	
+    #print A.T											
     AA=A * A.T
     check_condition=0
     if check_condition:
@@ -122,7 +126,8 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     Agn=copy_(Ag)
     lon=copy_(lo)
     upn=copy_(up)
-    ifree=ones_(size_(lo))
+    print size_(lo).obj
+    ifree=ones_(size_(lo).obj)
     k=1
     for i in arange_(1,length_(lo)).reshape(-1):
         if lo[i] == up[i]:

@@ -12,6 +12,9 @@ import numpy as np
 class Test_blls(unittest.TestCase):
 
 	def setUp(self):
+		#self.options = helper.dummyOptions()
+		#self.values = helper.dummyValues()
+
 		pass
 
 	def test_ecdfo_check_cond1(self):
