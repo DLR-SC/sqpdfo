@@ -63,13 +63,20 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
     if me > 0:
         derivequcons=info.ae
         equmult=lm[n + mi + 1:n + mi + me]
-        print "info.ae.T", info.ae.T								
-        print "lm[n + mi + 1:n + mi + me]", lm[n + mi + 1:n + mi + me]
-        print "lm", lm
-        print "type(lm)", type(lm)								
+        #print "info.ae.T", info.ae.T								
+        #print "lm[n + mi + 1:n + mi + me]", lm[n + mi + 1:n + mi + me]
+        #print "lm", lm
+        #print "type(lm)", type(lm)								
         info.glag=info.glag + info.ae.T * lm[n + mi + 1:n + mi + me].T
         gradlag=info.glag
-    feas=matlabarray([[max_(0,max_([[x],[info.ci]] - ub,lb - [[x],[info.ci]]))],[info.ce]])
+    print "x", x
+    print "info.ci", info.ci								
+    print "[...]", [[x],[info.ci]]
+    print "lb", lb								
+    print "second", lb - [[x],[info.ci]]
+    #print "first", [[x], [info.ci]] - ub								
+    feas=matlabarray([[ max_(0,  max_(  [[x], [info.ci]] - ub,  lb - [[x],[info.ci]]   )   ) ],
+										[info.ce]])
     v=matlabarray([[x],[info.ci]])
     compl=zeros_(n + mi,1)
     I=find_((lb > - options.inf) and (abs_(lb - v) > options.dxmin))

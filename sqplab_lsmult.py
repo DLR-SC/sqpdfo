@@ -103,6 +103,8 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     lo=- inf * ones_(n + me,1)
     up=inf * ones_(n + me,1)
     for i in arange_(1,n).reshape(-1):
+        print "i", i					
+        print "lb", lb[1]
         if (lb[i] <= - options.inf):
             lo[i]=0
         if (ub[i] >= options.inf):

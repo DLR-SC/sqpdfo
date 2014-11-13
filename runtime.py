@@ -138,6 +138,19 @@ class matlabarray(np.ndarray):
 								
     def __rmul__(self, other):
         return np.dot(other, self)
+								
+    def __eq__(self, other):
+        #print "npa array self", np.array(self)
+        #print "np array other", np.array(other)								
+        #print "np comparisoon",np.array(self) == np.array(other)
+        if type(other) is list:#len(self) != len(other):
+            return self in other
+        elif (type(other) is float or type(other) is int) and self.shape == (1,1):
+	      return float(other) == float(self)
+        if self.shape != other.shape:
+            return False									
+        print "self", self, "other", other												
+        return (np.array(self) == np.array(other)).all()
 
     def __copy__(self):
         return np.ndarray.copy(self,order="F")
@@ -403,16 +416,16 @@ class char(matlabarray):
             return "\n".join("".join(s) for s in self)
         raise NotImplementedError
 								
-    def __eq__(self, other):
-        #print "npa array self", np.array(self)
-        #print "np array other", np.array(other)								
-        #print "np comparisoon",np.array(self) == np.array(other)
-        if type(other) is list:#len(self) != len(other):
-            return self in other
-        if self.shape != other.shape:
-            return False									
-        print "self", self, "other", other												
-        return (np.array(self) == np.array(other)).all()
+    #def __eq__(self, other):
+     #   #print "npa array self", np.array(self)
+      #  #print "np array other", np.array(other)								
+       # #print "np comparisoon",np.array(self) == np.array(other)
+        #if type(other) is list:#len(self) != len(other):
+         #   return self in other
+        #if self.shape != other.shape:
+         #   return False									
+        #print "self", self, "other", other												
+        #return (np.array(self) == np.array(other)).all()
 
 
 def abs_(a):
@@ -745,11 +758,14 @@ def any_(A):
 	
 def sqrt_(x):
 	return np.sqrt(x)
-#def strtrim___(strng):
-#	print "Warning: Lower just returns the string as it is"
-	#return strng
 
+def real_(x):
+	ret = np.real(x)
+	print "type np real ret", type(ret)
+	return ret
 
+def exp_(x):
+	return np.exp(x)
 
 if __name__ == "__main__":
     import doctest
