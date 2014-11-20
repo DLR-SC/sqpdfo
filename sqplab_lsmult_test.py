@@ -114,7 +114,7 @@ values =
                          eline: '======================================================================================'
                          sline: '**************************************************************************************'
 																									
-----------RETURN VALUES----------------
+----------OUTPUT VALUES----------------
 lm
 
 lm =
@@ -201,8 +201,13 @@ class Test_sqplab_lsmult(unittest.TestCase):
 
 	def test_sqplab_lsmult(self):
 		lm,info = sqplab_lsmult_(x=self.x,lb=self.lb,ub=self.ub,info=self.info,options=self.options,values=self.values)
+		
+		correctlm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
+		
+		self.assertTrue((abs(correctlm - lm) < 1e-8).all())
+		
 		print "lm", lm
-		print "info", info
+		#print "info", info
 
 if __name__ == '__main__':
 	unittest.main()

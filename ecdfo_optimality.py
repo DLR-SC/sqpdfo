@@ -70,19 +70,32 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
         info.glag=info.glag + info.ae.T * lm[n + mi + 1:n + mi + me].T
         gradlag=info.glag
     print "x", x
+    print "x shape", x.shape				
     print "info.ci", info.ci								
+    print "info.ci shape", info.ci.shape				
+    print "info.ce", info.ce												
+    print "ub", ub
+    #print "info.ci", info.ci								    				
     print "[...]", [[x],[info.ci]]
     print "lb", lb								
-    print "second", lb - [[x],[info.ci]]
-    #print "first", [[x], [info.ci]] - ub								
-    feas=matlabarray([[ max_(0,  max_(  [[x], [info.ci]] - ub,  lb - [[x],[info.ci]]   )   ) ],
-										[info.ce]])
-    v=matlabarray([[x],[info.ci]])
+    print "second", lb - concatenate_([x,info.ci])
+    print "first", concatenate_([x, info.ci]) - ub								
+    #feas=matlabarray([[ max_(0,  max_(  [[x], [info.ci]] - ub,  lb - [[x],[info.ci]]   )   ) ],
+#										[info.ce]])
+    feas=concatenate_([ max_(0,  max_(  concatenate_([x, info.ci]) - ub, lb - concatenate_([x,info.ci])   )   ) ,
+										info.ce])
+    print "feas:\n", feas, "\n\n\n"										
+    #v=matlabarray([[x],[info.ci]])
+    v=concatenate_([x,info.ci])
+    print "v:\n", v, "\n\n\n"				
     compl=zeros_(n + mi,1)
-    I=find_((lb > - options.inf) and (abs_(lb - v) > options.dxmin))
+    print "----"				
+    print "bitwise &", (lb > - options.inf) & (abs_(lb - v) > options.dxmin)				
+    print "----"				
+    I=find_((lb > - options.inf) & (abs_(lb - v) > options.dxmin))
     if not isempty_(I):
         compl[I]=max_(compl[I],max_(0,- lm[I]))
-    I=find_((ub < options.inf) and (abs_(ub - v) > options.dxmin))
+    I=find_((ub < options.inf) & (abs_(ub - v) > options.dxmin))
     if not isempty_(I):
         compl[I]=max_(compl[I],max_(0,lm[I]))
     return feas,compl,info

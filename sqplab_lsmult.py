@@ -69,6 +69,7 @@ from __future__ import division
 from runtime import *
 from ecdfo_check_convex import *
 from ecdfo_check_cond import *
+from blls import *
 #except ImportError:
 #    from smop.runtime import *
 
@@ -128,23 +129,57 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     Agn=copy_(Ag)
     lon=copy_(lo)
     upn=copy_(up)
-    print size_(lo).obj
-    ifree=ones_(size_(lo).obj)
-    k=1
+    print "size lo", size_(lo)#.obj
+    #ifree=ones_(size_(lo))
+    #print "[ gnlph list expression]", [gnlph for gnlph in size_(lo)]
+    ifree=ones_(*lo.shape)#[gnlph for gnlph in size_(lo)])
+    k=0#1
     for i in arange_(1,length_(lo)).reshape(-1):
         if lo[i] == up[i]:
-            AAn[k,:]=[]
-            AAn[:,k]=[]
-            Agn[k]=[]
-            lon[k]=[]
-            upn[k]=[]
+            #k-te Zeile löschen									
+            #AAn[k,:]=[]
+            #k-te spalte löschen								
+            #AAn[:,k]=[]
+            #k-ten eintrag löschen								
+            #Agn[k]=[]
+            #lon[k]=[]
+            #upn[k]=[]
+            print "-----"								
+            print "k = ", k								
+            print "AAn before\n", AAn								
+            #AAn = np.delete(AAn, AAn[k,:])#=[]
+            AAn = np.delete(AAn, k, 0)#=[]
+            print "AAn after\n", AAn												
+            print "AAn before 2\n", AAn												
+            AAn = np.delete(AAn, k, 1)#=[]
+            print "AAn 2 after\n", AAn
+            print "Agn before\n", Agn												
+            Agn = np.delete(Agn, k, 0)#=[]
+            print "Agn after\n", Agn
+            print "lon before\n", lon												
+            lon = np.delete(lon, k, 0)#=[]
+            print "lon after\n", lon
+            print "upn before\n", upn												
+            upn = np.delete(upn, k, 0)#=[]
+            print "upn after\n", upn												
             ifree[i]=0
+            print "-----"																				
         else:
             k=k + 1
     if not isempty_(ifree[ifree > 0]):
         sn,rn,op,exitc=blls_(AAn,- Agn,lon,upn,nargout=4)
         I=eye_(length_(lo))
-        lm=I[:,ifree > 0] * sn
+        print "ifree:", ifree
+        gnlphy = []								
+        for gnlphi in range(len(ifree)):
+            if ifree[gnlphi+1] < 1:									
+                gnlphy.append(gnlphi)									
+        print "[ifree]", gnlphy								
+        print "I[:,ifree > 0]:\n", I[:,ifree > 0]								
+        print "sn:\n", sn								
+        print "np.delete(I, ifree < 1, 1):\n", np.delete(I, gnlphy, 1)								
+        #lm=I[:,ifree > 0] * sn
+        lm=np.delete(I, gnlphy, 1) * sn								
     else:
         lm=zeros_(size_(lo))
     return lm,info

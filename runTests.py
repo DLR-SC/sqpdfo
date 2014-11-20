@@ -16,6 +16,11 @@ import sqplab_tcg_test
 import ecdfo_augmX_evalf_test
 import ecdfo_finish_test
 import ecdfo_func_test
+import ecdfo_iter_printout_test
+import ecdfo_init_prob_test
+import evalfgh_test
+import ecdfo_optimality_test
+import sqplab_lsmult_test
 
 loader = unittest.TestLoader() 
 
@@ -31,5 +36,10 @@ suite.addTests(loader.loadTestsFromTestCase(sqplab_tcg_test.Test_sqplab_tcg))
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_augmX_evalf_test.Test_ecdfo_augmX_evalf))
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_finish_test.Test_ecdfo_finish))
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_func_test.Test_ecdfo_func))
+suite.addTests(loader.loadTestsFromTestCase(ecdfo_iter_printout_test.Test_ecdfo_iter_printout))
+suite.addTests(loader.loadTestsFromTestCase(ecdfo_init_prob_test.Test_ecdfo_init_prob))
+suite.addTests(loader.loadTestsFromTestCase(evalfgh_test.Test_evalfgh))
+suite.addTests(loader.loadTestsFromTestCase(ecdfo_optimality_test.Test_ecdfo_optimality))
+suite.addTests(loader.loadTestsFromTestCase(sqplab_lsmult_test.Test_sqplab_lsmult))
 
 unittest.TextTestRunner(verbosity=2).run(suite)

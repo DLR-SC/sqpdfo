@@ -21,6 +21,39 @@ from runtime import *
 	#	self.stop_on_simul = False
 	#	self.fail_on_simul = False
 		
+class generalDecorator():
+	def convert(self, a):
+		if a.shape == (1,1):
+			print "shape (1,1)"
+			b = np.zeros(1)
+			b[0] = a[0]
+			return b[0]
+
+		if a.shape[1] == 1:
+			a = a.T			
+			#print "transposed a", a
+		if a.shape[0] == 1:
+			b = np.zeros(a.shape)#[0]
+			#print "b", b
+			#print "b.shape", b.shape
+			for i in range(b.shape[1]):#len(b)):
+				b[0][i] = a[i+1]
+		else:
+			b = np.zeros(a.shape)#[0]
+			#print "b", b
+			#print "b.shape", b.shape
+			for i in range(b.shape[0]):
+				#print "i", i
+				for j in range(b.shape[1]):
+					#print "j", j
+					b[i][j] = a[i+1,j+1]
+					
+		return b
+		
+	def printTypes(self, lst):
+		for arg in lst:
+			print type(arg)
+		
 class dummyOptions():
 	def __init__(self):
 		self.algo_method = 101
