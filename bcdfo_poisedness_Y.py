@@ -1,6 +1,34 @@
 #!/usr/local/bin/python
 from numpy import *
 from bcdfo_find_new_yj import *
+import helper
+from runtime import matlabarray
+
+def bcdfo_poisedness_Y_( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y, nargout=None ):
+	QZ = helper.convert(QZ)
+	RZ = helper.convert(RZ)
+	Y = helper.convert(Y)
+	eps_L = helper.convert(eps_L)
+	xbase = helper.convert(xbase)
+	lSolver = helper.convert(lSolver)
+	whichmodel = helper.convert(whichmodel)
+	hardcons = helper.convert(hardcons)
+	xl = helper.convert(xl)
+	xu = helper.convert(xu)
+	indfree = helper.convert(indfree)
+	stratLam = helper.convert(stratLam)
+	scale = helper.convert(scale)
+	shift_Y = helper.convert(shift_Y)
+	
+	
+	lambd, Y_radius = bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y )
+	
+	lambd = matlabarray(lambd)
+	Y_radius = matlabarray(Y_radius)
+	
+	return lambd, Y_radius
+	
+	
 
 def bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y ):
    """

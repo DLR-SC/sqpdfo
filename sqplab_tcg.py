@@ -85,7 +85,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
 
     info = tcgInfo()
 				
-    x=zeros_(size_(b))
+    x=zeros_(size_(b)[0])
     cost=0
     g=- b
     g2=g.T * g
@@ -110,10 +110,16 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             break
         if _iter == 1:
             d=- g
+            print "d = -g", d												
         else:
             d=- g + (g2 / g2_) * d
+            print "d = -g + (...) * d", d												
         Ad=A * d
-        dAd=d.T * Ad
+        print "A\n", A								
+        print "d\n", d
+        print "Ad\n", Ad								
+        #dAd=d.T * Ad
+        dAd=np.dot(d, Ad)								
         if plevel:
             fprintf_(fout,char('  %9.2e'),dAd / (d.T * d))
         if dAd <= 0:

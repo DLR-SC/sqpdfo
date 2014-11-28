@@ -71,6 +71,7 @@ Coexistence of matlab matrices and numpy arrays
 """
 import version
 from numpy import inf
+import scipy
 import numpy as np
 import os,sys,copy
 try:
@@ -150,6 +151,9 @@ class matlabarray(np.ndarray):
     #def __array_finalize__(self,obj):
 
     def __mul__(self, other):
+        print "HERE mul"
+        #return matlabarray(float(self) * other[1])
+        print "self\n", self, "\nother\n", other
         if self.shape == (1,1):
             print "self[1]", float(self[1]), "other", other									
             #sys.exit(1)																								
@@ -159,11 +163,20 @@ class matlabarray(np.ndarray):
             print "self", float(self), "other[1]", other[1]
             #sys.exit(1)																								
             return float(self) * other[1]
-            
-        return np.dot(self, other)
+        ret = np.dot(self, other)            
+        print "ret", ret, "\n-------\n"																		
+        return ret
 								
     def __rmul__(self, other):
-        return np.dot(other, self)
+        print "HERE rmul"
+        #return matlabarray(float(self) * other[1])
+        print "self\n", self, "\nother\n", other
+        ret = np.dot(other, self)								
+        print "ret", ret, "\n-------\n"					
+        return ret
+								
+    def dot(self, other):
+        return np.multiply(self, other)								
 								
     def __eq__(self, other):
         #print "npa array self", np.array(self)
@@ -173,8 +186,11 @@ class matlabarray(np.ndarray):
             return False									
         elif type(other) is list:#len(self) != len(other):
             return self in other
-        elif (type(other) is float or type(other) is int) and self.shape == (1,1):
-	      return float(other) == float(self)
+        elif (type(other) is float or type(other) is int):
+		if self.shape == (1,1):
+		      return float(other) == float(self)
+		else:
+			return False								
         if self.shape != other.shape:
             return False									
         print "self", self, "other", other												
@@ -240,6 +256,8 @@ class matlabarray(np.ndarray):
             return np.ndarray.__getitem__(self,indices)
 
     def __setslice__(self,i,j,value):
+        print "__setslice__ i,j", i, j					
+        								
         if i == 0 and j == sys.maxsize:
             index = slice(None,None)
         else:
@@ -260,6 +278,30 @@ class matlabarray(np.ndarray):
         return n 
 
     def __setitem__(self,index,value):
+        #if type(index) is tuple:
+        #    if len(index) == 2:									
+        #        print "__setitem__ index: ", index					
+        #        print "self.shape", self.shape
+        #        if index[0] == slice(None,None,None) and index[1] >= self.shape[1]:
+        #        ##concatenate/append column									
+        #            ret = concatenate_([self, value.T], axis=1)								
+	#																		
+      #              #newshape = (self.shape[0], index[1])																
+      #              #print "newshape", newshape																				
+      #              #np.asarray(self).resize(newshape)
+      #              #print "resized self", self																				
+      #              #super(self).__setitem__(index, value)																				
+      #              #self.__dict__ = ret.__dict__																				
+      #              print "ret", ret												
+      #              self.__class__ = int#ret																				
+      #              return #ret												
+      #          elif index[1] == slice(None,None,None) and index[0] >= self.shape[0]:
+      #          ##concatenate/append row
+      #              ret = concatenate_([self, value])								
+      #              #self.__dict__ = ret.__dict__																																								
+      #              print "ret", ret																								
+      #              return #ret											
+									
         #import pdb; pdb.set_trace()
         indices = self.compute_indices(index)
         try:
@@ -519,8 +561,13 @@ def find_(a,n=None,d=None,nargout=1):
     # instead of asanyarray
     if nargout == 1:
         i = np.flatnonzero(np.asarray(a)).reshape(1,-1)+1
+        print "a\n", a
+        print "i\n", i	
+        if isempty_(i):
+            return matlabarray([])
+												
         if n is not None:
-            i = i.take(n)
+            i = i.take(range(n))
         return matlabarray(i)
     if nargout == 2:
         i,j = np.nonzero(np.asarray(a))
@@ -618,11 +665,24 @@ def max_(a, d=None):
     else:
         return np.amax(a)
 
-def min_(a, d=None):#, nargout=0):
-    if d is not None:
-        return np.minimum(a,d)
+def min_(a, d=None, nargout=None):#, nargout=0):
+    print "a", a
+#    print "len(a)", len(a)				
+    if isempty_(a):
+        ret = matlabarray([])					
+    elif d is not None:
+        ret = np.minimum(a,d)
     else:
-        return np.amin(a)
+        ret = np.amin(a)
+								
+    if nargout == 2:
+        if isempty_(a):
+            ret2 = matlabarray([])									
+        else:
+            ret2 = np.argmin(a)												
+        return ret, ret2
+    else:
+        return ret								
 
 def mod_(a,b):
     try:
@@ -649,19 +709,21 @@ def numel_(a):
 				
 				#,order="F",**kwargs))
     #return matlabarray(np.ones(shape[1]))
-def ones_(*args,**kwargs):
-    if not args:
-        return 1.0
-    #if len(args) == 1:
-    #    print "helllooo!"					
-    #    args += args
-    #print tuple(args)								
-    print "ones_:"								
-    print "args", args								
-    ret = matlabarray(np.ones(args,order="F",**kwargs))				
-    print "ret", ret				
-    print "----"				
-    return ret
+				
+#recent one				
+#def ones_(*args,**kwargs):
+#    if not args:
+#        return 1.0
+#    #if len(args) == 1:
+#    #    print "helllooo!"					
+#    #    args += args
+#    #print tuple(args)								
+#    print "ones_:"								
+#    print "args", args								
+#    ret = matlabarray(np.ones(args,order="F",**kwargs))				
+#    print "ret", ret				
+#    print "----"				
+#    return ret
 
 def rand_(*args,**kwargs):
     if not args:
@@ -726,16 +788,69 @@ def true_(*args):
         args += args
     return matlabarray(np.ones(args,dtype=bool,order="F"))
 
-def zeros_(shape, *args,**kwargs):
-    #if not args:
-    #    return 0.0
-    #if len(args) == 1:
-    #    args += args
-    #return matlabarray(np.zeros(args,**kwargs))
-    #print "shape", shape
-    zs = np.zeros(shape)
-    print "zs", zs				
-    return matlabarray(zs)
+
+def zeros_(*args,**kwargs):
+    if not args:
+        return 0.0
+
+    if type(args[0]) is matlabarray:
+        print "zeros_:"								
+    #print "args[0]", [rg for rg in args[0]]
+    #for rg in args:
+    #    print "type rg", type(rg)					
+    #    print "rg", rg								
+								
+    #print "---look at args[0]---"								
+    #for rg0 in args[0]:
+    #    print "type rg0", type(rg0)
+    #    print "rg0", rg0		
+								
+        print "\nargs[0] as array", np.asarray(args[0])[0]
+        print "type args[0] as array", type(np.asarray(args[0])[0])
+        ret = matlabarray(np.zeros(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
+        print "ret", ret				
+        print "----"
+    else:
+        print "np.zeros(args)"					
+        ret = matlabarray(np.zeros(args, **kwargs))
+    return ret
+
+#def zeros_(*args):#shape, *args,**kwargs):
+#    #if not args:
+#    #    return 0.0
+#    #if len(args) == 1:
+#    #    args += args
+#    #return matlabarray(np.zeros(args,**kwargs))
+#    #print "shape", shape
+#    zs = np.zeros(args)#np.zeros(shape)
+#    print "zs", zs				
+#    return matlabarray(zs)
+
+def ones_(*args,**kwargs):
+    if not args:
+        return 0.0
+
+    if type(args[0]) is matlabarray:
+        print "ones_:"								
+    #print "args[0]", [rg for rg in args[0]]
+    #for rg in args:
+    #    print "type rg", type(rg)					
+    #    print "rg", rg								
+								
+    #print "---look at args[0]---"								
+    #for rg0 in args[0]:
+    #    print "type rg0", type(rg0)
+    #    print "rg0", rg0		
+								
+        print "\nargs[0] as array", np.asarray(args[0])[0]
+        print "type args[0] as array", type(np.asarray(args[0])[0])
+        ret = matlabarray(np.ones(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
+        print "ret", ret				
+        print "----"
+    else:
+        print "np.zeros(args)"					
+        ret = matlabarray(np.ones(args, **kwargs))
+    return ret
 				
 #------------------------------------------------------------------------------
 #				Added Functions Start here.
@@ -828,10 +943,59 @@ def exp_(x):
 	return np.exp(x)
 	
 def num2str_(num):
-	return str(num)	
+	return str(num)
+
+def strcmp_(s1, s2):	
+	#print "compare strings:"
+	#print "s1", s1
+	#print "s2", s2
+	if s1 == s2:
+		return 1
+	else:
+		return 0		
+
+def null_(A, eps=1e-15):
+	u, s, vh = scipy.linalg.svd(A)
+	padding = max(0,np.shape(A)[1]-np.shape(s)[0])
+	null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
+	null_space = scipy.compress(null_mask, vh, axis=0)
+	return scipy.transpose(null_space)		
+#def null_(A, eps=1e-15):
+#    u, s, vh = scipy.linalg.svd(A)
+#    null_mask = (s <= eps)
+#    null_space = scipy.compress(null_mask, vh, axis=0)
+#    return scipy.transpose(null_space)		
+#def null_(A, eps=1e-3):
+	#u,s,vh = np.linalg.svd(A,full_matrices=1,compute_uv=1)
+	#print "u", u
+	#print "s", s
+	#print "vh", vh
+	#null_space = np.compress(s <= eps, vh, axis=0)
+	#return null_space.T
+
+def int2str_(val):
+	return str(val)
+	
+def full_(A):
+	print "full_ just returns A"
+	return A
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+def tf_mapper(x):
+	#print "x", x
+	if x:
+		return 1
+	else:
+		return 0
+				
+def logical_or_(a,b):
+	vtf_mapper = np.vectorize (tf_mapper)
+	ret = np.logical_or(a,b)				
+	return vtf_mapper(ret)
+	
+	
 
 # vim:et:sw=4:si:tw=60

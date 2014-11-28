@@ -5,6 +5,7 @@ Created on Thu Nov 06 14:50:24 2014
 @author: jaco_da
 """
 from runtime import *
+import numpy as np
 
 #class dummyOptions:
 #	def __init__(self):
@@ -20,35 +21,99 @@ from runtime import *
 	#def __inite__(self):
 	#	self.stop_on_simul = False
 	#	self.fail_on_simul = False
+class dummyUnionStruct():
+	pass
+
+def convert(a):
+	if a is None:
+		return a
+	a = np.copy(a)		
+	if type(a) is np.ndarray:
+		print "no conversion, a already is numpy array"
+		return a
+	if type(a) is float or type(a) is int:
+		b = np.zeros(1)
+		b[0] = a
+		return b[0]
+	if a.shape == (1,1):
+		print "shape (1,1)"
+		b = np.zeros(1)
+		b[0] = a[0]
+		return b[0]
+
+	if a.shape[1] == 1:
+		a = a.T			
+		#print "transposed a", a
+	if a.shape[0] == 1:
+		b = np.zeros(a.shape)#[0]
+		#print "b", b
+		#print "b.shape", b.shape
+		for i in range(b.shape[1]):#len(b)):
+			b[0][i] = np.copy(a[i+1])
+	else:
+		b = np.zeros(a.shape)#[0]
+		#print "b", b
+		#print "b.shape", b.shape
+		for i in range(b.shape[0]):
+			#print "i", i
+			for j in range(b.shape[1]):
+				#print "j", j
+				b[i][j] = np.copy(a[i+1,j+1])
+				
+	return b
 		
 class generalDecorator():
-	def convert(self, a):
-		if a.shape == (1,1):
-			print "shape (1,1)"
-			b = np.zeros(1)
-			b[0] = a[0]
-			return b[0]
+	def __init__(self, f):
+		self.f = f
 
+	def convert(self, a):
+		if type(a) is np.ndarray:
+			print "no conversion, a already is numpy array"
+			return a
+		if type(a) is float or type(a) is int:
+		#	b = np.zeros(1)
+		#	b[0] = a
+		#	return b[0]
+			return a
 		if a.shape[1] == 1:
 			a = a.T			
-			#print "transposed a", a
-		if a.shape[0] == 1:
-			b = np.zeros(a.shape)#[0]
-			#print "b", b
-			#print "b.shape", b.shape
-			for i in range(b.shape[1]):#len(b)):
-				b[0][i] = a[i+1]
-		else:
-			b = np.zeros(a.shape)#[0]
-			#print "b", b
-			#print "b.shape", b.shape
-			for i in range(b.shape[0]):
-				#print "i", i
-				for j in range(b.shape[1]):
-					#print "j", j
-					b[i][j] = a[i+1,j+1]
-					
-		return b
+			print "transposed a", a
+		return np.asarray(a)
+		
+		
+		#if type(a) is np.ndarray:
+		#	print "no conversion, a already is numpy array"
+	#		return a
+		#if type(a) is float or type(a) is int:
+		#	b = np.zeros(1)
+		#	b[0] = a
+		#	return b[0]
+		#if a.shape == (1,1):
+		#	print "shape (1,1)"
+		#	b = np.zeros(1)
+		#	b[0] = a[0]
+		#	return b[0]
+
+		#if a.shape[1] == 1:
+		#	a = a.T			
+		#	#print "transposed a", a
+		#if a.shape[0] == 1:
+		#	b = np.zeros(a.shape)#[0]
+		#	#print "b", b
+		#	#print "b.shape", b.shape
+		#	for i in range(b.shape[1]):#len(b)):
+		#		b[0][i] = a[i+1]
+		#else:
+		#	b = np.zeros(a.shape)#[0]
+		#	#print "b", b
+		#	#print "b.shape", b.shape
+		#	for i in range(b.shape[0]):
+		#		#print "i", i
+		#		for j in range(b.shape[1]):
+		#			#print "j", j
+		#			b[i][j] = a[i+1,j+1]
+		#			
+		#return b
 		
 	def printTypes(self, lst):
 		for arg in lst:

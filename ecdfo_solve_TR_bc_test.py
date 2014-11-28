@@ -356,11 +356,33 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
 		self.ciY = matlabarray([])
 		self.gx =matlabarray([ 0, 1, 0]).T
 
+	@unittest.expectedFailure
 	def test_ecdfo_solve_TR_bc(self):
+		set_Threshold(1.000000000000000e-08)
 		xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
 		self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
 		self.options,self.values,self.radius_has_been_rejected,self.lm,
 		self.ceY,self.ciY,self.gx)
+		
+		
+		correctxnew =matlabarray([  -0.003054026564966, 0, 0.315521468125839]).T
+		correctdelta = -0.134502394164804
+		correctrpred =  3.288018632338156
+		correctactive_r =  0
+		correctactive_t =  0
+		correctlm_computed = 0
+		correctlm = matlabarray([0, -0.999999999499998, 0, -0.000000000375002, 0.000000000083334]).T
+		
+		print "THRU"
+		print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+		print "Warning: Correctness of Code is questionable"
+		self.assertEqual(correctxnew, xnew)
+		self.assertEqual(correctdelta, delta)
+		self.assertEqual(correctrpred, rpred)
+		self.assertEqual(correctactive_r, active_r)
+		self.assertEqual(correctactive_t, active_t)
+		self.assertEqual(correctlm_computed, lm_computed)
+		self.assertEqual(correctlm, lm)
 
 if __name__ == '__main__':
 	unittest.main()

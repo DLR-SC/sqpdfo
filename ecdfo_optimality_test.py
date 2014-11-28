@@ -178,7 +178,7 @@ class Test_ecdfo_optimality(unittest.TestCase):
 		feas,compl,info = ecdfo_optimality_(self.x,self.lm,self.lb,self.ub,self.info,self.options)
 		
 		correctfeas = matlabarray([ 0, 0, 0, 2, 3]).T
-		correctcompl = matlabarray([0, 0, 0])
+		correctcompl = matlabarray([0, 0, 0]).T
 		correctglag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
 		
 		self.assertEqual(feas, correctfeas)

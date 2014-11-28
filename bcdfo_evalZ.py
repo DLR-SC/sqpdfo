@@ -1,6 +1,18 @@
 #! /usr/bin/env python
 from matrixalgebra import *
 from numpy import *
+from runtime import matlabarray
+import helper
+
+def bcdfo_evalZ_( X, q ):
+		X = helper.convert(X)
+		q = helper.convert(q)
+		
+		Z = bcdfo_evalZ( X, q )
+				
+		Z = matlabarray(Z)
+		
+		return Z
 
 def bcdfo_evalZ( X, q ):
 ###############################################################################

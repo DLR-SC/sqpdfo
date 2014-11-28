@@ -89,6 +89,8 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
     v=concatenate_([x,info.ci])
     print "v:\n", v, "\n\n\n"				
     compl=zeros_(n + mi,1)
+    print "n + mi,1", n + mi,",1"				
+    print "compl", compl				
     print "----"				
     print "bitwise &", (lb > - options.inf) & (abs_(lb - v) > options.dxmin)				
     print "----"				

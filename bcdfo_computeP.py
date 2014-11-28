@@ -1,6 +1,38 @@
 #! /usr/bin/env python
 from numpy import *
-
+import helper
+def bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+         i_xold, i_xplus, g, scale, shift_Y, Delta0=None, indfree=None, gmat=None, hessian=None, 
+         epsilon=None, noisy=None):
+		
+		QZ = helper.convert(QZ)
+		RZ = helper.convert(RZ)
+		Y = helper.convert(Y)
+		fY = helper.convert(fY)
+		whichmodel = helper.convert(whichmodel)
+		P_old = helper.convert(P_old)
+		ind_Y = helper.convert(ind_Y)
+		i_xold = helper.convert(i_xold)
+		i_xplus = helper.convert(i_xplus)
+		g = helper.convert(g)
+		scale = helper.convert(scale)
+		shift_Y = helper.convert(shift_Y)
+		Delta0 = helper.convert(Delta0)
+		indfree = helper.convert(indfree)
+		gmat = helper.convert(gmat)
+		hessian = helper.convert(hessian) 
+		epsilon = helper.convert(epsilon)
+		noisy = helper.convert(noisy)
+		
+		P = bcdfo_computeP(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+			i_xold, i_xplus, g, scale, shift_Y, Delta0, indfree, gmat, hessian, 
+		      epsilon, noisy)
+				
+		P = matlabarray(P)
+						
+		return P
+		
+#@bcdfo_computeP_decorator
 def bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
          i_xold, i_xplus, g, scale, shift_Y, Delta0, indfree, gmat, hessian, 
          epsilon, noisy ):
@@ -75,6 +107,12 @@ def bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
       # build (sub-basis) model (p1 = q)
       # (QZ and RZ are the factors of Z = M')
 
+      print "type(QZ)", type(QZ)
+      print "QZ\n", QZ						
+      print "type(RZ)", type(RZ)
+      print "RZ\n", RZ
+      print "type(fY)", type(fY)
+      print "fY", fY						
       P = reshape(dot(QZ, linalg.solve( RZ.transpose(),fY)),(1,p1))
 
 #      P = ( QZ * ( RZ.transpose() \ fY.transpose() ) ).transpose()

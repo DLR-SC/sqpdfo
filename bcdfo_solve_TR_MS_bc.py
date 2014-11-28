@@ -8,7 +8,7 @@ class bcdfo_solve_TR_MS_bc_decorator(generalDecorator):
 	def __init__(self, f):
 		self.f = f
 
-	def __call__(self, gx, H, lb, ub, Delta, eps_D, stratLam):
+	def __call__(self, gx, H, lb, ub, Delta, eps_D, stratLam, nargout=None):
 		
 		gx = self.convert(gx)
 		#print "gx", gx
@@ -37,7 +37,7 @@ class bcdfo_solve_TR_MS_bc_decorator(generalDecorator):
 		#self.printTypes([s, lamb, norms, value, gplus, nfact, neigd, msg])
 
 		
-		s = matlabarray(s)
+		s = matlabarray(s).T
 		lamb = matlabarray(lamb)
 		norms = matlabarray(norms)
 		value = matlabarray(value)
@@ -49,7 +49,7 @@ class bcdfo_solve_TR_MS_bc_decorator(generalDecorator):
 		return s, lamb, norms, value, gplus, nfact, neigd, msg
 		
 @bcdfo_solve_TR_MS_bc_decorator
-def bcdfo_solve_TR_MS_bc( gx, H, lb, ub, Delta, eps_D, stratLam ):
+def bcdfo_solve_TR_MS_bc( gx, H, lb, ub, Delta, eps_D, stratLam, ):
 ###############################################################################
 #
 #  An implementation of exact trust-region minimization based on the

@@ -58,7 +58,7 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 		print "y", y
 		return None,100 * ( y[2] - y[1]^2 ) ^2 + (1-y[1])^2,matlabarray([]),matlabarray([])
 
-	@unittest.expectedFailure
+#	@unittest.expectedFailure
 	def test_ecdfo_augmX_evalf(self):
 		#(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,
 		#indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,

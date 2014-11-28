@@ -105,7 +105,21 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
         outdic,fvalue,info.ci,info.ce=f(2,yfull)
         info.f=fvalue
     else:
-        X[:,m]=y
+        print "X", X#[:,m]
+        print "X.shape", X.shape
+        print "m", m								
+        print "y", y
+        print "type y", type(y)
+        if X.shape[1] <= m:								
+            X = concatenate_([X, y.T], axis=1)								
+            print "concatenate"												
+        else:
+            X[:,m]=y												
+            print "assignment"												
+										
+        print "X", X#[:,m]								
+        								
+        #X[:,m]=y
         if (scaleX):
             y=y / scalefacX
         info.nsimul[2]=info.nsimul[2] + 1
@@ -147,6 +161,12 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
     if not isempty_(info.ci):
         ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
-        ceX[:,m]=real_(info.ce.T)
+        #ceX[:,m]=real_(info.ce.T)
+        if X.shape[1] <= m:								
+            ceX = concatenate_([ceX, real_(info.ce.T)], axis=1)								
+            print "concatenate"												
+        else:
+            ceX[:,m]=real_(info.ce.T)												
+            print "assignment"								
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
