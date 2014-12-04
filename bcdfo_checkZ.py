@@ -1,4 +1,10 @@
-#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Dec 03 11:32:54 2014
+
+@author: jaco_da
+"""
+
 from numpy import linalg
 
 def bcdfo_checkZ( Z, kappa_ill ):

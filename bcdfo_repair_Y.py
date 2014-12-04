@@ -2,6 +2,13 @@
 from numpy import *
 from bcdfo_poisedness_Y import *
 from bcdfo_replace_in_Y import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_repair_Y_( QZ, RZ, Y, Delta, farfact, farthr, closethr, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree,   stratLam, scale, shift_Y, normgx, kappa_ill ):
+	return bcdfo_repair_Y( QZ, RZ, Y, Delta, farfact, farthr, closethr, 
+           eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, 
+           stratLam, scale, shift_Y, normgx, kappa_ill )
 
 def bcdfo_repair_Y( QZ, RZ, Y, Delta, farfact, farthr, closethr, 
            eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, 

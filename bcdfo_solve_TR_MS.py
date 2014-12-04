@@ -1,6 +1,10 @@
 #!/usr/local/bin/python
 from numpy import *
+import helper
 
+@helper.convertingDecorator
+def bcdfo_solve_TR_MS_( gg, HH, Delta, eps_D ):
+	return bcdfo_solve_TR_MS( gg, HH, Delta, eps_D )
 
 def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
 

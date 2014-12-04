@@ -160,9 +160,9 @@ class matlabarray(np.ndarray):
             return float(self[1]) * other
             #sys.exit(1)												
         elif other.shape == (1,1):
-            print "self", float(self), "other[1]", other[1]
+            print "self", self, "other[1]", float(other[1])
             #sys.exit(1)																								
-            return float(self) * other[1]
+            return np.dot(self , float(other[1]))
         ret = np.dot(self, other)            
         print "ret", ret, "\n-------\n"																		
         return ret

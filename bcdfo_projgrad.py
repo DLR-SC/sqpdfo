@@ -1,5 +1,11 @@
 #!/usr/local/bin/python
 from numpy import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_projgrad_(n,x,g,bl,bu):
+	return bcdfo_projgrad(n,x,g,bl,bu)
+
 
 def bcdfo_projgrad(n,x,g,bl,bu):
 ########################################################
@@ -25,6 +31,7 @@ def bcdfo_projgrad(n,x,g,bl,bu):
    gn = array([[]])
 
    for i in range(0,n):
+      print "g[0]\n", g[0]				
       gi = g[0][i]
       if ( gi < 0.0 ):
          gn = append(gn,-min(abs(bu[i]-x[i]),-gi))

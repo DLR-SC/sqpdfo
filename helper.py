@@ -24,6 +24,51 @@ import numpy as np
 class dummyUnionStruct():
 	pass
 
+
+def convertArray(a):
+	if a is None or type(a) is float or type(a) is int:
+		return a
+	#a = np.copy(a)		
+	if type(a) is np.ndarray:
+		print "no conversion, a already is numpy array"
+		return a
+
+	print "type a", type(a)		
+	if type(a) is char:
+		ret = str(a)
+		print "str(a)", ret
+		return ret	
+	#if type(a) is float or type(a) is int:
+	#	b = np.zeros(1)
+#		b[0] = a
+#		return b[0]
+	if a.shape == (1,1):
+		print "shape (1,1)"
+		#b = np.zeros(1)
+		b = np.copy(a[0])
+		return b#[0]
+
+	#if a.shape[1] == 1:
+	#	a = a.T			
+		#print "transposed a", a
+	if a.shape[0] == 1:
+		b = np.zeros(a.shape)#[0]
+		#print "b", b
+		#print "b.shape", b.shape
+		for i in range(b.shape[1]):#len(b)):
+			b[0][i] = np.copy(a[i+1])
+	else:
+		b = np.zeros(a.shape)#[0]
+		#print "b", b
+		#print "b.shape", b.shape
+		for i in range(b.shape[0]):
+			#print "i", i
+			for j in range(b.shape[1]):
+				#print "j", j
+				b[i][j] = np.copy(a[i+1,j+1])
+				
+	return b
+
 def convert(a):
 	if a is None:
 		return a
@@ -68,7 +113,7 @@ class generalDecorator():
 
 	def convert(self, a):
 		if type(a) is np.ndarray:
-			print "no conversion, a already is numpy array"
+			print "no conversion, a already is numpy array general decorator"
 			return a
 		if type(a) is float or type(a) is int:
 		#	b = np.zeros(1)
@@ -118,6 +163,32 @@ class generalDecorator():
 	def printTypes(self, lst):
 		for arg in lst:
 			print type(arg)
+			
+class convertingDecorator(generalDecorator):
+	def __call__(self, *args, **kwargs):
+		#args = locals()
+		#print args
+		self.printTypes(args)
+		pass_args = []
+		for arg in args:
+			#arg = args[k]
+			#print "arg", arg
+			pass_args.append(convertArray(arg))#np.copy(arg))#convert(arg))
+		
+		ret_tuple = self.f( *pass_args )
+	
+		if type(ret_tuple) is tuple:
+			ret = []
+			for arg in ret_tuple:
+				ret.append(matlabarray(arg))
+		else:
+			return matlabarray(ret_tuple)
+		
+		if len(ret) == 1:
+			return ret[0]
+		elif len(ret) > 1:			
+			return tuple(ret)
+					
 		
 class dummyOptions():
 	def __init__(self):

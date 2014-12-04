@@ -5,6 +5,13 @@ from bcdfo_computeLj import *
 from bcdfo_gradP import *
 from bcdfo_hessP import *
 from bcdfo_solve_TR_MS import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_find_new_yj_( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
+   scale, shift_Y ):
+	return bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
+   scale, shift_Y )				
 
 def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    scale, shift_Y ):
@@ -121,6 +128,8 @@ def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    else:
 
       #  When no shift occurs, the current iterate is Y(:,0)
+      print "Ycp\n", Ycp
+      print "Ycp[:,0]\n", Ycp[:,0]
 
       g  = bcdfo_gradP( Lj, Ycp[:,0], xbase, scale, 0 );
       H  = bcdfo_hessP( Lj, Ycp[:,0], xbase, scale, 0 );

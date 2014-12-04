@@ -1,7 +1,12 @@
 #! /usr/bin/env python
 from numpy import *
 from bcdfo_evalZ import *
+import helper
 
+@helper.convertingDecorator
+def bcdfo_evalP_( P, x, xbase, scale, shift_Y ):
+	return bcdfo_evalP( P, x, xbase, scale, shift_Y )
+	
 def bcdfo_evalP( P, x, xbase, scale, shift_Y ):
 ###############################################################################
 #
@@ -49,6 +54,7 @@ def bcdfo_evalP( P, x, xbase, scale, shift_Y ):
    p1 = len( P[0] )
 
    if ( shift_Y ):
+      print "scale", scale
       value = dot(P, bcdfo_evalZ( ( x - xbase ) * scale[1][0], p1 ))
    else:
       value = dot(P, bcdfo_evalZ( x, p1 ))

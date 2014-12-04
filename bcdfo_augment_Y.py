@@ -1,6 +1,24 @@
 #! /usr/bin/env python
 from numpy import *
 from bcdfo_build_QR_of_Y import *
+import helper
+
+def bcdfo_augment_Y_( Ynew, Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
+	args = locals()
+	print args
+	for k in args:
+		#arg = args[k]
+		#print "arg", arg
+		args[k] = helper.convert(args[k])
+		
+	ret_tuple = bcdfo_augment_Y( Ynew, Y, whichmodel, shift_Y, Delta, normgx, kappa_ill )
+	
+	ret = []
+	for arg in ret_tuple:
+		ret.append(matlabarray(arg))
+		
+	return tuple(ret)
+	
 
 def bcdfo_augment_Y( Ynew, Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 

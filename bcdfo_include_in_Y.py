@@ -2,6 +2,16 @@
 from numpy import *
 from bcdfo_evalL import *
 from bcdfo_replace_in_Y import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_include_in_Y_( x, QZ, RZ, Y, choice_set, poisedness_threshold, criterion, xbase, whichmodel, succ, scale, shift_Y, Delta, normgx, kappa_ill ):
+	print "choice_set", choice_set
+	print "choice_set[0]", choice_set[0]
+	print "type choiceset0", type(choice_set[0])
+	choice_set =  [int(gnlph) for gnlph in choice_set[0]]
+	return bcdfo_include_in_Y( x, QZ, RZ, Y, choice_set, poisedness_threshold, criterion, xbase, whichmodel, succ, scale, shift_Y, Delta, normgx, kappa_ill )
+																			
 
 def bcdfo_include_in_Y( x, QZ, RZ, Y, choice_set, poisedness_threshold, criterion,
                    xbase, whichmodel, succ, scale, shift_Y, Delta, normgx, kappa_ill ):

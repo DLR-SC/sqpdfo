@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 from numpy import *
+import helper
+
+@helper.convertingDecorator
+def  bcdfo_hessP_( P, x, xbase, scale, shift_Y ):
+	return bcdfo_hessP( P, x, xbase, scale, shift_Y )
 
 def  bcdfo_hessP( P, x, xbase, scale, shift_Y ):
 ###############################################################################

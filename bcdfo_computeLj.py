@@ -1,5 +1,10 @@
 #!/usr/local/bin/python
 from numpy import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_computeLj_( QZ, RZ, j, Y, whichmodel, scale, shift_Y ):
+	return bcdfo_computeLj( QZ, RZ, j, Y, whichmodel, scale, shift_Y )
 
 def bcdfo_computeLj( QZ, RZ, j, Y, whichmodel, scale, shift_Y ):
 ###############################################################################

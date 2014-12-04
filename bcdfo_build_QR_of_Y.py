@@ -3,7 +3,7 @@ from numpy import *
 from bcdfo_evalZ import *
 from bcdfo_checkZ import *
 import helper
-from runtime import matlabarray
+#from runtime import matlabarray
 
 def bcdfo_build_QR_of_Y_( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill, nargout=None ):
 		Y = helper.convert(Y)

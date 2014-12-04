@@ -1,6 +1,15 @@
 #! /usr/bin/env python
 from numpy import *
 from bcdfo_evalP import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_evalL_( QZ, RZ, Y, choice_set, x, xbase, whichmodel, scale, shift_Y ):
+	print "choice_set", choice_set
+	print "choice_set[0]", choice_set[0]
+	print "type choiceset0", type(choice_set[0])
+	choice_set =  [int(gnlph) for gnlph in choice_set[0]]
+	return bcdfo_evalL( QZ, RZ, Y, choice_set, x, xbase, whichmodel, scale, shift_Y )
 
 def bcdfo_evalL( QZ, RZ, Y, choice_set, x, xbase, whichmodel, scale, shift_Y ):
 ###############################################################################
@@ -56,7 +65,12 @@ def bcdfo_evalL( QZ, RZ, Y, choice_set, x, xbase, whichmodel, scale, shift_Y ):
    if ( whichmodel == 0 ):
    
       # evaluate (sub-basis) Lagrange polynomial (p1 = q)
-   
+      print "choice_set", choice_set  
+      #print "I[choice_set,:]", I[choice_set,:]
+      #print "linalg.solve( RZ, QZ.transpose())", linalg.solve( RZ, QZ.transpose())						
+      print "bcdfo_evalP",bcdfo_evalP( dot(I[choice_set,:], linalg.solve( RZ, QZ.transpose())), x, xbase, scale, shift_Y );
+      print " values[choice_set] ",  values[choice_set] 
+      print "values", values						
       values[choice_set] = bcdfo_evalP( dot(I[choice_set,:], linalg.solve( RZ, QZ.transpose())), x, xbase, scale, shift_Y );
    
    elif ( whichmodel == 1 ):

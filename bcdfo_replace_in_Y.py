@@ -1,6 +1,12 @@
 #! /usr/bin/env python
 from numpy import *
 from bcdfo_build_QR_of_Y import *
+import helper
+
+@helper.convertingDecorator
+def bcdfo_replace_in_Y_( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y, Delta, normgx, kappa_ill ):
+	return bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y,
+         Delta, normgx, kappa_ill )
 
 def bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y,
          Delta, normgx, kappa_ill ):

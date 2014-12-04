@@ -18,7 +18,7 @@ class Test_bcdfo_computeP(unittest.TestCase):
 	def setUp(self):
 		pass
 	
-	def test_bcdfo_computeP(self):
+	def est_bcdfo_computeP(self):
 		Y = matlabarray([[ 0, 1, 0, 2, 0],[0, 0, 1, 0, 2]])
 		fY =matlabarray([ 1, 2, 3, 4, 5 ])
 		whichmodel = 0
