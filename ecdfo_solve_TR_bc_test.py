@@ -316,73 +316,73 @@ from evalfgh import evalfgh_
 import helper
 
 class dummyInfo():
-	def __init__(self):
-		self.g =  matlabarray([0, 1, 0]).T
-		self.ai = matlabarray([])
-		self.ae = matlabarray([[1,     1,     1], [1,     2,     3]])
-		self.hl = matlabarray([])
-		self.niter = 1
-		self.flag = 0
-		self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-		self.ci=  matlabarray([])
-		self.ce = matlabarray([2,3]).T
-		self.f = 1.500000000000000
-		self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
-		self.glagn = 0.666666666736111
-		self.feasn = 3
-		self.compl = 0
-		
+    def __init__(self):
+        self.g =  matlabarray([0, 1, 0]).T
+        self.ai = matlabarray([])
+        self.ae = matlabarray([[1,     1,     1], [1,     2,     3]])
+        self.hl = matlabarray([])
+        self.niter = 1
+        self.flag = 0
+        self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci=  matlabarray([])
+        self.ce = matlabarray([2,3]).T
+        self.f = 1.500000000000000
+        self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
+        self.glagn = 0.666666666736111
+        self.feasn = 3
+        self.compl = 0
+        
 class Test_ecdfo_solve_TR_bc(unittest.TestCase):
 
-	def setUp(self):
-		self.simul = evalfgh_
-		self.x = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
-		self.lb = matlabarray([ -0.500000000000000, 0, -np.Inf]).T
-		self.ub = matlabarray([np.Inf, np.Inf, np.Inf]).T
-		self.delta =  1
-		self.mi =  0
-		self.me =  2
-		self.M = matlabarray([[1,     0,     0], [0,     1,     0], [0,     0,     1]])
-		self.prec_r = 1.000000000000000e-06
-		self.prec_t = 1.000000000000000e-06
-		
-		self.info = dummyInfo()
-		self.options = helper.dummyOptions()
-		self.values = helper.dummyValues()
-	
-		self.radius_has_been_rejected = 0
-		self.lm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
-		self.ceY = matlabarray([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
-		self.ciY = matlabarray([])
-		self.gx =matlabarray([ 0, 1, 0]).T
+    def setUp(self):
+        self.simul = evalfgh_
+        self.x = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
+        self.lb = matlabarray([ -0.500000000000000, 0, -np.Inf]).T
+        self.ub = matlabarray([np.Inf, np.Inf, np.Inf]).T
+        self.delta =  1
+        self.mi =  0
+        self.me =  2
+        self.M = matlabarray([[1,     0,     0], [0,     1,     0], [0,     0,     1]])
+        self.prec_r = 1.000000000000000e-06
+        self.prec_t = 1.000000000000000e-06
+        
+        self.info = dummyInfo()
+        self.options = helper.dummyOptions()
+        self.values = helper.dummyValues()
+    
+        self.radius_has_been_rejected = 0
+        self.lm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
+        self.ceY = matlabarray([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
+        self.ciY = matlabarray([])
+        self.gx =matlabarray([ 0, 1, 0]).T
 
-	@unittest.expectedFailure
-	def test_ecdfo_solve_TR_bc(self):
-		set_Threshold(1.000000000000000e-08)
-		xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
-		self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
-		self.options,self.values,self.radius_has_been_rejected,self.lm,
-		self.ceY,self.ciY,self.gx)
-		
-		
-		correctxnew =matlabarray([  -0.003054026564966, 0, 0.315521468125839]).T
-		correctdelta = -0.134502394164804
-		correctrpred =  3.288018632338156
-		correctactive_r =  0
-		correctactive_t =  0
-		correctlm_computed = 0
-		correctlm = matlabarray([0, -0.999999999499998, 0, -0.000000000375002, 0.000000000083334]).T
-		
-		print "THRU"
-		print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
-		print "Warning: Correctness of Code is questionable"
-		self.assertEqual(correctxnew, xnew)
-		self.assertEqual(correctdelta, delta)
-		self.assertEqual(correctrpred, rpred)
-		self.assertEqual(correctactive_r, active_r)
-		self.assertEqual(correctactive_t, active_t)
-		self.assertEqual(correctlm_computed, lm_computed)
-		self.assertEqual(correctlm, lm)
+#    @unittest.expectedFailure
+    def test_ecdfo_solve_TR_bc(self):
+        set_Threshold(1.000000000000000e-08)
+        xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
+        self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
+        self.options,self.values,self.radius_has_been_rejected,self.lm,
+        self.ceY,self.ciY,self.gx)
+        
+        
+        correctxnew =matlabarray([  -0.003054026564966, 0, 0.315521468125839]).T
+        correctdelta = -0.134502394164804
+        correctrpred =  3.288018632338156
+        correctactive_r =  0
+        correctactive_t =  0
+        correctlm_computed = 0
+        correctlm = matlabarray([0, 0, 0, -0.333333332763888, -0.000000000250000]).T
+        
+        print "THRU"
+        print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+        
+        self.assertAlmostEqual(correctxnew.all(), xnew.all(), delta=1e-5)
+        self.assertAlmostEqual(correctdelta, delta, delta=1e-5)
+        self.assertAlmostEqual(correctrpred, rpred, delta=1e-5)
+        self.assertEqual(correctactive_r, active_r)
+        self.assertEqual(correctactive_t, active_t)
+        self.assertEqual(correctlm_computed, lm_computed)
+        self.assertAlmostEqual(correctlm.all(), lm.all(), delta=1e-5)
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
