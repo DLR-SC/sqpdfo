@@ -403,6 +403,5 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 print "gconstraints", gconstraints																
                 gconstraints[i,:]=gconstraints[i,:] + (M * step).T
             delta=delta - norm_(step)
-            pdb.set_trace()
 
     return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
