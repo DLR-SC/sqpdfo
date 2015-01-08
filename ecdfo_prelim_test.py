@@ -598,11 +598,12 @@ class Test_ecdfo_prelim(unittest.TestCase):
 		self.dstatus = matlabarray([])
 		
 		self.options = myDummyOptions()
+		set_prob(3)
 		#self.values = helper.dummyValues()
 
 	def test_ecdfo_prelim(self):
 		#self.options.algo_method = 'quasi newton'
-		
+		print "################-----STARTING TEST!!!-----#########################"
 		n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(func=self.func,x0=self.x0,lm0=self.lm0,Delta0=self.Delta0,
 		lb=self.lb,ub=self.ub,scaleX=self.scaleX,scalefacX=self.scalefacX,cur_degree=self.cur_degree,rep_degree=self.rep_degree,
 		plin=self.plin,pdiag=self.pdiag,pquad=self.pquad,c=self.c,initial_Y=self.initial_Y,kappa_ill=self.kappa_ill,
@@ -681,8 +682,10 @@ class Test_ecdfo_prelim(unittest.TestCase):
 		print n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
 		
 		self.assertEqual(n, correctn)
-		self.assertEqual(b, correctb)
+		self.assertEqual(int(nb), correctnb)
 		self.assertEqual(mi, correctmi)
+		print "me", me
+		print "correctme", correctme
 		self.assertEqual(me, correctme)
 		
 		

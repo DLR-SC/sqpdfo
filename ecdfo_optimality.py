@@ -82,6 +82,9 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
     print "first", concatenate_([x, info.ci]) - ub								
     #feas=matlabarray([[ max_(0,  max_(  [[x], [info.ci]] - ub,  lb - [[x],[info.ci]]   )   ) ],
 #										[info.ce]])
+    print "concatenate_([x, info.ci]) - ub", concatenate_([x, info.ci]) -ub				
+    print "ub", ub				
+    				
     feas=concatenate_([ max_(0,  max_(  concatenate_([x, info.ci]) - ub, lb - concatenate_([x,info.ci])   )   ) ,
 										info.ce])
     print "feas:\n", feas, "\n\n\n"										

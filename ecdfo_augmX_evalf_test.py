@@ -34,7 +34,8 @@ TEST:
 import unittest
 from ecdfo_augmX_evalf import *
 #import numpy as np
-#import helper
+import helper
+from runtime import matlabarray
 
 class dummyInfo():
 	def __init__(self):
@@ -49,16 +50,37 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 		self.fX = matlabarray([ 1, 100, 101 ])
 		self.y = matlabarray([ 2, 4 ])
 		
+		self.ciX = copy_(self.X)
+		self.ceX = copy_(self.X)
+		
 		self.info = dummyInfo()
-		#self.options = helper.dummyOptions()
-		#self.values = helper.dummyValues()
-	def banana(self, x, y):
+		self.options = helper.dummyOptions()
+		self.values = helper.dummyValues()
+	#def banana(self, x, y):
+#		#return outdic,fvalue,info.ci,info.c 
+#		print "x", x
+#		print "y", y
+#		return None,100 * ( y[2] - y[1]^2 ) ^2 + (1-y[1])^2,matlabarray([]),matlabarray([])
+		
+	def banana(self, somenumber, x):
 		#return outdic,fvalue,info.ci,info.c 
-		print "x", x
-		print "y", y
-		return None,100 * ( y[2] - y[1]^2 ) ^2 + (1-y[1])^2,matlabarray([]),matlabarray([])
+		#print "x", x
+		#print "y", y
+		#print "banana x", x
+		#print "summand 1:", 100 * ( x[2] - x[1]**2 )**2
+		#print "summand 2:", (1-x[1])**2
+		#print "[[0]] + [[-3]]", matlabarray([0]) + matlabarray([-3])
+		#print "[[-3]]^2 = ", matlabarray([-3])**2
+		fx = 100 * ( x[2] - x[1]**2 )**2 + (1-x[1])**2
+		#print "banana fx", fx
+	#outdic = 0
+     #fvalue = fx
+     #infoci = fx
+     #infoce = fx
+		return 0,fx,matlabarray([[1.0],[0.0]]), matlabarray([[0.0],[1.0]])#fx,fx
 
-	@unittest.expectedFailure
+
+	#@unittest.expectedFailure
 	def test_ecdfo_augmX_evalf(self):
 		#(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,
 		#indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,
@@ -67,10 +89,10 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 	
 		X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic = ecdfo_augmX_evalf_(
 		f=self.banana,y=self.y, m=4, X=self.X,
-		fX=self.fX,ciX=0, ceX=matlabarray([[0],[0]]), nfix=matlabarray([]), xfix=matlabarray([1, 2, 3]), 
-		indifx=1e25, indfree=3, fxmax=100, neval=1, xstatus_val=0, xstatus=matlabarray([1, 1, 1]),
+		fX=self.fX,ciX=self.ciX, ceX=self.ceX, nfix=0, xfix=matlabarray([[0],[0]]), indfix=matlabarray([]), indfree=matlabarray([1, 2, 3]), 
+		fxmax=1e25, neval=3, xstatus=matlabarray([1, 1, 1]), xstatus_val=1,
 		sstatus=matlabarray([1, 1, 1]), dstatus=matlabarray([ 0, 0, 0]), scaleX=0, 
-		scalefacX=matlabarray([ 1, 1]), info=self.info)
+		scalefacX=matlabarray([ 1, 1]), info=self.info, options = self.options, values=self.values)
 		
 		#sstatus=1, dstatus=matlabarray([1, 1, 1]), scaleX=matlabarray([ 0, 0, 0]), scalefacX=0, 
 		#info=matlabarray([ 1, 1]))
@@ -87,9 +109,10 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 		self.assertEqual(sstatus, correctsstatus)
 		self.assertEqual(dstatus, correctdstatus)
 		
-		print "Warning: Specified Test does not match function"
+		#print "Warning: Specified Test does not match function"
 		#return unittest.skip("Thespecified Test does not match function...")
 		self.assertEqual(xstatus, correctxstatus)
+		print "fX", fX
 		self.assertEqual(fX, correctfX)
 		self.assertEqual(neval, correctneval)
 

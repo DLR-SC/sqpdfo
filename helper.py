@@ -26,7 +26,7 @@ class dummyUnionStruct():
 
 
 def convertArray(a):
-	if a is None or type(a) is float or type(a) is int:
+	if a is None or type(a) is float or type(a) is int or type(a) is long:
 		return a
 	#a = np.copy(a)		
 	if type(a) is np.ndarray:

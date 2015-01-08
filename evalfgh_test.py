@@ -70,13 +70,14 @@ class Test_evalfgh(unittest.TestCase):
 		correctmsg = 0
 		correctout2 = 3.354626279025119e-04
 		correctout3 =  matlabarray([])
-		correctout4 =    matlabarray([4, -1, 1])
+		correctout4 =    matlabarray([4, -1, 1]).T
 		
 		self.assertEqual(correctmsg, msg)
 		self.assertAlmostEqual(correctout2, out2, 8)
 		self.assertEqual(correctout3, out3)
 		
 		self.assertTrue((abs(correctout4 - out4) < 1e-7).all())
+		
 		#self.assertEqual(correctout4, out4)
 
 

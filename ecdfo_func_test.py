@@ -57,12 +57,14 @@ class Test_ecdfo_func(unittest.TestCase):
 		correctmsg = 0
 		correctf =0.053985698962084
 		correctci = matlabarray([])
-		correctce = matlabarray([  -0.000822750000001, 0.000238240000000, 0.001195859492999])
+		correctce = matlabarray([  -0.000822750000001, 0.000238240000000, 0.001195859492999]).T
 		
 		self.assertEqual(correctmsg, msg)
 		self.assertAlmostEqual(correctf, f, 7)
 		self.assertAlmostEqual(correctci, ci, 7)
 		#print "abs", (abs(correctce - ce) < 1e-7).all()
+		print "ce", ce
+		print "correctce", correctce
 		self.assertTrue((abs(correctce - ce) < 1e-7).all())
 
 if __name__ == '__main__':

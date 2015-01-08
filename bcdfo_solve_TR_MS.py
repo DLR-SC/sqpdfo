@@ -171,6 +171,7 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
 
                w     = dot(H, s.T)
                sT    = s.T
+               print "g:\n", g, "\nsT:\n", sT, "\ns:\n", s, "\nw:\n", w															
                value = dot(g, sT)  + 0.5 * dot(s, w)
                gplus = g + w.T;
                norms = linalg.norm( s );

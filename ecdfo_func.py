@@ -31,7 +31,7 @@ def ecdfo_func_(x=None,*args,**kwargs):
     msg=matlabarray([])
     f=matlabarray([])
     ci=matlabarray([])
-    ce=matlabarray([])
+    ce=matlabarray([]) #[0,0]
     if prob == 1:
         f=- (5 - (x[1] - 2) ** 2 - 2 * (x[2] - 1) ** 2)
         ce=x[1] + 4 * x[2] - 3
@@ -41,12 +41,16 @@ def ecdfo_func_(x=None,*args,**kwargs):
             ce=x[1] + x[2] - 1
         else:
             if prob == 3:
+                ce = matlabarray([0.0 ,0.0])													
                 f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2
                 ce[1]=x[1] + x[2] + x[3]
                 ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
                 ce=ce.T
+                print "Hello prob 3"
+                print "ce", ce
             else:
                 if prob == 4:
+                    ce = matlabarray([0.0, 0.0, 0.0])
                     f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4]
                     ce[1]=x[1] + x[2] + x[3]
                     ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
@@ -54,6 +58,7 @@ def ecdfo_func_(x=None,*args,**kwargs):
                     ce=ce.T
                 else:
                     if prob == 5:
+                        ce = matlabarray([0.0, 0.0, 0.0])
                         f=exp_(x[1] * x[2] * x[3] * x[4] * x[5])
                         ce[1]=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4] ** 2 + x[5] ** 2 - 10
                         ce[2]=x[2] * x[3] - 5 * x[4] * x[5]
@@ -64,4 +69,5 @@ def ecdfo_func_(x=None,*args,**kwargs):
                         print "ecdfo_func type ce", type(ce)
                         print "ecdfo_func ce after", ce																								   
     msg=0
+    print "returning", msg,f,ci,ce			
     return msg,f,ci,ce

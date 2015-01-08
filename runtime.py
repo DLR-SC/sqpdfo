@@ -278,6 +278,7 @@ class matlabarray(np.ndarray):
         return n 
 
     def __setitem__(self,index,value):
+        print "value at start of set item", value					
         #if type(index) is tuple:
         #    if len(index) == 2:									
         #        print "__setitem__ index: ", index					
@@ -347,6 +348,9 @@ class matlabarray(np.ndarray):
                 elif self.flags["F_CONTIGUOUS"]:
                     new_shape[-1] = self.sizeof(indices[-1])
                 self.resize(new_shape,refcheck=0)
+                print "indices", indices
+                print "value", value
+                print "np.asarray(self)", np.asarray(self)																
                 np.asarray(self).__setitem__(indices,value)
 
     def __repr__(self):
@@ -995,6 +999,14 @@ def logical_or_(a,b):
 	vtf_mapper = np.vectorize (tf_mapper)
 	ret = np.logical_or(a,b)				
 	return vtf_mapper(ret)
+	
+def strcat_(*args):
+	ret = ""
+	for arg in args:
+		ret = ret + str(arg)
+		
+	print "strcat_:", ret
+	return char(ret)
 	
 	
 

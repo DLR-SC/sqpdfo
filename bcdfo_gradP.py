@@ -4,7 +4,7 @@ import helper
 
 @helper.convertingDecorator
 def bcdfo_gradP_( P, x, xbase, scale, shift_Y ):
-	return bcdfo_gradP( P, x, xbase, scale, shift_Y )
+	return bcdfo_gradP( P, x, xbase, scale, shift_Y ).T
 
 def bcdfo_gradP( P, x, xbase, scale, shift_Y ):
 

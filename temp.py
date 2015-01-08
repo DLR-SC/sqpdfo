@@ -10,12 +10,12 @@ from runtime import *
 #from bcdfo_build_QR_of_Y import *
 #from bcdfo_solve_TR_MS_bc import *
 
-X = matlabarray([1,2,3]).T
+#X = matlabarray([1,2,3]).T
 
-a = matlabarray([2.0, 3.0, 7.0])
-b = matlabarray([4.0, 3.0, 3.0])
+#a = matlabarray([2.0, 3.0, 7.0])
+#b = matlabarray([4.0, 3.0, 3.0])
 
-X[:,2] = a
+#X[:,2] = a
 
 #X[:,2] = b
 
@@ -24,7 +24,7 @@ X[:,2] = a
 
 #X = np.resize(X, (3,2))
 
-print "X", X
+#print "X", X
 #print np.multiply(a, b)
 #M = matlabarray([[1,2],[3,4]])
 #print a.T*M*a
@@ -36,8 +36,19 @@ print "X", X
      #[1,     2,     3],
      #[1,     2,     3]])
 
-#A = matlabarray([[1, 1, 1],
+A = matlabarray([[1, 1, 1],
+ [1, 2, 3], [0,0,0]])
+yblablup = matlabarray([5,5,5]).T
+
+#A = np.array([[1, 1, 1],
 # [1, 2, 3], [0,0,0]])
+#yblablup = np.array([5,5,5]).T
+	
+print "A", A
+print "yblablup", yblablup
+
+A[:,2]=yblablup
+print "A again", A
 
 #A = matlabarray([
 #    [2,3,5],

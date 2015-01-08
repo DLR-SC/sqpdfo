@@ -47,12 +47,19 @@ from __future__ import division
 from runtime import *
 #except ImportError:
 #    from smop.runtime import *
+#import sys
 import helper
 import numpy as np
 from sqplab_options import *
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
+from bcdfo_computeP import bcdfo_computeP_
+from bcdfo_gradP import bcdfo_gradP_
+from bcdfo_projgrad import bcdfo_projgrad_
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
+from sqplab_checkoptions import sqplab_checkoptions_
+from sqplab_lsmult import sqplab_lsmult_
+from ecdfo_optimality import ecdfo_optimality_
 
 def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=None,scalefacX=None,cur_degree=None,rep_degree=None,plin=None,pdiag=None,pquad=None,c=None,initial_Y=None,kappa_ill=None,whichmodel=None,factor_FPR=None,Lambda_FP=None,Lambda_CP=None,eps_L=None,lSolver=None,hardcons=None,stratLam=None,xstatus=None,sstatus=None,dstatus=None,options=None,*args,**kwargs):
     #varargin = cellarray(args)
@@ -214,26 +221,62 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                 for j in arange_(2,cur_degree).reshape(-1):
                     Y[:,j]=Y[:,1] + Y[:,j] * (Delta0 / norm_(Y[:,j]))
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
+                print "RZ build QR of Y 1"																   
                 if (cond_(RZ) < kappa_ill):
                     ill_init=0
 
             QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,Delta0,factor_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,1,kappa_ill,nargout=8)
+            print "RZ repaired in Y"												
             poisedness_known=1
         else:
             if (strcmp_(initial_Y,char('simplx'))):
                 I=eye_(n)
                 #Y[:,1]=x0
-                print "x0\n", x0																
-                print "Y before\n", Y																
-                #Y = np.append(Y, x0, axis=0)																
-                Y = concatenate_([Y,x0], axis=1)																
-                print "Y after\n", Y																
+                #print "x0\n", x0																
+                #print "Y before\n", Y																
+                ##Y = np.append(Y, x0, axis=0)																
+                if Y.shape[1] <= 1:
+                    Y = concatenate_([Y, x0], axis=1)
+                    print "Y concatenation"																				
+                else:
+                    Y[:,1]=x0
+                #Y = copy_(x0)#concatenate_([Y,x0], axis=1)																
+                #print "Y after\n", Y																
                 for j in arange_(1,n).reshape(-1):
                     step1=- Delta0
-                    #Y[:,j + 1]=x0 + step1 * I[:,j]
-                    print "Y before", Y																				
-                    Y = concatenate_([Y, x0 + step1 * I[:,j]], axis=1 )																				
+                    #print "x0", x0
+                    #print "step1", step1		
+                    #print "I[:,j]", I[:,j]
+                    ##print "Y[:,j + 1]", Y[:,j + 1]
+                    #print "step1 * I[:,j]", step1 * I[:,j]
+                    #yblablup = x0 + step1 * I[:,j].T#np.asarray(x0 + step1 * I[:,j])#.T)
+                    #print "x0 + step1 * I[:,j]", yblablup																				
+                    #print "yblablup.shape", yblablup.shape																				
+                    #print "Y:\n", Y																				   
+                    #print "j = ", j																				 
+                    #print "Y.shape", Y.shape																				
+                    ##print "Y[:,j + 1]", Y[:,j + 1]																				   
+                    
+                    ##Y[:,j + 1]=yblablup#x0 + step1 * I[:,j].T
+                    ##print "Y before", Y																				
+                    ###Y = concatenate_([Y, x0 + step1 * I[:,j]], axis=1 )																				
+                    if Y.shape[1] <= j + 1:
+                        #Y = concatenate_([Y, x0 + step1 * I[:,j]], axis=1)
+                        Y = concatenate_([Y, x0 + step1 * I[:,j].T], axis=1)
+                        print "Y concatenation"																				
+                    else:
+                        #print "np.reshape(yblablup, (3,))", np.reshape(yblablup, (3,))																					
+                        print "Y before\n", Y																				
+                        Yslice = Y[:,j + 1]
+                        print "Yslice", Yslice
+                        print "type Yslice", type(Yslice)																								  
+                        print "Yslice.shape", Yslice.shape																								 
+                        Y[:,j + 1]=x0 + step1 * I[:,j].T#yblablup.T#x0 + step1 * I[:,j]	#yblablup#
+                        #Y = Y.T																				
+                        #Y[j + 1]=(x0 + step1 * I[:,j]).T
+                        #Y = Y.T																								
                     print "Y after", Y																				
+																								
                     if (cur_degree >= pdiag):
                         step2=copy_(Delta0)
                         Y[:,j + 1 + n]=x0 + step2 * I[:,j]
@@ -243,7 +286,10 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                         for jj in arange_(j + 1,n).reshape(-1):
                             Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
                             k=k + 1
+                print "Y:\n", Y, "whichmodel =", whichmodel, "shift_Y = ", shift_Y, "Delta0 = ", Delta0, "kappa_ill =", kappa_ill																												
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
+                print "RZ build QR of Y 2"
+                #return																
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
                 poisedness_known=1
         poised_model=1
@@ -281,10 +327,21 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     m=copy_(cur_degree)
     i_xbest=1
     initmodel=zeros_(1,pquad)
-    rhsY=matlabarray([[fY],[ciY],[ceY]])
+    print "fy:\n", fY
+    print "ciY:\n", ciY
+    print "ceY:\n", ceY
+    #skibbe = concatenate_([fY,ciY,ceY], axis=1)
+    #print "concatenate:", skibbe
+    rhsY=concatenate_([fY,ciY,ceY], axis=0)#matlabarray([[fY],[ciY],[ceY]])
     fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-    normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+    print "lb", lb
+    print "lb[indfree]", lb[indfree]				
+    print "ub", ub
+    print "ub[indfree]", ub[indfree]
+    print "gx", gx
+    print "size_(gx)", size_(gx)				
+    normgx=bcdfo_projgrad_(n,x,gx,lb[indfree].T,ub[indfree].T)
     if any_(size_(gx) != [n,1]):
         if options.verbose:
             fprintf_(options.fout,char('### ecdfo: the computed gradient g has a wrong size, (%0i,%0i) instead of (%0i,1)\\n\\n'),size_(gx),n)
@@ -299,17 +356,22 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
             gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
         info.ai=gci
     else:
-        info.ci=[]
-        info.ai=[]
+        info.ci=matlabarray([])
+        info.ai=matlabarray([])
+    print "size_(ceY,1)", size_(ceY,1)
     me=size_(ceY,1)
     if me > 0:
-        info.ce=ceY[:,1]
+        info.ce=ceY[:,1].T     								
+        print "info.ce =", info.ce
+        #sys.exit(0)								
         gce=zeros_(me,n)
         for i in arange_(1,me).reshape(-1):
             gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
         info.ae=gce
     else:
         info.ce=[]
+        #print "info.ce = []"								
+        sys.exit(0)								
         info.ae=[]
     fprintf_(char('\\n'))
     fprintf_(char('**************************************************************************************\\n'))
@@ -402,7 +464,10 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
         fprintf_(options.fout,char('  . |x|_2                           %8.2e\\n'),norm_(x))
     if (nb + mi + me > 0):
         if isempty_(lm0):
+            #print "set info (ce) before = ", info.ce									
             lm,info=sqplab_lsmult_(x,[],[],info,options,values,nargout=2)
+            #print "set info (ce) after = ", info.ce
+            #sys.exit(0)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
             if options.verbose >= 4:
@@ -411,7 +476,10 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
             lm=copy_(lm0)
             if options.verbose >= 4:
                 fprintf_(options.fout,char('  . |lm|_2                          %8.2e\\n'),norm_(lm))
-    feas,compl,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+    print "lb", lb[indfree]
+    print "ub", ub[indfree]
+    #sys.exit(0)				
+    feas,compl,info=ecdfo_optimality_(x,lm,lb[indfree].T,ub[indfree].T,info,options,nargout=3)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     if options.verbose >= 4:

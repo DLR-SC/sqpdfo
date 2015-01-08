@@ -18,9 +18,9 @@ class Test_bcdfo_computeP(unittest.TestCase):
 	def setUp(self):
 		pass
 	
-	def est_bcdfo_computeP(self):
+	def test_bcdfo_computeP(self):
 		Y = matlabarray([[ 0, 1, 0, 2, 0],[0, 0, 1, 0, 2]])
-		fY =matlabarray([ 1, 2, 3, 4, 5 ])
+		fY =matlabarray([[ 1, 2, 3, 4, 5 ]])
 		whichmodel = 0
 		
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_(Y, whichmodel, 1, 1, 1, 1e15 )
@@ -37,7 +37,7 @@ class Test_bcdfo_computeP(unittest.TestCase):
 #  P =
 #   1.0000   1.0000   4.0000   4.0000       0
 		
-	def test_bcdfo_computePOriginal(self):
+	def est_bcdfo_computePOriginal(self):
 		print "Testing original func"
 		Y = np.array([[ 0, 1, 0, 2, 0],[0, 0, 1, 0, 2]])
 		fY = np.array([ 1, 2, 3, 4, 5 ])

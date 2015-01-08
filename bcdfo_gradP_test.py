@@ -27,7 +27,7 @@ class Test_bcdfo_gradP(unittest.TestCase):
 		#ans = bcdfo_gradP_( model, matlabarray([0,0]).T, xbase, scale, 0 )
 		ans = bcdfo_gradP_( model, matlabarray([[0],[0]]), xbase, scale, 0 )
 		print "ans", ans
-		correctans = matlabarray([ -6.0000, 1.0000])
+		correctans = matlabarray([ -6.0000, 1.0000]).T
 		
 		self.assertTrue((abs(ans - correctans) < 1e-8).all())
 

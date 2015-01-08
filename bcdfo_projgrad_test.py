@@ -28,7 +28,7 @@ class Test_bcdfo_projgrad(unittest.TestCase):
 #  bu    : upper bounds
 		n = 2
 		x = matlabarray([0.5,0.5]).T
-		g = matlabarray([-1,-1])#.T
+		g = matlabarray([-1,-1]).T
 		bl = matlabarray([0,0]).T
 		bu = matlabarray([2,2]).T
 		

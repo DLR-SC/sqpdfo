@@ -419,6 +419,27 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
 			options=self.options,values=self.values,fcmodel=self.fcmodel,Y=self.Y,fY=self.fY,ciY=self.ciY,ceY=self.ceY,
 			sigma=self.sigma,scale=self.scale,shift_Y=self.shift_Y,QZ=self.QZ,RZ=self.RZ,whichmodel=self.whichmodel,
 			ind_Y=self.ind_Y,i_xbest=self.i_xbest,m=self.m)
+			
+		print "M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g
+			
+		correctM = matlabarray([
+
+[   2.620301230585867,                   0,                   0],
+ [                  0,                   0,                   0],
+  [                 0,                   0,                   0]])
+
+
+		correctpc = 1
+		correctinfog = matlabarray([
+  [-0.009783923878659],
+  [ 1.000000000000000],
+                   [0]])
+		
+		self.assertEqual(pc, correctpc)
+		self.assertTrue((abs(M - correctM) < 1e-8).all())
+		self.assertTrue((abs(correctinfog - info.g) < 1e-8).all())
+		
+
 
 if __name__ == '__main__':
 	unittest.main()
