@@ -20,7 +20,17 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 
 		pass
 
-	def est_bcdfo_find_new_yj(self):
+	def test_bcdfo_find_new_yj(self):
+
+# Y = [14, 32, 50; 32, 77, 122; 50, 122, 194]; whichmodel = 0;
+#  [ QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y , whichmodel, 1, 1, 1, 1e15 );
+#  QZ
+#  RZ
+#  xbase
+#  scale
+#  [ ynew, improvement ] = bcdfo_find_new_yj( QZ, RZ, Y, 2, 1.0, 0.001, xbase, 1, ...
+#       whichmodel, scale, 1 )		
+		
 		Y = matlabarray([[ 3, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]])
 		whichmodel = 0
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y , whichmodel, 0, 1,1, 1e15 )
@@ -30,7 +40,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 		print "improvement", improvement
 	
 	@unittest.expectedFailure	
-	def test_bcdfo_find_new_yjOriginal(self):
+	def est_bcdfo_find_new_yjOriginal(self):
 		Y = np.array([[ 3, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]])
 		whichmodel = 0
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y( Y , whichmodel, 0, 1,1, 1e15 )
