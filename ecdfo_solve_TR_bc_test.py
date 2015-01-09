@@ -387,5 +387,9 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.assertAlmostEqual(correctlm.all(), lm.all(), delta=1e-5)
 
 if __name__ == '__main__':
+#<<<<<<< HEAD
     unittest.main()
-
+#
+#=======
+#    unittest.main()
+#>>>>>>> a959f16419e1ef0052e0d04109e5c0b7e711e3f0

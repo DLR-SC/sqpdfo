@@ -20,7 +20,7 @@ class Test_bcdfo_computeLj(unittest.TestCase):
 
 		pass
 
-	#@unittest.expectedFailure
+	@unittest.expectedFailure
 	def test_bcdfo_computeLj(self):
 		Y = matlabarray([[14.0, 32.0, 50.0], [32.0, 77.0, 122.0]])#, [50.0, 122.0, 194.0]])#matlabarray([[ 0, 1, 0, 2, 0], [0, 0, 1, 0, 2 ]])
 		whichmodel = 0
