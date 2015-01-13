@@ -10,7 +10,8 @@ import helper
 @helper.convertingDecorator
 def bcdfo_find_new_yj_( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    scale, shift_Y ):
-	return bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
+# j is an index, so we have to decrease it.				
+	return bcdfo_find_new_yj( QZ, RZ, Y, j-1, Delta, eps_L, xbase, lSolver, whichmodel,
    scale, shift_Y )				
 
 def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,

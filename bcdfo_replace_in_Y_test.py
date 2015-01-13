@@ -57,7 +57,7 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
 		self.assertTrue((abs(correctQZplus - QZplus) < 1e-8).all())
 		self.assertTrue((abs(correctRZplus - RZplus) < 1e-8).all())
 		self.assertTrue((abs(correctYplus - Yplus) < 1e-8).all())
-		print "Warning: QR decomposition"
+		#print "Warning: QR decomposition"
 
 if __name__ == '__main__':
 	unittest.main()

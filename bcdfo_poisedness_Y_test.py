@@ -31,8 +31,9 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
 		scale = matlabarray(scale)
 		
 		print "Warning: Not enough input arguments"
-		lambd ,Y_radius  = bcdfo_poisedness_Y_( QZ, RZ, Y, 0.001, xbase, 1, 0, scale, 1 )
-		print lambd, Y_radius
+		#lambd ,Y_radius  = bcdfo_poisedness_Y_( QZ, RZ, Y, 0.001, xbase, lSolver, 1, hardcons, xl, xu, indfree, stratLam  scale, 1 )
+		#print lambd, Y_radius
+		self.asserTrue(False)
 #  should give:
 #  lambd =
 #  204.8586
