@@ -5,7 +5,8 @@ import helper
 
 @helper.convertingDecorator
 def bcdfo_replace_in_Y_( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y, Delta, normgx, kappa_ill ):
-	return bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y,
+	#j is an index so we have to decrease it
+	return bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j-1, xbase, whichmodel, scale, shift_Y,
          Delta, normgx, kappa_ill )
 
 def bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y,
@@ -107,7 +108,9 @@ def bcdfo_replace_in_Y( QZ, RZ, ynew, Y, j, xbase, whichmodel, scale, shift_Y,
 
    # replace new point in Y
      
+   #print "Y before\n", Y					
    Y[:,j] = ynew[:,0]
+   #print "Y after\n", Y			
       
    #  a new factorization must be computed. 
 
