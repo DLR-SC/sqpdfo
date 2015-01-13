@@ -15,7 +15,13 @@ def bcdfo_poisedness_Y_( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons,
 	hardcons = helper.convert(hardcons)
 	xl = helper.convert(xl)
 	xu = helper.convert(xu)
-	indfree = helper.convert(indfree)
+	
+	print "indfree before = ", indfree	
+	#print "len indfree", len(indfree)
+	#print "ones", ones(len(indfree))
+	indfree = helper.convert(indfree - 1)
+	print "indfree after = ", indfree
+	
 	stratLam = helper.convert(stratLam)
 	scale = helper.convert(scale)
 	shift_Y = helper.convert(shift_Y)
