@@ -4,7 +4,8 @@ import helper
 
 @helper.convertingDecorator
 def bcdfo_computeLj_( QZ, RZ, j, Y, whichmodel, scale, shift_Y ):
-	return bcdfo_computeLj( QZ, RZ, j, Y, whichmodel, scale, shift_Y )
+	#j is an index, so we have to decrease it.
+	return bcdfo_computeLj( QZ, RZ, j-1, Y, whichmodel, scale, shift_Y )
 
 def bcdfo_computeLj( QZ, RZ, j, Y, whichmodel, scale, shift_Y ):
 ###############################################################################

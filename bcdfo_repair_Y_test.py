@@ -71,11 +71,15 @@ class Test_bcdfo_repair_Y(unittest.TestCase):
 			
 		#self.assertTrue((abs(correctQZplus - QZplus) < 1e-3).all())
 		#self.assertTrue((abs(correctRZplus - RZplus) < 1e-3).all())
-		print "Warning not unique QR (?)"
+		#print "Warning not unique QR (?)"
+		#print "Yplus\n", Yplus
+		#print "correctYplus\n", correctYplus			
 		self.assertTrue((abs(correctYplus - Yplus) < 1e-4).all())
 		
 		self.assertEqual(correctreplaced, replaced)
 		self.assertAlmostEqual(correctmaximprove, maximprove, 3)
+		
+#-------these are correct---------:		
 		self.assertTrue((abs(xbase - correctxbase) < 1e-4).all())
 		self.assertEqual(correctY_radius, Y_radius)
 		self.assertTrue((abs(correctscale - scale) < 1e-4).all())

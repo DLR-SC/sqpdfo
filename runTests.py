@@ -45,6 +45,7 @@ import bcdfo_computeP_test
 import bcdfo_computeLj_test
 import bcdfo_find_new_yj_test
 import bcdfo_projgrad_test
+import bcdfo_evalZ_test
 #import bcdfo_build_QR_of_Y_test
 #import bcdfo_solve_TR_MS_bc_test
 #import bcdfo_evalZ_test
@@ -90,7 +91,7 @@ suite.addTests(loader.loadTestsFromTestCase(bcdfo_replace_in_Y_test.Test_bcdfo_r
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_solve_TR_MS_test.Test_bcdfo_solve_TR_MS))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_build_QR_of_Y_test.Test_bcdfo_build_QR_of_Y))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_solve_TR_MS_bc_test.Test_bcdfo_solve_TR_MS_bc))
-suite.addTests(loader.loadTestsFromTestCase(bcdfo_evalZ_test.Test_bcdfo_evalZ))
+#suite.addTests(loader.loadTestsFromTestCase(bcdfo_evalZ_test.Test_bcdfo_evalZ))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_poisedness_Y_test.Test_bcdfo_poisedness_Y))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_augment_Y_test.Test_bcdfo_augment_Y))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_gradP_test.Test_bcdfo_gradP))
@@ -99,6 +100,7 @@ suite.addTests(loader.loadTestsFromTestCase(bcdfo_computeP_test.Test_bcdfo_compu
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_computeLj_test.Test_bcdfo_computeLj))
 #suite.addTests(loader.loadTestsFromTestCase(bcdfo_find_new_yj_test.Test_bcdfo_find_new_yj))
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_projgrad_test.Test_bcdfo_projgrad))
+#suite.addTests(loader.loadTestsFromTestCase(bcdfo_evalZ_test.Test_bcdfo_evalZ))
 
 #suite.addTests(loader.loadTestsFromTestCase(bcdfo_build_QR_of_Y_test.Test_bcdfo_build_QR_of_Y))
 #suite.addTests(loader.loadTestsFromTestCase(bcdfo_solve_TR_MS_bc_test.Test_bcdfo_solve_TR_MS_bc))
