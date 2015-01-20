@@ -7,7 +7,7 @@ Created on Thu Nov 27 15:15:59 2014
 from runtime import isempty_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 
-def ecdfo_swap_in_Y_(i,j,QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill):
+def ecdfo_swap_in_Y_(i,j,QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill, nargout=None):
 	if (i > j):
 		ii=j
 		jj=i

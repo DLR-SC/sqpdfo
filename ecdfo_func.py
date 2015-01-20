@@ -22,6 +22,10 @@ prob = 3
 def set_prob(val):
 	global prob
 	prob = val
+	
+def get_prob():
+	global prob
+	return prob	
 
 def ecdfo_func_(x=None,*args,**kwargs):
     #varargin = cellarray(args)

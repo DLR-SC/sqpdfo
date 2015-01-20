@@ -112,7 +112,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
         print "y", y
         print "type y", type(y)
         if X.shape[1] <= m:								
-            X = concatenate_([X, y.T], axis=1)								
+            X = concatenate_([X, y], axis=1)								
             print "concatenate"												
         else:
             X[:,m]=y												

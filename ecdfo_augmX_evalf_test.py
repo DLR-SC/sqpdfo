@@ -48,7 +48,7 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 	def setUp(self):
 		self.X = matlabarray([[ 0, 1, 0],[0, 0, 1] ])
 		self.fX = matlabarray([ 1, 100, 101 ])
-		self.y = matlabarray([ 2, 4 ])
+		self.y = matlabarray([ 2, 4 ]).T
 		
 		self.ciX = copy_(self.X)
 		self.ceX = copy_(self.X)

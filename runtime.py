@@ -74,6 +74,7 @@ from numpy import inf
 import scipy
 import numpy as np
 import os,sys,copy
+#import helper
 try:
     from scipy.io import loadmat
 except:
@@ -190,7 +191,8 @@ class matlabarray(np.ndarray):
 		if self.shape == (1,1):
 		      return float(other) == float(self)
 		else:
-			return False								
+			#print "super cmp", np.ndarray.__eq__(self, other)
+			return np.ndarray.__eq__(self, other)#False								
         if self.shape != other.shape:
             return False									
         print "self", self, "other", other												
@@ -245,10 +247,24 @@ class matlabarray(np.ndarray):
         return self.__getitem__(slice(i,j))
 
     def __getitem__(self,index):
+        if type(index) is matlabarray:
+        #    print "index:\n"	, index								
+        #    ravelled_index = index.ravel()												
+        #    if len(ravelled_index) > 0:
+        #        print "ravelled index:\n", ravelled_index
+        #        print "ravelled_index[0] == True", ravelled_index[0] == matlabarray([True])
+        #        print "ravelled_index[0] == False", ravelled_index[0] == matlabarray([False])													
+        #        if (ravelled_index[0] == matlabarray([True]) or ravelled_index[0] == matlabarray([False])) and ravelled_index[0] != 0 and ravelled_index[0] != 1:
+            print "self.shape", self.shape
+            print "index.shape", index.shape
+            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
+                print "True False index by shape\n", index#"returning np indexing\n", np.ndarray.__getitem__(self, np.asarray(index)) 																	
+                return np.ndarray.__getitem__(self, np.asarray(index))
         return matlabarray(self.get(index))
 
     def get(self,index):
         #import pdb; pdb.set_trace()
+        print "index", index				
         indices = self.compute_indices(index)
         if len(indices) == 1:
             return np.ndarray.__getitem__(self.reshape(-1,order="F"),indices)
@@ -304,6 +320,19 @@ class matlabarray(np.ndarray):
       #              return #ret											
 									
         #import pdb; pdb.set_trace()
+        if type(index) is matlabarray:
+            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
+                    print "True False index by shape\n", index#"returning np indexing\n", np.ndarray.__getitem__(self, np.asarray(index)) 																	
+
+                    for index_index,index_value in np.ndenumerate(index):
+                        print "index = ", index
+                        print "value = ", value																	
+                        if index_value == True:
+                            np.asarray(self).__setitem__(index_index, value[index_index])
+                            print "lbounds self = \n", self
+                    return
+																								
+																								
         indices = self.compute_indices(index)
         try:
             if len(indices) == 1:

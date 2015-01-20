@@ -299,7 +299,8 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
         ceX=matlabarray([])
         ind_Y=matlabarray([])
         for i in arange_(1,cur_degree).reshape(-1):
-            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
+            print "Y[:,i]", Y[:,i]									
+            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i].T,i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
             if (abs_(fX[i]) > 1e+25):

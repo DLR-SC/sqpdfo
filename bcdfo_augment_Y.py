@@ -3,7 +3,7 @@ from numpy import *
 from bcdfo_build_QR_of_Y import *
 import helper
 
-def bcdfo_augment_Y_( Ynew, Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
+def bcdfo_augment_Y_( Ynew, Y, whichmodel, shift_Y, Delta, normgx, kappa_ill, nargout=None ):
 	args = locals()
 	print args
 	for k in args:
