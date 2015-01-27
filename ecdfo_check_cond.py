@@ -29,13 +29,13 @@ def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
 
     badcond=0
     eps=1e-14
-    print "Prints----------------"
-    print isempty_
-    print find_
-    print isnan_
-    print isinf_
-    print A
-    print "--------------------------"
+    #print "Prints----------------"
+    #print isempty_
+    #print find_
+    #print isnan_
+    #print isinf_
+    #print A
+    #print "--------------------------"
     if (isempty_(find_(isnan_(A))) and isempty_(find_(isinf_(A)))):
         condA=cond_(A)
         if (condA > cthreshold):

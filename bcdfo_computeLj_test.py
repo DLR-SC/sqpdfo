@@ -26,7 +26,7 @@ class Test_bcdfo_computeLj(unittest.TestCase):
 		whichmodel = 0
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_(  Y, whichmodel, 1, 1, 1, 1e15 )
 		Lj = bcdfo_computeLj_( QZ, RZ, 1, Y, whichmodel, scale, 1 )
-		print "Lj", Lj
+		#print "Lj", Lj
 
 		#print "type(scale)", type(scale)
 		#print "Lj", Lj
@@ -43,7 +43,7 @@ class Test_bcdfo_computeLj(unittest.TestCase):
 		Lj = bcdfo_computeLj( QZ, RZ, 1, Y, whichmodel, scale, 1 )
 #  should give:
 		correctLj = np.array([1.0000,  -3.0000,  -3.0000,   4.0000,   4.0000])
-		print Lj #- correctLj
+		#print Lj #- correctLj
 			
 			
 			

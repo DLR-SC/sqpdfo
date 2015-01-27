@@ -373,9 +373,9 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
 		correctlm_computed = 0
 		correctlm = matlabarray([0.0, -0.999999999499998, 0.0, -0.000000000375002, 0.000000000083334]).T
 		
-		print "THRU"
-		print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
-		print "Warning: Correctness of Code is questionable"
+		#print "THRU"
+		#print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+		#print "Warning: Correctness of Code is questionable"
 		self.assertEqual(correctxnew, xnew)
 		self.assertEqual(correctdelta, delta)
 		self.assertEqual(correctrpred, rpred)

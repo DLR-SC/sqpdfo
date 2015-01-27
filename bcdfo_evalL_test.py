@@ -24,7 +24,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
 		Y = matlabarray([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
 		values = bcdfo_evalL_( QZ, RZ, Y, matlabarray(range(1,6)), matlabarray([[-1],[1]]), xbase, 0, scale, 1 )
-		print "values", values
+		#print "values", values
 		correctvalues = matlabarray([ [0],   [97.0000],    [2.9900],    [1.0000], [-100.0000],   [-0.4950] ])
 		self.assertTrue((abs(values - correctvalues) < 1e-8).all())
 		
@@ -32,7 +32,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
 		Y = np.array([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y( Y, 0, 1, 1,1,1e15 )
 		values = bcdfo_evalL_( QZ, RZ, Y, np.array(range(1,6)), np.array([[-1], [1]]), xbase, 0, scale, 1 )
-		print "values", values
+		#print "values", values
 		
 
 #Ankes Test

@@ -43,8 +43,8 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
 		
 		#print "Warning: Not enough input arguments"
 		lambd ,Y_radius  = bcdfo_poisedness_Y_( QZ, RZ, Y, 0.001, xbase, lSolver, 1, hardcons, xl, xu, indfree, stratLam,  scale, 1 )
-		print "lambd = ", lambd
-		print "Y_radius = ", Y_radius
+		#print "lambd = ", lambd
+		#print "Y_radius = ", Y_radius
 		
 		correctlambda = 402.6381
 		correctY_radius = 2
@@ -54,9 +54,9 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
 
 	#@unittest.expectedFailure
 	def est_bcdfo_poisedness_YOriginal(self):
-		print "Self-test of the function with shifting:"
+		#print "Self-test of the function with shifting:"
 		Y = np.array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
-		print Y
+		#print Y
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y( Y, 0, 1, 1, 1, 1e15 )
 		#QZ = matlabarray(QZ)
 		#RZ = matlabarray(RZ)
@@ -77,8 +77,8 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
 		
 		#print "Warning: Not enough input arguments"
 		lambd ,Y_radius  = bcdfo_poisedness_Y( QZ, RZ, Y, 0.001, xbase, lSolver, 1, hardcons, xl, xu, indfree, stratLam,  scale, 1 )
-		print "lambd = ", lambd
-		print "Y_radius = ", Y_radius
+		#print "lambd = ", lambd
+		#print "Y_radius = ", Y_radius
 
 		
 		#print lambd, Y_radius

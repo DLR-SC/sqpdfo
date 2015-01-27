@@ -104,8 +104,8 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     lo=- inf * ones_(n + me,1)
     up=inf * ones_(n + me,1)
     for i in arange_(1,n).reshape(-1):
-        print "i", i					
-        print "lb", lb[1]
+        #print "i", i					
+        #print "lb", lb[1]
         if (lb[i] <= - options.inf):
             lo[i]=0
         if (ub[i] >= options.inf):
@@ -129,7 +129,7 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     Agn=copy_(Ag)
     lon=copy_(lo)
     upn=copy_(up)
-    print "size lo", size_(lo)#.obj
+    #print "size lo", size_(lo)#.obj
     #ifree=ones_(size_(lo))
     #print "[ gnlph list expression]", [gnlph for gnlph in size_(lo)]
     ifree=ones_(*lo.shape)#[gnlph for gnlph in size_(lo)])
@@ -144,40 +144,40 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
             #Agn[k]=[]
             #lon[k]=[]
             #upn[k]=[]
-            print "-----"								
-            print "k = ", k								
-            print "AAn before\n", AAn								
+            #print "-----"								
+            #print "k = ", k								
+            #print "AAn before\n", AAn								
             #AAn = np.delete(AAn, AAn[k,:])#=[]
             AAn = np.delete(AAn, k, 0)#=[]
-            print "AAn after\n", AAn												
-            print "AAn before 2\n", AAn												
+            #print "AAn after\n", AAn												
+            #print "AAn before 2\n", AAn												
             AAn = np.delete(AAn, k, 1)#=[]
-            print "AAn 2 after\n", AAn
-            print "Agn before\n", Agn												
+            #print "AAn 2 after\n", AAn
+            #print "Agn before\n", Agn												
             Agn = np.delete(Agn, k, 0)#=[]
-            print "Agn after\n", Agn
-            print "lon before\n", lon												
+            #print "Agn after\n", Agn
+            #print "lon before\n", lon												
             lon = np.delete(lon, k, 0)#=[]
-            print "lon after\n", lon
-            print "upn before\n", upn												
+            #print "lon after\n", lon
+            #print "upn before\n", upn												
             upn = np.delete(upn, k, 0)#=[]
-            print "upn after\n", upn												
+            #print "upn after\n", upn												
             ifree[i]=0
-            print "-----"																				
+            #print "-----"																				
         else:
             k=k + 1
     if not isempty_(ifree[ifree > 0]):
         sn,rn,op,exitc=blls_(AAn,- Agn,lon,upn,nargout=4)
         I=eye_(length_(lo))
-        print "ifree:", ifree
+        #print "ifree:", ifree
         gnlphy = []								
         for gnlphi in range(len(ifree)):
             if ifree[gnlphi+1] < 1:									
                 gnlphy.append(gnlphi)									
-        print "[ifree]", gnlphy								
-        print "I[:,ifree > 0]:\n", I[:,ifree > 0]								
-        print "sn:\n", sn								
-        print "np.delete(I, ifree < 1, 1):\n", np.delete(I, gnlphy, 1)								
+        #print "[ifree]", gnlphy								
+        #print "I[:,ifree > 0]:\n", I[:,ifree > 0]								
+        #print "sn:\n", sn								
+        #print "np.delete(I, ifree < 1, 1):\n", np.delete(I, gnlphy, 1)								
         #lm=I[:,ifree > 0] * sn
         lm=np.delete(I, gnlphy, 1) * sn								
     else:

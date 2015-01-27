@@ -109,7 +109,7 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
                     if options.verbose:
                         fprintf_(options.fout,char('\\n### ecdfo: options.algo_method "%s" not recognized\\n\\n'),options.algo_method)
                     info.flag=values.fail_on_argument
-                    print "return 1"																				
+                    #print "return 1"																				
                     return info,options,values
     else:
         options.algo_method=values.quasi_newton
@@ -126,7 +126,7 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
                     if options.verbose:
                         fprintf_(options.fout,char('\\n### ecdfo: options.algo_globalization "%s" not recognized\\n\\n'),options.algo_globalization)
                     info.flag=values.fail_on_argument
-                    print "return 2"																				
+                    #print "return 2"																				
                     return info,options,values
     else:
         options.algo_globalization=values.linesearch
@@ -140,14 +140,14 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
                 if options.verbose:
                     fprintf_(options.fout,char('\\n### ecdfo: options.algo_descent "%s" not recognized\\n\\n'),options.algo_descent)
                 info.flag=values.fail_on_argument
-                print "return 3"																
+                #print "return 3"																
                 return info,options,values
     if isfield_(options,char('dxmin')):
         if (options.dxmin <= 0):
             if options.verbose:
                 fprintf_(options.fout,char('\\n### ecdfo: options.dxmin = %g must be > 0\\n\\n'),options.dxmin)
             info.flag=values.fail_on_argument
-            print "return 4"												
+            #print "return 4"												
             return info,options,values
     else:
         options.dxmin=1e-08
@@ -156,7 +156,7 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
             if options.verbose:
                 fprintf_(char('\\n### ecdfo: incorrect value of options.inf %g (should be > 0)\\n\\n'),options.inf)
             info.flag=values.fail_on_argument
-            print "return 5"
+            #print "return 5"
             return info,options,values
     else:
         options.inf=inf
@@ -165,18 +165,18 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
             if options.verbose:
                 fprintf_(char('\\n### ecdfo: incorrect value of options.miter %g (should be > 0)\\n\\n'),options.miter)
             info.flag=values.fail_on_argument
-            print "return 6"												
+            #print "return 6"												
             return info,options,values
     else:
         options.miter=1000
-    print "isfield optrions tol", isfield_(options,char('tol'))								
+    #print "isfield optrions tol", isfield_(options,char('tol'))								
     if isfield_(options,char('tol')):
-        print "hellooo any"					
+        #print "hellooo any"					
         if any_(options.tol <= 0):
             if options.verbose:
                 fprintf_(char('\\n### ecdfo: incorrect value of some options.tol (should be > 0)\\n\\n'))
             info.flag=values.fail_on_argument
-            print "return 7"																								
+            #print "return 7"																								
             return info,options,values
     else:
         options.tol=[[1e-06],[1e-06],[1e-06]]
@@ -192,6 +192,6 @@ def sqplab_options_(info=None,options=None,*args,**kwargs):
                 if options.verbose:
                     fprintf_(options.fout,char('\\n### ecdfo: options.hess_approx "%s" not recognized\\n\\n'),options.hess_approx)
                 info.flag=values.fail_on_argument
-                print "return 8"																												
+                #print "return 8"																												
                 return info,options,values
     return info,options,values

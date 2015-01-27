@@ -60,12 +60,12 @@ class Test_sqplab_bfgs(unittest.TestCase):
 	
 	def test_sqplab_bfgs_test(self):
 		M, _, info, values = sqplab_bfgs_(self.M,self.y,self.s,first=self.first,info=self.info,options=self.options,values=self.values)
-		print "M:\n", M
+		#print "M:\n", M
 		correctM = matlabarray([[0.205243860649550,   0.003553460424288,   0.000655537162145],
    [0.003553460424288,   0.195307727402361,  -0.000901167227317],
    [0.000655537162145,  -0.000901167227317,   0.200026425015353]])
 			
-		print "correctM:\n",correctM
+		#print "correctM:\n",correctM
 		#print "-:\n", 
 		#self.assertEqual(M, correctM)
 		self.assertTrue((abs(correctM - M) < 1e-15).all())

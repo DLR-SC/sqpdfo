@@ -24,12 +24,12 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
 	def test_bcdfo_build_QR_of_Y(self):
 		Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-		print "QZ", QZ
-		print "RZ", RZ
+		#print "QZ", QZ
+		#print "RZ", RZ
 		model = ( QZ * np.linalg.solve( RZ.T , matlabarray([1, 2, 3, 4, 5, 6 ]).T ) ).T
-		print "model", model
+		#print "model", model
 		res = np.dot(helper.convert(model) , bcdfo_evalZ( (np.array([[1,3]]).T-helper.convert(xbase))*helper.convert(scale[2]),6))
-		print "res", res
+		#print "res", res
 #  should give 6.0
 		self.assertAlmostEqual(float(res), 6)
 

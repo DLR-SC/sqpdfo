@@ -221,12 +221,12 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                 for j in arange_(2,cur_degree).reshape(-1):
                     Y[:,j]=Y[:,1] + Y[:,j] * (Delta0 / norm_(Y[:,j]))
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
-                print "RZ build QR of Y 1"																   
+                #print "RZ build QR of Y 1"																   
                 if (cond_(RZ) < kappa_ill):
                     ill_init=0
 
             QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,Delta0,factor_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,1,kappa_ill,nargout=8)
-            print "RZ repaired in Y"												
+            #print "RZ repaired in Y"												
             poisedness_known=1
         else:
             if (strcmp_(initial_Y,char('simplx'))):
@@ -237,7 +237,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                 ##Y = np.append(Y, x0, axis=0)																
                 if Y.shape[1] <= 1:
                     Y = concatenate_([Y, x0], axis=1)
-                    print "Y concatenation"																				
+                    #print "Y concatenation"																				
                 else:
                     Y[:,1]=x0
                 #Y = copy_(x0)#concatenate_([Y,x0], axis=1)																
@@ -263,19 +263,19 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                     if Y.shape[1] <= j + 1:
                         #Y = concatenate_([Y, x0 + step1 * I[:,j]], axis=1)
                         Y = concatenate_([Y, x0 + step1 * I[:,j].T], axis=1)
-                        print "Y concatenation"																				
+                        #print "Y concatenation"																				
                     else:
                         #print "np.reshape(yblablup, (3,))", np.reshape(yblablup, (3,))																					
-                        print "Y before\n", Y																				
+                        #print "Y before\n", Y																				
                         Yslice = Y[:,j + 1]
-                        print "Yslice", Yslice
-                        print "type Yslice", type(Yslice)																								  
-                        print "Yslice.shape", Yslice.shape																								 
+                        #print "Yslice", Yslice
+                        #print "type Yslice", type(Yslice)																								  
+                        #print "Yslice.shape", Yslice.shape																								 
                         Y[:,j + 1]=x0 + step1 * I[:,j].T#yblablup.T#x0 + step1 * I[:,j]	#yblablup#
                         #Y = Y.T																				
                         #Y[j + 1]=(x0 + step1 * I[:,j]).T
                         #Y = Y.T																								
-                    print "Y after", Y																				
+                    #print "Y after", Y																				
 																								
                     if (cur_degree >= pdiag):
                         step2=copy_(Delta0)
@@ -286,9 +286,9 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                         for jj in arange_(j + 1,n).reshape(-1):
                             Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
                             k=k + 1
-                print "Y:\n", Y, "whichmodel =", whichmodel, "shift_Y = ", shift_Y, "Delta0 = ", Delta0, "kappa_ill =", kappa_ill																												
+                #print "Y:\n", Y, "whichmodel =", whichmodel, "shift_Y = ", shift_Y, "Delta0 = ", Delta0, "kappa_ill =", kappa_ill																												
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
-                print "RZ build QR of Y 2"
+                #print "RZ build QR of Y 2"
                 #return																
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
                 poisedness_known=1
@@ -299,7 +299,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
         ceX=matlabarray([])
         ind_Y=matlabarray([])
         for i in arange_(1,cur_degree).reshape(-1):
-            print "Y[:,i]", Y[:,i]									
+            #print "Y[:,i]", Y[:,i]									
             X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i].T,i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
@@ -328,20 +328,20 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     m=copy_(cur_degree)
     i_xbest=1
     initmodel=zeros_(1,pquad)
-    print "fy:\n", fY
-    print "ciY:\n", ciY
-    print "ceY:\n", ceY
+    #print "fy:\n", fY
+    #print "ciY:\n", ciY
+    #print "ceY:\n", ceY
     #skibbe = concatenate_([fY,ciY,ceY], axis=1)
     #print "concatenate:", skibbe
     rhsY=concatenate_([fY,ciY,ceY], axis=0)#matlabarray([[fY],[ciY],[ceY]])
     fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-    print "lb", lb
-    print "lb[indfree]", lb[indfree]				
-    print "ub", ub
-    print "ub[indfree]", ub[indfree]
-    print "gx", gx
-    print "size_(gx)", size_(gx)				
+    #print "lb", lb
+    #print "lb[indfree]", lb[indfree]				
+    #print "ub", ub
+    #print "ub[indfree]", ub[indfree]
+    #print "gx", gx
+    #print "size_(gx)", size_(gx)				
     normgx=bcdfo_projgrad_(n,x,gx,lb[indfree].T,ub[indfree].T)
     if any_(size_(gx) != [n,1]):
         if options.verbose:
@@ -359,11 +359,11 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     else:
         info.ci=matlabarray([])
         info.ai=matlabarray([])
-    print "size_(ceY,1)", size_(ceY,1)
+    #print "size_(ceY,1)", size_(ceY,1)
     me=size_(ceY,1)
     if me > 0:
         info.ce=ceY[:,1].T     								
-        print "info.ce =", info.ce
+        #print "info.ce =", info.ce
         #sys.exit(0)								
         gce=zeros_(me,n)
         for i in arange_(1,me).reshape(-1):
@@ -477,8 +477,8 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
             lm=copy_(lm0)
             if options.verbose >= 4:
                 fprintf_(options.fout,char('  . |lm|_2                          %8.2e\\n'),norm_(lm))
-    print "lb", lb[indfree]
-    print "ub", ub[indfree]
+    #print "lb", lb[indfree]
+    #print "ub", ub[indfree]
     #sys.exit(0)				
     feas,compl,info=ecdfo_optimality_(x,lm,lb[indfree].T,ub[indfree].T,info,options,nargout=3)
     if info.flag:

@@ -98,9 +98,9 @@ def ecdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y=None,ind_Y=None,fY=None,ciY
     fY[jj]=f
     if not isempty_(ciY):
         ci=ciY[:,ii]
-        print "ciY", ciY								
-        print "type ciY", type(ciY)								
-        print "jj", jj								
+        #print "ciY", ciY								
+        #print "type ciY", type(ciY)								
+        #print "jj", jj								
         ciY[:,ii]=ciY[:,jj]
         ciY[:,jj]=ci
     if not isempty_(ceY):

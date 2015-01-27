@@ -109,8 +109,8 @@ class Test_sqplab_checkoptions(unittest.TestCase):
 		self.options.algo_method = self.values.quasi_newton
 		
 		info,options = sqplab_checkoptions_(self.nb,self.mi,self.me,self.ms,self.info,self.options,self.values)
-		print "options", options.algo_descent
-		print "value", self.values.powell
+		#print "options", options.algo_descent
+		#print "value", self.values.powell
 		self.assertTrue(options.algo_descent==self.values.powell)
 		
 if __name__ == '__main__':

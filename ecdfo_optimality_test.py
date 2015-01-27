@@ -169,7 +169,7 @@ class Test_ecdfo_optimality(unittest.TestCase):
 		
 		self.x =matlabarray([  0.500000000000000,  1.000000000000000,   0.500000000000000]).T
 		self.lm = matlabarray(    [0,0,0,  -0.333333332763891,  -0.000000000249999]).T
-		print "lm", self.lm
+		#print "lm", self.lm
 		self.lb = matlabarray([-0.500000000000000, 0, -np.Inf]).T
 		self.ub = matlabarray([ np.Inf, np.Inf, np.Inf]).T
 		#self.values = helper.dummyValues()

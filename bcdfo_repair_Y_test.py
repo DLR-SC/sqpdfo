@@ -25,7 +25,7 @@ class Test_bcdfo_repair_Y(unittest.TestCase):
 		Y = matlabarray([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]])
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_(  Y, 0, 1, 1, 1, 1e15 )
 		QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale = bcdfo_repair_Y_( QZ, RZ, Y, 0.7, 10, 1.0e-10, 1.1, 0.001, xbase, 1, 0, 0, matlabarray([-10,-10]), matlabarray([10,10]), matlabarray([1,2]), 1, scale, 1, 1, 1e15 )
-		print QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale
+		#print QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale
 		
 		correctQZplus = matlabarray([
 

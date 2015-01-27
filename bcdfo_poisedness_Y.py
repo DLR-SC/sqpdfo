@@ -16,11 +16,11 @@ def bcdfo_poisedness_Y_( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons,
 	xl = helper.convert(xl)
 	xu = helper.convert(xu)
 	
-	print "indfree before = ", indfree	
+	#print "indfree before = ", indfree	
 	#print "len indfree", len(indfree)
 	#print "ones", ones(len(indfree))
 	indfree = helper.convert(indfree - 1)
-	print "indfree after = ", indfree
+	#print "indfree after = ", indfree
 	
 	stratLam = helper.convert(stratLam)
 	scale = helper.convert(scale)
@@ -107,24 +107,24 @@ def bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, 
 if __name__ == "__main__":
    from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y
    import numpy
-   print "Self-test of the function without shifting:"
+   #print "Self-test of the function without shifting:"
    Y = numpy.array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
-   print Y
+   #print Y
    [QZ, RZ, xbase, scale] = bcdfo_build_QR_of_Y.bcdfo_build_QR_of_Y( Y, 0, 0 )
    [ lambd ,Y_radius ] = bcdfo_poisedness_Y( QZ, RZ, Y, 0.001, xbase, 1, 0, scale, 0 )
-   print lambd, Y_radius
+   #print lambd, Y_radius
 #  should give:
 #  lambd =
 #  204.8586
 #  Y_radius =
 #     2
 
-   print "Self-test of the function with shifting:"
+   #print "Self-test of the function with shifting:"
    Y = numpy.array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
-   print Y
+   #print Y
    [QZ, RZ, xbase, scale] = bcdfo_build_QR_of_Y( Y, 0, 1 )
    [ lambd ,Y_radius ] = bcdfo_poisedness_Y( QZ, RZ, Y, 0.001, xbase, 1, 0, scale, 1 )
-   print lambd, Y_radius
+   #print lambd, Y_radius
 #  should give:
 #  lambd =
 #  204.8586

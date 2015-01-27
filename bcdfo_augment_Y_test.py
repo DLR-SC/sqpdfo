@@ -24,7 +24,7 @@ class Test_bcdfo_augment_Y(unittest.TestCase):
 		Y = matlabarray([[ 0, 1, 0, 2, 0], [0, 0, 1, 0, 2 ]])
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_(  Y, 0, 0, 1, 1, 1e15 )
 		p1, QZ, RZ, Y, xbase, scale = bcdfo_augment_Y_( matlabarray([1, 0.01]).T, Y, 0, 0, 1, 1, 1e15 )
-		print "p1, QZ, RZ, Y, xbase, scale", p1, QZ, RZ, Y, xbase, scale
+		#print "p1, QZ, RZ, Y, xbase, scale", p1, QZ, RZ, Y, xbase, scale
 		
 		correctY = matlabarray([
          [0,    1.0000,         0,    2.0000,         0,    1.0000],

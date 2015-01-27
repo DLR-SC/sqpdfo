@@ -66,7 +66,7 @@ def bcdfo_gradP( P, x, xbase, scale, shift_Y ):
    p1   = len( P[0] )
    P_cp = copy(P)
    x_cp = copy(x.transpose())
-   print "x\n", x			
+   #print "x\n", x			
    
    if ( shift_Y ):
       P_cp = P_cp * scale.transpose()[0]
@@ -87,9 +87,9 @@ def bcdfo_gradP( P, x, xbase, scale, shift_Y ):
        # diagonal
 
        ndiag        = min( nquad, n )
-       print "g\n", g
-       print "P_cp\n", P_cp
-       print "x_cp\n", x_cp							
+       #print "g\n", g
+       #print "P_cp\n", P_cp
+       #print "x_cp\n", x_cp							
        g[0][0:ndiag] = g[0][0:ndiag] + P_cp[0][n+1:n+1+ndiag].transpose()*x_cp[0][0:ndiag]
        nquad        = nquad - ndiag
 

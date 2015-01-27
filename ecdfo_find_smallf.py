@@ -67,12 +67,12 @@ def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,i
     dummy_set=find_(dstatus == c.dummy)
     ind_insideBounds=matlabarray([])
     for i in arange_(1,cur_degree).reshape(-1):
-        print "Y[:,i]", Y[:,i]			
-        print "xl[indfree]", xl[indfree]
-        print "Y[:,i] < xl[indfree]", Y[:,i] < xl[indfree].T
-        print "Y[:,i] > xu[indfree]", Y[:,i] > xu[indfree].T
+        #print "Y[:,i]", Y[:,i]			
+        #print "xl[indfree]", xl[indfree]
+        #print "Y[:,i] < xl[indfree]", Y[:,i] < xl[indfree].T
+        #print "Y[:,i] > xu[indfree]", Y[:,i] > xu[indfree].T
 								
-        print "np.logical_or(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree])", np.logical_or(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T)
+        #print "np.logical_or(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree])", np.logical_or(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T)
         #print "the type:", type(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]))								
 			
         if ((isempty_(find_(logical_or_(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):

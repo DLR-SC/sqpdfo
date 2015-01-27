@@ -29,21 +29,21 @@ def convertArray(a):
 	if a is None or type(a) is float or type(a) is int or type(a) is long:
 		return a
 	#a = np.copy(a)		
-	if type(a) is np.ndarray:
-		print "no conversion, a already is numpy array"
+	if type(a) is np.ndarray or type(a) is np.float64:
+		#print "no conversion, a already is numpy array"
 		return a
 
-	print "type a", type(a)		
+	#print "type a", type(a)		
 	if type(a) is char:
 		ret = str(a)
-		print "str(a)", ret
+		#print "str(a)", ret
 		return ret	
 	#if type(a) is float or type(a) is int:
 	#	b = np.zeros(1)
 #		b[0] = a
 #		return b[0]
 	if a.shape == (1,1):
-		print "shape (1,1)"
+		#print "shape (1,1)"
 		#b = np.zeros(1)
 		b = np.copy(a[0])
 		return b#[0]
@@ -74,14 +74,14 @@ def convert(a):
 		return a
 	a = np.copy(a)		
 	if type(a) is np.ndarray:
-		print "no conversion, a already is numpy array"
+		#print "no conversion, a already is numpy array"
 		return a
 	if type(a) is float or type(a) is int:
 		b = np.zeros(1)
 		b[0] = a
 		return b[0]
 	if a.shape == (1,1):
-		print "shape (1,1)"
+		#print "shape (1,1)"
 		b = np.zeros(1)
 		b[0] = a[0]
 		return b[0]
@@ -113,7 +113,7 @@ class generalDecorator():
 
 	def convert(self, a):
 		if type(a) is np.ndarray:
-			print "no conversion, a already is numpy array general decorator"
+			#print "no conversion, a already is numpy array general decorator"
 			return a
 		if type(a) is float or type(a) is int:
 		#	b = np.zeros(1)
@@ -122,7 +122,7 @@ class generalDecorator():
 			return a
 		if a.shape[1] == 1:
 			a = a.T			
-			print "transposed a", a
+			#print "transposed a", a
 		return np.asarray(a)
 		
 		
@@ -168,7 +168,7 @@ class convertingDecorator(generalDecorator):
 	def __call__(self, *args, **kwargs):
 		#args = locals()
 		#print args
-		self.printTypes(args)
+		#self.printTypes(args)
 		pass_args = []
 		for arg in args:
 			#arg = args[k]

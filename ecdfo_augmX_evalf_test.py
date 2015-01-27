@@ -112,7 +112,7 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 		#print "Warning: Specified Test does not match function"
 		#return unittest.skip("Thespecified Test does not match function...")
 		self.assertEqual(xstatus, correctxstatus)
-		print "fX", fX
+		#print "fX", fX
 		self.assertEqual(fX, correctfX)
 		self.assertEqual(neval, correctneval)
 

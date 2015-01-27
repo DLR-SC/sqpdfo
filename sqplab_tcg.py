@@ -110,14 +110,14 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             break
         if _iter == 1:
             d=- g
-            print "d = -g", d												
+            #print "d = -g", d												
         else:
             d=- g + (g2 / g2_) * d
-            print "d = -g + (...) * d", d												
+           # print "d = -g + (...) * d", d												
         Ad=A * d
-        print "A\n", A								
-        print "d\n", d
-        print "Ad\n", Ad								
+        #print "A\n", A								
+        #print "d\n", d
+        #print "Ad\n", Ad								
         #dAd=d.T * Ad
         dAd=np.dot(d, Ad)								
         if plevel:

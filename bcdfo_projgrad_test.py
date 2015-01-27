@@ -20,7 +20,7 @@ class Test_bcdfo_projgrad(unittest.TestCase):
 		pass
 
 	def test_bcdfo_projgrad(self):
-		print "No test specified..."
+		#print "No test specified..."
 #		  n     : dimension
 #  x     : current iterate
 #  g     : gradient at x
@@ -34,8 +34,8 @@ class Test_bcdfo_projgrad(unittest.TestCase):
 		
 		gnorm, gn = bcdfo_projgrad_(n,x,g,bl,bu)
 		
-		print "gnorm", gnorm
-		print "gn", gn
+		#print "gnorm", gnorm
+		#print "gn", gn
 		
 		correctgn = matlabarray([-1,-1]).T
 		correctgnorm = 1

@@ -120,7 +120,7 @@ class Test_sqplab_options(unittest.TestCase):
 		self.assertEqual(self.options.algo_method, values.newton)
 	
 	def test_sqplab_options2(self):
-		print "---------------TEST 2-----------------"
+		#print "---------------TEST 2-----------------"
 		self.options.algo_globalization = char('trust regions')
 		info,options,values = sqplab_options_(self.info,self.options)
 		

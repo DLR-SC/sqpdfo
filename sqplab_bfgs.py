@@ -314,7 +314,7 @@ def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=N
         fprintf_(options.fout,char(" y'*s/(s'*s) = %9.3e\\n"),ys / (s.T * s))
     Ms=M * s
     sMs=s.T * Ms
-    print "s^TMs", sMs				
+    #print "s^TMs", sMs				
     if sMs <= 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
@@ -352,7 +352,7 @@ def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=N
         sMs=s.T * Ms
     M=M - (Ms * Ms.T) / sMs + (y * y.T) / ys
     if options.verbose >= 6:
-        print "eig_(M)", eig_(M)					
+        #print "eig_(M)", eig_(M)					
         eigM=sort_(eig_(M))
         fprintf_(options.fout,char('  eig(M): min = %g, max = %g, cond = %g\\n'),min_(eigM),max_(eigM),max_(eigM) / min_(eigM))
     return M,pc,info,values

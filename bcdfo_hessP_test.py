@@ -30,7 +30,7 @@ class Test_bcdfo_hessP(unittest.TestCase):
 						[-0.5000,    1.0000]])
 		
 		self.assertTrue((abs(ans - correctans) < 1e-8).all())
-		print "ans", ans
+		#print "ans", ans
   
 #  ans =
 #

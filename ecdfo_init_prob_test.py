@@ -130,7 +130,7 @@ class Test_ecdfo_init_prob(unittest.TestCase):
 		self.assertEqual(correctme, me)
 		self.assertEqual(correctinfo,info)
 
-		print "thru onon vec"		
+		#print "thru onon vec"		
 		self.assertEqual(correctx0, x0)
 		self.assertEqual(correctux, ux)
 		self.assertEqual(correctlx, lx)

@@ -22,7 +22,7 @@ class bcdfo_solve_TR_MS_bc_decorator(generalDecorator):
 		ub = self.convert(ub)
 		#print "ub", ub
 		#print "type(ub)", type(ub)
-		Delta = self.convert(Delta)
+		Delta = helper.convertArray(Delta)#self.convert(Delta)
 		#print "Delta", Delta
 		#print "type(Delta)", type(Delta)
 		eps_D = self.convert(eps_D)

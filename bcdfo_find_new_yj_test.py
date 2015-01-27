@@ -67,9 +67,9 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 		#print "RZ\n", RZ		
 		
 		#correctynew = matlabarray([[3],[0]])
-		print "ynew", ynew
+		#print "ynew", ynew
 		#self.assertEqual(ynew, correctynew)
-		print "improvement", improvement
+		#print "improvement", improvement
 		#correctimprovement = 0
 		#self.assertEqual(improvement, correctimprovement)
 		

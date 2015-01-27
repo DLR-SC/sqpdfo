@@ -129,8 +129,8 @@ def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    else:
 
       #  When no shift occurs, the current iterate is Y(:,0)
-      print "Ycp\n", Ycp
-      print "Ycp[:,0]\n", Ycp[:,0]
+      #print "Ycp\n", Ycp
+      #print "Ycp[:,0]\n", Ycp[:,0]
 
       g  = bcdfo_gradP( Lj, Ycp[:,0], xbase, scale, 0 );
       H  = bcdfo_hessP( Lj, Ycp[:,0], xbase, scale, 0 );

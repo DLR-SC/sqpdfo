@@ -206,7 +206,7 @@ class Test_sqplab_lsmult(unittest.TestCase):
 		
 		self.assertTrue((abs(correctlm - lm) < 1e-8).all())
 		
-		print "lm", lm
+		#print "lm", lm
 		#print "info", info
 
 if __name__ == '__main__':

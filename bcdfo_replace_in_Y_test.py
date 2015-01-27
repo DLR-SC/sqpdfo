@@ -25,8 +25,8 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
 		Y = matlabarray([[ 1.0, 1.0, 0.0, 0.0, 0.0, -1.0], [1.0, 0.0, -1.0, 1.0, 0.0, 0.0, ]])
 		whichmodel = 0
 		QZ,RZ,xbase,scale = bcdfo_build_QR_of_Y( Y , 0, 1, 1, 1, 1e15 )
-		print "QZ\n", QZ
-		print "RZ\n", RZ
+		#print "QZ\n", QZ
+		#print "RZ\n", RZ
 
 		#RZ = np.array([
 
@@ -38,10 +38,10 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
     #  [   0,         0,         0,         0,         0,    0.1952		]])
 		
 		ynew = 0.25*Y[:,3].T
-		print "ynew", ynew
+		#print "ynew", ynew
 		QZplus, RZplus, Yplus, xbase, scale = bcdfo_replace_in_Y( QZ, RZ, ynew, Y, 3, xbase, whichmodel, scale, 1, 1, 1, 1e15 )
 		
-		print "QZplus:\n", QZplus, "\nRZplus:\n",  RZplus, "\nYplus:\n", Yplus
+		#print "QZplus:\n", QZplus, "\nRZplus:\n",  RZplus, "\nYplus:\n", Yplus
 		
 		correctYplus = matlabarray([
     [1.0000,    1.0000,         0,         0,         0,   -1.0000],
@@ -75,8 +75,8 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
 		Y = np.array([[ 1.0, 1.0, 0.0, 0.0, 0.0, -1.0], [1.0, 0.0, -1.0, 1.0, 0.0, 0.0, ]])
 		whichmodel = 0
 		QZ,RZ,xbase,scale = bcdfo_build_QR_of_Y( Y , 0, 1, 1, 1, 1e15 )
-		print "QZ\n", QZ
-		print "RZ\n", RZ
+		#print "QZ\n", QZ
+		#print "RZ\n", RZ
 
 		#RZ = np.array([
 
@@ -88,10 +88,10 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
     #  [   0,         0,         0,         0,         0,    0.1952		]])
 		
 		ynew = np.array([0.25*Y[:,3-1]]).T
-		print "ynew", ynew
+		#print "ynew", ynew
 		QZplus, RZplus, Yplus, xbase, scale = bcdfo_replace_in_Y( QZ, RZ, ynew, Y, 3-1, xbase, whichmodel, scale, 1, 1, 1, 1e15 )
 		
-		print "QZplus:\n", QZplus, "\nRZplus:\n",  RZplus, "\nYplus:\n", Yplus
+		#print "QZplus:\n", QZplus, "\nRZplus:\n",  RZplus, "\nYplus:\n", Yplus
 		
 		correctYplus = np.array([
     [1.0000,    1.0000,         0,         0,         0,   -1.0000],

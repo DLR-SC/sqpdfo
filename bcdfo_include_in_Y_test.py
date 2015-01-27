@@ -25,7 +25,7 @@ class Test_bcdfo_include_in_Y(unittest.TestCase):
 		whichmodel = 0
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, whichmodel, 1, 1, 1, 1e15 )
 		QZplus, RZplus, Yplus, pos, xbase, scale = bcdfo_include_in_Y_(matlabarray([-1,1]).T, QZ, RZ, Y, matlabarray(range(2,6)), 0.01, char('weighted'), xbase, whichmodel, 0, scale, 1, 1, 1, 1e15 )
-		print QZplus, RZplus, Yplus, pos, xbase, scale
+		#print QZplus, RZplus, Yplus, pos, xbase, scale
 		
 		correctQZplus = matlabarray([
    [-1.0000,         0,         0,         0,         0,         0],
@@ -60,7 +60,7 @@ class Test_bcdfo_include_in_Y(unittest.TestCase):
 				
 		#self.assertTrue((abs(correctQZplus - QZplus) < 1e-8).all())
 		#self.assertTrue((abs(correctRZplus - RZplus) < 1e-8).all())
-		print "QR decompositions is different again"
+		#print "QR decompositions is different again"
 		self.assertTrue((abs(correctYplus - Yplus) < 1e-8).all())
 		self.assertEqual(correctpos, pos)
 		self.assertAlmostEqual(correctxbase, xbase)

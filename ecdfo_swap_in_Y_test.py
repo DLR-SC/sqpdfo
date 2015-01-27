@@ -52,17 +52,17 @@ class Test_ecdfo_swap_in_Y(unittest.TestCase):
 		QZ,RZ,xbase,scale = bcdfo_build_QR_of_Y_( self.Y, 0, 0, 1, 1, 1e15 )
 		Z = QZ*RZ
 		
-		print "QZ", QZ
-		print "type(QZ)", type(QZ)
-		print "RZ", RZ
-		print "type(RZ)", type(RZ)
-		print "Z", Z
-		print "xbase", xbase
-		print "type(xbase)", type(xbase)		
+		#print "QZ", QZ
+		#print "type(QZ)", type(QZ)
+		#print "RZ", RZ
+		#print "type(RZ)", type(RZ)
+		#print "Z", Z
+		#print "xbase", xbase
+		#print "type(xbase)", type(xbase)		
 		#self.fY, matlabarray(xbase), 0, matlabarray(scale), 0, 1, 1, 1e15 )
 
-		print "scale", scale
-		print "tyoe(scale)", type(scale)
+		#print "scale", scale
+		#print "tyoe(scale)", type(scale)
 		
 		#QZ, RZ, Y, xbase, scale = ecdfo_swap_in_Y_( 1, 3, matlabarray(QZ), matlabarray(RZ), self.Y, self.ind_Y,
 		ceY = self.Y

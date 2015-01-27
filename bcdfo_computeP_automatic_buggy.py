@@ -115,16 +115,16 @@ def bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
       # build (sub-basis) model (p1 = q)
       # (QZ and RZ are the factors of Z = M')
 
-      print "type(QZ)", type(QZ)
-      print "QZ\n", QZ						
-      print "type(RZ)", type(RZ)
-      print "RZ\n", RZ
-      print "type(fY)", type(fY)
-      print "fY", fY						
+      #print "type(QZ)", type(QZ)
+      #print "QZ\n", QZ						
+      #print "type(RZ)", type(RZ)
+      #print "RZ\n", RZ
+      #print "type(fY)", type(fY)
+      #print "fY", fY						
 
-      print "solve(...)", linalg.solve( RZ.transpose(),fY.transpose())						
-      print "(1,p1)", (1,p1)						
-      print "dot(...):\n", dot(QZ, linalg.solve( RZ.transpose(),fY.transpose()))						
+      #print "solve(...)", linalg.solve( RZ.transpose(),fY.transpose())						
+      #print "(1,p1)", (1,p1)						
+      #print "dot(...):\n", dot(QZ, linalg.solve( RZ.transpose(),fY.transpose()))						
       P = reshape(dot(QZ, linalg.solve( RZ.transpose(),fY.transpose())),(1,p1))
 
 #      P = ( QZ * ( RZ.transpose() \ fY.transpose() ) ).transpose()

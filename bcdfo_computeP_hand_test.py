@@ -32,25 +32,25 @@ class Test_bcdfo_computeP(unittest.TestCase):
 		P = bcdfo_computeP_( QZ, RZ, Y, fY, whichmodel, matlabarray([0, 0, 0, 0, 0]), 0,
 			1, 1, matlabarray([0, 0]), scale, 1, 1, matlabarray([1, 2]), matlabarray([]), matlabarray([[1, 0],[0, 1]]), 1e-5, None )
 
-		print "P\n", P
+		#print "P\n", P
 		#  should give:
 #  P =
 #   1.0000   1.0000   4.0000   4.0000       0
 		
 	def test_bcdfo_computePOriginal(self):
-		print "Testing original func"
+		#print "Testing original func"
 		Y = np.array([[ 0, 1, 0, 2, 0],[0, 0, 1, 0, 2]])
 		fY = np.array([ 1, 2, 3, 4, 5 ])
 		whichmodel = 0
 		
 		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y(Y, whichmodel, 1, 1, 1, 1e15 )
-		print "QZ\n", QZ
-		print "RZ\n", RZ
+		#print "QZ\n", QZ
+		#print "RZ\n", RZ
 	
 		P = bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, np.array([0, 0, 0, 0, 0]), 0,
 		1, 1, np.array([0, 0]), scale, 1, 1)#, np.array([1, 2]), np.array([]), np.array([[1, 0],[0, 1]]), 1e-5, None )
 
-		print "P\n", P
+		#print "P\n", P
 		
 	def test_bcdfo_computePOriginal2(self):
 		QZ = np.array([
@@ -91,7 +91,7 @@ class Test_bcdfo_computeP(unittest.TestCase):
 		Delta0 = 1
 		
 		P = bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, P_old, ind_Y, i_xold, i_xplus, g, scale, shift_Y, Delta0 )
-		print P
+		#print P
 		
 		correctP =  np.array([[1.500000000000000,                   0 ,  1.000000000000000,                   0],
 						[2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],

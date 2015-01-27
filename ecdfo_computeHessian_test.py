@@ -420,7 +420,7 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
 			sigma=self.sigma,scale=self.scale,shift_Y=self.shift_Y,QZ=self.QZ,RZ=self.RZ,whichmodel=self.whichmodel,
 			ind_Y=self.ind_Y,i_xbest=self.i_xbest,m=self.m)
 			
-		print "M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g
+		#print "M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g
 			
 		correctM = matlabarray([
 

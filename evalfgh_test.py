@@ -65,7 +65,7 @@ class Test_evalfgh(unittest.TestCase):
 	def test_evalfgh(self):
 		msg,out2,out3,out4 = evalfgh_(self.key,self.xy,lm=None)
 
-		print "msg,out2,out3,out4", msg,out2,out3,out4
+		#print "msg,out2,out3,out4", msg,out2,out3,out4
 		
 		correctmsg = 0
 		correctout2 = 3.354626279025119e-04

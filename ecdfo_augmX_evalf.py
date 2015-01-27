@@ -106,19 +106,19 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
         outdic,fvalue,info.ci,info.ce=f(2,yfull)
         info.f=fvalue
     else:
-        print "X", X#[:,m]
-        print "X.shape", X.shape
-        print "m", m								
-        print "y", y
-        print "type y", type(y)
+        #print "X", X#[:,m]
+        #print "X.shape", X.shape
+        #print "m", m								
+        #print "y", y
+        #print "type y", type(y)
         if X.shape[1] <= m:								
             X = concatenate_([X, y], axis=1)								
-            print "concatenate"												
+            #print "concatenate"												
         else:
             X[:,m]=y												
-            print "assignment"												
+            #print "assignment"												
 										
-        print "X", X#[:,m]								
+        #print "X", X#[:,m]								
         								
         #X[:,m]=y
         if (scaleX):
@@ -131,8 +131,8 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
             fprintf_(options.fout,char('### ecdfo_augmX_evalf: initial point x is out of domain\\n\\n'))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    print "fvalue", fvalue
-    print "isnan fvalue", isnan_(fvalue)								
+    #print "fvalue", fvalue
+    #print "isnan fvalue", isnan_(fvalue)								
     if isnan_(fvalue):
         if options.verbose:
             fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is NaN at the point x\\n\\n'))
@@ -175,14 +175,14 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
             #print "ceX", ceX
         #print "real_(info.ce.T)", real_(info.ce.T)
         #print "type real_(info.ce.T)", type(real_(info.ce.T))	
-            print "ceX", ceX												
-            print "info.ce.T", info.ce.T								
+            #print "ceX", ceX												
+            #print "info.ce.T", info.ce.T								
         																
             #ceX = matlabarray(np.concatenate([ceX, real_(info.ce.T)], 1))
             ceX = concatenate_([ceX, real_(info.ce)], axis=1)								
             #print "concatenate"												
         else:
             ceX[:,m]=real_(info.ce.T)												
-            print "assignment"								
+            #print "assignment"								
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic

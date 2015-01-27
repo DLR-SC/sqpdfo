@@ -375,8 +375,8 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         correctlm_computed = 0
         correctlm = matlabarray([0, 0, 0, -0.333333332763888, -0.000000000250000]).T
         
-        print "THRU"
-        print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+        #print "THRU"
+        #print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
         
         self.assertAlmostEqual(correctxnew.all(), xnew.all(), delta=1e-5)
         self.assertAlmostEqual(correctdelta, delta, delta=1e-5)

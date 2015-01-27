@@ -30,8 +30,8 @@ class Test_blls(unittest.TestCase):
 	def test_blls(self):
 		res = blls_(self.A,self.b, self.lb, self.ub)
 		
-		print "res", res[0]
-		print "ans", self.ans
+		#print "res", res[0]
+		#print "ans", self.ans
 		np.testing.assert_almost_equal(res[0], self.ans, 4)
 		
 

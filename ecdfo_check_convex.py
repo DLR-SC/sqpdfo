@@ -35,7 +35,7 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
         EPS=1e-09
         v,d=eig_(A,nargout=2)
         d=diag_(d)#np.diag(d)
-        print d
+        #print d
         d[d < ZERO]=EPS
         d=diag_(d)
         A=v * d * v.T

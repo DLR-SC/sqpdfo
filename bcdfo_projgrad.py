@@ -31,20 +31,20 @@ def bcdfo_projgrad(n,x,g,bl,bu):
    gn = array([[]])
 
    for i in range(0,n):
-      print "g[0]\n", g[0]				
+      #print "g[0]\n", g[0]				
       gi = g[i][0]#g[0][i]
       if ( gi < 0.0 ):
          gn = append(gn,-min(abs(bu[i]-x[i]),-gi))
       else:
 
-         print "x", x
-         print "bl", bl
-         print "bl[i]", bl[i]									
-         print "x[i]", x[i]									
-         print "abs(bl[i]-x[i])", abs(bl[i]-x[i])
-         print "gi", gi
-         print "gn", gn									
-         print "min(abs(bl[i]-x[i])", append(gn,min(abs(bl[i]-x[i]),gi))									
+         #print "x", x
+         #print "bl", bl
+         #print "bl[i]", bl[i]									
+         #print "x[i]", x[i]									
+         #print "abs(bl[i]-x[i])", abs(bl[i]-x[i])
+         #print "gi", gi
+         #print "gn", gn									
+         #print "min(abs(bl[i]-x[i])", append(gn,min(abs(bl[i]-x[i]),gi))									
          gn = append(gn,min(abs(bl[i]-x[i]),gi))
       
       # infinity-norm

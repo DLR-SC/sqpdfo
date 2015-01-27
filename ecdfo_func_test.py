@@ -63,8 +63,8 @@ class Test_ecdfo_func(unittest.TestCase):
 		self.assertAlmostEqual(correctf, f, 7)
 		self.assertAlmostEqual(correctci, ci, 7)
 		#print "abs", (abs(correctce - ce) < 1e-7).all()
-		print "ce", ce
-		print "correctce", correctce
+		#print "ce", ce
+		#print "correctce", correctce
 		self.assertTrue((abs(correctce - ce) < 1e-7).all())
 
 if __name__ == '__main__':

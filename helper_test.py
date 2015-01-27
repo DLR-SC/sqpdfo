@@ -27,23 +27,23 @@ class Test_convertArray(unittest.TestCase):
 		
 		A = helper.convertArray(self.A)
 		
-		print "Conversion done:"
-		print "x\n", x
-		print "y\n", y
-		print "z\n", z
+		#print "Conversion done:"
+		#print "x\n", x
+		#print "y\n", y
+		#print "z\n", z
 		
-		print "A\n", A
+		#print "A\n", A
 		
 		x.reshape((4,1))
 		y.reshape((2,2))
 		A.reshape((1,4))
 		
-		print "Reshape done:"
-		print "x\n", x
-		print "y\n", y
-		print "z\n", z
+		#print "Reshape done:"
+		#print "x\n", x
+		#print "y\n", y
+		#print "z\n", z
 		
-		print "A\n", A
+		#print "A\n", A
 
 
 	def test_convertArray_resize(self):
@@ -53,24 +53,24 @@ class Test_convertArray(unittest.TestCase):
 		
 		A = helper.convertArray(self.A)
 		
-		print "Conversion done:"
-		print "x\n", x
-		print "y\n", y
-		print "z\n", z
+		#print "Conversion done:"
+		#print "x\n", x
+		#print "y\n", y
+		#print "z\n", z
 		
-		print "A\n", A
+		#print "A\n", A
 		
 		x.resize((4,2))
 		y.resize((2,4))
 		z.resize((2,2))
 		A.resize((4,4))
 		
-		print "Resize done:"
-		print "x\n", x
-		print "y\n", y
-		print "z\n", z
+		#print "Resize done:"
+		#print "x\n", x
+		#print "y\n", y
+		#print "z\n", z
 		
-		print "A\n", A
+		#print "A\n", A
 
 
 if __name__ == '__main__':
