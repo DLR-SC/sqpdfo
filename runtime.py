@@ -327,7 +327,16 @@ class matlabarray(np.ndarray):
       #              #self.__dict__ = ret.__dict__																																								
       #              print "ret", ret																								
       #              return #ret											
-									
+				
+				
+#        if value == []:
+#            print "helloooo"
+#            #self = np.delete(self, indices)
+#            self = np.delete(np.asarray(self), np.asarray(index) - 1)
+#            print "done"
+#            return self
+				
+				
         #import pdb; pdb.set_trace()
         if type(index) is matlabarray:
             if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():

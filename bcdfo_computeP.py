@@ -9,6 +9,16 @@ from bcdfo_evalZ import *
 
 import helper
 from runtime import matlabarray
+
+#@helper.convertingDecorator
+#def bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+#         i_xold, i_xplus, g, scale, shift_Y, Delta0=None, indfree=None, gmat=None, hessian=None, 
+#         epsilon=None, noisy=None):
+#										
+#    return bcdfo_computeP(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+#         i_xold, i_xplus, g, scale, shift_Y, Delta0=None)#, indfree=None, gmat=None, hessian=None, 
+#         #epsilon=None, noisy=None)
+
 def bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
          i_xold, i_xplus, g, scale, shift_Y, Delta0=None, indfree=None, gmat=None, hessian=None, 
          epsilon=None, noisy=None):
@@ -48,6 +58,8 @@ def bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
 		return P
 
 #return P
+
+
 def bcdfo_computeP( QZ, RZ, Y, fY, whichmodel, P_old, ind_Y, i_xold, i_xplus, g, scale, shift_Y, Delta0 ):
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #%

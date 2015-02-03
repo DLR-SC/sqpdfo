@@ -65,7 +65,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     armijob=0.5
     armijor=0.01
     maxback=15
-    inds=matlabarray([arange_(1,n)])
+    inds=arange_(1,n)#matlabarray([arange_(1,n)])
     nit=0
     nuns=0
     ssub=zeros_(n,1)
@@ -147,11 +147,11 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             break
         atlb=inds[find_(abs_(stry - lb) <= epsfeas)]
         atub=inds[find_(abs_(stry - ub) <= epsfeas)]
-        atb=matlabarray([atlb,atub])
+        atb=concatenate_([atlb,atub], axis=1)#matlabarray([atlb,atub])
         latlb=length_(atlb)
         latub=length_(atub)
         free=copy_(inds)
-        free[atb]=[]
+        free = np.delete(np.asarray(free), np.asarray(atb) - 1) #free[atb]=[]
         lfree=length_(free)
         s[atlb]=lb[atlb]
         s[atub]=ub[atub]

@@ -48,6 +48,9 @@ from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
 from ecdfo_computeHessian import ecdfo_computeHessian_
+from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
+from bcdfo_repair_Y import bcdfo_repair_Y_
+from ecdfo_find_smallf import ecdfo_find_smallf_
 #from ecdfo_func import get_prob
 #except ImportError:
     #from smop.runtime import *
@@ -57,7 +60,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
     #nargin = 89-[func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,level,whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values].count(None)+len(args)
 
     old_delta=copy_(delta)
-    sigma=1
+    sigma=matlabarray([1.0])
     rho_factor=0.3
     tau1=copy_(gamma2)
     tau2=copy_(gamma3)
@@ -137,7 +140,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
                     disp_([char('error on gradient before set improvement = '),num2str_(errg)])
-                if ((((info.glagn <= options.tol(1)) and (info.feasn <= options.tol(2)) and (info.compl <= options.tol(3)) and errg <= epsilon) or delta <= epsilon * 1e-05) and strcmp_(level,char('toplevel'))):
+                if ((((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3]) and errg <= epsilon) or delta <= epsilon * 1e-05) and strcmp_(level,char('toplevel'))):
                     info.niter=info.niter + 1
                     itype=char('conv')
                     ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -195,7 +198,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 xstatus[ind_Y[j]]=c.unused
                 ind_Y[j]=m
                 xstatus[m]=c.inY
-                X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,j],m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
+                X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,j].T,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
                 #print "Z 191 sstatus set to", sstatus																
                 fY[j]=fX[m]
                 if mi > 0:
@@ -244,7 +247,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
                 disp_([char('error on gradient after set improvement = '),num2str_(errg)])
-            if ((info.glagn / factor_CV <= options.tol(1)) and (info.feasn / factor_CV <= options.tol(2)) and (info.compl / factor_CV <= options.tol(3)) and errg <= epsilon and cur_degree >= rep_degree and strcmp_(level,char('toplevel'))):
+            if ((info.glagn / factor_CV <= options.tol[1]) and (info.feasn / factor_CV <= options.tol[2]) and (info.compl / factor_CV <= options.tol[3]) and errg <= epsilon and cur_degree >= rep_degree and strcmp_(level,char('toplevel'))):
                 info.niter=info.niter + 1
                 itype=char('conv')
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -280,9 +283,9 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             fprintf_(options.fout,char('  Full step:\\n    |s| = %8.2e\\n'),norms)
         qcost=info.g.T * s + 0.5 * (s.T * M * s)
         if rpred == 0:
-            sigmab=0
+            sigmab=matlabarray([0.0])
         else:
-            sigmab=qcost / ((1 - rho_factor) * rpred)
+            sigmab=matlabarray([float(qcost / ((1.0 - rho_factor) * rpred))])
         if sigma < sigmab:
             sigma=max_(sigmab,1.5 * sigma)
             merit0=f0 + sigma * ce0n
@@ -420,7 +423,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                         lbounds[ilb]=lb[indfree[ilb]]
                         ubounds[iub]=ub[indfree[iub]]
                         lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
-                    M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,matlabarray([sigma]),scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
+                    M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
             if pred == - 1.0:
                 pos=1
                 rho=1

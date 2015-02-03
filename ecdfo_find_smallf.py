@@ -94,7 +94,7 @@ def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,i
             x=Y[:,1]
     info.f=fY[1]
     if length_(ceY) > 0:
-        info.ce=ceY[:,1]
+        info.ce=ceY[:,1].T
     if length_(ciY) > 0:
-        info.ci=ciY[:,1]
+        info.ci=ciY[:,1].T
     return x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info

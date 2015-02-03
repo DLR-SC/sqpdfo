@@ -455,7 +455,7 @@ class Test_ecdfo_find_smallf(unittest.TestCase):
 					info=self.info)
 					
 		#print "info.ce", info.ce	
-		correctinfoce =  1.0e-15 * matlabarray([0.222044604925031,-0.111022302462516])
+		correctinfoce =  1.0e-15 * matlabarray([[0.222044604925031,-0.111022302462516]]).T
 		self.assertTrue((abs(info.ce - correctinfoce) < 1e-16).all())		
 		
 		
