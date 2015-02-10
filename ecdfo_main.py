@@ -132,7 +132,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 fprintf_(options.fout,char('  feasibility     = %12.5e\\n'),info.feasn)
             else:
                 fprintf_(options.fout,char(' |grad f| = %12.5e\\n'),info.glagn)
-        if ((info.glagn <= options.tol[1]) and (info.feasn <= options.tol(2)) and (info.compl <= options.tol(3))) or delta <= epsilon * 1e-05 or (pred == - 1.0):
+        if ((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3])) or delta <= epsilon * 1e-05 or (pred == - 1.0):
             augment=rep_degree - cur_degree
             if (augment <= 0):
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)

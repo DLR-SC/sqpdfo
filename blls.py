@@ -183,9 +183,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     indices_of_variables_at_their_upper_bound=copy_(atub)
                 rhs=copy_(b)
                 if not isempty_(atlb):
-                    rhs=rhs - A[1:m,atlb] * lb[atlb]
+                    rhs=rhs - A[1:m,atlb] * lb[atlb].T
                 if not isempty_(atub):
-                    rhs=rhs - A[1:m,atub] * ub[atub]
+                    rhs=rhs - A[1:m,atub] * ub[atub].T
                 ssub[free]=pinv_(A[1:m,free]) * rhs
                 ssub[atlb]=lb[atlb]
                 ssub[atub]=ub[atub]

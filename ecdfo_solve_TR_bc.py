@@ -78,6 +78,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
     #varargin = cellarray(args)
     #nargin = 18-[simul,x,lb,ub,delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx].count(None)+len(args)
     info_r = helper.dummyUnionStruct()
+    violated = None
 
     global threshold
     lm_computed=0
@@ -136,7 +137,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 #gconstraints=matlabarray([[gconstraints],[I[i,:]]])
                 #print "CONCATENATING 1"																				
                 constraints=concatenate_([constraints,matlabarray([0])])
-                gconstraints=concatenate_([constraints,I[i,:]])
+                gconstraints=concatenate_([constraints,I[i,:].T], axis = 1)
             if (x[i] - gradlag[i] >= ub[i]) and (abs_(x[i] - ub[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
@@ -173,7 +174,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             lb_r=lb[1:n].T - x
             ub_r=ub[1:n].T - x
             stratLam=1												
-            r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+            r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
 																								
             info_r.prec=sqrt_(gplus.T * gplus)
             xr=x + r
@@ -277,7 +278,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             #print "lb\n", lb												
             if (xnew[i] - lb[i] < - threshold):
                 x_viol[i]=- i
-                x_fix=matlabarray([x_fix,i])
+                x_fix=concatenate_([x_fix, matlabarray([i])])#matlabarray([x_fix,i])
                 if options.verbose >= 3:
                     disp_(['lb ',int2str_(i),' is violated'])
                 #constraints=matlabarray([[constraints],[0]])
@@ -296,7 +297,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 else:
                     if (xnew[i] - ub[i] > threshold):
                         x_viol[i]=i
-                        x_fix=matlabarray([x_fix,i])
+                        x_fix=concatenate_([x_fix, matlabarray(i)])#matlabarray([x_fix,i])
                         if options.verbose >= 3:
                             disp_(['ub ',int2str_(i),' is violated'])
                         #print "CONCATENATING 4"																												
@@ -332,7 +333,8 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             #print "x_fix[1]", x_fix[2]												
             #print "type(x_fix)", type(x_fix)												
             #print "lm[x_fix]", lm[x_fix[1]]												
-            min_lm,ind_min_lm=min_(lm[x_fix[1]],nargout=2)
+            #min_lm,ind_min_lm=min_(lm[x_fix[1]],nargout=2)
+            min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
             if options.verbose >= 3:
                 disp_(['smallest Lagrange multiplier (for the bounds) = ',num2str_(min_lm)])
             if min_lm < 0:

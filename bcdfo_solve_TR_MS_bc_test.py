@@ -21,20 +21,31 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
 
 	def test_bcdfo_solve_TR_MS_bc(self):
 		#arg1 = np.array([[2,3]])
-		arg1 = matlabarray([[2,3]])
+		gx = matlabarray([[2,3]]).T
 		#print "arg1", arg1
 		#arg2 = np.array([[4, 6], [6, 5]])
-		arg2 = matlabarray([[4, 6], [6, 5]])
+		H = matlabarray([[4, 6], [6, 5]])
 		#print "arg2", arg2
 		#arg3 = np.array([[-10, -10]])
-		arg3 = matlabarray([[-10, -10]])
+		lb = matlabarray([[-10, -10]]).T
 		#print "arg3", arg3
 		#arg4 = np.array([[10,10]])
-		arg4 = matlabarray([[10,10]])
+		ub = matlabarray([[10,10]]).T
 		#print "arg4", arg4
+		Delta = 1.0
+		eps_D = 0.001
+		stratLam = 1
 		
-		res =  bcdfo_solve_TR_MS_bc( arg1, arg2, arg3, arg4, 1.0, 0.001, 1 )
-		#print "Returns:\n", res
+		#print "-----start bcdfo solve tr ms bc -----"
+		res =  bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
+		#print "-----end bcdfo solve tr ms bc-----"
+		
+		#print "-----start trying printo -----"
+		#trying_printo(arg1, arg2, arg3, arg4, 1.0, 0.001, 1) # gx, H, lb, ub, Delta, eps_D, stratLam
+		#print "-----end trying printo-----"
+		
+		
+		print "Returns:\n", res
 		self.assertTrue((abs(res[0] - matlabarray([0.5153, -0.8575]).T) < 1e-4).all())
 #  should give
 #    0.5153

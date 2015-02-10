@@ -180,7 +180,10 @@ class convertingDecorator(generalDecorator):
 		if type(ret_tuple) is tuple:
 			ret = []
 			for arg in ret_tuple:
-				ret.append(matlabarray(arg))
+				if type(arg) is str:
+					ret.append(char(arg))
+				else:
+					ret.append(matlabarray(arg))
 		else:
 			return matlabarray(ret_tuple)
 		

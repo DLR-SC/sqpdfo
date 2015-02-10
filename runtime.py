@@ -606,7 +606,13 @@ def copy_(a):
     return matlabarray(np.asanyarray(a).copy(order="F"))
 
 def disp_(*args):
-    print (args)
+    out = ""
+    for arg in args:
+        try:
+            out = out + str(arg)
+        except Exception as e:
+            print "Display Error:", e.message()
+    print out#(args)
 
 false = False
 
