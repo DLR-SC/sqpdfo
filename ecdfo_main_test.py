@@ -875,7 +875,26 @@ class dummyInfo():
 		self.glag =  matlabarray([
 [-0.333333333013890],
 [   0.666666666736111],
-[  -0.333333333513889]])	
+[  -0.333333333513889]])
+
+class correctInfo():
+	def __init__(self):
+
+		self.g = matlabarray([-1.000001597463464, 0.000000267687146, 0.999990706694728]).T
+		self.ai = matlabarray( [])
+		self.ae = matlabarray([[1.000000000001365,   1.000000000001130,   0.999999999995923],
+   [0.999999999985469,   1.999999999999835,   2.999999999990382]])
+		self.hl = matlabarray( [])
+		self.niter = 4
+		self.flag = 0
+		self.nsimul = matlabarray([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+		self.ci = matlabarray( [])
+		self.ce =  1.0e-15 * matlabarray([ 0.222044604925031, -0.111022302462516]).T
+		self.f = 0.500000000000000
+		self.glag =    1.0e-15 * matlabarray([0.666133814775094, 0.661787688722732, -0.555111512312578]).T
+		self.glagn = 6.661338147750939e-16
+		self.feasn = 2.220446049250313e-16
+		self.compl = 0
 
 class Test_ecdfo_main(unittest.TestCase):
 
@@ -1042,9 +1061,102 @@ class Test_ecdfo_main(unittest.TestCase):
 	def test_ecdfo_main(self):
 		nit, i_xbest, x, fx, m, X, fX, ciX, ceX, ind_Y, Delta, eps_current, cur_degree, fcmodel, gx, normgx, vstatus, xstatus, sstatus, dstatus, M, ndummyY, sspace_save, xspace_save, msg, CNTsin, neval, lm, info = ecdfo_main_(self.func,self.n,self.nb,self.mi,self.me,self.lm,self.nitold, self.nit, self.i_xbest, self.lb, self.ub, self.m, self.X, self.fX, self.ciX, self.ceX, self.ind_Y, self.QZ, self.RZ, self.delta, self.cur_degree, self.neval, self.maxeval, self.maxit, self.fcmodel, self.gx, self.normgx, self.show_errg, self.pquad, self.pdiag, self.plin, self.stallfact, self.eps_rho, self.Deltamax, self.rep_degree, self.epsilon, self.verbose, self.eta1, self.eta2, self.gamma1, self.gamma2, self.gamma3, self.interpol_TR, self.factor_CV, self.Lambda_XN, self.Lambda_CP, self.factor_FPU, self.factor_FPR, self.Lambda_FP, self.criterion_S, self.criterion_FP, self.criterion_CP, self.mu, self.theta, self.eps_TR, self.eps_L, self.lSolver, self.stratLam, self.eps_current, self.vstatus, self.xstatus, self.sstatus, self.dstatus, self.ndummyY, self.sspace_save, self.xspace_save, self.xfix, self.fxmax, self.poised_model, self.M, self.kappa_ill, self.kappa_th, self.eps_bnd, self.poised, self.Y_radius, self.c, 'toplevel', self.whichmodel, self.hardcons, self.noisy, self.scaleX, self.scalefacX, self.CNTsin, self.shrink_Delta, self.scale, self.shift_Y,self.info,self.options,self.values)
 		
+		
+		correctnit = 0
+		correcti_xbest = 6
+		correctx = matlabarray([  -0.500000000000000, 0,  0.500000000000000]).T
+		correctfx = 0.500000000000000
+		correctm = 11
+		correctX = matlabarray([
+
+   [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.003054026564966,  -0.500000000000000, -0.500002253056410,  -0.500000286192314,  -0.499999900588771,  -0.500009741475754,  -0.499990015903692],
+   [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000,                   0,                   0, 0.000000442034118 , -0.000009988577082 ,  0.000009999638990,   0.000000127297985 , -0.000000045756443],
+   [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000,   0.315521468125839,   0.500000000000000, 0.499990267148911 ,  0.499999612175087 ,  0.500000134714239,   0.500002260696260 ,  0.499999438103251]])
+		correctfX = matlabarray([   1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000,   0.099563123926544,   0.500000000000000, 0.499992520305321,   0.499999898467405,   0.500000035403030,   0.500012002272037,   0.499989454106944])
+		correctciX = matlabarray( [])
+		correctceX = matlabarray([
+  [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   0.000010233764458,  -0.000007353481509,   0.000009376443116],
+  [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,   0.000020502831926 , -0.000002704791005,   0.000008206893176]])
+		correctind_Y = matlabarray([   6,     9,    10,     7,     8,    11])
+		correctDelta = 5.672511970824019
+		correcteps_current =  1.000000000000000e-05
+		correctcur_degree =  6
+		correctfcmodel = matlabarray([
+   [0.500000000000000,  -0.000010001181020,   0.000000000002677,   0.000010001072100,   0.000000000222233,   0.000000000197548],
+   [0.000000000000000,   0.000010001165044,   0.000010001165044,   0.000010001165044,   0.000000000000000,  -0.000000000000000],
+  [-0.000000000000000,   0.000010001165043,   0.000020002330087,   0.000030003495131,   0.000000000000000,   0.000000000000000]])
+		correctgx = matlabarray([ -1.000001597463464, 0.000000267687146, 0.999990706694728]).T
+		correctnormgx = 1.000001597463464
+		correctvstatus = matlabarray([  0,  0,  0]).T
+		correctxstatus = matlabarray([ 0,  0, 0, 0, 0, 1, 1, 1, 1,  1, 1]).T
+		correctsstatus = matlabarray([ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]).T
+		correctdstatus = matlabarray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).T
+		correctM =   1.0e+05 * matlabarray([
+   [3.981667193893546,                   0,                   0],
+   [                0,   6.903934759857267,                   0],
+   [                0,                  0 ,                  0]])
+
+		correctndummyY =  0
+		correctsspace_save = matlabarray(  [])
+		correctxspace_save = matlabarray(  [])
+		correctmsg = char("Convergence in 7 evaluations of the objective function.")
+		correctCNTsin =  0
+		correctneval = 7
+		correctlm = matlabarray([0, -0.000005713064576, 0, 1.999997749517402, -0.999996152071198]).T
+		
+		correctinfo = correctInfo()
+		
 		print "nit = ", nit
+		self.assertEqual(nit, correctnit)
 		print "x = ", x
+		self.assertTrue((abs(x - correctx) < 1e-15).all())
 		print "fx = ", fx
+		self.assertEqual(fx, correctfx)
+		
+		self.assertEqual(correcti_xbest, i_xbest)
+		
+		#Difference due to different convergence paths in auskommentierten Zeilen
+		#self.assertEqual(correctm, m)
+		#self.assertTrue((abs(correctX - X) < 1e-14).all())
+		
+		self.assertEqual(correctciX, ciX)
+		
+		#self.assertTrue((abs(correctceX - ceX) < 1e-14).all())
+		
+		#self.assertEqual(correctind_Y, ind_Y)
+		
+		#self.assertEqual(correctDelta, Delta)
+		self.assertEqual(correcteps_current, eps_current)
+		self.assertEqual(correctcur_degree, cur_degree)
+		
+		#self.assertTrue((abs(correctfcmodel - fcmodel) < 1e-14).all())
+		#print "abs(correctfcmodel - fcmodel): \n ", abs(correctfcmodel - fcmodel)
+		
+		#self.assertTrue((abs(correctgx - gx) < 1e-14).all())
+		#print "abs(correctgx - gx)\n", abs(correctgx - gx)
+		
+		#self.assertEqual(normgx, correctnormgx)
+		self.assertEqual(vstatus, correctvstatus)
+		#self.assertEqual(correctxstatus, xstatus)
+		#self.assertEqual(correctvstatus, vstatus)
+		#self.assertEqual(dstatus, correctdstatus)
+		#self.assertEqual(sstatus, correctsstatus)
+		#self.assertTrue((abs(correctM - M) < 1e-14).all())
+		#print "abs(correctM - M)\n", abs(correctM - M)
+		
+		self.assertEqual(correctndummyY, ndummyY)
+		self.assertEqual(correctsspace_save, sspace_save)
+		self.assertEqual(correctxspace_save, xspace_save)
+		#self.assertEqual(correctmsg, msg)
+		#print "msg\n", msg
+		
+		self.assertEqual(CNTsin, correctCNTsin)
+		#self.assertEqual(correctneval, neval)
+		#self.assertTrue((abs(lm - correctlm) < 1e-14).all())
+		#print "abs(lm - correctlm)\n", abs(lm - correctlm)
+		#self.assertEqual(info, correctinfo)
+		
+		
 
 if __name__ == '__main__':
 	unittest.main()

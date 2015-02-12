@@ -1075,5 +1075,8 @@ def strcat_(*args):
 	return char(ret)
 	
 	
+def randn_(msg, number):
+	print "Warning: randn does not do anything, because it's discouraged syntax"
+	
 
 # vim:et:sw=4:si:tw=60

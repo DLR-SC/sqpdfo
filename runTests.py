@@ -26,6 +26,7 @@ import ecdfo_swap_in_Y_test
 import ecdfo_find_smallf_test
 import ecdfo_computeHessian_test
 import ecdfo_prelim_test
+import ecdfo_main_test
 
 import bcdfo_evalL_test
 import bcdfo_find_new_yj_test
@@ -59,6 +60,9 @@ loader = unittest.TestLoader()
 suite = loader.loadTestsFromTestCase(ecdfo_check_convex_test.Test_ecdfo_check_convex)
 
 #ECDFO Tests
+
+suite.addTests(loader.loadTestsFromTestCase(ecdfo_main_test.Test_ecdfo_main))
+
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_check_cond_test.Test_ecdfo_check_cond))
 suite.addTests(loader.loadTestsFromTestCase(blls_test.Test_blls))
 suite.addTests(loader.loadTestsFromTestCase(sqplab_badsimul_test.Test_sqplab_badsimul))

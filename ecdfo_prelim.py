@@ -68,33 +68,36 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     info = helper.dummyUnionStruct()
     info.nsimul = matlabarray([])
     Y = matlabarray([])
+    gamma1 = 0.010000000000000
+    eps =  2.220446049250313e-16
+    stallfact=10 * eps
     
-    #nfix = None				
-    #indfix = None				
-    #xfix = None
-    #vstatus = None				
-    #QZ = None
-    #RZ = None
-    #scale = None
-    #poised = None
-    #Y_radius = None
-    #poised_model = None
-    #X = None
-    #fX = None
+    nfix = None				
+    indfix = None				
+    xfix = None
+    vstatus = None				
+    QZ = None
+    RZ = None
+    scale = None
+    poised = None
+    Y_radius = None
+    poised_model = None
+    X = None
+    fX = None
     #Y = None
-    #fY = None
-    #ciX = None
-    #ciY = None
-    #ceX = None
-    #ceY = None
-    #poisedness_known = None
-    #m = None
-    #normgx = None
-    #fcmodel = None
-    #ind_Y = None
-    #i_xbest = None
-    #indfree = None
-    #print "Warning: set nfix, indfix, xfix, vstatus, QZ, RZ, scale, poised, Y_radius, poised_model, X, fX, Y, fY, ciX, ciY, ceX, ceY, poisedness_known, m, normgx, fcmodel, ind_Y, i_xbest, indfree = None\n in ecdfo_prelim."    				
+    fY = None
+    ciX = None
+    ciY = None
+    ceX = None
+    ceY = None
+    poisedness_known = None
+    m = None
+    normgx = None
+    fcmodel = None
+    ind_Y = None
+    i_xbest = None
+    indfree = None
+    print "Warning: set nfix, indfix, xfix, vstatus, QZ, RZ, scale, poised, Y_radius, poised_model, X, fX, Y, fY, ciX, ciY, ceX, ceY, poisedness_known, m, normgx, fcmodel, ind_Y, i_xbest, indfree = None\n in ecdfo_prelim."    				
 
     n=0
     nb=0
@@ -239,7 +242,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                     Y = concatenate_([Y, x0], axis=1)
                     #print "Y concatenation"																				
                 else:
-                    Y[:,1]=x0
+                    Y[:,1]=x0.T
                 #Y = copy_(x0)#concatenate_([Y,x0], axis=1)																
                 #print "Y after\n", Y																
                 for j in arange_(1,n).reshape(-1):
@@ -271,7 +274,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                         #print "Yslice", Yslice
                         #print "type Yslice", type(Yslice)																								  
                         #print "Yslice.shape", Yslice.shape																								 
-                        Y[:,j + 1]=x0 + step1 * I[:,j].T#yblablup.T#x0 + step1 * I[:,j]	#yblablup#
+                        Y[:,j + 1]=(x0 + step1 * I[:,j].T).T#yblablup.T#x0 + step1 * I[:,j]	#yblablup#
                         #Y = Y.T																				
                         #Y[j + 1]=(x0 + step1 * I[:,j]).T
                         #Y = Y.T																								
@@ -372,7 +375,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     else:
         info.ce=[]
         #print "info.ce = []"								
-        sys.exit(0)								
+        #sys.exit(0)								
         info.ae=[]
     fprintf_(char('\\n'))
     fprintf_(char('**************************************************************************************\\n'))
