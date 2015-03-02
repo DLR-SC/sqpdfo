@@ -187,7 +187,7 @@ class matlabarray(np.ndarray):
             return False									
         elif type(other) is list:#len(self) != len(other):
             return self in other
-        elif (type(other) is float or type(other) is int):
+        elif (type(other) is float or type(other) is int or type(other) is np.int64):
 		if self.shape == (1,1):
 		      return float(other) == float(self)
 		else:
