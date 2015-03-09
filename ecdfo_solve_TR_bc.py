@@ -349,7 +349,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                         for i in arange_(1,length_(x_fix)).reshape(-1):
                             if i != ind_min_lm:
                                 #print "CONCATENATING 5"																													
-                                constraints=concatenate_([constraints,matlabarray([0])])
+                                constraints=concatenate_([constraints,matlabarray([0])]) #axis = 1 (?)
                                 gconstraints=concatenate_([gconstraints,I[x_fix[i],:]])
                         #x_fix[ind_min_lm]=[]
                         x_fix = np.delete(x_fix, ind_min_lm)																																

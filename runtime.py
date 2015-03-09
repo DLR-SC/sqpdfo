@@ -187,7 +187,7 @@ class matlabarray(np.ndarray):
             return False									
         elif type(other) is list:#len(self) != len(other):
             return self in other
-        elif (type(other) is float or type(other) is int or type(other) is np.int64):
+        elif (type(other) is float or type(other) is int or type(other) is np.int64 or type(other) is np.ndarray):
 		if self.shape == (1,1):
 		      return float(other) == float(self)
 		else:
@@ -658,6 +658,10 @@ def fopen_(*args):
         return fp
     except:
         return -1
+								
+def fclose_(*args):
+	if args[0] == -1:
+		print "No file to close, continue..."
 
 def fullfile_(*args):
     return os.path.join(*args)

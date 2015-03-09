@@ -310,7 +310,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
                 break
             if (i == cur_degree):
                 getfY=0
-            ind_Y=matlabarray([ind_Y,i])
+            ind_Y=concatenate_([ind_Y,matlabarray([i])])#matlabarray([ind_Y,i]) #concatenade here!!!
         fY=copy_(fX)
         ciY=copy_(ciX)
         ceY=copy_(ceX)
