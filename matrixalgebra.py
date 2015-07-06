@@ -9,8 +9,8 @@
 ##           1.0 11/08/2009 Braconnier             0.1 Creation
 ##  ==========================================================================
 
-from numpy.oldnumeric import *
-from numpy.oldnumeric.linear_algebra import singular_value_decomposition, Heigenvectors
+from numpy import shape, diagonal, sqrt, float, ones, zeros, transpose, identity, dot
+import numpy.linalg as nl
 #
 
 
