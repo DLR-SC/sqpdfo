@@ -8,8 +8,9 @@ import sys
 sys.path.append("../")
  
 import unittest
-from bcdfo_evalZ import *
+from bcdfo_evalZ import bcdfo_evalZ_
 import numpy as np
+from runtime import matlabarray, compare_matlabarray
 #import helper
 
 class Test_bcdfo_evalZ(unittest.TestCase):
@@ -29,13 +30,13 @@ class Test_bcdfo_evalZ(unittest.TestCase):
      [    0,    1.0000,         0,    2.0000,    1.0000,         0],
       [   0,         0,    1.0000,         0,    0.0100,    2.0000],
        [  0,    0.5000,         0,    2.0000,    0.5000,         0],
-        [ 0,         0,    0.5000,         0,    0.0001,    2.0000],
+        [ 0,         0,    0.5000,         0,    0.00005,    2.0000],
          [0,         0,         0,         0,    0.0100,         0]])
             
         #print "abs:\n\n", abs(res - correctres)
         #print "5e-5  -> 1e-1 ?"
         # Just a numerical Error, Tested also with the below test case and correct result was obtained
-        self.assertTrue((abs(res - correctres) < 1e-4).all())
+        self.assertTrue(compare_matlabarray(res, correctres, 1e-15, 1e-15))
         
     def test_bcdfo_evalZ_Original(self):
         #ret =    bcdfo_evalZ( np.array([[ 0.0, 1.0, 0.0, 2.0, 1.0, 0.0], [0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]]), 6 )
@@ -47,7 +48,7 @@ class Test_bcdfo_evalZ(unittest.TestCase):
        [  0.5,         2,         4.5,         8,       12.5,         18],
         [ 0.5,         2,         4.5,         8,       12.5,         18],
          [1,         4,         9,         16,       25,         36]])
-        self.assertTrue((abs(res - correctres) < 1e-4).all())
+        self.assertTrue(compare_matlabarray(res, correctres, 1e-15, 1e-15))
         
         
         
