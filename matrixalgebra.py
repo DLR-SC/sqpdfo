@@ -44,13 +44,13 @@ def norm(x):
 
 def mat_yy(dim):
     n = 2 ** dim
-    yy = zeros([n, dim], Float)
+    yy = zeros([n, dim], float)
     for j in range(dim):
         k = 2 ** (j + 1)
         nk = n / k
         for i in range(k):
             yy[i * nk:(i + 1) * nk, j:j + 1] = (-1) ** (i + 1) * ones([nk, 1],
-                    Float)
+                    float)
     return yy
 
 
@@ -58,9 +58,9 @@ def mat_yy(dim):
 
 
 def svd(A):
-    (U, S, V) = singular_value_decomposition(A)
+    (U, S, V) = nl.svd(A)
     n = len(S)
-    S = identity(n, Float) * S
+    S = identity(n, float) * S
     V = transpose(V)
     return (U, S, V)
 
@@ -80,9 +80,9 @@ def dtpr(x):
 
 
 def eig(A):
-    (D, V) = Heigenvectors(A)
+    (D, V) = nl.eigenvectors(A)
     n = len(D)
-    Eig = zeros([n, n], Float)
+    Eig = zeros([n, n], float)
     for i in range(n):
         Eig[i, i] = sqrt(abs(D[i]))
     V = transpose(V)
@@ -94,7 +94,7 @@ def eig(A):
 
 def house(a):
     (n, m) = shape(a)
-    v = zeros([n, 1], Float)
+    v = zeros([n, 1], float)
     for i in range(n):
         v[i, 0] = a[i, 0]
     na = norm(a)
@@ -113,13 +113,13 @@ def house(a):
 
 def rowhouse(A, v):
     (n, m) = shape(A)
-    A1 = zeros([n, m], Float)
+    A1 = zeros([n, m], float)
     for i in range(n):
         for j in range(m):
             A1[i, j] = A[i, j]
     beta = -2. / dtpr(v)
-    w = beta * matrixmultiply(transpose(A), v)
-    A1 = A1 + matrixmultiply(v, transpose(w))
+    w = beta * dot(transpose(A),v)
+    A1 = A1 + dot(v, transpose(w))
     return A1
 
 
@@ -128,23 +128,23 @@ def rowhouse(A, v):
 
 def qr(A):
     (m, n) = shape(A)
-    A1 = zeros([m, n], Float)
+    A1 = zeros([m, n], float)
     for i in range(m):
         for j in range(n):
             A1[i, j] = A[i, j]
-    v = zeros([m, 1], Float)
+    v = zeros([m, 1], float)
     for j in range(n):
         v[j:m, 0:1] = house(A1[j:m, j:j + 1])
         A1[j:m, j:n] = rowhouse(A1[j:m, j:n], v[j:m, 0:1])
         if j < m - 1:
             A1[j + 1:m, j:j + 1] = v[j + 1:m, 0:1]
-    R = zeros([n, n], Float)
+    R = zeros([n, n], float)
     for i in range(n):
         for j in range(i, n):
             R[i, j] = A1[i, j]
-    Q = identity(m, Float)
+    Q = identity(m, float)
     for j in range(n - 1, -1, -1):
-        v = zeros([m, 1], Float)
+        v = zeros([m, 1], float)
         v[j, 0] = 1.
         v[j + 1:m, 0] = A1[j + 1:m, j]
         Q[j:m, j:m] = rowhouse(Q[j:m, j:m], v[j:m, 0:1])
