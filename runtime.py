@@ -1084,3 +1084,23 @@ def randn_(msg, number):
 	
 
 # vim:et:sw=4:si:tw=60
+
+
+from numpy import where, isinf, isnan, ones, shape
+
+def compare_matlabarray(x, y, abs_tol, rel_tol):
+    """  Function which compares the matlabarray x and y and returns true if all the elements are
+     approximately the same according to the absolute tolerance (abs_tol) and to the relative tolerance (rel_tol)
+    """
+     
+    #compute error and relative error
+    error = x.flat[:]-y.flat[:];
+    rel_error = error/x.flat[:];
+     
+    #Sets Inf and NaN to 0
+    indices=where(isinf(rel_error) | isnan(rel_error))
+    ones_vect=ones(shape(indices))
+    indices=indices+ones_vect
+    rel_error[indices] = 0 
+    
+    return (abs(error) < abs_tol).all() & (abs(rel_error) < rel_tol).all()
