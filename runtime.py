@@ -69,18 +69,14 @@ Coexistence of matlab matrices and numpy arrays
 (*) Such expressions _are_ legal in Octave.  TBD
 
 """
-import version
-from numpy import inf
 import scipy
 import numpy as np
-import os,sys,copy
+import os,sys
 #import helper
 try:
     from scipy.io import loadmat
 except:
     pass
-import unittest
-from version import __version__
 
 def isvector_or_scalar(a):
     """
@@ -139,12 +135,12 @@ class matlabarray(np.ndarray):
      #                  dtype=dtype,
       #                 copy=False,
        #                order="F",
-        #               ndmin=2)#.copy(order="F")					
-        ##print "original", original																							
-        ##myoriginal = original[0]																							
+        #               ndmin=2)#.copy(order="F")                    
+        ##print "original", original                                                                                            
+        ##myoriginal = original[0]                                                                                            
         #cls = original.view(cls).copy(order="F")
-        #print "original", original								
-        #cls.original = original								
+        #print "original", original                                
+        #cls.original = original                                
         #if cls.size == 0:
         #    cls.shape = (0,0)
         #return cls
@@ -156,53 +152,54 @@ class matlabarray(np.ndarray):
         #return matlabarray(float(self) * other[1])
         #print "self\n", self, "\nother\n", other
         if self.shape == (1,1):
-            #print "self[1]", float(self[1]), "other", other									
-            #sys.exit(1)																								
+            #print "self[1]", float(self[1]), "other", other                                    
+            #sys.exit(1)                                                                                                
             return float(self[1]) * other
-            #sys.exit(1)												
+            #sys.exit(1)                                                
         elif other.shape == (1,1):
             #print "self", self, "other[1]", float(other[1])
-            #sys.exit(1)																								
+            #sys.exit(1)                                                                                                
             return np.dot(self , float(other[1]))
         ret = np.dot(self, other)            
-        #print "ret", ret, "\n-------\n"																		
+        #print "ret", ret, "\n-------\n"                                                                        
         return ret
-								
+                                
     def __rmul__(self, other):
         #print "HERE rmul"
         #return matlabarray(float(self) * other[1])
         #print "self\n", self, "\nother\n", other
-        ret = np.dot(other, self)								
-        #print "ret", ret, "\n-------\n"					
+        ret = np.dot(other, self)                                
+        #print "ret", ret, "\n-------\n"                    
         return ret
-								
+                                
     def dot(self, other):
-        return np.multiply(self, other)								
-								
+        return np.multiply(self, other)                                
+                                
     def __eq__(self, other):
         #print "npa array self", np.array(self)
-        #print "np array other", np.array(other)								
+        #print "np array other", np.array(other)                                
         #print "np comparisoon",np.array(self) == np.array(other)
         if other is None:
-            return False									
+            return False                                    
         elif type(other) is list:#len(self) != len(other):
             return self in other
         elif (type(other) is float or type(other) is int or type(other) is np.int64 or type(other) is np.ndarray):
-		if self.shape == (1,1):
-		      return float(other) == float(self)
-		else:
-			#print "super cmp", np.ndarray.__eq__(self, other)
-			return np.ndarray.__eq__(self, other)#False								
+            
+           if self.shape == (1,1):
+              return float(other) == float(self)
+           else:
+            #print "super cmp", np.ndarray.__eq__(self, other)
+               return np.ndarray.__eq__(self, other)#False                                
         if self.shape != other.shape:
-            return False									
-        #print "self", self, "other", other												
+            return False                                    
+        #print "self", self, "other", other                                                
         return (np.array(self) == np.array(other)).all()
-								
-    #def T(self):								
+                                
+    #def T(self):                                
     #    if self.shape == (1,1):
-    #        print "DO SOMETHIONG"																					
+    #        print "DO SOMETHIONG"                                                                                    
     #    else:
-    #        return super(self).T									
+    #        return super(self).T                                    
 
     def __copy__(self):
         return np.ndarray.copy(self,order="F")
@@ -248,32 +245,32 @@ class matlabarray(np.ndarray):
 
     def __getitem__(self,index):
         if type(index) is matlabarray:
-        #    print "index:\n"	, index								
-        #    ravelled_index = index.ravel()												
+        #    print "index:\n"    , index                                
+        #    ravelled_index = index.ravel()                                                
         #    if len(ravelled_index) > 0:
         #        print "ravelled index:\n", ravelled_index
         #        print "ravelled_index[0] == True", ravelled_index[0] == matlabarray([True])
-        #        print "ravelled_index[0] == False", ravelled_index[0] == matlabarray([False])													
+        #        print "ravelled_index[0] == False", ravelled_index[0] == matlabarray([False])                                                    
         #        if (ravelled_index[0] == matlabarray([True]) or ravelled_index[0] == matlabarray([False])) and ravelled_index[0] != 0 and ravelled_index[0] != 1:
             #print "self.shape", self.shape
             #print "index.shape", index.shape
             if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
-                #print "True False index by shape\n", index#"returning np indexing\n", np.ndarray.__getitem__(self, np.asarray(index)) 																	
+                #print "True False index by shape\n", index#"returning np indexing\n", np.ndarray.__getitem__(self, np.asarray(index))                                                                     
                 #return matlabarray([np.ndarray.__getitem__(self, np.asarray(index))]).T
                 return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
                 #for index_index,index_value in np.ndenumerate(index):
                 #        print "index = ", index
-                #        #print "value = ", value																	
+                #        #print "value = ", value                                                                    
                 #        if index_value == True:
                 #            np.asarray(self).__setitem__(index_index, value[index_index])
                 #            print "lbounds self = \n", self
-		#														
-																
+        #                                                        
+                                                                
         return matlabarray(self.get(index))
 
     def get(self,index):
         #import pdb; pdb.set_trace()
-        #print "index", index				
+        #print "index", index                
         indices = self.compute_indices(index)
         if len(indices) == 1:
             return np.ndarray.__getitem__(self.reshape(-1,order="F"),indices)
@@ -281,8 +278,8 @@ class matlabarray(np.ndarray):
             return np.ndarray.__getitem__(self,indices)
 
     def __setslice__(self,i,j,value):
-        #print "__setslice__ i,j", i, j					
-        								
+        #print "__setslice__ i,j", i, j                    
+                                        
         if i == 0 and j == sys.maxsize:
             index = slice(None,None)
         else:
@@ -303,52 +300,52 @@ class matlabarray(np.ndarray):
         return n 
 
     def __setitem__(self,index,value):
-        #print "value at start of set item", value					
+        #print "value at start of set item", value                    
         #if type(index) is tuple:
-        #    if len(index) == 2:									
-        #        print "__setitem__ index: ", index					
+        #    if len(index) == 2:                                    
+        #        print "__setitem__ index: ", index                    
         #        print "self.shape", self.shape
         #        if index[0] == slice(None,None,None) and index[1] >= self.shape[1]:
-        #        ##concatenate/append column									
-        #            ret = concatenate_([self, value.T], axis=1)								
-	#																		
-      #              #newshape = (self.shape[0], index[1])																
-      #              #print "newshape", newshape																				
+        #        ##concatenate/append column                                    
+        #            ret = concatenate_([self, value.T], axis=1)                                
+    #                                                                        
+      #              #newshape = (self.shape[0], index[1])                                                                
+      #              #print "newshape", newshape                                                                                
       #              #np.asarray(self).resize(newshape)
-      #              #print "resized self", self																				
-      #              #super(self).__setitem__(index, value)																				
-      #              #self.__dict__ = ret.__dict__																				
-      #              print "ret", ret												
-      #              self.__class__ = int#ret																				
-      #              return #ret												
+      #              #print "resized self", self                                                                                
+      #              #super(self).__setitem__(index, value)                                                                                
+      #              #self.__dict__ = ret.__dict__                                                                                
+      #              print "ret", ret                                                
+      #              self.__class__ = int#ret                                                                                
+      #              return #ret                                                
       #          elif index[1] == slice(None,None,None) and index[0] >= self.shape[0]:
       #          ##concatenate/append row
-      #              ret = concatenate_([self, value])								
-      #              #self.__dict__ = ret.__dict__																																								
-      #              print "ret", ret																								
-      #              return #ret											
-				
-				
+      #              ret = concatenate_([self, value])                                
+      #              #self.__dict__ = ret.__dict__                                                                                                                                                                
+      #              print "ret", ret                                                                                                
+      #              return #ret                                            
+                
+                
 #        if value == []:
 #            print "helloooo"
 #            #self = np.delete(self, indices)
 #            self = np.delete(np.asarray(self), np.asarray(index) - 1)
 #            print "done"
 #            return self
-				
-				
+                
+                
         #import pdb; pdb.set_trace()
         if type(index) is matlabarray:
             if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
                     if isempty_(value):
-	                  print "Isempty"
+                      print "Isempty"
                     else:
-	                  print "np.asarray(value.T)", np.asarray(value.T)[0]
-	                  np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])
+                      print "np.asarray(value.T)", np.asarray(value.T)[0]
+                      np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])
                     #print "True False index by shape\n", index#"returning np indexing\n", np.ndarray.__getitem__(self, np.asarray(index)
                     #--> This was the former code line!np.asarray(self).__setitem__(np.asarray(index.T)[0], np.asarray(value.T)[0])
-                    #print "set boolean index self = ", self																			
-                    return																				
+                    #print "set boolean index self = ", self                                                                            
+                    return                                                                                
                     #if type(value) is matlabarray:
                     #    index_indexOffset = 1
                     #else:
@@ -357,13 +354,13 @@ class matlabarray(np.ndarray):
 
                     #for index_index,index_value in np.ndenumerate(np.asarray(index)):
                     #    print "index = ", index
-                    #    print "value = ", value																	
+                    #    print "value = ", value                                                                    
                     #    if index_value == True:
                     #        np.asarray(self).__setitem__(index_index, np.asarray(value[tuple(np.array(index_index))])) #+ index_indexOffset )])
                     #        print "lbounds self = \n", self
                     #return
-																								
-																								
+                                                                                                
+                                                                                                
         indices = self.compute_indices(index)
         try:
             if len(indices) == 1:
@@ -374,7 +371,7 @@ class matlabarray(np.ndarray):
             #import pdb; pdb.set_trace()
             if not self.size:
                 new_shape = [self.sizeof(s) for s in indices]
-                #print "resizing---", index, value, indices, new_shape																
+                #print "resizing---", index, value, indices, new_shape                                                                
                 self.resize(new_shape,refcheck=0)
                 np.asarray(self).__setitem__(indices,value)
             elif len(indices) == 1:
@@ -410,7 +407,7 @@ class matlabarray(np.ndarray):
                 self.resize(new_shape,refcheck=0)
                 #print "indices", indices
                 #print "value", value
-                #print "np.asarray(self)", np.asarray(self)																
+                #print "np.asarray(self)", np.asarray(self)                                                                
                 np.asarray(self).__setitem__(indices,value)
 
     def __repr__(self):
@@ -424,9 +421,9 @@ class matlabarray(np.ndarray):
 
     def __neg__(self):
         return matlabarray(np.asarray(self).__neg__())
-								
+                                
     #def zzzQuatsch():
-    #    print "quatsch"								
+    #    print "quatsch"                                
 
 class end(object):
     def __add__(self,n):
@@ -559,16 +556,16 @@ class char(matlabarray):
         if self.ndim == 2:
             return "\n".join("".join(s) for s in self)
         raise NotImplementedError
-								
+                                
     #def __eq__(self, other):
      #   #print "npa array self", np.array(self)
-      #  #print "np array other", np.array(other)								
+      #  #print "np array other", np.array(other)                                
        # #print "np comparisoon",np.array(self) == np.array(other)
         #if type(other) is list:#len(self) != len(other):
          #   return self in other
         #if self.shape != other.shape:
-         #   return False									
-        #print "self", self, "other", other												
+         #   return False                                    
+        #print "self", self, "other", other                                                
         #return (np.array(self) == np.array(other)).all()
 
 
@@ -632,10 +629,10 @@ def find_(a,n=None,d=None,nargout=1):
     if nargout == 1:
         i = np.flatnonzero(np.asarray(a)).reshape(1,-1)+1
         #print "a\n", a
-        #print "i\n", i	
+        #print "i\n", i    
         if isempty_(i):
             return matlabarray([])
-												
+                                                
         if n is not None:
             i = i.take(range(n))
         return matlabarray(i)
@@ -658,10 +655,10 @@ def fopen_(*args):
         return fp
     except:
         return -1
-								
+                                
 def fclose_(*args):
-	if args[0] == -1:
-		print "No file to close, continue..."
+    if args[0] == -1:
+        print "No file to close, continue..."
 
 def fullfile_(*args):
     return os.path.join(*args)
@@ -741,22 +738,22 @@ def max_(a, d=None):
 
 def min_(a, d=None, nargout=None):#, nargout=0):
     #print "a", a
-#    print "len(a)", len(a)				
+#    print "len(a)", len(a)                
     if isempty_(a):
-        ret = matlabarray([])					
+        ret = matlabarray([])                    
     elif d is not None:
         ret = np.minimum(a,d)
     else:
         ret = np.amin(a)
-								
+                                
     if nargout == 2:
         if isempty_(a):
-            ret2 = matlabarray([])									
+            ret2 = matlabarray([])                                    
         else:
-            ret2 = np.argmin(a)												
+            ret2 = np.argmin(a)                                                
         return ret, ret2
     else:
-        return ret								
+        return ret                                
 
 def mod_(a,b):
     try:
@@ -771,32 +768,32 @@ def numel_(a):
 
 #def ones_(*args,**kwargs):
 #    #zs = np.ones(shape)
-#    #print "os", zs				
+#    #print "os", zs                
 #    #return matlabarray(zs)
 #    if not args:
 #        return 1.0
-#    print "args", args								
-#    print "args ones", np.ones(shape=args)				
+#    print "args", args                                
+#    print "args ones", np.ones(shape=args)                
 #    #print "ones args", args[0].cls
-#    #print "ones type args", type(args)				
+#    #print "ones type args", type(args)                
 #    return matlabarray(np.ones(args))
-				
-				#,order="F",**kwargs))
+                
+                #,order="F",**kwargs))
     #return matlabarray(np.ones(shape[1]))
-				
-#recent one				
+                
+#recent one                
 #def ones_(*args,**kwargs):
 #    if not args:
 #        return 1.0
 #    #if len(args) == 1:
-#    #    print "helllooo!"					
+#    #    print "helllooo!"                    
 #    #    args += args
-#    #print tuple(args)								
-#    print "ones_:"								
-#    print "args", args								
-#    ret = matlabarray(np.ones(args,order="F",**kwargs))				
-#    print "ret", ret				
-#    print "----"				
+#    #print tuple(args)                                
+#    print "ones_:"                                
+#    print "args", args                                
+#    ret = matlabarray(np.ones(args,order="F",**kwargs))                
+#    print "ret", ret                
+#    print "----"                
 #    return ret
 
 def rand_(*args,**kwargs):
@@ -868,24 +865,24 @@ def zeros_(*args,**kwargs):
         return 0.0
 
     if type(args[0]) is matlabarray:
-        #print "zeros_:"								
+        #print "zeros_:"                                
     #print "args[0]", [rg for rg in args[0]]
     #for rg in args:
-    #    print "type rg", type(rg)					
-    #    print "rg", rg								
-								
-    #print "---look at args[0]---"								
+    #    print "type rg", type(rg)                    
+    #    print "rg", rg                                
+                                
+    #print "---look at args[0]---"                                
     #for rg0 in args[0]:
     #    print "type rg0", type(rg0)
-    #    print "rg0", rg0		
-								
+    #    print "rg0", rg0        
+                                
         #print "\nargs[0] as array", np.asarray(args[0])[0]
         #print "type args[0] as array", type(np.asarray(args[0])[0])
         ret = matlabarray(np.zeros(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-        #print "ret", ret				
+        #print "ret", ret                
         #print "----"
     else:
-        #print "np.zeros(args)"					
+        #print "np.zeros(args)"                    
         ret = matlabarray(np.zeros(args, **kwargs))
     return ret
 
@@ -897,7 +894,7 @@ def zeros_(*args,**kwargs):
 #    #return matlabarray(np.zeros(args,**kwargs))
 #    #print "shape", shape
 #    zs = np.zeros(args)#np.zeros(shape)
-#    print "zs", zs				
+#    print "zs", zs                
 #    return matlabarray(zs)
 
 def ones_(*args,**kwargs):
@@ -905,202 +902,201 @@ def ones_(*args,**kwargs):
         return 0.0
 
     if type(args[0]) is matlabarray:
-        #print "ones_:"								
+        #print "ones_:"                                
     #print "args[0]", [rg for rg in args[0]]
     #for rg in args:
-    #    print "type rg", type(rg)					
-    #    print "rg", rg								
-								
-    #print "---look at args[0]---"								
+    #    print "type rg", type(rg)                    
+    #    print "rg", rg                                
+                                
+    #print "---look at args[0]---"                                
     #for rg0 in args[0]:
     #    print "type rg0", type(rg0)
-    #    print "rg0", rg0		
-								
+    #    print "rg0", rg0        
+                                
         #print "\nargs[0] as array", np.asarray(args[0])[0]
         #print "type args[0] as array", type(np.asarray(args[0])[0])
         ret = matlabarray(np.ones(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-        #print "ret", ret				
+        #print "ret", ret                
         #print "----"
     else:
-        #print "np.zeros(args)"					
+        #print "np.zeros(args)"                    
         ret = matlabarray(np.ones(args, **kwargs))
     return ret
-				
+                
 #------------------------------------------------------------------------------
-#				Added Functions Start here.
+#                Added Functions Start here.
 #------------------------------------------------------------------------------
 # -> convert to matlab arrays before returning
 # -> remove additional arguments. *args **kwargs only where necessary makes debugging easier.
 
 def eig_(A, nargout=1, *args,**kwargs):
-	if nargout == 1:
-		return np.linalg.eigvals(A)
-	else:
-		return np.linalg.eig(A)
-	
+    if nargout == 1:
+        return np.linalg.eigvals(A)
+    else:
+        return np.linalg.eig(A)
+    
 def diag_(A, *args,**kwargs):
-	return np.array(np.diag(A))
-	
+    return np.array(np.diag(A))
+    
 def isreal_(A, *args,**kwargs):
-	return np.isreal(A)
-	
+    return np.isreal(A)
+    
 def isnan_(A,*args,**kwargs):
-	return np.isnan(A)
-	
+    return np.isnan(A)
+    
 def isinf_(A, *args,**kwargs):
-	return np.isinf(A)
-	
+    return np.isinf(A)
+    
 def cond_(A, *args,**kwargs):
-	return np.linalg.cond(A)
-	
+    return np.linalg.cond(A)
+    
 def svd_(A, full_matrices=1, *args,**kwargs):
-	return np.linalg.svd(A, full_matrices)
-	
+    return np.linalg.svd(A, full_matrices)
+    
 def norm_(A, *args,**kwargs):
-	return np.linalg.norm(A)
-	
+    return np.linalg.norm(A)
+    
 def pinv_(A):
-	return np.linalg.pinv(A)
+    return np.linalg.pinv(A)
 
 def fprintf_(*args,**kwargs):
-	print args, kwargs	
-	
+    print args, kwargs    
+    
 def eye_(n):
-	return matlabarray(np.eye(n))
-	
+    return matlabarray(np.eye(n))
+    
 def concatenate_(arrs, axis=0):
-	for arr in arrs:
-		if isempty_(arr):
-			arrs.remove(arr)
-	#print "concatenate arrs", arrs			
-	return matlabarray(np.concatenate(arrs, axis))
-	
+    for arr in arrs:
+        if isempty_(arr):
+            arrs.remove(arr)
+    #print "concatenate arrs", arrs            
+    return matlabarray(np.concatenate(arrs, axis))
+    
 def sort_(A):
-	return np.sort(A)
-	
+    return np.sort(A)
+    
 def isfield_(obj, name):
-	return obj.__dict__.has_key(str(name))
-	
+    return obj.__dict__.has_key(str(name))
+    
 def lower___(strng):
-	#print "Warning: Lower just returns the string as it is"
-	return strng
-	
+    #print "Warning: Lower just returns the string as it is"
+    return strng
+    
 def lower__(strng):
-	return lower___(strng)
-	
+    return lower___(strng)
+    
 def regexprep___(string1, string2, string3):
-	#print "Warning: regexprep__ just returns the string(1) as it is"
-	return string1
-	
+    #print "Warning: regexprep__ just returns the string(1) as it is"
+    return string1
+    
 def regexprep__(string1, string2, string3):
-	return regexprep___(string1, string2, string3)
+    return regexprep___(string1, string2, string3)
 
 def strtrim___(strng):
-	#print "Warning: strtrim___ just returns the string as it is"
-	return strng
+    #print "Warning: strtrim___ just returns the string as it is"
+    return strng
 
 def strtrim__(strng):
-	return strtrim___(strng)
-	
+    return strtrim___(strng)
+    
 def any_(A):
-	return A.any()
-	
+    return A.any()
+    
 def sqrt_(x):
-	return np.sqrt(x)
+    return np.sqrt(x)
 
 def real_(x):
-	ret = np.real(x)
-	#print "type np real ret", type(ret)
-	return ret
+    ret = np.real(x)
+    #print "type np real ret", type(ret)
+    return ret
 
 def exp_(x):
-	return np.exp(x)
-	
+    return np.exp(x)
+    
 def num2str_(num):
-	return str(num)
+    return str(num)
 
-def strcmp_(s1, s2):	
-	#print "compare strings:"
-	#print "s1", s1
-	#print "s2", s2
-	if s1 == s2:
-		return 1
-	else:
-		return 0		
+def strcmp_(s1, s2):    
+    #print "compare strings:"
+    #print "s1", s1
+    #print "s2", s2
+    if s1 == s2:
+        return 1
+    else:
+        return 0        
 
 def null_(A, eps=1e-15):
-	u, s, vh = scipy.linalg.svd(A)
-	padding = max(0,np.shape(A)[1]-np.shape(s)[0])
-	null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
-	null_space = scipy.compress(null_mask, vh, axis=0)
-	return scipy.transpose(null_space)		
+    u, s, vh = scipy.linalg.svd(A)
+    padding = max(0,np.shape(A)[1]-np.shape(s)[0])
+    null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
+    null_space = scipy.compress(null_mask, vh, axis=0)
+    return scipy.transpose(null_space)        
 #def null_(A, eps=1e-15):
 #    u, s, vh = scipy.linalg.svd(A)
 #    null_mask = (s <= eps)
 #    null_space = scipy.compress(null_mask, vh, axis=0)
-#    return scipy.transpose(null_space)		
+#    return scipy.transpose(null_space)        
 #def null_(A, eps=1e-3):
-	#u,s,vh = np.linalg.svd(A,full_matrices=1,compute_uv=1)
-	#print "u", u
-	#print "s", s
-	#print "vh", vh
-	#null_space = np.compress(s <= eps, vh, axis=0)
-	#return null_space.T
+    #u,s,vh = np.linalg.svd(A,full_matrices=1,compute_uv=1)
+    #print "u", u
+    #print "s", s
+    #print "vh", vh
+    #null_space = np.compress(s <= eps, vh, axis=0)
+    #return null_space.T
 
 def int2str_(val):
-	return str(val)
-	
+    return str(val)
+    
 def full_(A):
-	#print "full_ just returns A"
-	return A
+    #print "full_ just returns A"
+    return A
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 def tf_mapper(x):
-	#print "x", x
-	if x:
-		return 1
-	else:
-		return 0
-				
+    #print "x", x
+    if x:
+        return 1
+    else:
+        return 0
+                
 def logical_or_(a,b):
-	vtf_mapper = np.vectorize (tf_mapper)
-	ret = np.logical_or(a,b)				
-	return vtf_mapper(ret)
-	
+    vtf_mapper = np.vectorize (tf_mapper)
+    ret = np.logical_or(a,b)                
+    return vtf_mapper(ret)
+    
 def strcat_(*args):
-	ret = ""
-	for arg in args:
-		ret = ret + str(arg)
-		
-	#print "strcat_:", ret
-	return char(ret)
-	
-	
+    ret = ""
+    for arg in args:
+        ret = ret + str(arg)
+        
+    #print "strcat_:", ret
+    return char(ret)
+    
+    
 def randn_(msg, number):
-	print "Warning: randn does not do anything, because it's discouraged syntax"
-	
+    print "Warning: randn does not do anything, because it's discouraged syntax"
+    
 
 # vim:et:sw=4:si:tw=60
 
 
-from numpy import where, isinf, isnan, ones, shape
+
 
 def compare_matlabarray(x, y, abs_tol, rel_tol):
     """  Function which compares the matlabarray x and y and returns true if all the elements are
      approximately the same according to the absolute tolerance (abs_tol) and to the relative tolerance (rel_tol)
     """
+    #Flatening of x and y
+    x=x.flat[:];
+    y=y.flat[:];     
      
     #compute error and relative error
-    error = x.flat[:]-y.flat[:];
-    rel_error = error/x.flat[:];
-     
-    #Sets Inf and NaN to 0
-    indices=where(isinf(rel_error) | isnan(rel_error))
-    ones_vect=ones(shape(indices))
-    indices=indices+ones_vect
-    rel_error[indices] = 0 
+    error = x-y;
     
-    return (abs(error) < abs_tol).all() & (abs(rel_error) < rel_tol).all()
+    #we avoid the zero division by adding epsilon
+    rel_error = error/(x+np.ones(np.shape(x))*sys.float_info.epsilon);
+    
+    return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
