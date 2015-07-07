@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import numpy as np
 from numpy import *
 from bcdfo_evalZ import *
 from bcdfo_checkZ import *
@@ -64,7 +65,7 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 ################################################################################
 
    n,p1 = shape( Y )
-
+   badcond=0
    #  Compute and check the size of the tolerance.
 
    if ( normgx == 0.0 ):
@@ -132,7 +133,14 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 
       #  Check condition of Z and cure if ill-conditioned
 
-      badcond = bcdfo_checkZ( Z, kappa_ill )
+    
+#      badcond = bcdfo_checkZ( Z, kappa_ill )
+      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+          condZ = linalg.cond(Z)      
+          if (condZ > kappa_ill):
+             badcond = 1;
+      else:
+          badcond=1;
 
       if ( badcond ):
          [U,Sdiag,Vh]        = linalg.svd(Z)
@@ -191,7 +199,13 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 
       #  Check condition of Z and cure if ill-conditioned
 
-      badcond = bcdfo_checkZ( Z, kappa_ill )
+#      badcond = bcdfo_checkZ( Z, kappa_ill )
+      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+          condZ = linalg.cond(Z)      
+          if (condZ > kappa_ill):
+             badcond = 1;
+      else:
+          badcond=1;
       
       if ( badcond ):
          [U,S,V]        = svd(Z);
@@ -226,50 +240,62 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
       else:
          [ QZ, RZ ]     = qr( Z );
       
-
-   elif ( whichmodel == 8 ):
-
-      # QR of gmodel interpolation matrix
-      # (factorize matrix Z = M')
-
-      Z = bcdfo_evalZ( Y2, q );
-
-      #  Check condition of Z and cure if ill-conditioned
-
-      badcond = bcdfo_checkZ( Z, kappa_ill )
-
-      if ( badcond ):
-         [U,S,V]        = svd(Z);
-         Sdiag          = diag(S);
-         indices        = where(Sdiag < delt);
-         Sdiag[indices] = delt;
-         S              = diag(Sdiag);
-         M              = (V * S * U.transpose()).transpose();
-         [ QZ, RZ ]     = qr( M );
-      else:
-         [ QZ, RZ ]     = qr( Z );
-        
-
-   elif ( whichmodel == 9 ):
-
-      # QR of gmodel interpolation matrix
-      # (factorize matrix Z = M')
-
-      Z = bcdfo_evalZ( Y2, q );
-
-      #  Check condition of Z and cure if ill-conditioned
-
-      badcond = bcdfo_checkZ( Z, kappa_ill )
-      
-      if ( badcond ):
-         [U,S,V]        = svd(Z);
-         Sdiag          = diag(S);
-         indices        = where(Sdiag < delt);
-         Sdiag[indices] = delt;
-         S              = diag(Sdiag);
-         M              = (V * S * U.transpose()).transpose();
-         [ QZ, RZ ]     = qr( M );
-      else:
-         [ QZ, RZ ]     = qr( Z );
-
+# WARNING : THE FOLLOWINGS MODELS DO NOT APPEAR ON THE MATLAB CODE
+#   elif ( whichmodel == 8 ):
+#
+#      # QR of gmodel interpolation matrix
+#      # (factorize matrix Z = M')
+#
+#      Z = bcdfo_evalZ( Y2, q );
+#
+#      #  Check condition of Z and cure if ill-conditioned
+#
+##      badcond = bcdfo_checkZ( Z, kappa_ill )
+#      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+#          condZ = linalg.cond(Z)      
+#          if (condZ > kappa_ill):
+#             badcond = 1;
+#      else:
+#          badcond=1;
+#
+#      if ( badcond ):
+#         [U,S,V]        = svd(Z);
+#         Sdiag          = diag(S);
+#         indices        = where(Sdiag < delt);
+#         Sdiag[indices] = delt;
+#         S              = diag(Sdiag);
+#         M              = (V * S * U.transpose()).transpose();
+#         [ QZ, RZ ]     = qr( M );
+#      else:
+#         [ QZ, RZ ]     = qr( Z );
+#        
+#
+#   elif ( whichmodel == 9 ):
+#
+#      # QR of gmodel interpolation matrix
+#      # (factorize matrix Z = M')
+#
+#      Z = bcdfo_evalZ( Y2, q );
+#
+#      #  Check condition of Z and cure if ill-conditioned
+#
+##      badcond = bcdfo_checkZ( Z, kappa_ill )
+#      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+#          condZ = linalg.cond(Z)      
+#          if (condZ > kappa_ill):
+#             badcond = 1;
+#      else:
+#          badcond=1;
+#      
+#      if ( badcond ):
+#         [U,S,V]        = svd(Z);
+#         Sdiag          = diag(S);
+#         indices        = where(Sdiag < delt);
+#         Sdiag[indices] = delt;
+#         S              = diag(Sdiag);
+#         M              = (V * S * U.transpose()).transpose();
+#         [ QZ, RZ ]     = qr( M );
+#      else:
+#         [ QZ, RZ ]     = qr( Z );
+#
    return QZ, RZ, xbase, scale
