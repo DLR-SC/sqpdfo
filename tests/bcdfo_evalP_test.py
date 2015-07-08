@@ -37,7 +37,7 @@ class Test_bcdfo_evalP(unittest.TestCase):
         #we verify that the sixth point is interpolated
         model = ( QZ * np.linalg.solve( RZ.T , matlabarray([[1], [2], [3], [4], [5], [6] ]) ) ).T
         res = bcdfo_evalP_( model, matlabarray([[1],[3]]), xbase, scale, 1 )  
-        self.assertAlmostEqual(float(res), 6.0, places=14)
+        self.assertAlmostEqual(float(res), 6.0, places=13)
         
   
     def test_bcdfo_evalP_2(self):
