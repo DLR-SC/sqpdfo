@@ -1095,8 +1095,19 @@ def compare_matlabarray(x, y, abs_tol, rel_tol):
      
     #compute error and relative error
     error = x-y;
+    try:
+        rel_error=error/(x+np.ones(np.shape(x))*sys.float_info.min)  #This line may issue warnings, but the inf and nan are dealt with below on the code. This is not an issue.
+    except:
+        pass
     
-    #we avoid the zero division by adding epsilon
-    rel_error = error/(x+np.ones(np.shape(x))*sys.float_info.epsilon);
+    #Sets rel_error[i] = 0 if either x[i] = 0 or y[i]=0. This code is not very pretty but there is no emergency in changing it 
+    indices=np.where(x==0.)
+    ones_vect=np.ones(np.shape(indices))
+    indices=indices+ones_vect
+    rel_error[indices] = 0
+    indices=np.where(y==0.)
+    ones_vect=np.ones(np.shape(indices))
+    indices=indices+ones_vect
+    rel_error[indices] = 0      
     
     return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
