@@ -1100,14 +1100,10 @@ def compare_matlabarray(x, y, abs_tol, rel_tol):
     except:
         pass
     
-    #Sets rel_error[i] = 0 if either x[i] = 0 or y[i]=0. This code is not very pretty but there is no emergency in changing it 
-    indices=np.where(x==0.)
+    #Sets rel_error[i] = 0 if either x[i] = 0 or y[i]=0.  Indices have to be incremented due to the implementation of the matlab array
+    indices=np.where(np.logical_or(x==0, y==0))
     ones_vect=np.ones(np.shape(indices))
     indices=indices+ones_vect
     rel_error[indices] = 0
-    indices=np.where(y==0.)
-    ones_vect=np.ones(np.shape(indices))
-    indices=indices+ones_vect
-    rel_error[indices] = 0      
-    
+
     return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
