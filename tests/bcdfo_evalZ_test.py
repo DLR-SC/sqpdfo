@@ -16,7 +16,7 @@ from runtime import matlabarray, compare_matlabarray
 class Test_bcdfo_evalZ(unittest.TestCase):
     """
     Reminder :
-    This class is a test for evalZ which compute the matrix of the values of given points on the monomials basis 1, x1, x2,...,0.5*x1^2, 0.5*x2^2...x1*x2....
+    This class is a test for evalZ which computes the matrix of the values of given points on the monomials basis 1, x1, x2,...,0.5*x1^2, 0.5*x2^2...x1*x2....
     """ 
     def setUp(self):
         #self.options = helper.dummyOptions()

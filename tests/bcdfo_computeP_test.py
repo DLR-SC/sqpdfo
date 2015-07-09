@@ -18,7 +18,7 @@ from runtime import matlabarray, compare_matlabarray
 class Test_bcdfo_computeP(unittest.TestCase):
     """
     Reminder :
-    This class is a test for computeP which compute the coefficients of the polynomial model
+    This class is a test for computeP which computes the coefficients of the polynomial model
     """ 
     def setUp(self):      
         self.abs_tol=1e-14;

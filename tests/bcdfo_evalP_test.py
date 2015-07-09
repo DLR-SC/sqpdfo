@@ -16,7 +16,7 @@ from random import random
 class Test_bcdfo_evalP(unittest.TestCase):
     """
  Reminder :
- This class is a test for evalP which compute the value of the model at x
+ This class is a test for evalP which computes the value of the model at x
     """ 
 
     def setUp(self):

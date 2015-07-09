@@ -15,7 +15,7 @@ from random import random
 class Test_bcdfo_evalL(unittest.TestCase):
     """
     #Reminder :
-    #This class is a test for evalL which compute the values of the lagrange polynomials l_j(x), such that the output vector values is :
+    #This class is a test for evalL which computes the values of the lagrange polynomials l_j(x), such that the output vector values is :
     #[l_1(x), l_2(x), l_3(x),....l_p(x)] where p is the number of points of the interpolant set.
     """ 
     def setUp(self):
