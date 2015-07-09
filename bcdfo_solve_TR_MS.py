@@ -69,7 +69,27 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
 
    if ( verbose ):
       disp( ' bcdfo_solve_TR_MS : ============ enter' )
+      
+   if (isnan(H).any()):
+      if (verbose):
+         disp('Error in bcdfo_solve_TR_MS_bc: H contains NaNs!')
 
+      msg = 'Error1';
+      return s, lamb, norms, value, gplus, nfact, neigd, msg
+
+   if (not isreal(H).all()):
+      if (verbose):
+         disp('Error in bcdfo_solve_TR_MS_bc: H contains imaginary parts!')
+
+      msg = 'Error2';
+      return s, lamb, norms, value, gplus, nfact, neigd, msg
+
+   if (isinf(H).any()):
+      if (verbose):
+         disp('Error in bcdfo_solve_TR_MS_bc: H contains infinite elements!')
+
+      msg = 'Error3';
+      return s, lamb, norms, value, gplus, nfact, neigd, msg
    #  Compute initial bounds on lambda.
 
    gnorm    = linalg.norm( g );
@@ -94,22 +114,27 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
       if ( verbose ):
          disp( ' bcdfo_solve_TR_MS : zero gradient:' )
          
-      D, V    = linalg.eig( H )
-      neigd   = neigd + 1;
-      mu      = min( D )
-      imu     = argmin( D )
-  
-      if ( mu < 0 ):
-         s = Delta * V[:,imu].T
-      else:
-         if ( gnorm == 0 ):
-            s = zeros_like(g)
-         else:
-            s = - Delta * ( g / gnorm );
-   
-      sfound = 1;
-      norms  = linalg.norm( s );
-      lamb = -mu;
+#      D, V    = linalg.eig( H )
+#      neigd   = neigd + 1;
+#      mu      = min( D )
+#      imu     = argmin( D )
+#  
+#      if ( mu < 0 ):
+#         s = Delta * V[:,imu].T
+#      else:
+#         if ( gnorm == 0 ):
+#            s = zeros_like(g)
+#         else:
+#            s = - Delta * ( g / gnorm );
+#   
+#      sfound = 1;
+#      norms  = linalg.norm( s );
+#      lamb = -mu;
+         
+      sfound = 1
+      norms= linalg.norm(s);
+      lamb=0
+      return s, lamb, norms, value, gplus, nfact, neigd, msg
 
    #  Nonzero gradient
 
