@@ -95,7 +95,7 @@ def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
 
    Lj = bcdfo_computeLj( QZ, RZ, j, Ycp, whichmodel, scale, shift_Y )
    
-   if ( (not isreal(Lj)).any() or isnan(Lj).any or isinf(Lj).any ):
+   if ((not (isreal(Lj)).any()) or isnan(Lj).any() or isinf(Lj).any()):
       msgTR = 'Error0: Lagrange polynomial contains NaN or Inf or nonreal components!!';
       if ( verbose ):
          disp( msgTR )
