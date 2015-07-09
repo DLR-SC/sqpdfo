@@ -62,22 +62,22 @@ def trying_printo(gx, H, lb, ub, Delta, eps_D, stratLam,):
 
 @helper.convertingDecorator  # @bcdfo_solve_TR_MS_bc_decorator
 def bcdfo_solve_TR_MS_bc_(gx, H, lb, ub, Delta, eps_D, stratLam,):
-	gx = gx.T
-	print "gx\n", gx
-	print "H\n", H
-	lb = lb.T
-	print "lb\n", lb
-	ub = ub.T
-	print "ub\n", ub
-	print "Delta\n", Delta
-	print "eps_D\n", eps_D
-	print "stratLam\n", stratLam
+#	gx = gx.T
+#	print "gx\n", gx
+#	print "H\n", H
+#	lb = lb.T
+#	print "lb\n", lb
+#	ub = ub.T
+#	print "ub\n", ub
+#	print "Delta\n", Delta
+#	print "eps_D\n", eps_D
+#	print "stratLam\n", stratLam
 
 	s, lamb, norms, value, gplus, nfact, neigd, msg = bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,)
 
-	s = s.T
-	ub = ub.T
-	lb = lb.T
+#	s = s.T
+#	ub = ub.T
+#	lb = lb.T
 
 	return s, lamb, norms, value, gplus, nfact, neigd, msg
 
@@ -332,7 +332,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
                R = array([[]])
                p = 1
 
-            if (isnan(R.any())):
+            if (isnan(R).any):
                disp('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
                msg = 'Error4';
                return s, lamb, norms, value, gplus, nfact, neigd, msg
@@ -589,7 +589,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
 
             #  Return with error message after 100 iterations
 
-            if (i >= 10):
+            if (i >= 100):
                s = zeros((1, n))
                norms = 0;
                msg = 'Error6 in bcdfo_solve_TR_MS_bc: iteration limit in bc-MS exceeded!'
