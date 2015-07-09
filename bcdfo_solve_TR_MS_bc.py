@@ -191,6 +191,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
    if (len(ind_g_crit) != 0):
        ind_active = ind_free[ind_g_crit]
        ind_free = list(set(ind_free) - set(ind_active))
+       ind_free=array(ind_free)
        nfree = len(ind_free)
 
    #  Loop until no free variables anymore
@@ -239,6 +240,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
             ind_active = append(ind_active, ind_free[ind_u_crit])
             ind_active = append(ind_active, ind_free[ind_l_crit])
             ind_free = list(set(range(0, n)) - set(ind_active))
+            ind_free=array(ind_free)
             nfree = len(ind_free)
 
             if (verbose):
@@ -332,7 +334,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
                R = array([[]])
                p = 1
 
-            if (isnan(R).any):
+            if (isnan(R).any()):
                disp('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
                msg = 'Error4';
                return s, lamb, norms, value, gplus, nfact, neigd, msg
@@ -645,6 +647,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
 
       ind_active = where(logical_or((ub[0] - s[0]) <= eps_bound, (s[0] - lb[0]) <= eps_bound))[0]
       ind_free = list(set(range(0, n)) - set(ind_active))
+      ind_free=array(ind_free)
       nfree = len(ind_free)
 
       if (nfree > 0):
@@ -667,9 +670,10 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
          if (len(ind_g_crit) != 0):
             ind_active = append(ind_active, ind_free[ind_g_crit])
             ind_free = list(set(ind_free) - set(ind_active))
+            ind_free=array(ind_free)
             nfree = len(ind_free)
 
 
-
-
+   #Final return, if we get out of the while loop
+   return s, lamb, norms, value, gplus, nfact, neigd, msg
 

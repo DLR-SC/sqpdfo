@@ -142,7 +142,7 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
              R = array([[]])
              p = 1
 
-         if ( isnan(R.any()) ):
+         if ( isnan(R).any() ):
             disp( 'NaN in Cholesky factorization' )
             msg = 'error4';
             if ( verbose ):
