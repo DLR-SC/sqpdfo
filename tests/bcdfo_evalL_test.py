@@ -21,8 +21,8 @@ class Test_bcdfo_evalL(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-           self.abs_tol=1e-2;
-           self.rel_tol=1e-2;
+           self.abs_tol=1e-15;
+           self.rel_tol=1e-15;
            pass
 
 
