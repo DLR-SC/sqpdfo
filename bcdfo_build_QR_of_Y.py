@@ -4,8 +4,8 @@ from numpy import *
 from bcdfo_evalZ import *
 from bcdfo_checkZ import *
 import helper
-#from runtime import matlabarray
-
+from runtime import matlabarray
+#
 def bcdfo_build_QR_of_Y_( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill, nargout=None ):
 		Y = helper.convert(Y)
 		whichmodel = helper.convert(whichmodel)
@@ -135,7 +135,7 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 
     
 #      badcond = bcdfo_checkZ( Z, kappa_ill )
-      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+      if (not(np.isnan(Z).any())) and (not(np.isinf(Z).any())):
           condZ = linalg.cond(Z)      
           if (condZ > kappa_ill):
              badcond = 1;
@@ -200,7 +200,7 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
       #  Check condition of Z and cure if ill-conditioned
 
 #      badcond = bcdfo_checkZ( Z, kappa_ill )
-      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+      if (not(np.isnan(Z).any())) and (not(np.isinf(Z).any())):
           condZ = linalg.cond(Z)      
           if (condZ > kappa_ill):
              badcond = 1;
@@ -227,7 +227,13 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 
       #  Check condition of Z and cure if ill-conditioned
 
-      badcond = bcdfo_checkZ( Z, kappa_ill )
+      #      badcond = bcdfo_checkZ( Z, kappa_ill )
+      if (not(np.isnan(Z).any())) and (not(np.isinf(Z).any())):
+          condZ = linalg.cond(Z)      
+          if (condZ > kappa_ill):
+             badcond = 1;
+      else:
+          badcond=1;
       
       if ( badcond ):
          [U,S,V]        = svd(Z);
@@ -251,7 +257,7 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 #      #  Check condition of Z and cure if ill-conditioned
 #
 ##      badcond = bcdfo_checkZ( Z, kappa_ill )
-#      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+#      if (not(np.isnan(Z).any())) and (not(np.isinf(Z).any())):
 #          condZ = linalg.cond(Z)      
 #          if (condZ > kappa_ill):
 #             badcond = 1;
@@ -280,7 +286,7 @@ def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):
 #      #  Check condition of Z and cure if ill-conditioned
 #
 ##      badcond = bcdfo_checkZ( Z, kappa_ill )
-#      if (not(np.isnan(Z).flat[:].any())) and (not(np.isinf(Z).flat[:].any())):
+#      if (not(np.isnan(Z).any())) and (not(np.isinf(Z).any())):
 #          condZ = linalg.cond(Z)      
 #          if (condZ > kappa_ill):
 #             badcond = 1;
