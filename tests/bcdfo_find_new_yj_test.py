@@ -57,7 +57,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 #        print "ynew", ynew
 #        print "improvement", improvement
         
-        self.assertAlmostEqual(correctimprovement, improvement, 4)
+        self.assertAlmostEqual(correctimprovement, improvement, places=11)
         self.assertTrue(compare_matlabarray(correctynew, ynew, self.abs_tol, self.rel_tol))
   
   
