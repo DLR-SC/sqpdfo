@@ -12,7 +12,7 @@ def bcdfo_find_new_yj_( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    scale, shift_Y ):
 # j is an index, so we have to decrease it.				
 	return bcdfo_find_new_yj( QZ, RZ, Y, j-1, Delta, eps_L, xbase, lSolver, whichmodel,
-   scale, shift_Y )				
+   scale, shift_Y )
 
 def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
    scale, shift_Y ):
@@ -132,8 +132,8 @@ def bcdfo_find_new_yj( QZ, RZ, Y, j, Delta, eps_L, xbase, lSolver, whichmodel,
       #print "Ycp\n", Ycp
       #print "Ycp[:,0]\n", Ycp[:,0]
 
-      g  = bcdfo_gradP( Lj, Ycp[:,0], xbase, scale, 0 );
-      H  = bcdfo_hessP( Lj, Ycp[:,0], xbase, scale, 0 );
+      g  = bcdfo_gradP( Lj, Ycp[:,0].reshape((n,1)), xbase, scale, 0 );
+      H  = bcdfo_hessP( Lj, Ycp[:,0].reshape((n,1)), xbase, scale, 0 );
 
       #  Minimize this polynomial and its opposite.
 
