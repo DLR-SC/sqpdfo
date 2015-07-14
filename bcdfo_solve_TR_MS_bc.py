@@ -4,61 +4,61 @@ from bcdfo_solve_TR_MS import *
 from helper import generalDecorator, convertingDecorator
 from runtime import matlabarray, char
 
-class bcdfo_solve_TR_MS_bc_decorator(convertingDecorator):  # generalDecorator):
-	def __init__(self, f):
-		self.f = f
-
-	def __call__(self, gx, H, lb, ub, Delta, eps_D, stratLam, nargout=None):
-
-		gx = helper.convertArray(gx).T  # gx = self.convert(gx)
-		# print "gx", gx
-		# print "type(gx)", type(gx)
-		H = helper.convertArray(H)  # H = self.convert(H)
-		# print "H", H
-		# print "type(H)", type(H)
-		lb = helper.convertArray(lb)  # lb = self.convert(lb)
-		# print "lb", lb
-		# print "type(lb)", type(lb)
-		ub = helper.convertArray(ub)  # self.convert(ub)
-		# print "ub", ub
-		# print "type(ub)", type(ub)
-		Delta = helper.convertArray(Delta)
-		# print "Delta", Delta
-		# print "type(Delta)", type(Delta)
-		eps_D = helper.convertArray(eps_D)  # eps_D = self.convert(eps_D)
-		# print "eps_D", eps_D
-		# print "type(eps_D)", type(eps_D)
-		stratLam = helper.convertArray(stratLam)  # stratLam = self.convert(stratLam)
-		# print "stratLam", stratLam
-		# print "type(stratLam)", type(stratLam)
-
-
-		s, lamb, norms, value, gplus, nfact, neigd, msg = self.f(gx, H, lb, ub, Delta, eps_D, stratLam)
-		# self.printTypes([s, lamb, norms, value, gplus, nfact, neigd, msg])
-
-
-		s = matlabarray(s).T
-		lamb = matlabarray(lamb)
-		norms = matlabarray(norms)
-		value = matlabarray(value)
-		gplus = matlabarray(gplus)
-		nfact = matlabarray(nfact)
-		neigd = matlabarray(neigd)
-		msg = char(msg)
-
-		return s, lamb, norms, value, gplus, nfact, neigd, msg
-
-@bcdfo_solve_TR_MS_bc_decorator
-def trying_printo(gx, H, lb, ub, Delta, eps_D, stratLam,):
-	print "gx\n", gx
-	print "H\n", H
-	print "lb\n", lb
-	print "ub\n", ub
-	print "Delta\n", Delta
-	print "eps_D\n", eps_D
-	print "stratLam\n", stratLam
-
-	return None, None, None, None, None, None, None, ""
+#class bcdfo_solve_TR_MS_bc_decorator(convertingDecorator):  # generalDecorator):
+#	def __init__(self, f):
+#		self.f = f
+#
+#	def __call__(self, gx, H, lb, ub, Delta, eps_D, stratLam, nargout=None):
+#
+#		gx = helper.convertArray(gx).T  # gx = self.convert(gx)
+#		# print "gx", gx
+#		# print "type(gx)", type(gx)
+#		H = helper.convertArray(H)  # H = self.convert(H)
+#		# print "H", H
+#		# print "type(H)", type(H)
+#		lb = helper.convertArray(lb)  # lb = self.convert(lb)
+#		# print "lb", lb
+#		# print "type(lb)", type(lb)
+#		ub = helper.convertArray(ub)  # self.convert(ub)
+#		# print "ub", ub
+#		# print "type(ub)", type(ub)
+#		Delta = helper.convertArray(Delta)
+#		# print "Delta", Delta
+#		# print "type(Delta)", type(Delta)
+#		eps_D = helper.convertArray(eps_D)  # eps_D = self.convert(eps_D)
+#		# print "eps_D", eps_D
+#		# print "type(eps_D)", type(eps_D)
+#		stratLam = helper.convertArray(stratLam)  # stratLam = self.convert(stratLam)
+#		# print "stratLam", stratLam
+#		# print "type(stratLam)", type(stratLam)
+#
+#
+#		s, lamb, norms, value, gplus, nfact, neigd, msg = self.f(gx, H, lb, ub, Delta, eps_D, stratLam)
+#		# self.printTypes([s, lamb, norms, value, gplus, nfact, neigd, msg])
+#
+#
+#		s = matlabarray(s).T
+#		lamb = matlabarray(lamb)
+#		norms = matlabarray(norms)
+#		value = matlabarray(value)
+#		gplus = matlabarray(gplus)
+#		nfact = matlabarray(nfact)
+#		neigd = matlabarray(neigd)
+#		msg = char(msg)
+#
+#		return s, lamb, norms, value, gplus, nfact, neigd, msg
+#
+#@bcdfo_solve_TR_MS_bc_decorator
+#def trying_printo(gx, H, lb, ub, Delta, eps_D, stratLam,):
+#	print "gx\n", gx
+#	print "H\n", H
+#	print "lb\n", lb
+#	print "ub\n", ub
+#	print "Delta\n", Delta
+#	print "eps_D\n", eps_D
+#	print "stratLam\n", stratLam
+#
+#	return None, None, None, None, None, None, None, ""
 
 @helper.convertingDecorator  # @bcdfo_solve_TR_MS_bc_decorator
 def bcdfo_solve_TR_MS_bc_(gx, H, lb, ub, Delta, eps_D, stratLam,):

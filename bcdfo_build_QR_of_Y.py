@@ -4,24 +4,25 @@ from numpy import *
 from bcdfo_evalZ import *
 from bcdfo_checkZ import *
 import helper
-from runtime import matlabarray
+#from runtime import matlabarray
 #
+@helper.convertingDecorator
 def bcdfo_build_QR_of_Y_( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill, nargout=None ):
-		Y = helper.convert(Y)
-		whichmodel = helper.convert(whichmodel)
-		shift_Y = helper.convert(shift_Y)
-		Delta = helper.convert(Delta)
-		normgx = helper.convert(normgx)
-		kappa_ill = helper.convert(kappa_ill)
-		
-		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y(Y, whichmodel, shift_Y, Delta, normgx, kappa_ill)
-				
-		QZ = matlabarray(QZ)
-		RZ = matlabarray(RZ)
-		xbase = matlabarray(xbase)
-		scale = matlabarray(scale)
-		
-		return QZ, RZ, xbase, scale
+#		Y = helper.convert(Y)
+#		whichmodel = helper.convert(whichmodel)
+#		shift_Y = helper.convert(shift_Y)
+#		Delta = helper.convert(Delta)
+#		normgx = helper.convert(normgx)
+#		kappa_ill = helper.convert(kappa_ill)
+#		
+#		QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y(Y, whichmodel, shift_Y, Delta, normgx, kappa_ill)
+#				
+#		QZ = matlabarray(QZ)
+#		RZ = matlabarray(RZ)
+#		xbase = matlabarray(xbase)
+#		scale = matlabarray(scale)
+#		
+		return bcdfo_build_QR_of_Y(Y, whichmodel, shift_Y, Delta, normgx, kappa_ill)
 	
 
 def bcdfo_build_QR_of_Y( Y, whichmodel, shift_Y, Delta, normgx, kappa_ill ):

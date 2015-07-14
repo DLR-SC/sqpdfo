@@ -19,43 +19,46 @@ from runtime import matlabarray
 #         i_xold, i_xplus, g, scale, shift_Y, Delta0=None)#, indfree=None, gmat=None, hessian=None, 
 #         #epsilon=None, noisy=None)
 
+@helper.convertingDecorator
 def bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
          i_xold, i_xplus, g, scale, shift_Y, Delta0=None, indfree=None, gmat=None, hessian=None, 
          epsilon=None, noisy=None):
 		
-		QZ = helper.convert(QZ)
-		RZ = helper.convert(RZ)
-		Y = helper.convert(Y)
-		#print "fY", fY
-		#print "fY[1,:]", fY[1,:]
-		#print "type fY1,:", type(fY[1,:])
-		#for lst in fY:
-	#		break
-		#lst = [gnlph for gnlph in fY[1, :]]
-	#	print "gnlph lst:", lst
-		fY = helper.convertArray(fY)#lst)
-		whichmodel = helper.convert(whichmodel)
-		P_old = helper.convert(P_old)
-		ind_Y = helper.convert(ind_Y)
-		i_xold = helper.convert(i_xold)
-		i_xplus = helper.convert(i_xplus)
-		g = helper.convert(g)
-		scale = helper.convert(scale)
-		shift_Y = helper.convert(shift_Y)
-		Delta0 = helper.convert(Delta0)
-		indfree = helper.convert(indfree)
-		gmat = helper.convert(gmat)
-		hessian = helper.convert(hessian) 
-		epsilon = helper.convert(epsilon)
-		noisy = helper.convert(noisy)
-		
-		P = bcdfo_computeP(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
-			i_xold, i_xplus, g, scale, shift_Y, Delta0)#), indfree, gmat, hessian, 
-		      #epsilon, noisy)
-				
-		P = matlabarray(P)
+#		QZ = helper.convert(QZ)
+#		RZ = helper.convert(RZ)
+#		Y = helper.convert(Y)
+#		#print "fY", fY
+#		#print "fY[1,:]", fY[1,:]
+#		#print "type fY1,:", type(fY[1,:])
+#		#for lst in fY:
+#	#		break
+#		#lst = [gnlph for gnlph in fY[1, :]]
+#	#	print "gnlph lst:", lst
+#		fY = helper.convertArray(fY)#lst)
+#		whichmodel = helper.convert(whichmodel)
+#		P_old = helper.convert(P_old)
+#		ind_Y = helper.convert(ind_Y)
+#		i_xold = helper.convert(i_xold)
+#		i_xplus = helper.convert(i_xplus)
+#		g = helper.convert(g)
+#		scale = helper.convert(scale)
+#		shift_Y = helper.convert(shift_Y)
+#		Delta0 = helper.convert(Delta0)
+#		indfree = helper.convert(indfree)
+#		gmat = helper.convert(gmat)
+#		hessian = helper.convert(hessian) 
+#		epsilon = helper.convert(epsilon)
+#		noisy = helper.convert(noisy)
+#		
+#		P = bcdfo_computeP(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+#			i_xold, i_xplus, g, scale, shift_Y, Delta0)#), indfree, gmat, hessian, 
+#		      #epsilon, noisy)
+#				
+#		P = matlabarray(P)
 						
-		return P
+		return bcdfo_computeP(QZ, RZ, Y, fY, whichmodel, P_old, ind_Y,
+			i_xold, i_xplus, g, scale, shift_Y, Delta0)#), indfree, gmat, hessian, 
+#		      epsilon, noisy)
 
 #return P
 

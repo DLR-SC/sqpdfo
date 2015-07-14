@@ -38,15 +38,16 @@ import helper
 #                        break
 #    return Z
 
+@helper.convertingDecorator
 def bcdfo_evalZ_( X, q ):
-		X = helper.convert(X)
-		q = helper.convert(q)
+#		X = helper.convert(X)
+#		q = helper.convert(q)
+#		
+#		Z = bcdfo_evalZ( X, q )
+			
+#		Z = matlabarray(Z)
 		
-		Z = bcdfo_evalZ( X, q )
-				
-		Z = matlabarray(Z)
-		
-		return Z
+		return  bcdfo_evalZ( X, q )
 
 def bcdfo_evalZ( X, q ):
 ###############################################################################
