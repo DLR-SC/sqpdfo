@@ -25,8 +25,8 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-        self.abs_tol=1e-10;
-        self.rel_tol=1e-10
+        self.abs_tol=1e-14;
+        self.rel_tol=1e-14;
         pass
 
     #@unittest.expectedFailure
@@ -66,9 +66,8 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
 [0,	0,	0,	0,	0.114859096884849,	0.183774555015759],
 [0,	0,	0,	0,	0,	0.894427190999916]])
          
-#        print QZplus[6,:]
 #        print correctQZplus
-        self.assertTrue(compare_matlabarray(correctQZplus, QZplus,self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctQZplus, QZplus,self.abs_tol, self.rel_tol)) 
         self.assertTrue(compare_matlabarray(correctRZplus, RZplus,self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(correctYplus, Yplus,self.abs_tol, self.rel_tol))
 
