@@ -1,2 +1,3 @@
 #To ignore all the compiled files .pyc
 *.pyc
+a.py
