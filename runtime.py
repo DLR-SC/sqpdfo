@@ -1089,21 +1089,23 @@ def compare_matlabarray(x, y, abs_tol, rel_tol):
     """  Function which compares the matlabarray x and y and returns true if all the elements are
      approximately the same according to the absolute tolerance (abs_tol) and to the relative tolerance (rel_tol)
     """
+    #Conversion of matlabarrays to python arrays
+    x=np.array(x);
+    y=np.array(y);    
+    
     #Flatening of x and y
     x=x.flat[:];
     y=y.flat[:];     
      
-    #compute error and relative error
+    #compute error and relative error. sys.float_info.min=2.2250738585072014e-308  to avoid zero division
     error = x-y;
     try:
         rel_error=error/(x+np.ones(np.shape(x))*sys.float_info.min)  #This line may issue warnings, but the inf and nan are dealt with below on the code. This is not an issue.
     except:
         pass
     
-    #Sets rel_error[i] = 0 if either x[i] = 0 or y[i]=0.  Indices have to be incremented due to the implementation of the matlab array
-    indices=np.where(np.logical_or(x==0, y==0))
-    ones_vect=np.ones(np.shape(indices))
-    indices=indices+ones_vect
+    #Sets rel_error[i] = 0 if either |x[i]| = 0 or |y[i]|<=abs_tol
+    indices=np.where(np.logical_or(abs(x)<=abs_tol, abs(y)<=abs_tol))
     rel_error[indices] = 0
 
     return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
