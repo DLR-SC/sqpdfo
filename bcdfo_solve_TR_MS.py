@@ -66,7 +66,7 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
    nfact    = 0;              # factorization counter
    neigd    = 0;              # eigen decomposition counter
    hardcase = 0;              # hard case
-
+   msg=''
    if ( verbose ):
       disp( ' bcdfo_solve_TR_MS : ============ enter' )
       
@@ -75,21 +75,21 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
          disp('Error in bcdfo_solve_TR_MS_bc: H contains NaNs!')
 
       msg = 'Error1';
-      return s, lamb, norms, value, gplus, nfact, neigd, msg
+      return s, lamb, norms, value, gplus, nfact, neigd, msg, hardcase
 
    if (not isreal(H).all()):
       if (verbose):
          disp('Error in bcdfo_solve_TR_MS_bc: H contains imaginary parts!')
 
       msg = 'Error2';
-      return s, lamb, norms, value, gplus, nfact, neigd, msg
+      return s, lamb, norms, value, gplus, nfact, neigd, msg, hardcase
 
    if (isinf(H).any()):
       if (verbose):
          disp('Error in bcdfo_solve_TR_MS_bc: H contains infinite elements!')
 
       msg = 'Error3';
-      return s, lamb, norms, value, gplus, nfact, neigd, msg
+      return s, lamb, norms, value, gplus, nfact, neigd, msg, hardcase
    #  Compute initial bounds on lambda.
 
    gnorm    = linalg.norm( g );
@@ -134,7 +134,7 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
       sfound = 1
       norms= linalg.norm(s);
       lamb=0
-      return s, lamb, norms, value, gplus, nfact, neigd, msg
+      return s, lamb, norms, value, gplus, nfact, neigd, msg, hardcase
 
    #  Nonzero gradient
 

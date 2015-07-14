@@ -4,37 +4,40 @@ from bcdfo_find_new_yj import *
 import helper
 from runtime import matlabarray
 
+@helper.convertingDecorator
 def bcdfo_poisedness_Y_( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y, nargout=None ):
-	QZ = helper.convert(QZ)
-	RZ = helper.convert(RZ)
-	Y = helper.convert(Y)
-	eps_L = helper.convert(eps_L)
-	xbase = helper.convert(xbase)
-	lSolver = helper.convert(lSolver)
-	whichmodel = helper.convert(whichmodel)
-	hardcons = helper.convert(hardcons)
-	xl = helper.convert(xl)
-	xu = helper.convert(xu)
-	
+#	QZ = helper.convert(QZ)
+#	RZ = helper.convert(RZ)
+#	Y = helper.convert(Y)
+#	eps_L = helper.convert(eps_L)
+#	xbase = helper.convert(xbase)
+#	lSolver = helper.convert(lSolver)
+#	whichmodel = helper.convert(whichmodel)
+#	hardcons = helper.convert(hardcons)
+#	xl = helper.convert(xl)
+#	xu = helper.convert(xu)
+#	indfree = helper.convert(indfree - 1)
+
 	#print "indfree before = ", indfree	
 	#print "len indfree", len(indfree)
 	#print "ones", ones(len(indfree))
-	indfree = helper.convert(indfree - 1)
+
 	#print "indfree after = ", indfree
 	
-	stratLam = helper.convert(stratLam)
-	scale = helper.convert(scale)
-	shift_Y = helper.convert(shift_Y)
+#	stratLam = helper.convert(stratLam)
+#	scale = helper.convert(scale)
+#	shift_Y = helper.convert(shift_Y)
 	
 	
-	lambd, Y_radius = bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y )
+#	lambd, Y_radius = bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y )
 	
-	lambd = matlabarray(lambd)
-	Y_radius = matlabarray(Y_radius)
+#	lambd = matlabarray(lambd)
+#	Y_radius = matlabarray(Y_radius)
+ 
 	
-	return lambd, Y_radius
+#	return lambd, Y_radius
 	
-	
+	return bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y )
 
 def bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, xl, xu, indfree, stratLam, scale, shift_Y ):
    """
@@ -101,32 +104,3 @@ def bcdfo_poisedness_Y( QZ, RZ, Y, eps_L, xbase, lSolver, whichmodel, hardcons, 
       lambd = max( improvement, lambd );
 
    return lambd, Y_radius
-
-#----------------------------------
-
-if __name__ == "__main__":
-   from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y
-   import numpy
-   #print "Self-test of the function without shifting:"
-   Y = numpy.array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
-   #print Y
-   [QZ, RZ, xbase, scale] = bcdfo_build_QR_of_Y.bcdfo_build_QR_of_Y( Y, 0, 0 )
-   [ lambd ,Y_radius ] = bcdfo_poisedness_Y( QZ, RZ, Y, 0.001, xbase, 1, 0, scale, 0 )
-   #print lambd, Y_radius
-#  should give:
-#  lambd =
-#  204.8586
-#  Y_radius =
-#     2
-
-   #print "Self-test of the function with shifting:"
-   Y = numpy.array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
-   #print Y
-   [QZ, RZ, xbase, scale] = bcdfo_build_QR_of_Y( Y, 0, 1 )
-   [ lambd ,Y_radius ] = bcdfo_poisedness_Y( QZ, RZ, Y, 0.001, xbase, 1, 0, scale, 1 )
-   #print lambd, Y_radius
-#  should give:
-#  lambd =
-#  204.8586
-#  Y_radius =
-#     2
