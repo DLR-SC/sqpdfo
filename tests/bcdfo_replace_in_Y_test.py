@@ -25,8 +25,8 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-        self.abs_tol=1e-10;
-        self.rel_tol=1e-10;
+        self.abs_tol=1e-13;
+        self.rel_tol=1e-13;
         pass
 
     #@unittest.expectedFailure
