@@ -5,7 +5,7 @@ Created on Fri Nov 07 11:45:31 2014
 
 %  blls is a solver for bound-constrained linear least-squares problems, that
 %  is problem where, given 
-%  - a n x m matrix A,
+%  - a m x n matrix A,
 %  - a m x 1 right-hand side vector b,
 %  - a n x 1 vector of (possibly -Inf) lower bounds lb,
 %  - a n x 1 vector of (possibly +Inf) upper bounds ub,
