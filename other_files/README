@@ -1,0 +1,9 @@
+OTHER_FILES
+================
+
+In other_files/ there are files which are  apparently not directly linked to the ecdfo algorithm : they may be tests (*temp*), copies of SMOP translated code (*automatic*) or others :
+bcdfo_solve_TR_MS - Kopie seems to be only a copie of bcdfo_solve_TR_MS (surely bugged?)
+funlist contains a list of functions,
+generalUnittest is the basic code for a unit test,
+bcdfo_find_new_yj_bc is the equivalent of bcdfo_find_new_yj when there are bound constraints but it does not seem to be called,
+ecdfo_augmX_evalf_fromrepository and bcdfo_solve_TR_MS_bc_decorator not sure yet what they are intended for. 
