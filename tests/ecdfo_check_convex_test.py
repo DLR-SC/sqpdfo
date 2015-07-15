@@ -68,17 +68,6 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         matlabres=matlabarray([[  16.116843969881806, 0.000000000925233,  0.000000001000001]])        
         self.assertTrue(compare_matlabarray(matlabres, eig_(res), 1e-8, 1e-8))
         
-#    def test_ecdfo_check_convex4(self):
-#        """
-#        With a non symmetric matrix non convex
-#        """
-#        C = matlabarray([[1,2,3],[5,4,6],[7,8,9]])
-#        
-#        res = ecdfo_check_convex_(C, helper.dummyOptions())
-#        for i in range(0,100):
-#            self.assertTrue(~compare_matlabarray(C, res, self.abs_tol, self.rel_tol))
-#            self.assertTrue(compare_matlabarray(res, res.T, self.abs_tol, self.rel_tol))
-#            self.assertTrue(np.all(np.linalg.eigvals(res) > 0))
         
 
 if __name__ == '__main__':
