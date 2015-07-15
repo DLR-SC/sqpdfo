@@ -33,8 +33,8 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
     if not isempty_(evneg):
         ZERO=1e-10
         EPS=1e-09
-        v,d=eig_(A,nargout=2)
-        d=diag_(d)#np.diag(d)
+        d,v=eig_(A,nargout=2)
+#        d=diag_(d)#np.diag(d)
         #print d
         d[d < ZERO]=EPS
         d=diag_(d)
