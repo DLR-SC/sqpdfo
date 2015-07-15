@@ -2,4 +2,4 @@ SQPDFO Optimizer
 ================
 
 This is the python implementation of the SQPDFO Optimizer.
-Naming convention: One file per Matlab function. suffix _test is unittest for particular file.
+See other README files if you need more information on subdirectories.
