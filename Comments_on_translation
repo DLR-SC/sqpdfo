@@ -1,0 +1,30 @@
+Comments on translation
+================
+
+This file helps us find the bugs when doing the translation from matlab to python code.
+
+BCDFO files :
+
+These files have been (hand?)-translated by Dr. Tröltzsch Anke and therefore use normal python arrays. We therefore have to be careful with indices.
+
+Besides the known issues notified on gitlab, this is what we have to be careful with :
+-Lot of bugs were found on bcdfo_solve_TR_MS/bcdfo_solve_TR_MS_bc and thus more tests if we have time could reveal more.
+-Almost all functions were tested with whichmodel=0, therefore more tests if we have time with other values of whichmodel could be important.
+
+ECDFO files :
+
+These files have been translated by SMOP, i.e. automatic translation. These are the known points which give issues with this automatic translation :
+
+-This kind of  matlab code
+	Z  = [ ones( 1, m ); X(1:n,1:m); 0.5*X(1:ndiag,1:m).^2 ];
+ is automatically converted like this :
+    Z=matlabarray([[ones_(1,m)],[X[1:n,1:m]],[0.5 * X[1:ndiag,1:m] ** 2]])
+ which does not work and has to be dealt with a code like this :
+           Z[1,:]=ones_(1,m)
+           Z[2:nlin+1,:]=X[1:nlin,1:m]
+           Z[nlin+2:nlin+1+ndiag,:]=0.5 * X[1:ndiag,1:m] ** 2
+  This is not easy to translate because we have to count the indices, but maybe there is a better way not found yet.
+  
+-The eig_(A,1) function in python give the eigenvalues like matlab BUT :
+	the eig_(A,2) function gives FIRST the eigenvalues and only SECOND the eigenvectors, which is the reverse order in matlab.
+	the eig_(A,2) function gives the eigenvalues(in the first place) as a VECTOR, whereas it is a diagonal matrix in matlab (in the second place).
