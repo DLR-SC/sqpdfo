@@ -17,6 +17,7 @@ Created on Fri Nov 14 14:16:17 2014
 from __future__ import division
 #try:
 from runtime import *
+from numpy import inf
 #except ImportError:
     #from smop.runtime import *
 

@@ -36,6 +36,7 @@ Created on Wed Nov 12 10:42:12 2014
 from __future__ import division
 #try:
 from runtime import *
+from numpy import inf
 #except ImportError:
     #from smop.runtime import *
 

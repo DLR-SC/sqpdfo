@@ -204,7 +204,7 @@ class dummyOptions():
 		self.dxmin = 1.0e-06
 		self.miter = 500
 		self.msimul = 500
-		self.verbose = 7#2 set to a high level to get many messages.
+		self.verbose = 0#2 set to a low level to avoid messages : matlab is the reference to debug
 		self.fout = 1
 		self.inf = np.Inf#Inf
 		self.df1 = 0

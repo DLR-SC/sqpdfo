@@ -36,6 +36,7 @@ from __future__ import division
 #try:
 import sys
 from runtime import *
+from numpy import inf
 
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
