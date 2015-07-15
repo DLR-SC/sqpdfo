@@ -20,6 +20,7 @@ Created on Thu Nov 06 11:53:16 2014
 from __future__ import division
 #try:
 from runtime import *
+from numpy import inf
 #except ImportError:
 #    from smop.runtime import *
 
@@ -42,14 +43,15 @@ def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
             badcond=1
     else:
         badcond=1
+        
     if (badcond):
-        U,S,V=svd_(A,0,nargout=3)
-        Sdiag=diag_(S)
+        U,Sdiag,V=svd_(A,0,nargout=3)
         Sdiag[Sdiag < 1e-07]=1e-07
         S=diag_(Sdiag)
         A=(V * S * U.T).T
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
-                disp_([char('### ecdfo_check_cond: '),char("matrix is non symmetric. Resetting A=(A+A')/2.")])
-            A=(A + A.T) * 0.5
+                disp_(["### ecdfo_check_cond: matrix is non symmetric. Resetting A=(A+A')/2."])
+            A=0.5*(A + A.T) 
+            
     return A,badcond
