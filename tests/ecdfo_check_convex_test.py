@@ -19,7 +19,8 @@ from random import random
 class Test_ecdfo_check_convex(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_check_convex which check if the matrix is convex and if not returns (A+A')*0.5
+      This class is a test for ecdfo_check_convex which check if the matrix is convex and if not modify it so it becomes convex.
+      The returned matrix is also symmetric when either original matrix is symmetric or when it has been modified.
     """ 
     def setUp(self):
     #    self.dummyOptions = helper.dummyOptions()
@@ -48,7 +49,7 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         res = ecdfo_check_convex_(B)
         #print "B", B
         #print "ecdfo  check cond", str(res)
-        self.assertTrue(~compare_matlabarray(B, res, self.abs_tol, self.rel_tol))
+        self.assertFalse(compare_matlabarray(B, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(res, res.T, self.abs_tol, self.rel_tol))
         
         matlabres=matlabarray([[3.000000000000000,  0.000000001000000]])
@@ -62,7 +63,7 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         
         res = ecdfo_check_convex_(C, helper.dummyOptions())
 
-        self.assertTrue(~compare_matlabarray(C, res, self.abs_tol, self.rel_tol))
+        self.assertFalse(compare_matlabarray(C, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(res, res.T, self.abs_tol, self.rel_tol))
 
         matlabres=matlabarray([[  16.116843969881806, 0.000000000925233,  0.000000001000001]])        
