@@ -1,0 +1,5 @@
+SQPDFO Optimizer tests
+================
+
+This is the python implementation of the SQPDFO Optimizer tests.
+Naming convention: One file per Matlab function. suffix _test is unittest for particular file.
