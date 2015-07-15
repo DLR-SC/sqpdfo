@@ -23,6 +23,7 @@ class Test_ecdfo_check_cond(unittest.TestCase):
         self.A = matlabarray([[ 1,  0, -1], [ 0,  1,  0], [ 1,  0,  1]])
         self.B = matlabarray([[1e12,0],[0,1e-8]])
         self.dummyOptions = helper.dummyOptions() 
+        self.dummyOptions.verbose=0;
         self.abs_tol=1e-15;
         self.rel_tol=1e-15;
         #print self.A
