@@ -1,4 +1,4 @@
-OTHER_FILES
+OTHER_FILES DIRECTORY
 ================
 
 In other_files/ there are files which are  apparently not directly linked to the ecdfo algorithm : they may be tests (*temp*), copies of SMOP translated code (*automatic*) or others :

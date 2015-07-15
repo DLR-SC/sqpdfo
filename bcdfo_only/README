@@ -1,5 +1,5 @@
-BCDFO_ONLY FILE
+BCDFO_ONLY DIRECTORY
 ================
 
-In bcdfo_only/ there are files which are only required for bcdfo algorithm. These are however not tested and there are certainly others required files for bcdfo algorithm which are missing.
+In bcdfo_only/ there are files which are only required for bcdfo algorithm (and NOT ecdfo, though ecdfo uses parts of bdcfo). These are however not tested and there are certainly others required files for bcdfo algorithm which are missing.
  We put them there to have easy access to them, if needed.
