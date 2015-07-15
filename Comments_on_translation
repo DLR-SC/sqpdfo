@@ -28,3 +28,5 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 -The eig_(A,1) function in python give the eigenvalues like matlab BUT :
 	the eig_(A,2) function gives FIRST the eigenvalues and only SECOND the eigenvectors, which is the reverse order in matlab.
 	the eig_(A,2) function gives the eigenvalues(in the first place) as a VECTOR, whereas it is a diagonal matrix in matlab (in the second place).
+	
+-The U,S,V=svd_(A,0,nargout=3) function gives S as a vector and not as a diagonal matrix like in matlab 
