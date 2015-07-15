@@ -2,7 +2,6 @@
 import numpy as np
 from numpy import *
 from bcdfo_evalZ import *
-from bcdfo_checkZ import *
 import helper
 #from runtime import matlabarray
 #
