@@ -289,27 +289,24 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 gconstraints=concatenate_([gconstraints,I[i,:]])
                 violated=1
                 break
-            else:
-                if (abs_(xnew[i] - lb[i]) < 1e-07):
-                    x_active[i]=- i
-                    if options.verbose >= 3:
-                        disp_(['lb ',int2str_(i),' is active'])
-                else:
-                    if (xnew[i] - ub[i] > threshold):
-                        x_viol[i]=i
-                        x_fix=concatenate_([x_fix, matlabarray(i)])#matlabarray([x_fix,i])
-                        if options.verbose >= 3:
-                            disp_(['ub ',int2str_(i),' is violated'])
-                        #print "CONCATENATING 4"																												
-                        constraints=concatenate_([constraints,matlabarray([0])])
-                        gconstraints=concatenate_([gconstraints,I[i,:]])
-                        violated=1
-                        break
-                    else:
-                        if (abs_(xnew[i] - ub[i]) < 1e-07):
-                            x_active[i]=i
-                            if options.verbose >= 3:
-                                disp_(['ub ',int2str_(i),' is active'])
+            elif (abs_(xnew[i] - lb[i]) < 1e-07):
+                x_active[i]=- i
+                if options.verbose >= 3:
+                    disp_(['lb ',int2str_(i),' is active'])
+            elif (xnew[i] - ub[i] > threshold):
+                x_viol[i]=i
+                x_fix=concatenate_([x_fix, matlabarray(i)])#matlabarray([x_fix,i])
+                if options.verbose >= 3:
+                    disp_(['ub ',int2str_(i),' is violated'])
+                    #print "CONCATENATING 4"																												
+                    constraints=concatenate_([constraints,matlabarray([0])])
+                    gconstraints=concatenate_([gconstraints,I[i,:]])
+                    violated=1
+                    break
+            elif (abs_(xnew[i] - ub[i]) < 1e-07):
+                x_active[i]=i
+                if options.verbose >= 3:
+                    disp_(['ub ',int2str_(i),' is active'])
        
         if sum_(x_viol) == matlabarray([0]):
             violated=0
@@ -348,7 +345,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                     if sort_(xa) == sort_(x_fix):
                         for i in arange_(1,length_(x_fix)).reshape(-1):
                             if i != ind_min_lm:
-                                #print "CONCATENATING 5"																													
+                                #print "CONCATENATING 5"
                                 constraints=concatenate_([constraints,matlabarray([0])]) #axis = 1 (?)
                                 gconstraints=concatenate_([gconstraints,I[x_fix[i],:]])
                         #x_fix[ind_min_lm]=[]
