@@ -72,6 +72,7 @@ Coexistence of matlab matrices and numpy arrays
 import scipy
 import numpy as np
 import os,sys
+from numpy import inf
 #import helper
 try:
     from scipy.io import loadmat
@@ -751,7 +752,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
             ret2 = matlabarray([])                                    
         else:
             ret2 = np.argmin(a)                                                
-        return ret, ret2
+        return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
         return ret                                
 
@@ -953,14 +954,26 @@ def cond_(A, *args,**kwargs):
 def svd_(A, full_matrices=1, *args,**kwargs):
     return np.linalg.svd(A, full_matrices)
     
+def chol_(A, *args, **kwargs):
+    return np.linalg.cholesky(A)
+    
+def inv_(A, *args, **kwargs):
+    return np.linalg.inv(A)
+     
 def norm_(A, *args,**kwargs):
     return np.linalg.norm(A)
     
 def pinv_(A):
     return np.linalg.pinv(A)
+    
+def solve_(A,b):
+    return np.linalg.solve(A,b)
 
 def fprintf_(*args,**kwargs):
-    print args, kwargs    
+    print args, kwargs  
+    
+def poly1d_(A, r=0, *args, **kwargs):
+    return np.poly1d(A,r) 
     
 def eye_(n):
     return matlabarray(np.eye(n))
