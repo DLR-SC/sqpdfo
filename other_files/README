@@ -8,3 +8,4 @@ generalUnittest is the basic code for a unit test,
 bcdfo_find_new_yj_bc.m is the equivalent of bcdfo_find_new_yj when there are bound constraints but it does not seem to be called,
 ecdfo_augmX_evalf_fromrepository and bcdfo_solve_TR_MS_bc_decorator not sure yet what they are intended for. 
 bcdfo_checkZ was a factorization of code which was not present in the matlab code and not totally equivalent, therefore not necessary.
+bcdfo_computeP_hand_test contains some tests of computeP
