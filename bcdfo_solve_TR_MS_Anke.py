@@ -50,7 +50,7 @@ def bcdfo_solve_TR_MS( gg, HH, Delta, eps_D ):
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 
 ###############################################################################
-
+   gg=gg.T                     #1 because in this code, gg is supposed to be a vector line
    verbose  = 0
    theta    = 1.0e-13;         # accuracy of the interval on lambda
    eps_g    = 1.0e-15;        # theshold under which the gradient is considered as zero
