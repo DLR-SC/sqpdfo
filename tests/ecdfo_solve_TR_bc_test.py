@@ -311,6 +311,8 @@ ans =
 @author: jaco_da
 """
 
+import sys
+sys.path.append("../")
 import unittest
 from ecdfo_solve_TR_bc import *
 from evalfgh import evalfgh_
@@ -335,7 +337,11 @@ class dummyInfo():
         self.compl = 0
         
 class Test_ecdfo_solve_TR_bc(unittest.TestCase):
-
+    """
+      Reminder :
+      This class is a test for ecdfo_solve_TR_bc which compute the new SQP-trust-region step inside delta and subject to simple bounds
+      accordingly.
+    """ 
     def setUp(self):
         self.simul = evalfgh_
         self.x = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
@@ -360,6 +366,9 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
 
 #    @unittest.expectedFailure
     def test_ecdfo_solve_TR_bc(self):
+        """
+            This is a test with some values and compared with matlab results.
+        """
         set_Threshold(1.000000000000000e-08)
         xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
         self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
