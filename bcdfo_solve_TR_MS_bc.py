@@ -250,7 +250,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
 
             if (nfree == 0):
                norms = linalg.norm(s)
-               value = 0.5 * dot(dot(s, H), s.transpose()) + dot(s, g0.transpose())
+               value = 0.5 * dot(dot(s.transpose(), H), s) + dot(s.transpose(), g0)
                if (verbose):
                   disp('no inactive variables anymore - return')
 
@@ -617,7 +617,7 @@ def bcdfo_solve_TR_MS_bc(gx, H, lb, ub, Delta, eps_D, stratLam,):
 
          s = s_after_reduced_ms;
          norms = linalg.norm(s);
-         value = 0.5 * dot(dot(s, H), s.transpose()) + dot(s, g0.transpose())
+         value = 0.5 * dot(dot(s.transpose(), H), s) + dot(s.transpose(), g0)
 
          return s, lamb, norms, value, gplus, nfact, neigd, msg
 
