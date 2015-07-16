@@ -4,7 +4,8 @@ Created on Thu Nov 20 13:25:23 2014
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from bcdfo_solve_TR_MS_bc import *
 from runtime import matlabarray, compare_matlabarray
@@ -24,7 +25,7 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.rel_tol=1e-13;
         pass
 
-    def test_bcdfo_solve_TR_MS_bc(self):
+    def test_bcdfo_solve_TR_MS_bc_1(self):
         """
             Tests initially written in the matlab code.  We compare the results from python with the results from matlab and verify that it is correct
         """
@@ -74,7 +75,22 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.assertEqual(nfact,9)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
-              
+        
+    def test_bcdfo_solve_TR_MS_bc_2(self):
+        """
+            Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
+        """
+        g1=matlabarray([[ 5], [ 8], [11]])
+        H1=matlabarray([[ 2, 3, 4], [ 3, 5, 7], [ 4, 7, 10]])
+        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
+        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
+        delta_r=1.0
+        prec_r=1e-6
+        stratLam=1
+        s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+        print s
+        correctS = matlabarray([-0,721798600158445,-0,562510852813043,-0,403223105467640])
+        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
 
 if __name__ == '__main__':
     unittest.main()
