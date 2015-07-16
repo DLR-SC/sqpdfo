@@ -30,3 +30,15 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 	the eig_(A,2) function gives the eigenvalues(in the first place) as a VECTOR, whereas it is a diagonal matrix in matlab (in the second place).
 	
 -The U,S,V=svd_(A,0,nargout=3) function gives S as a vector and not as a diagonal matrix like in matlab 
+
+-The matlab elsif are automatically translated with else..if instead of elif
+
+-Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~'
+
+-Matrices like V[:,a] where a is a integer (and not an interval like 3:5) always gives as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.
+
+-cholesky function in python does not give an answer when the matrix is not definite positive (whereas matlab does) and raises instead an exception  : therefore they have to be handle differently (cf bcdfo_solve_TR_MS for an instance)
+
+-The disp_ and fprint_ have not been dealt with yet, but they eventually will have to be modified.
+
+-When multiplying a number by a matrix, the number must be first in python. For instance, 3*matlabarray([[-0.10526316,  0.9944444 ]]) and NOT matlabarray([[-0.10526316,  0.9944444 ]])*3.
