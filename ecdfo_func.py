@@ -20,12 +20,12 @@ from runtime import *
 prob = 3
 
 def set_prob(val):
-	global prob
-	prob = val
-	
+    global prob
+    prob = val
+    
 def get_prob():
-	global prob
-	return prob	
+    global prob
+    return prob    
 
 def ecdfo_func_(x=None,*args,**kwargs):
     #varargin = cellarray(args)
@@ -39,39 +39,35 @@ def ecdfo_func_(x=None,*args,**kwargs):
     if prob == 1:
         f=- (5 - (x[1] - 2) ** 2 - 2 * (x[2] - 1) ** 2)
         ce=x[1] + 4 * x[2] - 3
-    else:
-        if prob == 2:
-            f=2 * x[1] ** 2 + x[2] ** 2
-            ce=x[1] + x[2] - 1
-        else:
-            if prob == 3:
-                ce = matlabarray([0.0 ,0.0])													
-                f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2
-                ce[1]=x[1] + x[2] + x[3]
-                ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
-                ce=ce.T
-                #print "Hello prob 3"
-                #print "ce", ce
-            else:
-                if prob == 4:
-                    ce = matlabarray([0.0, 0.0, 0.0])
-                    f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4]
-                    ce[1]=x[1] + x[2] + x[3]
-                    ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
-                    ce[3]=x[4] ** 3 - 1
-                    ce=ce.T
-                else:
-                    if prob == 5:
-                        ce = matlabarray([0.0, 0.0, 0.0])
-                        f=exp_(x[1] * x[2] * x[3] * x[4] * x[5])
-                        ce[1]=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4] ** 2 + x[5] ** 2 - 10
-                        ce[2]=x[2] * x[3] - 5 * x[4] * x[5]
-                        ce[3]=x[1] ** 3 + x[2] ** 3 + 1
-                        #print "ecdfo_func type ce", type(ce)																								   																				    
-                        #print "ecdfo_func ce before", ce																								   																								   
-                        ce=ce.T
-                        #print "ecdfo_func type ce", type(ce)
-                        #print "ecdfo_func ce after", ce																								   
+    elif prob == 2:
+        f=2 * x[1] ** 2 + x[2] ** 2
+        ce=x[1] + x[2] - 1
+    elif prob == 3:
+        ce = matlabarray([0.0 ,0.0])                                                    
+        f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2
+        ce[1]=x[1] + x[2] + x[3]
+        ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
+        ce=ce.T
+        #print "Hello prob 3"
+        #print "ce", ce
+    elif prob == 4:
+        ce = matlabarray([0.0, 0.0, 0.0])
+        f=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4]
+        ce[1]=x[1] + x[2] + x[3]
+        ce[2]=x[1] + 2 * x[2] + 3 * x[3] - 1
+        ce[3]=x[4] ** 3 - 1
+        ce=ce.T
+    elif prob == 5:
+        ce = matlabarray([0.0, 0.0, 0.0])
+        f=exp_(x[1] * x[2] * x[3] * x[4] * x[5])
+        ce[1]=x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4] ** 2 + x[5] ** 2 - 10
+        ce[2]=x[2] * x[3] - 5 * x[4] * x[5]
+        ce[3]=x[1] ** 3 + x[2] ** 3 + 1
+        #print "ecdfo_func type ce", type(ce)                                                                                                                                                                                       
+        #print "ecdfo_func ce before", ce                                                                                                                                                                                                      
+        ce=ce.T
+        #print "ecdfo_func type ce", type(ce)
+        #print "ecdfo_func ce after", ce                                                                                                   
     msg=0
-    #print "returning", msg,f,ci,ce			
+    #print "returning", msg,f,ci,ce            
     return msg,f,ci,ce
