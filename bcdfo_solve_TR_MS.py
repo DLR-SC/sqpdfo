@@ -50,6 +50,7 @@ Created on Thu Jul 16 12:41:45 2015
 
 #from __future__ import division
 from runtime import *
+import numpy
 #from numpy import inf
 def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -76,7 +77,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
         if (verbose):
             disp_(char(' bcdfo_solve_TR_MS : ============ error exit'))
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
-    if (length_(find_(~ isreal_(H))) != 0):
+    if (length_(find_( ~isreal_(H))) != 0):
         disp_(char(' bcdfo_solve_TR_MS : H contains imaginary parts!'))
         msg=char('error2')
         if (verbose):
@@ -127,12 +128,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             sfound=0
             if (verbose):
                 disp_([char(' bcdfo_solve_TR_MS ('),int2str_(i),char('): lower = '),num2str_(lower),char(' lambda = '),num2str_(_lambda),char(' upper = '),num2str_(upper)])
-            try:
-                R = chol_( H + _lambda * eye_( n ) ).T
-                p = 0
-            except:
-                R = matlabarray([[]])
-                p = 1
+            R,p=chol_(H + _lambda * eye_(n),nargout=2)
             if (length_(find_(isnan_(R))) != 0):
                 H
                 _lambda
@@ -146,7 +142,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
             nfact=nfact + 1
             if (p == 0):
-                s=solve_(- R,(solve_(R.T,g)))
+                s=numpy.linalg.solve(- R,(numpy.linalg.solve(R.T,g)))
                 sfound=1
                 norms=norm_(s)
                 if (verbose):
@@ -163,7 +159,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                     if (verbose):
                         disp_(char(' bcdfo_solve_TR_MS : ============ successful exit'))
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
-                w=solve_(R.T,s)
+                w=numpy.linalg.solve(R.T,s)
                 normw2=w.T * w
                 new_lambda=_lambda + ((norms - Delta) / Delta) * (norms ** 2 / normw2)
                 if (norms > Dupper):
@@ -181,8 +177,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                 _lambda=(1 - t) * lower + t * upper
             if (upper - lower < theta * max_(1,upper)):
                 break
-    D,V=eig_(H,nargout=2)
-    D=diag_(D)
+    V,D=eig_(H,nargout=2)
     neigd=neigd + 1
     mu,imu=min_(diag_(D),nargout=2)
     if (verbose):
@@ -201,9 +196,9 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
         scri=zeros_(n,1)
         nscri=0
     if (nscri <= Delta):
-        p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu]*scri,nscri ** 2 - Delta ** 2],r=0)
-        root = max_(p2.r)
-        s=scri + root* V[:,imu].T
+        p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
+        root=max(p2.r)
+        s=scri + root * V[:,imu]
     else:
         s=Delta * scri / nscri
     _lambda=- mu
@@ -216,10 +211,10 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     norms=norm_(s)
     if abs_(value) <= 1e-15:
         s=zeros_(size_(s))
-    if ( norms < ( 1 - eps_D ) * Delta ):
-      msg = [ 'interior solution ( '+ str( nfact )+' factorizations,  lambda = '+ str( _lambda )+ ')' ]
+    if (norms < (1 - eps_D) * Delta):
+        msg = [ 'interior solution ( '+ str( nfact )+' factorizations,  lambda = '+ str( _lambda )+ ')' ]
     else:
-      msg = [ 'boundary solution ( '+ str( nfact )+ ' factorizations, '+str( neigd )+ ' eigen decomposition, lambda = '+ str( _lambda )+ ' )']
-    if (verbose):
-        disp_(char(' bcdfo_solve_TR_MS : ============ hard case exit'))
+        msg = [ 'boundary solution ( '+ str( nfact )+ ' factorizations, '+str( neigd )+ ' eigen decomposition, lambda = '+ str( _lambda )+ ' )']
+        if (verbose):
+            disp_(char(' bcdfo_solve_TR_MS : ============ hard case exit'))
     return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
