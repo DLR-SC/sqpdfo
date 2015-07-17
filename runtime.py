@@ -32,7 +32,7 @@ Main differences between Matlab matrices and numpy arrays
    is copy-on-write.
 
 #. There are no zero or one-dimensional arrays. Scalars are
-   two-dimensional rather than zero=dimensional as in numpy.
+   two-dimensional rather than zero-dimensional as in numpy.
 
 #. Single subscript implies ravel.
 
@@ -265,8 +265,15 @@ class matlabarray(np.ndarray):
                 #        if index_value == True:
                 #            np.asarray(self).__setitem__(index_index, value[index_index])
                 #            print "lbounds self = \n", self
-        #                                                        
-                                                                
+        # 
+    
+        #To deal with the special case M[:,i] where 'i'  is an integer. This has to return a column vector, but without thoses lines, we
+        #have a line vector. Therefore we here give the same result but transposed                                                      
+        if type(index) is tuple and len(index)==2:
+            if (type(index[0]) is slice) and not(type(index[1]) is slice):
+                return matlabarray(self.get(index)).T
+ 
+                                                       
         return matlabarray(self.get(index))
 
     def get(self,index):
@@ -710,6 +717,10 @@ def isequal_(a,b):
     return np.array_equal(np.asanyarray(a),
                           np.asanyarray(b))
                           
+def isvector_(a):
+    """test if the argument is a line or column vector"""
+    return (size_(a)==1).any()                         
+                          
 def isscalar_(a):
     """np.isscalar returns True if a.__class__ is a scalar
     type (i.e., int, and also immutable containers str and
@@ -731,11 +742,22 @@ try:
 except:
     pass
 
-def max_(a, d=None):
-    if d is not None:
-        return np.maximum(a,d)
+def max_(a, d=None, nargout=None):
+    if isempty_(a):
+        ret = matlabarray([])                    
+    elif d is not None:
+        ret = np.maximum(a,d)
     else:
-        return np.amax(a)
+        ret = np.amax(a)
+                                
+    if nargout == 2:
+        if isempty_(a):
+            ret2 = matlabarray([])                                    
+        else:
+            ret2 = np.argmax(a)                                                
+        return ret, ret2+1 #+1 added since we deal with indices of matlabarray
+    else:
+        return ret    
 
 def min_(a, d=None, nargout=None):#, nargout=0):
     #print "a", a
@@ -927,17 +949,23 @@ def ones_(*args,**kwargs):
 #------------------------------------------------------------------------------
 #                Added Functions Start here.
 #------------------------------------------------------------------------------
+# -> matrices given as arguments  are matlabarray. Otherwise these functions may not do their job. We are doing our best here so that
+#    the linear algebra functions return the arguments like in matlab. Therefore we do modifications on the outputs of classical python functions.
 # -> convert to matlab arrays before returning
 # -> remove additional arguments. *args **kwargs only where necessary makes debugging easier.
 
 def eig_(A, nargout=1, *args,**kwargs):
     if nargout == 1:
-        return np.linalg.eigvals(A)
+        return matlabarray(np.linalg.eigvals(A))
     else:
-        return np.linalg.eig(A)
+        D,V = np.linalg.eig(A) #when A is a matlabarray, linalg.eig(A) returns D as a python array and V as a matlabarray
+        return V,matlabarray(np.diag(D))
     
 def diag_(A, *args,**kwargs):
-    return np.array(np.diag(A))
+    if isvector_(A):
+        return matlabarray(np.diag(A.reshape(-1)))
+    else:
+        return matlabarray(np.diag(A))
     
 def isreal_(A, *args,**kwargs):
     return np.isreal(A)
@@ -952,10 +980,17 @@ def cond_(A, *args,**kwargs):
     return np.linalg.cond(A)
     
 def svd_(A, full_matrices=1, *args,**kwargs):
-    return np.linalg.svd(A, full_matrices)
+    u,s,v= np.linalg.svd(A, full_matrices)
+    return u, matlabarray(np.diag(s)), v.T
     
 def chol_(A, *args, **kwargs):
-    return np.linalg.cholesky(A)
+    try: #there is in python a exception when the matrix is not positive definite, which does not occur on matlab
+        R = np.linalg.cholesky(A).T
+        p = 0
+    except:
+        R = matlabarray([[]])
+        p = 1
+    return R,p
     
 def inv_(A, *args, **kwargs):
     return np.linalg.inv(A)
@@ -973,6 +1008,7 @@ def fprintf_(*args,**kwargs):
     print args, kwargs  
     
 def poly1d_(A, r=0, *args, **kwargs):
+    #Careful : A.r which gives then the roots of the polynom is an array instead of a matlab array
     return np.poly1d(A,r) 
     
 def eye_(n):
