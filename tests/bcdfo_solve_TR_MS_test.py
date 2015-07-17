@@ -53,7 +53,7 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
         self.assertTrue(compare_matlabarray(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,45)
         self.assertEqual(neigd,1)
-        self.assertEqual(str(msg), "['boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )']")
+        self.assertEqual(str(msg), "['boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = [[ 15.]] )']")
 #        self.assertEqual(str(msg), "[[ 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )']]") # for Anke's translation
         self.assertEqual(hardcase,1)
 
