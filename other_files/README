@@ -10,3 +10,4 @@ ecdfo_augmX_evalf_fromrepository and bcdfo_solve_TR_MS_bc_decorator not sure yet
 bcdfo_checkZ was a factorization of code which was not present in the matlab code and not totally equivalent, therefore not necessary.
 bcdfo_computeP_hand_test contains some tests of computeP
 ecdfo_solve_TR_bc_dave is apparently Dave's older version of ecdfo_solve_TR_bc if we refer to the date of the latests commits messages
+matrix_algebra contains some linear algebra functions but I am not sured where it is used
