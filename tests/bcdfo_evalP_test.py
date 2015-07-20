@@ -4,7 +4,8 @@ Created on Tue Dec 02 15:04:23 2014
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from bcdfo_evalP import bcdfo_evalP_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
@@ -63,7 +64,7 @@ class Test_bcdfo_evalP(unittest.TestCase):
         #we verify that the sixth point is interpolated
         model = ( QZ * np.linalg.solve( RZ.T , matlabarray([0,0,0,0,0, 6 ]).T ) ).T
         res = res = bcdfo_evalP_( model, matlabarray([[1],[3]]), xbase, scale, 1 )
-        self.assertAlmostEqual(float(res), 6, places=15)
+        self.assertAlmostEqual(float(res), 6, places=14)
         
     def test_bcdfo_evalP_4(self):
         """

@@ -4,7 +4,8 @@ Created on Tue Dec 02 14:54:04 2014
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from bcdfo_evalL import bcdfo_evalL_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
@@ -21,8 +22,8 @@ class Test_bcdfo_evalL(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-           self.abs_tol=1e-15;
-           self.rel_tol=1e-15;
+           self.abs_tol=1e-13;
+           self.rel_tol=1e-13;
            pass
 
 
@@ -65,12 +66,9 @@ class Test_bcdfo_evalL(unittest.TestCase):
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
         
         #Here we choose the fourth point of the interpolant set
-        values = bcdfo_evalL_( QZ, RZ, Y, matlabarray([2, 3, 5]), matlabarray([[2],[0]]), xbase, 0, scale, 1 )
+        values = bcdfo_evalL_( QZ, RZ, Y, matlabarray([2, 4, 5]), matlabarray([[2],[0]]), xbase, 0, scale, 1 )
         correctvalues = matlabarray([ [0],   [0],    [0],  [1], [0],   [0] ])
-        
         self.assertTrue(compare_matlabarray(values, correctvalues, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(xbase, matlabarray([0,0]), self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(scale, matlabarray([1,0.5, 0.5, 0.25, 0.25, 0.25]), self.abs_tol, self.rel_tol))
 
     
     def test_bcdfo_evalL_4(self):
@@ -91,8 +89,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
         """
         Y = matlabarray([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
-        values = bcdfo_evalL_( QZ, RZ, Y, matlabarray(range(1,6)), matlabarray([[-1],[1]]), xbase, 0, scale, 1 )
-        #print "values", values
+        values = bcdfo_evalL_( QZ, RZ, Y, matlabarray(range(2,7)), matlabarray([[-1],[1]]), xbase, 0, scale, 1 )
         correctvalues = matlabarray([ [0],   [97.0000],    [2.9900],    [1.0000], [-100.0000],   [-0.4950] ])
         self.assertTrue(compare_matlabarray(values, correctvalues, self.abs_tol, self.rel_tol))
         
