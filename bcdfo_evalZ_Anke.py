@@ -4,40 +4,6 @@ from numpy import *
 from runtime import *
 import helper
 
-#def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
-##    varargin = cellarray(args)
-##    nargin = 2-[X,q].count(None)+len(args)
-#
-#    n,m=size_(X,nargout=2)
-#    nlin=min_(n + 1,q)
-#    nquad=max_(0,q - nlin)
-#    nlin=nlin - 1
-#    Z=zeros_(q,m)
-#    if (q == 1):
-#        Z=ones_(1,m)
-#    else:
-#        if (q <= n + 1):
-##            Z[nlin+1,m]=matlabarray([[ones_(1,m)],[X[1:nlin,1:m]]])
-#            Z[1,:]=ones_(1,m)
-#            Z[2:nlin+1,:]=X[1:nlin,1:m]
-#            
-#        else:
-#            ndiag=min_(n,nquad)
-#            Z[1,:]=ones_(1,m)
-#            Z[2:nlin+1,:]=X[1:nlin,1:m]
-#            Z[nlin+2:nlin+1+ndiag,:]=0.5 * X[1:ndiag,1:m] ** 2
-##            matlabarray(ones_(1,m),[X[1:n,1:m]],[0.5 * X[1:ndiag,1:m] ** 2]])
-#            nquad=nquad - ndiag
-#            if (nquad > 0):
-#                for k in arange_(1,n - 1).reshape(-1):
-#                    nsd=min_(n - k,nquad)
-#                    if (nsd > 0):
-#                        Z[nlin+1+ndiag+k+(k-1)*nsd:nlin+ndiag+k+nsd+(k-1)*nsd,:]=X[k + 1:k + nsd,1:m].dot(X[1:nsd,1:m])
-#                        nquad=nquad - nsd
-#                    if (nquad == 0):
-#                        break
-#    return Z
-
 @helper.convertingDecorator
 def bcdfo_evalZ_( X, q ):
 #		X = helper.convert(X)
