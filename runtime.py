@@ -201,11 +201,14 @@ class matlabarray(np.ndarray):
 
                 return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
     
-        #To deal with the special case M[:,i] where 'i'  is an integer. This has to return a column vector, but without thoses lines, we
-        #have a line vector. Therefore we here give the same result but transposed                                                      
+#        To deal with the special case M[:,i] where 'i'  is an integer. This has to return a column vector, but without thoses lines, we
+#        have a line vector. Therefore we here give the same result but transposed                                                      
         if type(index) is tuple and len(index)==2:
-            if (type(index[0]) is slice) and not(type(index[1]) is slice):
-                return matlabarray(self.get(index)).T
+            if type(index[0]) is slice:
+                if not(type(index[1]) is slice): 
+                    return matlabarray(self.get(index)).T
+                elif index[1].start==index[1].stop:
+                    return matlabarray(self.get(index)).T
  
                                                        
         return matlabarray(self.get(index))
@@ -255,6 +258,17 @@ class matlabarray(np.ndarray):
         try:
             if len(indices) == 1:
                 np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
+            elif type(index) is tuple and len(index)==2:
+                if type(index[0]) is slice:
+                    if not(type(index[1]) is slice):
+                        np.asarray(self).__setitem__(indices,value.T)
+                    elif index[1].start==index[1].stop:
+                        np.asarray(self).__setitem__(indices,value.T)
+                    else:
+                        np.asarray(self).__setitem__(indices,value)
+                else:
+                    np.asarray(self).__setitem__(indices,value)
+                        
             else:
                 np.asarray(self).__setitem__(indices,value)
         except (ValueError,IndexError):
@@ -777,6 +791,9 @@ def chol_(A, *args, **kwargs):
         R = matlabarray([[]])
         p = 1
     return R,p
+    
+def qr_(A, nargout=2):
+    return np.linalg.qr((A))
     
 def inv_(A, *args, **kwargs):
     return np.linalg.inv(A)
