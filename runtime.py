@@ -72,7 +72,8 @@ Coexistence of matlab matrices and numpy arrays
 import scipy
 import numpy as np
 import os,sys
-from numpy import inf
+import numpy #this is for the other files which import runtime and need numpy, for instance with numpy.linalg.solve
+from numpy import inf #some other files which import runtine need inf
 #import helper
 try:
     from scipy.io import loadmat
@@ -675,6 +676,9 @@ def round_(a):
 def rows_(a):
     return np.asarray(a).shape[0]
 
+def columns_(a):
+    return np.asarray(a).shape[1]
+
 def size_(a, b=0, nargout=1):
     """
     >>> size_(zeros_(3,3)) + 1
@@ -721,30 +725,43 @@ def true_(*args):
 
 
 def zeros_(*args,**kwargs):
+    """
+    This function is supposed to be similar to matlab. Here are examples :
+        zeros_(1,2)
+        zeros_(matlabarray([[1,2]])) #Careful, this has to be a line vector, not a column vector, like in matlab
+        zeros_(matlabarray([[1]]),2)
+        zeros_(2, matlabarray([[1]]))
+        zeros_(3)
+        zeros_(matlabarray([[3]]))
+    """
     if not args:
         return 0.0
-
-    if type(args[0]) is matlabarray:
-
-        ret = matlabarray(np.zeros(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-
-    else:                   
-        ret = matlabarray(np.zeros(args, **kwargs))
-    return ret
+    if len(args) == 1:
+        if numel_(args)==1:
+            args += args
+        else:
+            return matlabarray(np.zeros(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
+    return matlabarray(np.zeros(args,**kwargs))
 
 
 def ones_(*args,**kwargs):
+    """
+    This function is supposed to be similar to matlab. Here are examples :
+        ones_(1,2)
+        ones_(matlabarray([[1,2]])) #Careful, this has to be a line vector, not a column vector, like in matlab
+        ones_(matlabarray([[1]]),2)
+        ones_(2, matlabarray([[1]]))
+        ones_(3)
+        ones_(matlabarray([[3]]))
+    """
     if not args:
-        return 0.0
-
-    if type(args[0]) is matlabarray:
-
-        ret = matlabarray(np.ones(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-
-    else:
-                   
-        ret = matlabarray(np.ones(args, **kwargs))
-    return ret
+        return 1.0
+    if len(args) == 1:
+        if numel_(args)==1:
+            args += args
+        else:
+            return matlabarray(np.ones(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
+    return matlabarray(np.ones(args,**kwargs))
                 
 #------------------------------------------------------------------------------
 #                Added Functions Start here.
