@@ -10,6 +10,8 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
+    
+from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 
 def bcdfo_augment_Y_(Ynew=None,Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -21,7 +23,8 @@ def bcdfo_augment_Y_(Ynew=None,Y=None,whichmodel=None,shift_Y=None,Delta=None,no
         disp_(char('     Ignoring augmentation...'))
         QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     else:
-        Y=matlabarray([Y,Ynew])
+        Y=concatenate_([Y, Ynew], axis=1)
+#        Y=matlabarray([Y,Ynew])
         p1=p1 + size_(Ynew,2)
         QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     return p1,QZ,RZ,Y,xbase,scale
