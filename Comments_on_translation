@@ -43,6 +43,10 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 
 -Python will addition matrix which do not have the same dimension without giving some kind of errors or warnings. Therefore checking dimensions of matrices might sometimes be useful.
 
+-When functions call each other in python code, arguments may be modified => we should give them as a copy if we do not want the arguments to be modified. For instance, if we care do not want the function to modify our Y :
+	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(copy_(Y),whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4) instead of :
+	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
+
 PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 
 -Matrices like V[m:n,a] where a is a integer (or an interval containing a unique number like 4:4, but not an interval like 3:5) or matrices V[m:n] where V is a vertical vector always give as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.
