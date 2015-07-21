@@ -5,6 +5,8 @@ Created on Mon Dec 01 13:41:32 2014
 @author: jaco_da
 """
 
+import sys
+sys.path.append("../")
 import unittest
 from bcdfo_computeLj import *#bcdfo_computeLj_
 from bcdfo_build_QR_of_Y import *#bcdfo_build_QR_of_Y_
