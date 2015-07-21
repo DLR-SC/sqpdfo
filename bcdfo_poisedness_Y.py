@@ -11,6 +11,8 @@ try:
 except ImportError:
     from smop.runtime import *
     
+from bcdfo_find_new_yj import bcdfo_find_new_yj_
+    
 def bcdfo_poisedness_Y_(QZ=None,RZ=None,Y=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 14-[QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y].count(None)+len(args)
@@ -22,8 +24,8 @@ def bcdfo_poisedness_Y_(QZ=None,RZ=None,Y=None,eps_L=None,xbase=None,lSolver=Non
         Y_radius=max_(Y_radius,norm_(Y[:,j] - Y[:,1]))
     for j in arange_(2,p1).reshape(-1):
         if (hardcons == 1):
-            y,improvement=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Y_radius,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
+            y,improvement, msgTR=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Y_radius,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
         else:
-            y,improvement=bcdfo_find_new_yj_(QZ,RZ,Y,j,Y_radius,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
+            y,improvement, msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,j,Y_radius,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
         _lambda=max_(improvement,_lambda)
     return _lambda,Y_radius

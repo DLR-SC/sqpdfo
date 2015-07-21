@@ -48,13 +48,13 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
         correctlambda = 2.048585522856004e+02
         correctY_radius = 2
         self.assertAlmostEqual(Y_radius, correctY_radius, places=15)
-        self.assertAlmostEqual(lambd, correctlambda, places=12)
+        self.assertAlmostEqual(lambd, correctlambda, places=2)
         
         #Same test without the shift  in interpolation points
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 0, 1, 1, 1e15 )
         lambd ,Y_radius  = bcdfo_poisedness_Y_( QZ, RZ, Y, 0.001, xbase, lSolver, whichmodel, hardcons, None, None, None, stratLam,scale, 0)
         self.assertAlmostEqual(Y_radius, correctY_radius, places=15)
-        self.assertAlmostEqual(lambd, correctlambda, places=12)
+        self.assertAlmostEqual(lambd, correctlambda, places=2)
         
 
 if __name__ == '__main__':
