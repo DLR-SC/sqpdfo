@@ -9,6 +9,8 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
+from bcdfo_evalL import bcdfo_evalL_
+from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 
 def bcdfo_include_in_Y_(x=None,QZ=None,RZ=None,Y=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase=None,whichmodel=None,succ=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
