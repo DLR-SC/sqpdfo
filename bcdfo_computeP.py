@@ -22,7 +22,6 @@ def bcdfo_computeP_(QZ=None,RZ=None,Y=None,fY=None,whichmodel=None,P_old=None,in
     if (whichmodel == 3 and p1 < q):
         whichmodel=2
     if (whichmodel == 0):
-        warning_(char('off'))
         P=(QZ * (numpy.linalg.solve(RZ.T,fY.T))).T
     else:
         if (whichmodel == 1):
@@ -41,18 +40,18 @@ def bcdfo_computeP_(QZ=None,RZ=None,Y=None,fY=None,whichmodel=None,P_old=None,in
                     Y=Y / scaleY
                 P=matlabarray([])
                 for i in arange_(1,n_rhs).reshape(-1):
-                    rhs=matlabarray([fY[i,:],zeros_(1,n + 1)])
+                    rhs=concatenate_([fY[i,:],zeros_(1,n + 1)], axis=1)
+#                    rhs=matlabarray([fY[i,:],zeros_(1,n + 1)])
                     mualpha=(numpy.linalg.solve(RZ,(QZ.T * rhs.T))).T
                     P_i[1:n + 1]=mualpha[p1 + 1:p1 + n + 1].T
                     M=bcdfo_evalZ_(Y,q).T
                     P_i[n + 2:q]=M[:,n + 2:q].T * mualpha[1:p1].T
-                    P=matlabarray([[P],[P_i]])
+                    P=concatenante_([P, P_i])
+#                    P=matlabarray([[P],[P_i]])
         else:
             if (whichmodel == 2):
-                warning_(char('off'))
                 P=(QZ * (numpy.linalg.solve(RZ.T,fY.T))).T
             else:
                 if (whichmodel == 3):
-                    warning_(char('off'))
                     P=(pinv_(RZ) * QZ.T * fY.T).T
     return P
