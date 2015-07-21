@@ -4,11 +4,15 @@ Created on Tue Jul 21 13:40:58 2015
 
 @author: lien_ol
 """
-
+from __future__ import division
+try:
+    from runtime import *
+except ImportError:
+    from smop.runtime import *
 def bcdfo_gradP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
-
+#    varargin = cellarray(args)
+#    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
+#
     n=length_(x)
     p1=length_(P)
     if (shift_Y):
