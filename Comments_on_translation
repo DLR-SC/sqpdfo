@@ -24,9 +24,7 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
   which can not be further used and has to be dealt with a code like this :
       Z=concatenate_([ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2], axis=0) 
   NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1
-  
--Matrices like V[:,a] where a is a integer (and not an interval like 3:5) always gives as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it. 
-  
+    
 -The matlab elsif are automatically translated with else..if instead of elif
 
 -Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~'
@@ -45,9 +43,9 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 
 -Python will addition matrix which do not have the same dimension without giving some kind of errors or warnings. Therefore checking dimensions of matrices might sometimes be useful.
 
-PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH (but we are keeping them close just in case):
+PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 
--Matrices like V[m:n,a] where a is a integer (or a interval containing a unique number like 4:4, but not an interval like 3:5) always gives as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.
+-Matrices like V[m:n,a] where a is a integer (or an interval containing a unique number like 4:4, but not an interval like 3:5) or matrices V[m:n] where V is a vertical vector always give as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.
 
 -cholesky function in python does not give an answer when the matrix is not definite positive (whereas matlab does) and raises instead an exception  : therefore they have to be handle differently (cf bcdfo_solve_TR_MS for an instance)
 
