@@ -21,11 +21,11 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y=None,whichmodel=None,scale=None,sh
     if (whichmodel == 3 and p1 < q):
         whichmodel=2
     if (whichmodel == 0):
-        Lj=(QZ * (numpy.linalg.solve(RZ.T,[[zeros_(j - 1,1)],[1],[zeros_(p1 - j,1)]]))).T
+        Lj=(QZ * (numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 - j,1)],axis=0)))).T
     else:
         if (whichmodel == 1):
             if (p1 == n + 1 or p1 == q):
-                Lj=(numpy.linalg.solve(RZ,QZ.T) * [[zeros_(j - 1,1)],[1],[zeros_(p1 - j,1)]]).T
+                Lj=(numpy.linalg.solve(RZ,QZ.T) * concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 - j,1)],axis=0)).T
                 if (p1 == n + 1):
                     Lj[n + 2:q]=0
             else:
@@ -36,7 +36,7 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y=None,whichmodel=None,scale=None,sh
                         Y[:,i]=Y[:,i] - xbase
                         scaleY=max_(scaleY,norm_(Y[:,i]))
                     Y=Y / scaleY
-                rhs=matlabarray([[zeros_(j - 1,1)],[1],[zeros_(p1 + n + 1 - j,1)]])
+                rhs=concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 + n +1 - j,1)],axis=0)
                 mualpha=(numpy.linalg.solve(RZ,(QZ.T * rhs))).T
                 Lj[1:n + 1]=mualpha[p1 + 1:p1 + n + 1].T
                 M=bcdfo_evalZ_(Y,q).T
@@ -44,10 +44,10 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y=None,whichmodel=None,scale=None,sh
         else:
             if (whichmodel == 2):
                 if (p1 < q):
-                    Lj=(QZ * (pinv_(RZ.T) * [[zeros_(j - 1,1)],[1],[zeros_(p1 - j,1)]])).T
+                    Lj=(QZ * (pinv_(RZ.T) * concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 - j,1)],axis=0))).T
                 else:
-                    Lj=(QZ * (numpy.linalg.solve(RZ.T,[[zeros_(j - 1,1)],[1],[zeros_(p1 - j,1)]]))).T
+                    Lj=(QZ * (numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 - j,1)],axis=0)))).T
             else:
                 if (whichmodel == 3):
-                    Lj=(pinv_(RZ) * QZ.T * [[zeros_(j - 1,1)],[1],[zeros_(p1 - j,1)]]).T
+                    Lj=(pinv_(RZ) * QZ.T * concatenate_([zeros_(j - 1,1),matlabarray([[1]]),zeros_(p1 - j,1)],axis=0)).T
     return Lj
