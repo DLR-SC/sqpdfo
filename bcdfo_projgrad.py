@@ -14,7 +14,7 @@ except ImportError:
 def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 5-[n,x,g,bl,bu].count(None)+len(args)
-
+    gn=matlabarray()
     gnorm=0.0
     for i in arange_(1,n).reshape(-1):
         gi=g[i]
