@@ -46,6 +46,7 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 -When functions call each other in python code, arguments may be modified => we should give them as a copy if we do not want the arguments to be modified. For instance, if we care do not want the function to modify our Y :
 	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(copy_(Y),whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4) instead of :
 	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
+ It may then be interesting to make a copy of Y each time it is called in a function, to make sure that there is  no unwanted modification
 
 PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 
