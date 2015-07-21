@@ -4,10 +4,14 @@ Created on Tue Jul 21 13:40:57 2015
 
 @author: lien_ol
 """
-
+from __future__ import division
+try:
+    from runtime import *
+except ImportError:
+    from smop.runtime import *
 def bcdfo_hessP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 
     n=length_(x)
     p1=length_(P)
@@ -17,7 +21,7 @@ def bcdfo_hessP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs
         x=x - xbase
     if (nquad > 0):
         ndiag=min_(nquad,n)
-        H=diag_([P[n + 2:n + 1 + ndiag],zeros_(1,n - ndiag)])
+        H=diag_(concatenate_([P[n + 2:n + 1 + ndiag],zeros_(1,n - ndiag)]))
         nquad=nquad - ndiag
         if (nquad > 0):
             k=2 * n + 1
