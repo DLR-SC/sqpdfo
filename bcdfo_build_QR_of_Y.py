@@ -27,7 +27,7 @@ def bcdfo_build_QR_of_Y_(Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=N
     if (_del < 1e-10):
         _del=1e-10
     if (whichmodel == 0):
-        q=copy(p1)
+        q=copy_(p1)
     else:
         q=((n + 1) * (n + 2)) / 2
     if (whichmodel == 3 and p1 < q):
@@ -39,7 +39,7 @@ def bcdfo_build_QR_of_Y_(Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=N
         for i in arange_(1,p1).reshape(-1):
             Y[:,i]=Y[:,i] - xbase
             scaleY=max_(scaleY,norm_(Y[:,i]))
-        scale=concatenate_((matlabarray([[1]]),scaleY ** - 1 * ones_(1,min_(n,q - 1)),scaleY ** - 2 * ones_(1,q - n - 1)), axis=1).T
+        scale=concatenate_([matlabarray([[1]]),scaleY ** - 1 * ones_(1,min_(n,q - 1)),scaleY ** - 2 * ones_(1,q - n - 1)], axis=1).T
         Y=Y / scaleY
     else:
         scale=ones_(q,1)

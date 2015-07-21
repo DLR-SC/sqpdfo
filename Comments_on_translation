@@ -22,10 +22,9 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
  which does not work ; it actually does not give an error, but returns a matlabarray containing other matlabarrays like
      matlabarray([[matlabarray([[ 1.,  1.,  1.,  1.,  1.,  1.]])],[ matlabarray([[ 0.  ,  1.  ,  0.  ,  2.  ,  1.  ,  0.  ]])])
   which can not be further used and has to be dealt with a code like this :
-      Z=concatenate_((ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2), axis=0) 
+      Z=concatenate_([ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2], axis=0) 
   NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1
-    
-
+  
 -Matrices like V[:,a] where a is a integer (and not an interval like 3:5) always gives as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it. 
   
 -The matlab elsif are automatically translated with else..if instead of elif
