@@ -4,7 +4,8 @@ Created on Tue Dec 02 12:24:11 2014
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from runtime import matlabarray, compare_matlabarray
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
@@ -25,7 +26,7 @@ class Test_bcdfo_hessP(unittest.TestCase):
         self.rel_tol=1e-13;
         pass
 
-    def test_bcdfo_gradP_1(self):
+    def test_bcdfo_hessP_1(self):
         """
            Easy tests, with models hand-given
         """

@@ -5,6 +5,8 @@ Created on Tue Dec 02 11:59:20 2014
 @author: jaco_da
 """
 
+import sys
+sys.path.append("../")
 import unittest
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
@@ -32,7 +34,7 @@ class Test_bcdfo_gradP(unittest.TestCase):
         for i in range(0, 20):
             x1=(random()-0.5)*100
             x2=(random()-0.5)*100
-            model = matlabarray([0, x1, x2, 0,0,0, ])
+            model = matlabarray([0, x1, x2, 0,0,0 ])
             ans = bcdfo_gradP_( model, matlabarray([[(random()-0.5)*100],[(random()-0.5)*100]]), matlabarray([[(random()-0.5)*100],[(random()-0.5)*100]]), 1, 0 )
             correctans = matlabarray([ x1, x2]).T
         
@@ -43,7 +45,7 @@ class Test_bcdfo_gradP(unittest.TestCase):
             x2=(random()-0.5)*100
             x3=(random()-0.5)*100
             x4=(random()-0.5)*100
-            model = matlabarray([0, 0, 0, x1,x2,0, ])
+            model = matlabarray([[0, 0, 0, x1,x2,0 ]])
             ans = bcdfo_gradP_( model, matlabarray([[x3],[x4]]), matlabarray([[(random()-0.5)*100],[(random()-0.5)*100]]), 1, 0 )
             correctans = matlabarray([ x1*x3, x2*x4]).T
         
