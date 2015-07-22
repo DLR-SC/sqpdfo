@@ -12,9 +12,15 @@ except ImportError:
     from smop.runtime import *
 from bcdfo_evalZ import *
 
-def bcdfo_computeP_(QZ=None,RZ=None,Y=None,fY=None,whichmodel=None,P_old=None,ind_Y=None,i_xold=None,i_xplus=None,g=None,scale=None,shift_Y=None,Delta0=None,*args,**kwargs):
+def bcdfo_computeP_(QZ=None,RZ=None,Y_=None,fY=None,whichmodel=None,P_old=None,ind_Y=None,i_xold=None,i_xplus=None,g=None,scale=None,shift_Y=None,Delta0=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 13-[QZ,RZ,Y,fY,whichmodel,P_old,ind_Y,i_xold,i_xplus,g,scale,shift_Y,Delta0].count(None)+len(args)
+
+    #Copy only if necessary
+    if (shift_Y):
+        Y=copy_(Y_)
+    else:
+        Y=Y_
 
     n,p1=size_(Y,nargout=2)
     badcond=0

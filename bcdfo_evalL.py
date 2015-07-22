@@ -13,10 +13,18 @@ except ImportError:
 from bcdfo_evalP import bcdfo_evalP_
 import numpy
     
-def bcdfo_evalL_(QZ=None,RZ=None,Y=None,choice_set=None,x=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 9-[QZ,RZ,Y,choice_set,x,xbase,whichmodel,scale,shift_Y].count(None)+len(args)
 
+    #Copy only if necessary
+    if (shift_Y):
+        Y=copy_(Y_)
+        xbase=copy_(xbase_)
+    else:
+        Y=Y_
+        xbase=xbase_        
+        
     n,p1=size_(Y,nargout=2)
     I=eye_(p1)
     lc=length_(choice_set)

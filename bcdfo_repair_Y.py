@@ -14,9 +14,15 @@ except ImportError:
 from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
     
-def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase_=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale_=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 20-[QZ,RZ,Y,Delta,farfact,farthr,closethr,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,normgx,kappa_ill].count(None)+len(args)
+
+    Y=copy_(Y_)
+    QZ=copy_(QZ_)
+    RZ=copy_(RZ_)
+    xbase=copy_(xbase_)
+    scale=copy_(scale_)
 
     verbose=0
     max_improve_loops=20

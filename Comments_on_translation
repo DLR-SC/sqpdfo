@@ -38,10 +38,10 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 
 -Python will addition matrix which do not have the same dimension without giving some kind of errors or warnings. Therefore checking dimensions of matrices might sometimes be useful.
 
--When functions call each other in python code, arguments may be modified => we should give them as a copy if we do not want the arguments to be modified. For instance, if we care do not want the function to modify our Y :
-	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(copy_(Y),whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4) instead of :
-	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
- It may then be interesting to make a copy of Y each time it is called in a function, to make sure that there is  no unwanted modification
+-When functions call each other in python code, arguments may be modified => we have to make copy of all the arguments which are modified by the function to make sure that there is  no unwanted modification, even if the
+argument is returned at the end of the function. For instance, bcdfo_repair_Y modifies and returns Y, but it may be returned under an other name in matlab, for instance Yplus:
+QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale = bcdfo_repair_Y_( QZ, RZ, Y, 0.7, 10, 1.0e-10, 1.1, 0.001, xbase, 1, 0, 0, matlabarray([-10,-10]), matlabarray([10,10]), matlabarray([1,2]), 1, scale, 0, 1, 1e15 )
+In this case, we would not want Y to be modified during the call. Therefore Y has to be copied in bcdfo_repair_Y, even though it is returned at the end. 
 
 -There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case, those are the followings :
 

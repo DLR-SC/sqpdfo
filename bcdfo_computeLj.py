@@ -12,9 +12,15 @@ except ImportError:
     from smop.runtime import *
 from bcdfo_evalZ import *
 
-def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[QZ,RZ,j,Y,whichmodel,scale,shift_Y].count(None)+len(args)
+
+    #Copy only if necessary
+    if (shift_Y):
+        Y=copy_(Y_)
+    else:
+        Y=Y_
 
     n,p1=size_(Y,nargout=2)
     q=((n + 1) * (n + 2)) / 2

@@ -13,9 +13,11 @@ except ImportError:
     
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 
-def bcdfo_augment_Y_(Ynew=None,Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_augment_Y_(Ynew=None,Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[Ynew,Y,whichmodel,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
+
+    Y=copy_(Y_)
 
     n,p1=size_(Y,nargout=2)
     if ((p1 >= ((n + 1) * (n + 2)) / 2) and (whichmodel != 3)):

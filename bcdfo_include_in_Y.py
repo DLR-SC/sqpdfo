@@ -12,9 +12,15 @@ except ImportError:
 from bcdfo_evalL import bcdfo_evalL_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 
-def bcdfo_include_in_Y_(x=None,QZ=None,RZ=None,Y=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase=None,whichmodel=None,succ=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase_=None,whichmodel=None,succ=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 15-[x,QZ,RZ,Y,choice_set,poisedness_threshold,criterion,xbase,whichmodel,succ,scale,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
+    
+    Y=copy_(Y_)
+    QZ=copy_(QZ_)
+    RZ=copy_(RZ_)
+    xbase=copy_(xbase_)
+    scale=copy_(scale_)
 
     if (length_(choice_set) == 0):
         pos=0

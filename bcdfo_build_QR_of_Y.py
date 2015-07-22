@@ -12,10 +12,16 @@ except ImportError:
 from bcdfo_evalZ import *
 from numpy import copy
     
-def bcdfo_build_QR_of_Y_(Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 6-[Y,whichmodel,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
 
+    #Copy only if necessary
+    if (shift_Y):
+        Y=copy_(Y_)
+    else:
+        Y=Y_
+        
     n,p1=size_(Y,nargout=2)
     badcond=0
     if (normgx == 0.0):

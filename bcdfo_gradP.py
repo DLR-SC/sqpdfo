@@ -9,10 +9,18 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
-def bcdfo_gradP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_gradP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 #
+    #Copy only if necessary
+    if (shift_Y):
+        P=copy_(P_)
+        x=copy_(x_)
+    else:
+        P=P_
+        x=x_
+
     n=length_(x)
     p1=length_(P)
     if (shift_Y):
