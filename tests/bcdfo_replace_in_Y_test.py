@@ -98,7 +98,6 @@ class Test_bcdfo_replace_in_Y(unittest.TestCase):
 [0,	0,	0,	0,	0.0242179739848241,	0.0484359479696486],
 [0,	0,	0,	0,	0,	0.195180014589707]])
 
-        print Yplus
         self.assertTrue(compare_matlabarray(correctQZplus, QZplus,self.abs_tol, self.rel_tol)) 
         self.assertTrue(compare_matlabarray(correctRZplus, RZplus,self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(correctYplus, Yplus,self.abs_tol, self.rel_tol))
