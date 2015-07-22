@@ -3,7 +3,7 @@ Comments on translation
 
 This file helps us find the bugs when doing the translation from matlab to python code.
 
-BCDFO files :
+BCDFO files translated by Dr. Tröltzsch Anke:
 
 These files have been (hand?)-translated by Dr. Tröltzsch Anke and therefore use normal python arrays. We therefore have to be careful with indices.
 
@@ -11,7 +11,7 @@ Besides the known issues notified on gitlab, this is what we have to be careful 
 -Lot of bugs were found on bcdfo_solve_TR_MS/bcdfo_solve_TR_MS_bc and thus more tests if we have time could reveal more.
 -Almost all functions were tested with whichmodel=0, therefore more tests if we have time with other values of whichmodel could be important.
 
-ECDFO files :
+BCDFO and ECDFO files automatically translated:
 
 These files have been translated by SMOP, i.e. automatic translation. These are the known points which give issues with this automatic translation :
 
@@ -24,18 +24,13 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
   which can not be further used and has to be dealt with a code like this :
       Z=concatenate_([ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2], axis=0) 
   NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1
+  Differenciate when to put axis =0 or axis =1 is quite easy :
+	When Z=[[A],[B],[C]]] or Z=matlabarry([[A],[B],[C]]]) we put axis=0
+	When Z=[A,B,C] or Z=matlabarray([A,B,C]) then we put axis=1
     
 -The matlab elsif are automatically translated with else..if instead of elif
 
 -Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~'
-
--roots function from matlab has to be handled in python like in the following example :
-   root  = roots([norm(V(:,imu))^2 2*V(:,imu)'*scri nscri^2-Delta^2]);
-   s     = scri + root(1)*V(:,imu);
-  IS TRANSLATED IN PYTHON BY :
-    p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
-    root=max(p2.r) #CAREFUL, p2.r is an ARRAY and not a MATLABARRAY, therefore we use max from numpy and not max_ from runtime
-    s=scri + root * V[:,imu]
 
 -The disp_ and fprint_ have not been dealt with yet, but they eventually will have to be modified.
 
@@ -48,6 +43,22 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
  It may then be interesting to make a copy of Y each time it is called in a function, to make sure that there is  no unwanted modification
 
+-There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case, those are the followings :
+
+	-roots function from matlab has to be handled in python like in the following example :
+	   root  = roots([norm(V(:,imu))^2 2*V(:,imu)'*scri nscri^2-Delta^2]);
+	   s     = scri + root(1)*V(:,imu);
+	  IS TRANSLATED IN PYTHON BY :
+		p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
+		root=max(p2.r) #CAREFUL, p2.r is an ARRAY and not a MATLABARRAY, therefore we use max from numpy and not max_ from runtime
+		s=scri + root * V[:,imu]
+		
+	-sort function from matlab has to be handled in python like in the following example :
+	    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
+		IS TRANSLATED IN PYTHON BY :
+		dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
+		jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])
+ 
 PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 
 -Matrices like V[m:n,a] where a is a integer (or an interval containing a unique number like 4:4, but not an interval like 3:5) or matrices V[m:n] where V is a vertical vector always give as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.

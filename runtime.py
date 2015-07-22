@@ -856,6 +856,9 @@ def concatenate_(arrs, axis=0):
 def sort_(A):
     return np.sort(A)
     
+def argsort_(A):
+    return np.argsort(A)
+    
 def isfield_(obj, name):
     return obj.__dict__.has_key(str(name))
     

@@ -11,6 +11,8 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
+from bcdfo_find_new_yj import bcdfo_find_new_yj_
+from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
     
 def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -25,7 +27,9 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
     d=zeros_(1,p1)
     for j in arange_(2,p1).reshape(-1):
         d[j]=norm_(Y[:,j] - Y[:,1])
-    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
+#    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
+    dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
+    jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])
     if (verbose):
         d
         dsorted
@@ -34,13 +38,14 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
         if (dsorted[j] > farfact * (1 + eps_L) * Delta):
             jmax=jsorted[j]
             if (hardcons == 1):
-                y,improvement=bcdfo_find_new_yj_bc_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
+                y,improvement,msgTR=bcdfo_find_new_yj_bc_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
             else:
-                y,improvement=bcdfo_find_new_yj_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
+                y,improvement,msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose):
                 disp_([char('lambda = '),num2str_(improvement),char(' at j='),num2str_(jmax)])
             QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,y,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
-            replaced=matlabarray([replaced,jmax])
+#            replaced=matlabarray([replaced,jmax])
+            replaced=concatenate_([replaced,jmax], axis=1)
             d[jmax]=norm_(y - Y[:,1])
         else:
             Y_radius=dsorted[j]
@@ -53,9 +58,9 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
         maximprove=0
         for j in arange_(2,p1).reshape(-1):
             if (hardcons == 1):
-                y,improvement=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
+                y,improvement, msgTR=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
             else:
-                y,improvement=bcdfo_find_new_yj_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
+                y,improvement, msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose > 1):
                 disp_([char(' ==> j = '),int2str_(j),char(' improve = '),num2str_(improvement)])
                 y
@@ -79,7 +84,7 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
         QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ymax,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
         d[jmax]=norm_(ymax - Y[:,1])
         if (length_(find_(replaced == jmax)) == 0):
-            replaced=matlabarray([replaced,jmax])
+            replaced=concatenate_([replaced,jmax], axis=1)
     Y_radius=max_(d)
     if (verbose):
         replaced
