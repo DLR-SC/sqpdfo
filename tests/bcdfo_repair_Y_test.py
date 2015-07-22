@@ -123,7 +123,6 @@ class Test_bcdfo_repair_Y(unittest.TestCase):
         correctmaximprove =  1.000153015137598
 
         correctY_radius =  2
-        print replaced
 
         self.assertTrue(compare_matlabarray(correctRZplus, RZplus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(correctQZplus, QZplus, self.abs_tol, self.rel_tol))
