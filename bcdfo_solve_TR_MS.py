@@ -93,7 +93,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     goverD=gnorm / Delta
     Hnorminf=norm_(H,inf)
     if (Hnorminf > 0):
-        HnormF=norm_(H,char('fro'))
+        HnormF=norm_(H,'fro')
     else:
         HnormF=0
     lower=max_(0,goverD - min_(Hnorminf,HnormF))

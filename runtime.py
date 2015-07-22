@@ -827,8 +827,8 @@ def qr_(A, nargout=2):
 def inv_(A, *args, **kwargs):
     return np.linalg.inv(A)
      
-def norm_(A, *args,**kwargs):
-    return np.linalg.norm(A)
+def norm_(A, order=None, axis=None):
+    return np.linalg.norm(A, order,axis)
     
 def pinv_(A):
     return np.linalg.pinv(A)

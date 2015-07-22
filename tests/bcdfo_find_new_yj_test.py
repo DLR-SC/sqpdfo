@@ -23,8 +23,8 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-        self.abs_tol=1e-5;
-        self.rel_tol=1e-5;
+        self.abs_tol=1e-15;
+        self.rel_tol=1e-15;
         pass
 
     def test_bcdfo_find_new_yj(self):
@@ -43,8 +43,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
         correctimprovement =  314.8805392927235
 #        print "ynew", ynew
 #        print "improvement", improvement
-        
-        self.assertAlmostEqual(correctimprovement, improvement, 2)
+        self.assertAlmostEqual(correctimprovement, improvement, 12)
         self.assertTrue(compare_matlabarray(correctynew, ynew, self.abs_tol, self.rel_tol))
         
         #Same test as above but without the shifting in the interpolation points
@@ -58,7 +57,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 #        print "ynew", ynew
 #        print "improvement", improvement
         
-        self.assertAlmostEqual(correctimprovement, improvement, places=2)
+        self.assertAlmostEqual(correctimprovement, improvement, places=11)
         self.assertTrue(compare_matlabarray(correctynew, ynew, self.abs_tol, self.rel_tol))
   
   
