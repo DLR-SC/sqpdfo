@@ -62,6 +62,7 @@ In this case, we would not want Y to be modified during the call. Therefore Y ha
 PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 
 -Matrices like V[m:n,a] where a is a integer (or an interval containing a unique number like 4:4, but not an interval like 3:5) or matrices V[m:n] where V is a vertical vector always give as a result a line vector such as matlabarray([[-0.10526316,  0.9944444 ]]). Therefore we have to transpose it.
+ This was also a problem for case V[M] where M is a matrix and V is a vertical vector.
 
 -cholesky function in python does not give an answer when the matrix is not definite positive (whereas matlab does) and raises instead an exception  : therefore they have to be handle differently (cf bcdfo_solve_TR_MS for an instance)
 

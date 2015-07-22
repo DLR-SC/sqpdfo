@@ -73,7 +73,7 @@ import scipy
 import numpy as np
 import os,sys
 import numpy #this is for the other files which import runtime and need numpy, for instance with numpy.linalg.solve
-from numpy import inf #some other files which import runtine need inf
+from numpy import inf, logical_or, logical_and #some other files which import runtine need inf
 #import helper
 try:
     from scipy.io import loadmat
@@ -197,10 +197,14 @@ class matlabarray(np.ndarray):
 
     def __getitem__(self,index):
         if type(index) is matlabarray:
-
+            
             if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
 
                 return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
+#            To deal with the special case V[M] where M is a matrix and V is a vertical vector. his has to return a column vector, but without thoses lines, we
+#        have a line vector. Therefore we here give the same result but transposed.
+            elif columns_(self)==1 and rows_(self)>1:
+                return matlabarray(self.get(index)).T
     
 #        To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
 #        have a line vector. Therefore we here give the same result but transposed 
@@ -256,7 +260,10 @@ class matlabarray(np.ndarray):
                       print "np.asarray(value.T)", np.asarray(value.T)[0]
                       np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])                                                                         
                     return                                                                                
-
+#           To deal with the special case V[M] where M is a matrix and V is a vertical vector. his has to return a column vector, but without thoses lines, we
+#           have a line vector. Therefore we here give the same result but transposed.
+            elif columns_(self)==1 and rows_(self)>1:
+                return matlabarray(self.get(index)).T
                                                                                                 
                                                                                                 
         indices = self.compute_indices(index)
@@ -946,9 +953,13 @@ def tf_mapper(x):
         return 0
                 
 def logical_or_(a,b):
-    vtf_mapper = np.vectorize (tf_mapper)
-    ret = np.logical_or(a,b)                
-    return vtf_mapper(ret)
+#    vtf_mapper = np.vectorize (tf_mapper)
+#    ret = np.logical_or(a,b)                
+#    return vtf_mapper(ret)
+    return np.logical_or(a,b)
+    
+def logical_and_(a,b):
+    return np.logical_and(a,b)
     
 def strcat_(*args):
     ret = ""
