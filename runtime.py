@@ -780,39 +780,38 @@ def ones_(*args,**kwargs):
 #------------------------------------------------------------------------------
 # -> matrices given as arguments  are matlabarray. Otherwise these functions may not do their job. We are doing our best here so that
 #    the linear algebra functions return the arguments like in matlab. Therefore we do modifications on the outputs of classical python functions.
-# -> convert to matlab arrays before returning
-# -> remove additional arguments. *args **kwargs only where necessary makes debugging easier.
+# -> normally all the functions below return matlabarrays when given matlabarrays as inputs
 
-def eig_(A, nargout=1, *args,**kwargs):
+def eig_(A, nargout=1):
     if nargout == 1:
         return matlabarray(np.linalg.eigvals(A))
     else:
         D,V = np.linalg.eig(A) #when A is a matlabarray, linalg.eig(A) returns D as a python array and V as a matlabarray
         return V,matlabarray(np.diag(D))
     
-def diag_(A, *args,**kwargs):
+def diag_(A):
     if isvector_(A):
         return matlabarray(np.diag(A.reshape(-1)))
     else:
         return matlabarray(np.diag(A))
     
-def isreal_(A, *args,**kwargs):
+def isreal_(A):
     return np.isreal(A)
     
-def isnan_(A,*args,**kwargs):
+def isnan_(A):
     return np.isnan(A)
     
-def isinf_(A, *args,**kwargs):
+def isinf_(A):
     return np.isinf(A)
     
-def cond_(A, *args,**kwargs):
+def cond_(A):
     return np.linalg.cond(A)
     
 def svd_(A, full_matrices=1, *args,**kwargs):
     u,s,v= np.linalg.svd(A, full_matrices)
     return u, matlabarray(np.diag(s)), v.T
     
-def chol_(A, *args, **kwargs):
+def chol_(A,nargout=2):
     try: #there is in python a exception when the matrix is not positive definite, which does not occur on matlab
         R = np.linalg.cholesky(A).T
         p = 0
@@ -824,7 +823,7 @@ def chol_(A, *args, **kwargs):
 def qr_(A, nargout=2):
     return np.linalg.qr((A))
     
-def inv_(A, *args, **kwargs):
+def inv_(A):
     return np.linalg.inv(A)
      
 def norm_(A, order=None, axis=None):
@@ -839,7 +838,7 @@ def solve_(A,b):
 def fprintf_(*args,**kwargs):
     print args, kwargs  
     
-def poly1d_(A, r=0, *args, **kwargs):
+def poly1d_(A, r=0):
     #Careful : A.r which gives then the roots of the polynom is an array instead of a matlab array
     return np.poly1d(A,r) 
     
