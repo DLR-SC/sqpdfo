@@ -198,12 +198,16 @@ class matlabarray(np.ndarray):
     def __getitem__(self,index):
         if type(index) is matlabarray:
             
+            #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
 #            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
-
-#                return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
+            if self.shape == index.shape and  np.logical_or(index == 0, index == 1).all() :
+                try:
+                    return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
+                except:
+                    pass
 #            To deal with the special case V[M] where M is a matrix and V is a vertical vector. This has to return a column vector, but without thoses lines, we
 #        have a line vector. Therefore we here give the same result but transposed.
-            if columns_(self)==1 and rows_(self)>1:
+            elif columns_(self)==1 and rows_(self)>1:
                 return matlabarray(self.get(index)).T
     
 #        To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
@@ -252,14 +256,21 @@ class matlabarray(np.ndarray):
 
     def __setitem__(self,index,value):
 
-#        if type(index) is matlabarray:
+        if type(index) is matlabarray:
+            #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
 #            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
-#                    if isempty_(value):
+            if self.shape == index.shape and  np.logical_or(index == 0, index == 1).all() :
+                    if isempty_(value):
 #                      print "Isempty"
-#                    else:
+                        pass
+                    else:
 #                      print "np.asarray(value.T)", np.asarray(value.T)[0]
-#                      np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])                                                                         
-#                    return                                                                                
+                        try:
+                            np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0]) 
+                            return
+                        except:
+                            pass                                                                        
+                                                                                                    
 ##           To deal with the special case V[M] where M is a matrix and V is a vertical vector. This code is however not necessary since this is done in 
 ##            the "try: else:" below. But for coherence with the __getitem__ function, I keep this code commented
 #            elif columns_(self)==1 and rows_(self)>1:
