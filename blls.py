@@ -208,7 +208,8 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             atubt=matlabarray([atub,natubt])
                             atbt=matlabarray([atlbt,atubt])
                             freet=copy_(inds)
-                            freet[atbt]=[]
+#                            freet[atbt]=[]
+                            freet = np.delete(free, atbt - 1)
                             latlbt=length_(atlbt)
                             latubt=length_(atubt)
                             lfreet=length_(freet)
@@ -227,7 +228,8 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                                 atub=matlabarray([atub,natubt])
                                 atb=matlabarray([atlb,atub])
                                 free=copy_(inds)
-                                free[atb]=[]
+#                                free[atb]=[]
+                                free = np.delete(free, atb - 1)
                                 latlb=length_(atlb)
                                 latub=length_(atub)
                                 lfree=length_(free)
@@ -265,7 +267,8 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         atub=matlabarray([atub,natub])
                         atb=matlabarray([atlb,atub])
                         free=copy_(inds)
-                        free[atb]=[]
+#                        free[atb]=[]
+                        free = np.delete(free, atb - 1)
                         latlb=length_(atlb)
                         latub=length_(atub)
                         lfree=length_(free)

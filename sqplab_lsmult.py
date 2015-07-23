@@ -70,6 +70,7 @@ from runtime import *
 from ecdfo_check_convex import *
 from ecdfo_check_cond import *
 from blls import *
+
 #except ImportError:
 #    from smop.runtime import *
 
@@ -129,18 +130,23 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*ar
     k=1
     for i in arange_(1,length_(lo)).reshape(-1):
         if lo[i] == up[i]:
-            AAn[k,:]=[]
-            AAn[:,k]=[]
-            Agn[k]=[]
-            lon[k]=[]
-            upn[k]=[]
+#            AAn[k,:]=[]
+#            AAn[:,k]=[]
+#            Agn[k]=[]
+#            lon[k]=[]
+#            upn[k]=[]
+            AAn=np.delete(AAn, k-1, 0)
+            AAn=np.delete(AAn, k-1, 1)
+            Agn=np.delete(Agn, k-1, 0)
+            lon=np.delete(lon, k-1, 0)
+            upn=np.delete(upn, k-1, 0)
             ifree[i]=0
         else:
             k=k + 1
     if not isempty_(ifree[ifree > 0]):
         sn,rn,op,exitc=blls_(AAn,- Agn,lon,upn,nargout=4)
         I=eye_(length_(lo))
-        lm=I[:,ifree > 0] * sn
+        lm=np.delete(I, find_(ifree<=0)-1, 1)*sn
     else:
         lm=zeros_(size_(lo))
     return lm,info

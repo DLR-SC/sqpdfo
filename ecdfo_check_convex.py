@@ -24,24 +24,27 @@ from runtime import *
 #except ImportError:
 #    from smop.runtime import *
 
-def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
+def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 2-[A,options].count(None)+len(args)
+
+    A=copy_(A_)
 
     ev=eig_(A)
     evneg=ev[ev < 0]
     if not isempty_(evneg):
-        ZERO=1e-10
-        EPS=1e-09
+        ZERO=matlabarray([[1e-10]])
+        EPS=matlabarray([[1e-09]])
         v,d=eig_(A,nargout=2)
         d=diag_(d)
         d[d < ZERO]=EPS
         d=diag_(d)
         A=v * d * v.T
-        if not isempty_(find_(not isreal_(A),1)):
+        if not isempty_(find_(~ isreal_(A),1)):
             if options.verbose >= 3:
                 disp_(char('### ecdfo_check_convex: matrix is non symmetric. Resetting A.'))
-            A=(A + A.T) * 0.5
+            A=0.5*(A + A.T)
+            
     return A
 
 #def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):

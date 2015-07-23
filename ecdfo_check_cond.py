@@ -24,9 +24,11 @@ from numpy import inf
 #except ImportError:
 #    from smop.runtime import *
 
-def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
+def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 3-[A,cthreshold,options].count(None)+len(args)
+
+    A=copy_(A_)
 
     badcond=0
     eps=1e-14
@@ -45,7 +47,7 @@ def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
                 disp_([char('### ecdfo_check_cond: '),char("matrix is non symmetric. Resetting A=(A+A')/2.")])
-            A=(A + A.T) * 0.5
+            A=0.5*(A + A.T)
     return A,badcond
 
 #def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
