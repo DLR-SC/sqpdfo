@@ -198,12 +198,12 @@ class matlabarray(np.ndarray):
     def __getitem__(self,index):
         if type(index) is matlabarray:
             
-            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
+#            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
 
-                return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
+#                return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
 #            To deal with the special case V[M] where M is a matrix and V is a vertical vector. This has to return a column vector, but without thoses lines, we
 #        have a line vector. Therefore we here give the same result but transposed.
-            elif columns_(self)==1 and rows_(self)>1:
+            if columns_(self)==1 and rows_(self)>1:
                 return matlabarray(self.get(index)).T
     
 #        To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
@@ -252,14 +252,14 @@ class matlabarray(np.ndarray):
 
     def __setitem__(self,index,value):
 
-        if type(index) is matlabarray:
-            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
-                    if isempty_(value):
-                      print "Isempty"
-                    else:
-                      print "np.asarray(value.T)", np.asarray(value.T)[0]
-                      np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])                                                                         
-                    return                                                                                
+#        if type(index) is matlabarray:
+#            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
+#                    if isempty_(value):
+#                      print "Isempty"
+#                    else:
+#                      print "np.asarray(value.T)", np.asarray(value.T)[0]
+#                      np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])                                                                         
+#                    return                                                                                
 ##           To deal with the special case V[M] where M is a matrix and V is a vertical vector. This code is however not necessary since this is done in 
 ##            the "try: else:" below. But for coherence with the __getitem__ function, I keep this code commented
 #            elif columns_(self)==1 and rows_(self)>1:
@@ -637,7 +637,7 @@ def max_(a, d=None, nargout=None):
     elif d is not None:
         ret = np.maximum(a,d)
     else:
-        ret = np.amax(a)
+        ret = matlabarray(np.amax(np.asarray(a)))
                                 
     if nargout == 2:
         if isempty_(a):
@@ -656,7 +656,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     elif d is not None:
         ret = np.minimum(a,d)
     else:
-        ret = np.amin(a)
+        ret = matlabarray(np.amin(np.asarray(a)))
                                 
     if nargout == 2:
         if isempty_(a):
@@ -805,13 +805,13 @@ def diag_(A):
         return matlabarray(np.diag(A))
     
 def isreal_(A):
-    return np.isreal(A)
+    return matlabarray(np.isreal(np.asarray(A)))
     
 def isnan_(A):
-    return np.isnan(A)
+    return matlabarray(np.isnan(np.asarray(A)))
     
 def isinf_(A):
-    return np.isinf(A)
+    return matlabarray(np.isinf(np.asarray(A)))
     
 def cond_(A):
     return np.linalg.cond(A)
