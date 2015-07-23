@@ -76,21 +76,32 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
 #        
-#    def test_bcdfo_solve_TR_MS_bc_2(self):
-#        """
-#            Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
-#        """
-#        g1=matlabarray([[ 5], [ 8], [11]])
-#        H1=matlabarray([[ 2, 3, 4], [ 3, 5, 7], [ 4, 7, 10]])
-#        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
-#        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
-#        delta_r=1.0
-#        prec_r=1e-6
-#        stratLam=1
-#        s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
-##        print s
-#        correctS = matlabarray([-0,721798600158445,-0,562510852813043,-0,403223105467640])
-#        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
+    def test_bcdfo_solve_TR_MS_bc_2(self):
+        """
+            Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
+        """
+        g1=matlabarray([[ 5.], [ 8.], [11.]])
+        H1=matlabarray([[ 2., 3, 4.], [ 3., 5., 7.], [ 4., 7., 10.]])
+        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
+        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
+        delta_r=1.0
+        prec_r=1e-6
+        stratLam=1
+        s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+        correctS = matlabarray([-7.217986001584447e-01,-5.625108528130431e-01,-4.032231054676398e-01])
+        correctgplus=matlabarray( [5.255977819373422e+00, 8.199488197185971,1.114299857499852e+01])
+        
+        #The relatively low accuracy of the results, compared to matlab results, comes from a different result in the cholesky
+#        factorization during the call to bcdfo_solve_TR_MS. The last number of the matrix has its eigth digit different in python and matlab,
+#        therefore we loose so much in accuracy. But other than that, I believe that the test is correct.
+        self.assertTrue(compare_matlabarray(correctS, s, 1e-6, 1e-6))
+        self.assertAlmostEqual(lamb, 3.546388415234277e-01, places=5)
+        self.assertAlmostEqual(norms, 1.000000275753019, places=6)
+        self.assertAlmostEqual(value, -6.449586510274759, places=6)
+        self.assertTrue(compare_matlabarray(correctgplus, gplus, 1e-6, 1e-6))
+        self.assertEqual(nfact,7)
+        self.assertEqual(neigd,0)
+        self.assertEqual(str(msg), '(partly) interior solution')
 
 if __name__ == '__main__':
     unittest.main()
