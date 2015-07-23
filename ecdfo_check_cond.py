@@ -25,33 +25,57 @@ from numpy import inf
 #    from smop.runtime import *
 
 def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
-    #varargin = cellarray(args)
-    #nargin = 3-[A,cthreshold,options].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 3-[A,cthreshold,options].count(None)+len(args)
 
     badcond=0
     eps=1e-14
-    #print "Prints----------------"
-    #print isempty_
-    #print find_
-    #print isnan_
-    #print isinf_
-    #print A
-    #print "--------------------------"
     if (isempty_(find_(isnan_(A))) and isempty_(find_(isinf_(A)))):
         condA=cond_(A)
         if (condA > cthreshold):
             badcond=1
     else:
         badcond=1
-        
     if (badcond):
-        U,Sdiag,V=svd_(A,0,nargout=3)
+        U,S,V=svd_(A,0,nargout=3)
+        Sdiag=diag_(S)
         Sdiag[Sdiag < 1e-07]=1e-07
         S=diag_(Sdiag)
         A=(V * S * U.T).T
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
-                disp_(["### ecdfo_check_cond: matrix is non symmetric. Resetting A=(A+A')/2."])
-            A=0.5*(A + A.T) 
-            
+                disp_([char('### ecdfo_check_cond: '),char("matrix is non symmetric. Resetting A=(A+A')/2.")])
+            A=(A + A.T) * 0.5
     return A,badcond
+
+#def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
+#    #varargin = cellarray(args)
+#    #nargin = 3-[A,cthreshold,options].count(None)+len(args)
+#
+#    badcond=0
+#    eps=1e-14
+#    #print "Prints----------------"
+#    #print isempty_
+#    #print find_
+#    #print isnan_
+#    #print isinf_
+#    #print A
+#    #print "--------------------------"
+#    if (isempty_(find_(isnan_(A))) and isempty_(find_(isinf_(A)))):
+#        condA=cond_(A)
+#        if (condA > cthreshold):
+#            badcond=1
+#    else:
+#        badcond=1
+#        
+#    if (badcond):
+#        U,Sdiag,V=svd_(A,0,nargout=3)
+#        Sdiag[Sdiag < 1e-07]=1e-07
+#        S=diag_(Sdiag)
+#        A=(V * S * U.T).T
+#        if norm_(A - A.T,inf) > eps:
+#            if options.verbose >= 3:
+#                disp_(["### ecdfo_check_cond: matrix is non symmetric. Resetting A=(A+A')/2."])
+#            A=0.5*(A + A.T) 
+#            
+#    return A,badcond

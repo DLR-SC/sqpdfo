@@ -37,9 +37,10 @@ from runtime import *
 #except ImportError:
 #    from smop.runtime import *
 
+
 def sqplab_badsimul_(outdic=None,info=None,options=None,values=None,*args,**kwargs):
-    #varargin = cellarray(args)
-    #nargin = 4-[outdic,info,options,values].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 4-[outdic,info,options,values].count(None)+len(args)
 
     if outdic == 2:
         if options.verbose:
@@ -51,3 +52,18 @@ def sqplab_badsimul_(outdic=None,info=None,options=None,values=None,*args,**kwar
                 fprintf_(options.fout,char('\\n\\n### sqplab: error with the simulator (outdic = %0i)\\n'),outdic)
             info.flag=values.fail_on_simul
     return info
+
+#def sqplab_badsimul_(outdic=None,info=None,options=None,values=None,*args,**kwargs):
+#    #varargin = cellarray(args)
+#    #nargin = 4-[outdic,info,options,values].count(None)+len(args)
+#
+#    if outdic == 2:
+#        if options.verbose:
+#            fprintf_(options.fout,char('\\n\\n### sqplab: the simulator wants to stop\\n'))
+#        info.flag=values.stop_on_simul
+#    else:
+#        if outdic > 2:
+#            if options.verbose:
+#                fprintf_(options.fout,char('\\n\\n### sqplab: error with the simulator (outdic = %0i)\\n'),outdic)
+#            info.flag=values.fail_on_simul
+#    return info

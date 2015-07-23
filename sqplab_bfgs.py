@@ -295,10 +295,9 @@ from __future__ import division
 from runtime import *
 #except ImportError:
     #from smop.runtime import *
-
 def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=None,*args,**kwargs):
-    #varargin = cellarray(args)
-    #nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
 
     eta=0.2
     n=length_(s)
@@ -314,7 +313,6 @@ def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=N
         fprintf_(options.fout,char(" y'*s/(s'*s) = %9.3e\\n"),ys / (s.T * s))
     Ms=M * s
     sMs=s.T * Ms
-    #print "s^TMs", sMs				
     if sMs <= 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
@@ -325,9 +323,6 @@ def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=N
         pc=(1 - eta) * sMs / (sMs - ys)
         if options.verbose >= 4:
             fprintf_(options.fout,char("  Powell's corrector = %7.1e\\n"),pc)
-        #print pc
-        #print y
-        #print Ms												
         y=pc * y + (1 - pc) * Ms
         ys=y.T * s
         if options.verbose >= 4:
@@ -352,7 +347,67 @@ def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=N
         sMs=s.T * Ms
     M=M - (Ms * Ms.T) / sMs + (y * y.T) / ys
     if options.verbose >= 6:
-        #print "eig_(M)", eig_(M)					
         eigM=sort_(eig_(M))
         fprintf_(options.fout,char('  eig(M): min = %g, max = %g, cond = %g\\n'),min_(eigM),max_(eigM),max_(eigM) / min_(eigM))
     return M,pc,info,values
+    
+#def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=None,*args,**kwargs):
+#    #varargin = cellarray(args)
+#    #nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
+#
+#    eta=0.2
+#    n=length_(s)
+#    pc=1
+#    info.flag=values.success
+#    if norm_(s) == 0:
+#        info.flag=values.fail_strange
+#        if options.verbose >= 3:
+#            fprintf_(options.fout,char('\\n### sqplab_bfgs: null step s\\n\\n'))
+#        return M,pc,info,values
+#    ys=y.T * s
+#    if options.verbose >= 4:
+#        fprintf_(options.fout,char(" y'*s/(s'*s) = %9.3e\\n"),ys / (s.T * s))
+#    Ms=M * s
+#    sMs=s.T * Ms
+#    #print "s^TMs", sMs				
+#    if sMs <= 0:
+#        info.flag=values.fail_strange
+#        if options.verbose >= 3:
+#            fprintf_(options.fout,char('\\n### sqplab_bfgs: BFGS Hessian approximation is not positive definite:\\n'))
+#            fprintf_(options.fout,char("            s'*M*s = %g <= 0\\n\\n"),sMs)
+#        return M,pc,info,values
+#    if (options.algo_descent == values.powell) and (ys < eta * sMs):
+#        pc=(1 - eta) * sMs / (sMs - ys)
+#        if options.verbose >= 4:
+#            fprintf_(options.fout,char("  Powell's corrector = %7.1e\\n"),pc)
+#        #print pc
+#        #print y
+#        #print Ms												
+#        y=pc * y + (1 - pc) * Ms
+#        ys=y.T * s
+#        if options.verbose >= 4:
+#            fprintf_(options.fout,char(" (new y'*s/(s'*s) = %7.1e\\n)"),ys / (s.T * s))
+#        if ys <= 0:
+#            info.flag=values.fail_strange
+#            if options.verbose >= 4:
+#                fprintf_(options.fout,char("\\n### sqplab_bfgs: y'*s = %9.3e not positive despite correction:\\n\\n"),ys).T
+#            return M,pc,info,values
+#    else:
+#        if ys <= 0:
+#            if options.verbose >= 4:
+#                fprintf_(options.fout,char("\\n### sqplab_bfgs: y'*s = %9.3e is nonpositive\\n\\n"),ys).T
+#            info.flag=values.fail_strange
+#            return M,pc,info,values
+#    if first:
+#        ol=(y.T * y) / ys
+#        M=ol * eye_(n)
+#        if options.verbose >= 4:
+#            fprintf_(options.fout,char('  OL coefficient = %g\\n'),ol)
+#        Ms=ol * s
+#        sMs=s.T * Ms
+#    M=M - (Ms * Ms.T) / sMs + (y * y.T) / ys
+#    if options.verbose >= 6:
+#        #print "eig_(M)", eig_(M)					
+#        eigM=sort_(eig_(M))
+#        fprintf_(options.fout,char('  eig(M): min = %g, max = %g, cond = %g\\n'),min_(eigM),max_(eigM),max_(eigM) / min_(eigM))
+#    return M,pc,info,values

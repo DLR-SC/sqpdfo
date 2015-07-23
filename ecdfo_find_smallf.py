@@ -57,25 +57,14 @@ from __future__ import division
 from runtime import *
 #except ImportError:
 #from smop.runtime import *
-
 def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
-    #varargin = cellarray(args)
-    #nargin = 24-[c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,xl,xu,fx,dstatus,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,sigma,info].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 24-[c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,xl,xu,fx,dstatus,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,sigma,info].count(None)+len(args)
 
-    norm_ceY = zeros_(1,cur_degree)
-				
     dummy_set=find_(dstatus == c.dummy)
     ind_insideBounds=matlabarray([])
     for i in arange_(1,cur_degree).reshape(-1):
-        #print "Y[:,i]", Y[:,i]			
-        #print "xl[indfree]", xl[indfree]
-        #print "Y[:,i] < xl[indfree]", Y[:,i] < xl[indfree].T
-        #print "Y[:,i] > xu[indfree]", Y[:,i] > xu[indfree].T
-								
-        #print "np.logical_or(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree])", np.logical_or(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T)
-        #print "the type:", type(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]))								
-			
-        if ((isempty_(find_(logical_or_(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
+        if ((isempty_(find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
             ind_insideBounds[i]=i
         else:
             ind_insideBounds[i]=1
@@ -84,7 +73,7 @@ def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,i
             norm_ceY[i]=norm_(ceY[:,i])
     else:
         norm_ceY=zeros_(1,cur_degree)
-    meritY=fY + sigma * norm_ceY#sigma.dot(norm_ceY)
+    meritY=fY + sigma.dot(norm_ceY)
     fmin,imin=min_(meritY[ind_insideBounds],nargout=2)
     if (imin != 1 and fmin < meritY[1]):
         QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
@@ -94,7 +83,47 @@ def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,i
             x=Y[:,1]
     info.f=fY[1]
     if length_(ceY) > 0:
-        info.ce=ceY[:,1].T
+        info.ce=ceY[:,1]
     if length_(ciY) > 0:
-        info.ci=ciY[:,1].T
+        info.ci=ciY[:,1]
     return x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info
+#def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
+#    #varargin = cellarray(args)
+#    #nargin = 24-[c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,xl,xu,fx,dstatus,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,sigma,info].count(None)+len(args)
+#
+#    norm_ceY = zeros_(1,cur_degree)
+#				
+#    dummy_set=find_(dstatus == c.dummy)
+#    ind_insideBounds=matlabarray([])
+#    for i in arange_(1,cur_degree).reshape(-1):
+#        #print "Y[:,i]", Y[:,i]			
+#        #print "xl[indfree]", xl[indfree]
+#        #print "Y[:,i] < xl[indfree]", Y[:,i] < xl[indfree].T
+#        #print "Y[:,i] > xu[indfree]", Y[:,i] > xu[indfree].T
+#								
+#        #print "np.logical_or(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree])", np.logical_or(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T)
+#        #print "the type:", type(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]))								
+#			
+#        if ((isempty_(find_(logical_or_(Y[:,i] < xl[indfree].T , Y[:,i] > xu[indfree].T),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
+#            ind_insideBounds[i]=i
+#        else:
+#            ind_insideBounds[i]=1
+#    if length_(ceY) > 0:
+#        for i in arange_(1,cur_degree).reshape(-1):
+#            norm_ceY[i]=norm_(ceY[:,i])
+#    else:
+#        norm_ceY=zeros_(1,cur_degree)
+#    meritY=fY + sigma * norm_ceY#sigma.dot(norm_ceY)
+#    fmin,imin=min_(meritY[ind_insideBounds],nargout=2)
+#    if (imin != 1 and fmin < meritY[1]):
+#        QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
+#        fx=fY[1]
+#        i_xbest=ind_Y[1]
+#        if (not shift_Y):
+#            x=Y[:,1]
+#    info.f=fY[1]
+#    if length_(ceY) > 0:
+#        info.ce=ceY[:,1].T
+#    if length_(ciY) > 0:
+#        info.ci=ciY[:,1].T
+#    return x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info

@@ -88,8 +88,8 @@ from runtime import *
     #from smop.runtime import *
 
 def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,scaleX=None,scalefacX=None,info=None,options=None,values=None,*args,**kwargs):
-    #varargin = cellarray(args)
-    #nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
+    varargin = cellarray(args)
+    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
 
     full_n=length_(xfix)
     I=eye_(full_n)
@@ -101,38 +101,21 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
         X[:,m]=yfull
         if (scaleX):
             yfull=yfull / scalefacX
-        info.nsimul[2]=info.nsimul[2]+ 1
-        #print "f(2,yfull)", 								
-        outdic,fvalue,info.ci,info.ce=f(2,yfull)
+        info.nsimul[2]=info.nsimul(2) + 1
+        outdic,fvalue,info.ci,info.ce=f[2,yfull]
         info.f=fvalue
     else:
-        #print "X", X#[:,m]
-        #print "X.shape", X.shape
-        #print "m", m								
-        #print "y", y
-        #print "type y", type(y)
-        if X.shape[1] <= m:								
-            X = concatenate_([X, y], axis=1)								
-            #print "concatenate"												
-        else:
-            X[:,m]=y												
-            #print "assignment"												
-										
-        #print "X", X#[:,m]								
-        								
-        #X[:,m]=y
+        X[:,m]=y
         if (scaleX):
             y=y / scalefacX
-        info.nsimul[2]=info.nsimul[2] + 1
-        outdic,fvalue,info.ci,info.ce=f(2,y)
+        info.nsimul[2]=info.nsimul(2) + 1
+        outdic,fvalue,info.ci,info.ce=f[2,y]
         info.f=fvalue
     if outdic == 1:
         if options.verbose:
             fprintf_(options.fout,char('### ecdfo_augmX_evalf: initial point x is out of domain\\n\\n'))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    #print "fvalue", fvalue
-    #print "isnan fvalue", isnan_(fvalue)								
     if isnan_(fvalue):
         if options.verbose:
             fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is NaN at the point x\\n\\n'))
@@ -162,27 +145,106 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
     if not isempty_(info.ci):
         ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
-        #ceX[:,m]=real_(info.ce.T)
-        #print "ceX", ceX
-        #print "real_(info.ce.T)", real_(info.ce.T)
-        #print "type real_(info.ce.T)", type(real_(info.ce.T))	
-        #print "info.ce", info.ce								
-        if X.shape[1] <= m: #<= m:								
-            if info.ce.shape == (1,1):
-                
-                info.ce = info.ce * ones_(ceX.shape[0])#.T
-                #print "infoce", info.ce.T																
-            #print "ceX", ceX
-        #print "real_(info.ce.T)", real_(info.ce.T)
-        #print "type real_(info.ce.T)", type(real_(info.ce.T))	
-            #print "ceX", ceX												
-            #print "info.ce.T", info.ce.T								
-        																
-            #ceX = matlabarray(np.concatenate([ceX, real_(info.ce.T)], 1))
-            ceX = concatenate_([ceX, real_(info.ce)], axis=1)								
-            #print "concatenate"												
-        else:
-            ceX[:,m]=real_(info.ce.T)												
-            #print "assignment"								
+        ceX[:,m]=real_(info.ce.T)
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+
+#def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,scaleX=None,scalefacX=None,info=None,options=None,values=None,*args,**kwargs):
+#    #varargin = cellarray(args)
+#    #nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
+#
+#    full_n=length_(xfix)
+#    I=eye_(full_n)
+#    xstatus[m]=xstatus_val
+#    sstatus[m]=1
+#    dstatus[m]=0
+#    if (nfix > 0):
+#        yfull=I[:,indfix] * xfix[indfix] + I[:,indfree] * y
+#        X[:,m]=yfull
+#        if (scaleX):
+#            yfull=yfull / scalefacX
+#        info.nsimul[2]=info.nsimul[2]+ 1
+#        #print "f(2,yfull)", 								
+#        outdic,fvalue,info.ci,info.ce=f(2,yfull)
+#        info.f=fvalue
+#    else:
+#        #print "X", X#[:,m]
+#        #print "X.shape", X.shape
+#        #print "m", m								
+#        #print "y", y
+#        #print "type y", type(y)
+#        if X.shape[1] <= m:								
+#            X = concatenate_([X, y], axis=1)								
+#            #print "concatenate"												
+#        else:
+#            X[:,m]=y												
+#            #print "assignment"												
+#										
+#        #print "X", X#[:,m]								
+#        								
+#        #X[:,m]=y
+#        if (scaleX):
+#            y=y / scalefacX
+#        info.nsimul[2]=info.nsimul[2] + 1
+#        outdic,fvalue,info.ci,info.ce=f(2,y)
+#        info.f=fvalue
+#    if outdic == 1:
+#        if options.verbose:
+#            fprintf_(options.fout,char('### ecdfo_augmX_evalf: initial point x is out of domain\\n\\n'))
+#        info.flag=values.fail_on_simul
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    #print "fvalue", fvalue
+#    #print "isnan fvalue", isnan_(fvalue)								
+#    if isnan_(fvalue):
+#        if options.verbose:
+#            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is NaN at the point x\\n\\n'))
+#            x=copy_(y)
+#        info.flag=values.fail_on_simul
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    if isinf_(fvalue):
+#        if options.verbose:
+#            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is Inf at the point x\\n\\n'))
+#            x=copy_(y)
+#        info.flag=values.fail_on_simul
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    if outdic:
+#        info=sqplab_badsimul_(outdic,info,options,values)
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    if not isempty_(info.ci) and size_(info.ci,2) != 1:
+#        if options.verbose:
+#            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ci must be a row vector\\n\\n'))
+#        info.flag=values.fail_on_simul
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    if not isempty_(info.ce) and size_(info.ce,2) != 1:
+#        if options.verbose:
+#            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ce must be a row vector\\n\\n'))
+#        info.flag=values.fail_on_simul
+#        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+#    fX[m]=min_(fxmax,real_(fvalue))
+#    if not isempty_(info.ci):
+#        ciX[:,m]=real_(info.ci.T)
+#    if not isempty_(info.ce):
+#        #ceX[:,m]=real_(info.ce.T)
+#        #print "ceX", ceX
+#        #print "real_(info.ce.T)", real_(info.ce.T)
+#        #print "type real_(info.ce.T)", type(real_(info.ce.T))	
+#        #print "info.ce", info.ce								
+#        if X.shape[1] <= m: #<= m:								
+#            if info.ce.shape == (1,1):
+#                
+#                info.ce = info.ce * ones_(ceX.shape[0])#.T
+#                #print "infoce", info.ce.T																
+#            #print "ceX", ceX
+#        #print "real_(info.ce.T)", real_(info.ce.T)
+#        #print "type real_(info.ce.T)", type(real_(info.ce.T))	
+#            #print "ceX", ceX												
+#            #print "info.ce.T", info.ce.T								
+#        																
+#            #ceX = matlabarray(np.concatenate([ceX, real_(info.ce.T)], 1))
+#            ceX = concatenate_([ceX, real_(info.ce)], axis=1)								
+#            #print "concatenate"												
+#        else:
+#            ceX[:,m]=real_(info.ce.T)												
+#            #print "assignment"								
+#    neval=neval + 1
+#    return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
