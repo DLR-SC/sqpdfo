@@ -72,6 +72,9 @@ ms =
 @author: jaco_da
 """
 
+import sys
+sys.path.append("../")
+
 import unittest
 from sqplab_checkoptions import *
 #import numpy as np

@@ -58,7 +58,8 @@ info_t =
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from sqplab_tcg import *
 #import numpy as np

@@ -92,7 +92,8 @@ from sqplab_options import *
 from runtime import *
 #import numpy as np
 import helper
-
+import sys
+sys.path.append("../")
 class dummyInfo():
 	def __init__(self):
 

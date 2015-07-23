@@ -167,7 +167,8 @@ ans =
      3																								
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from sqplab_lsmult import *
 import numpy as np
