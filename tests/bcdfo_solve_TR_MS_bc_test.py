@@ -21,18 +21,18 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
-        self.abs_tol=1e-13;
-        self.rel_tol=1e-13;
+        self.abs_tol=1e-14;
+        self.rel_tol=1e-14;
         pass
 
     def test_bcdfo_solve_TR_MS_bc_1(self):
         """
             Tests initially written in the matlab code.  We compare the results from python with the results from matlab and verify that it is correct
         """
-        gx = matlabarray([[2,3]])
-        H = matlabarray([[4, 6], [6, 5]])
-        lb = matlabarray([[-10, -10]])
-        ub = matlabarray([[10,10]])
+        gx = matlabarray([[2.],[3.]])
+        H = matlabarray([[4., 6.], [6., 5.]])
+        lb = matlabarray([[-10.], [-10.]])
+        ub = matlabarray([[10.],[10.]])
         Delta = 1.0
         eps_D = 0.001
         stratLam = 1
@@ -49,7 +49,7 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
         
-        lb = matlabarray([[-0.1, -0.1]])
+        lb = matlabarray([[-0.1], [-0.1]])
         s, lamb, norms, value, gplus, nfact, neigd, msg= bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
         correctS = matlabarray( [-0.1, -0.1])
         correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
@@ -62,8 +62,8 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), 'boundary solution')
         
-        lb = matlabarray([[-10, -10]])
-        ub = matlabarray([[0, 0]])
+        lb = matlabarray([[-10], [-10]])
+        ub = matlabarray([[0], [0]])
         s, lamb, norms, value, gplus, nfact, neigd, msg= bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
         correctS = matlabarray( [0, -0.6])
         correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
@@ -75,22 +75,22 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         self.assertEqual(nfact,9)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
-        
-    def test_bcdfo_solve_TR_MS_bc_2(self):
-        """
-            Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
-        """
-        g1=matlabarray([[ 5], [ 8], [11]])
-        H1=matlabarray([[ 2, 3, 4], [ 3, 5, 7], [ 4, 7, 10]])
-        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
-        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
-        delta_r=1.0
-        prec_r=1e-6
-        stratLam=1
-        s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
-        print s
-        correctS = matlabarray([-0,721798600158445,-0,562510852813043,-0,403223105467640])
-        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
+#        
+#    def test_bcdfo_solve_TR_MS_bc_2(self):
+#        """
+#            Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
+#        """
+#        g1=matlabarray([[ 5], [ 8], [11]])
+#        H1=matlabarray([[ 2, 3, 4], [ 3, 5, 7], [ 4, 7, 10]])
+#        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
+#        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
+#        delta_r=1.0
+#        prec_r=1e-6
+#        stratLam=1
+#        s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+##        print s
+#        correctS = matlabarray([-0,721798600158445,-0,562510852813043,-0,403223105467640])
+#        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
 
 if __name__ == '__main__':
     unittest.main()
