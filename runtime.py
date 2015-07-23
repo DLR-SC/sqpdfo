@@ -201,7 +201,7 @@ class matlabarray(np.ndarray):
             if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
 
                 return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
-#            To deal with the special case V[M] where M is a matrix and V is a vertical vector. his has to return a column vector, but without thoses lines, we
+#            To deal with the special case V[M] where M is a matrix and V is a vertical vector. This has to return a column vector, but without thoses lines, we
 #        have a line vector. Therefore we here give the same result but transposed.
             elif columns_(self)==1 and rows_(self)>1:
                 return matlabarray(self.get(index)).T
@@ -260,10 +260,12 @@ class matlabarray(np.ndarray):
                       print "np.asarray(value.T)", np.asarray(value.T)[0]
                       np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0])                                                                         
                     return                                                                                
-#           To deal with the special case V[M] where M is a matrix and V is a vertical vector. his has to return a column vector, but without thoses lines, we
-#           have a line vector. Therefore we here give the same result but transposed.
-            elif columns_(self)==1 and rows_(self)>1:
-                return matlabarray(self.get(index)).T
+##           To deal with the special case V[M] where M is a matrix and V is a vertical vector. This code is however not necessary since this is done in 
+##            the "try: else:" below. But for coherence with the __getitem__ function, I keep this code commented
+#            elif columns_(self)==1 and rows_(self)>1:
+#                indices = self.compute_indices(index)
+#                np.asarray(self).__setitem__(indices,value)                                                                       
+#                return
                                                                                                 
                                                                                                 
         indices = self.compute_indices(index)
@@ -859,6 +861,12 @@ def concatenate_(arrs, axis=0):
     #print "concatenate arrs", arrs            
     return matlabarray(np.concatenate(arrs, axis))
     
+def sign_(A):
+    return np.sign(A)
+    
+def setdiff_(a,b):
+    return matlabarray(np.setdiff1d(np.asarray(a),np.asarray(b)))
+
 def sort_(A):
     return np.sort(A)
     
