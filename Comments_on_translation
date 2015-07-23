@@ -30,7 +30,7 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
     
 -The matlab elsif are automatically translated with else..if instead of elif
 
--Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~'
+-Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~' or one might later use (not isreal_(H).all) (or isreal_(H).any() when there is no negation) which may be quicker.
 
 -The disp_ and fprint_ have not been dealt with yet, but they eventually will have to be modified.
 
