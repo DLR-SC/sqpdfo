@@ -51,8 +51,8 @@ from runtime import *
 #except ImportError:
     #from smop.runtime import *
 def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 4-[A,b,lb,ub].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 4-[A,b,lb,ub].count(None)+len(args)
 
     m,n=size_(A,nargout=2)
     verbose=0
@@ -64,7 +64,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     armijob=0.5
     armijor=0.01
     maxback=15
-    inds=matlabarray([arange_(1,n)])
+    inds=arange_(1,n)
     nit=0
     nuns=0
     ssub=zeros_(n,1)
@@ -142,11 +142,11 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             break
         atlb=inds[find_(abs_(stry - lb) <= epsfeas)]
         atub=inds[find_(abs_(stry - ub) <= epsfeas)]
-        atb=matlabarray([atlb,atub])
+        atb=concatenate_([atlb,atub], axis=1)
         latlb=length_(atlb)
         latub=length_(atub)
         free=copy_(inds)
-        free[atb]=[]
+        free = np.delete(free, atb - 1)
         lfree=length_(free)
         s[atlb]=lb[atlb]
         s[atub]=ub[atub]
