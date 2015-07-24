@@ -363,6 +363,9 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.ceY = matlabarray([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
         self.ciY = matlabarray([])
         self.gx =matlabarray([ 0, 1, 0]).T
+        
+        self.abs_tol=1e-9
+        self.rel_tol=1e-9
 
 #    @unittest.expectedFailure
     def test_ecdfo_solve_TR_bc(self):
@@ -376,24 +379,24 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.ceY,self.ciY,self.gx)
         
         
-        correctxnew =matlabarray([  -0.003054026564966, 0, 0.315521468125839]).T
-        correctdelta = -0.134502394164804
-        correctrpred =  3.288018632338156
+        correctxnew =matlabarray([  -3.054026564966283e-03, 0, 3.155214681258386e-01]).T
+        correctdelta = -1.345023941648038e-01
+        correctrpred =  3.288018632338156e+00
         correctactive_r =  0
         correctactive_t =  0
         correctlm_computed = 0
-        correctlm = matlabarray([0, 0, 0, -0.333333332763888, -0.000000000250000]).T
+        correctlm = matlabarray([0, -9.999999994999984e-1, 0, -3.750022514736884e-10, 8.333378431757410e-11]).T
         
         #print "THRU"
         #print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
-        
-        self.assertAlmostEqual(correctxnew.all(), xnew.all(), delta=1e-5)
-        self.assertAlmostEqual(correctdelta, delta, delta=1e-5)
-        self.assertAlmostEqual(correctrpred, rpred, delta=1e-5)
+#        print xnew
+        self.assertTrue(compare_matlabarray(correctxnew, xnew, 1e-6, 1e-3))
+        self.assertAlmostEqual(correctdelta, delta, places=6)
+        self.assertAlmostEqual(correctrpred, rpred, places=6)
         self.assertEqual(correctactive_r, active_r)
         self.assertEqual(correctactive_t, active_t)
         self.assertEqual(correctlm_computed, lm_computed)
-        self.assertAlmostEqual(correctlm.all(), lm.all(), delta=1e-5)
+        self.assertTrue(compare_matlabarray(correctlm,lm, self.abs_tol, self.rel_tol))
 
 if __name__ == '__main__':
 #<<<<<<< HEAD
