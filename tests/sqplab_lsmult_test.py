@@ -212,7 +212,7 @@ class Test_sqplab_lsmult(unittest.TestCase):
         """
             Test comparing python results with the matlab results
         """
-        lm,info = sqplab_lsmult_(x=self.x,lb=self.lb,ub=self.ub,info=self.info,options=self.options,values=self.values)
+        lm,info = sqplab_lsmult_(self.x,self.lb,self.ub,self.info,self.options,self.values)
     
         correctlm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
         self.assertTrue(compare_matlabarray(correctlm, lm, self.abs_tol, self.rel_tol))
