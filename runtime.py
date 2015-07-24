@@ -939,7 +939,7 @@ def null_(A, eps=1e-15):
     padding = max(0,np.shape(A)[1]-np.shape(s)[0])
     null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
     null_space = scipy.compress(null_mask, vh, axis=0)
-    return scipy.transpose(null_space)        
+    return matlabarray(scipy.transpose(null_space))        
 #def null_(A, eps=1e-15):
 #    u, s, vh = scipy.linalg.svd(A)
 #    null_mask = (s <= eps)
