@@ -96,11 +96,11 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
         #returns X, fX, neval, xstatus, sstatus, dstatus
     
         X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic = ecdfo_augmX_evalf_(
-        f=self.banana,y=self.y, m=4, X=self.X,
-        fX=self.fX,ciX=self.ciX, ceX=self.ceX, nfix=0, xfix=matlabarray([[0],[0]]), indfix=matlabarray([]), indfree=matlabarray([1, 2, 3]), 
-        fxmax=1e25, neval=3, xstatus=matlabarray([1, 1, 1]), xstatus_val=1,
-        sstatus=matlabarray([1, 1, 1]), dstatus=matlabarray([ 0, 0, 0]), scaleX=0, 
-        scalefacX=matlabarray([ 1, 1]), info=self.info, options = self.options, values=self.values)
+        self.banana,self.y, 4,self.X,
+        self.fX,self.ciX, self.ceX, 0, matlabarray([[0],[0]]), matlabarray([]), matlabarray([1, 2, 3]), 
+        1e25, 3, matlabarray([1, 1, 1]), 1,
+        matlabarray([1, 1, 1]), matlabarray([ 0, 0, 0]), 0, 
+        matlabarray([ 1, 1]), self.info,self.options, self.values)
         
         #sstatus=1, dstatus=matlabarray([1, 1, 1]), scaleX=matlabarray([ 0, 0, 0]), scalefacX=0, 
         #info=matlabarray([ 1, 1]))

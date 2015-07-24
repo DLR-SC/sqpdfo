@@ -86,10 +86,24 @@ from __future__ import division
 from runtime import *
 #except ImportError:
     #from smop.runtime import *
+from copy import copy
 
-def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,scaleX=None,scalefacX=None,info=None,options=None,values=None,*args,**kwargs):
+def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval_=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
+
+    X=copy_(X_)
+    fX=copy_(fX_)
+    ciX=copy_(ciX_)
+    ceX=copy_(ceX_)
+    neval=copy(neval_)
+    xstatus=copy_(xstatus_)
+    xstatus=copy_(xstatus_)
+    sstatus=copy_(sstatus_)
+    dstatus=copy_(dstatus_)
+    info=copy(info_)
+    
+    
 
     full_n=length_(xfix)
     I=eye_(full_n)
