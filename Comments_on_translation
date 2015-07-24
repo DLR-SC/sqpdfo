@@ -28,13 +28,22 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 	When Z=[[A],[B],[C]]] or Z=matlabarry([[A],[B],[C]]]) we put axis=0
 	When Z=[A,B,C] or Z=matlabarray([A,B,C]) then we put axis=1
     
+-Matlab code AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k-1, 0)/Agn = np.delete(Agn, k-1, 0). 0 means that the (k-1)-nth line will be deleted,
+and 1 should be put when we want the (k-1)-nth column to be deleted.
+Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0)-1, 1)*sn.
+
+-Matlab code X(:,m)=y translated with X[:,m]=y is OK only if columns_(X) <= M or if y is a row vector (this case has been treated as an exception in the runtine) ; therefore if we do not know for sure, we can replace it by the following code:
+		if columns_(X) <= m:								
+           X = concatenate_([X, y], axis=1)								
+        else:
+            X[:,m]=y		
+		
+		or simpler :
+			X[:,m]=y.T if y is a row vector
+	
 -The matlab elsif are automatically translated with else..if instead of elif
 
 -Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~' or one might later use (not isreal_(H).all) (or isreal_(H).any() when there is no negation) which may be quicker.
-
--Matlab ecriture AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k-1, 0)/Agn = np.delete(Agn, k-1, 0). 0 means that the (k-1)-nth line will be deleted,
-and 1 should be put when we want the (k-1)-nth column to be deleted.
-Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0)-1, 1)*sn.
 
 -The disp_ and fprint_ have not been dealt with yet, but they eventually will have to be modified.
 

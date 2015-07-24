@@ -88,8 +88,8 @@ from runtime import *
     #from smop.runtime import *
 
 def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus=None,xstatus_val=None,sstatus=None,dstatus=None,scaleX=None,scalefacX=None,info=None,options=None,values=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
 
     full_n=length_(xfix)
     I=eye_(full_n)
@@ -105,11 +105,9 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X=None,fX=None,ciX=None,ceX=None,nfi
         outdic,fvalue,info.ci,info.ce=f[2,yfull]
         info.f=fvalue
     else:
-        X[:,m]=y
-        if (scaleX):
-            y=y / scalefacX
-        info.nsimul[2]=info.nsimul(2) + 1
-        outdic,fvalue,info.ci,info.ce=f[2,y]
+        X[:,m]=y.T
+        info.nsimul[2]=info.nsimul[2] + 1
+        outdic,fvalue,info.ci,info.ce=f(2,y)
         info.f=fvalue
     if outdic == 1:
         if options.verbose:
