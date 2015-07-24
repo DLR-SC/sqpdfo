@@ -741,7 +741,7 @@ def strrep_(a,b,c):
 
 def sum_(a, dim=None):
     if dim is None:
-        return np.asanyarray(a).sum()
+        return np.asanyarray(a).sum(0)
     else:
         return np.asanyarray(a).sum(dim-1)
 
