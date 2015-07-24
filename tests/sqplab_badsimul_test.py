@@ -19,7 +19,7 @@ class dummyInfo():
 class Test_sqplab_badsimul(unittest.TestCase):
     """
           Reminder :
-          This class is a test for sqplab_badsimul
+          This class is a test for sqplab_badsimul which prints a message, modifies info, and returns
     """
     def setUp(self):
         self.dummyOptions = helper.dummyOptions()

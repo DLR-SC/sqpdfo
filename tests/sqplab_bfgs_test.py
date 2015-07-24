@@ -15,7 +15,10 @@ import helper
 class dummyInfo():
     """
           Reminder :
-          This class is a test for sqplab_bfgs
+          This class is a test for sqplab_bfgs which computes the BFGS update of the matrix M, which is
+           supposed to be positive definite approximation of some Hessian. If
+           y'*s is not sufficiently positive and options.algo_descent is set to
+           values.powell, Powell's correction is applied to y
     """
     def __init__(self):
         self.g = matlabarray([  -0.009783923878659,  1.000000000000000, 0.0]).T
@@ -50,12 +53,18 @@ class Test_sqplab_bfgs(unittest.TestCase):
         
 
     def test_sqplab_bfgs_null_step(self):
+        """ 
+        Test with a null step
+        """
         self.s = matlabarray(np.zeros(3))
         _, _, info, values = sqplab_bfgs_(self.M,self.y,self.s,first=self.first,info=self.info,options=self.options,values=self.values)
         
         self.assertEqual(info.flag, values.fail_strange)
         
     def test_sqplab_bfgs_negative_definite(self):
+        """
+        Test with a negative definite step
+        """
         #self.M = matlabarray([[1,2,3],[2,1,2],[3,2,1]])
         self.M = matlabarray(-np.eye(3))
         #print "M", self.M

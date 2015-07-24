@@ -81,42 +81,49 @@ from sqplab_checkoptions import *
 import helper
 
 class dummyInfo():
-	def __init__(self):
+    def __init__(self):
 
-		self.g = matlabarray([0, 1,   0]).T
-		self.ai = matlabarray([])
-		self.ae =      matlabarray([[1,     1,     1],[1,     2,     3]])
-		self.hl = matlabarray([])
-		self.niter = 0
-		self.flag = 0
-		self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-		self.ci = matlabarray( [])
-		self.ce =  matlabarray([2, 3]).T
-		self.f = 1.500000000000000
-		self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
+        self.g = matlabarray([0, 1,   0]).T
+        self.ai = matlabarray([])
+        self.ae =      matlabarray([[1,     1,     1],[1,     2,     3]])
+        self.hl = matlabarray([])
+        self.niter = 0
+        self.flag = 0
+        self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = matlabarray( [])
+        self.ce =  matlabarray([2, 3]).T
+        self.f = 1.500000000000000
+        self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
 
 class Test_sqplab_checkoptions(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for sqplab_lsmult which checks the structure 'options' to see whether the required options are
+      compatible with the solver capabilities.
+    """
+    def setUp(self):
+        self.options = helper.dummyOptions()
+        self.values = helper.dummyValues()
+        self.info = dummyInfo()
+        self.nb = 2
+        self.mi = 0
+        self.me = 2
+        self.ms = 0
 
-	def setUp(self):
-		self.options = helper.dummyOptions()
-		self.values = helper.dummyValues()
-		self.info = dummyInfo()
-		self.nb = 2
-		self.mi = 0
-		self.me = 2
-		self.ms = 0
-
-	def test_sqplab_checkoptions_(self):
-		#print "running test"
-		self.values.unit_stepsize = self.options.algo_globalization
-		self.options.algo_method = self.values.quasi_newton
-		
-		info,options = sqplab_checkoptions_(self.nb,self.mi,self.me,self.ms,self.info,self.options,self.values)
-		#print "options", options.algo_descent
-		#print "value", self.values.powell
-		self.assertTrue(options.algo_descent==self.values.powell)
-		
+    def test_sqplab_checkoptions_(self):
+        """
+            Test comparing python results with the matlab results
+        """
+        #print "running test"
+        self.values.unit_stepsize = self.options.algo_globalization
+        self.options.algo_method = self.values.quasi_newton
+        
+        info,options = sqplab_checkoptions_(self.nb,self.mi,self.me,self.ms,self.info,self.options,self.values)
+        #print "options", options.algo_descent
+        #print "value", self.values.powell
+        self.assertTrue(options.algo_descent==self.values.powell)
+        
 if __name__ == '__main__':
-	#print "hello"
-	unittest.main()
+    #print "hello"
+    unittest.main()
 

@@ -113,7 +113,7 @@ values =
                          dline: '--------------------------------------------------------------------------------------'
                          eline: '======================================================================================'
                          sline: '**************************************************************************************'
-																									
+                                                                                                    
 ----------OUTPUT VALUES----------------
 lm
 
@@ -164,7 +164,7 @@ K>> info.ce
 ans =
 
      2
-     3																								
+     3                                                                                                
 @author: jaco_da
 """
 import sys
@@ -175,40 +175,54 @@ import numpy as np
 import helper
 
 class dummyInfo():
-	def __init__(self):
-		#g: [3x1 double]
-		self.g = matlabarray([0, 1, 0]).T
-		self.ai = matlabarray([])
-		#ae : [2x3 double]
-		self.ae = matlabarray([[1,     1,     1],    [ 1 ,    2,     3]])
-		self.hl = matlabarray([])
-		self.niter = 0
-		self.flag = 0
-		self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-		self.ci = matlabarray([])
-		#ce: [2x1 double]
-		self.ce = matlabarray([2, 3]).T
-		self.f = 1.5
-																								
+    def __init__(self):
+        #g: [3x1 double]
+        self.g = matlabarray([0, 1, 0]).T
+        self.ai = matlabarray([])
+        #ae : [2x3 double]
+        self.ae = matlabarray([[1,     1,     1],    [ 1 ,    2,     3]])
+        self.hl = matlabarray([])
+        self.niter = 0
+        self.flag = 0
+        self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = matlabarray([])
+        #ce: [2x1 double]
+        self.ce = matlabarray([2, 3]).T
+        self.f = 1.5
+                                                                                                
 class Test_sqplab_lsmult(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for sqplab_lsmult which  computes an exact least-squares multiplier 'lm'. It solves in lm the
+       quadratic optimization problem:
+           min || g+A'*lm ||^2
+           subject to possible bounds on lm,
+    """ 
+    def setUp(self):
+        self.x = matlabarray([0.5, 1.0, 0.5])
+        self.lb = matlabarray([])
+        self.ub = matlabarray([])
+        self.values = helper.dummyValues()
+        self.options = helper.dummyOptions()
+        self.info = dummyInfo()
+        self.abs_tol=1e-8;
+        self.rel_tol=1e-8;
 
-	def setUp(self):
-		self.x = matlabarray([0.5, 1.0, 0.5])
-		self.lb = matlabarray([])
-		self.ub = matlabarray([])
-		self.values = helper.dummyValues()
-		self.options = helper.dummyOptions()
-		self.info = dummyInfo()
+    def test_sqplab_lsmult(self):
+        """
+            Test comparing python results with the matlab results
+        """
+        lm,info = sqplab_lsmult_(x=self.x,lb=self.lb,ub=self.ub,info=self.info,options=self.options,values=self.values)
+    
+        correctlm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
+        self.assertTrue(compare_matlabarray(correctlm, lm, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(info.g, self.info.g, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(info.ae, self.info.ae, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(info.ce, self.info.ce, self.abs_tol, self.rel_tol))
 
-	def test_sqplab_lsmult(self):
-		lm,info = sqplab_lsmult_(x=self.x,lb=self.lb,ub=self.ub,info=self.info,options=self.options,values=self.values)
-		
-		correctlm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
-		
-		self.assertTrue((abs(correctlm - lm) < 1e-8).all())
-		
-		#print "lm", lm
-		#print "info", info
+        
+        #print "lm", lm
+        #print "info", info
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
