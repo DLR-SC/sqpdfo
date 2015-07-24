@@ -70,10 +70,19 @@ from runtime import *
 #except ImportError:
 #from smop.runtime import *
 
-
+class tcgInfo():
+	def __init__(self):
+		self.flag = None# 0
+		self.iter = None# 2
+		self.prec = None# 0
+		self.curv = None# 1
+  
+  
 def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[A,b,delta,max_iter,tol,plevel,fout].count(None)+len(args)
+
+    info=tcgInfo()
 
     x=zeros_(size_(b))
     cost=0
