@@ -70,14 +70,19 @@ from runtime import *
 from ecdfo_check_convex import *
 from ecdfo_check_cond import *
 from blls import *
+from copy import copy
 
 #except ImportError:
 #    from smop.runtime import *
 
-def sqplab_lsmult_(x=None,lb=None,ub=None,info=None,options=None,values=None,*args,**kwargs):
+def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
-    nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
+    info=copy(info_)
+    lb=copy_(lb_)
+    ub=copy_(ub_)
 
+    nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
+    
     lm=matlabarray([])
     info.flag=values.success
     badcond=0

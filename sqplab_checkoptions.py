@@ -38,11 +38,15 @@ Created on Wed Nov 12 09:57:33 2014
 from __future__ import division
 #try:
 from runtime import *
+from copy import copy
 #except ImportError:
 #    from smop.runtime import *
-def sqplab_checkoptions_(nb=None,mi=None,me=None,ms=None,info=None,options=None,values=None,*args,**kwargs):
+def sqplab_checkoptions_(nb=None,mi=None,me=None,ms=None,info_=None,options_=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[nb,mi,me,ms,info,options,values].count(None)+len(args)
+
+    options=copy(options_)
+    info=copy(info_)
 
     info.flag=values.success
     if options.algo_method == values.cheap_quasi_newton:

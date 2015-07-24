@@ -295,9 +295,13 @@ from __future__ import division
 from runtime import *
 #except ImportError:
     #from smop.runtime import *
-def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=None,*args,**kwargs):
+def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
+
+    M=copy_(M_)
+    y=copy_(y_)
+    info=copy_(info_)
 
     eta=0.2
     n=length_(s)
