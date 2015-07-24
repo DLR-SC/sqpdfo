@@ -89,7 +89,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             ind_l_crit=find_(logical_and(s_after_reduced_ms[ind_free] - lb[ind_free] <= eps_bound, lb[ind_free] >= -1e-10))
             if (length_(ind_u_crit) + length_(ind_l_crit) != 0):
 #                ind_active=matlabarray([ind_active,ind_free[ind_u_crit],ind_free[ind_l_crit]])
-                ind_active=concatenate_([ind_active,ind_free[ind_u_crit],ind_free[ind_l_crit]])
+                ind_active=concatenate_([ind_active,ind_free[ind_u_crit],ind_free[ind_l_crit]],axis=1)
                 ind_free=setdiff_(arange_(1,n),ind_active)
                 nfree=length_(ind_free)
                 if (verbose):
@@ -184,7 +184,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                                 ind_b=out_of_ubound[ind_b_u]
                                 sign_b=sign_(ub[ind_free[out_of_ubound[ind_b_u]]] - s[ind_free[out_of_ubound[ind_b_u]]])
 #                                out_of_ubound_init=matlabarray([[out_of_ubound_init],[out_of_ubound]])
-                                out_of_ubound_init=concatenate_([out_of_ubound_init,out_of_ubound],axis=1)
+                                out_of_ubound_init=concatenate_([out_of_ubound_init,out_of_ubound],axis=0)
                             if (length_(out_of_lbound) != 0):
                                 diff_b_l,ind_b_l=max_(abs_(s_duringH[ind_free[out_of_lbound]] - lb[ind_free[out_of_lbound]]),nargout=2)
                                 norms_b=abs_(s_deltaH[out_of_lbound[ind_b_l]])
@@ -192,7 +192,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                                 ind_b=out_of_lbound[ind_b_l]
                                 sign_b=sign_(lb[ind_free[out_of_lbound[ind_b_l]]] - s[ind_free[out_of_lbound[ind_b_l]]])
 #                                out_of_lbound_init=matlabarray([[out_of_lbound_init],[out_of_lbound]])
-                                out_of_lbound_init=concatenate_([out_of_lbound_init,out_of_lbound],axis=1)
+                                out_of_lbound_init=concatenate_([out_of_lbound_init,out_of_lbound],axis=0)
                             if ((length_(out_of_ubound) != 0) and (length_(out_of_lbound) != 0)):
                                 if (diff_b_u > diff_b_l):
                                     norms_b=abs_(s_deltaH[out_of_ubound[ind_b_u]])
@@ -351,7 +351,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             ind_g_crit=find_(logical_or(logical_and(abs(lb[ind_free]) <= 1e-10, g[ind_free] > 0), logical_and(ub[ind_free] <= 1e-10, g[ind_free] < 0)))
             if (length_(ind_g_crit) != 0):
 #                ind_active=matlabarray([ind_active,ind_free[ind_g_crit]])
-                ind_active=concatenate_([ind_active,ind_free[ind_g_crit]])
+                ind_active=concatenate_([ind_active,ind_free[ind_g_crit]],axis=1)
                 ind_free=setdiff_(ind_free,ind_active)
                 nfree=length_(ind_free)
 
