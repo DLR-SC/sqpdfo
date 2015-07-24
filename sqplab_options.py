@@ -37,42 +37,50 @@ from __future__ import division
 #try:
 from runtime import *
 from numpy import inf
+from copy import copy
 #except ImportError:
     #from smop.runtime import *
 
-def sqplab_options_(info=None,options=None,*args,**kwargs):
+class ecdfoValues():
+	def __init__(self):
+		self.success=0
+		self.fail_on_argument=1
+		self.fail_on_problem=2
+		self.fail_on_simul=3
+		self.stop_on_simul=4
+		self.stop_on_max_iter=5
+		self.stop_on_max_simul=6
+		self.stop_on_dxmin=7
+		self.fail_on_non_decrease=8
+		self.fail_on_ascent_dir=9
+		self.fail_on_max_ls_iter=10
+		self.fail_on_ill_cond=11
+		self.stop_on_small_trust_region=15
+		self.fail_on_null_step=20
+		self.fail_on_infeasible_QP=21
+		self.fail_on_unbounded_QP=22
+		self.fail_strange=99
+		self.nsimultype=16
+		self.max_null_steps=1
+		self.newton=100
+		self.quasi_newton=101
+		self.cheap_quasi_newton=102
+		self.unit_stepsize=110
+		self.linesearch=111
+		self.trust_regions=112
+		self.powell=120
+		self.wolfe=121
+		self.bfgs=130
+		self.model=131
+
+def sqplab_options_(info_=None,options_=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 2-[info,options].count(None)+len(args)
 
-    values.success=0
-    values.fail_on_argument=1
-    values.fail_on_problem=2
-    values.fail_on_simul=3
-    values.stop_on_simul=4
-    values.stop_on_max_iter=5
-    values.stop_on_max_simul=6
-    values.stop_on_dxmin=7
-    values.fail_on_non_decrease=8
-    values.fail_on_ascent_dir=9
-    values.fail_on_max_ls_iter=10
-    values.fail_on_ill_cond=11
-    values.stop_on_small_trust_region=15
-    values.fail_on_null_step=20
-    values.fail_on_infeasible_QP=21
-    values.fail_on_unbounded_QP=22
-    values.fail_strange=99
-    values.nsimultype=16
-    values.max_null_steps=1
-    values.newton=100
-    values.quasi_newton=101
-    values.cheap_quasi_newton=102
-    values.unit_stepsize=110
-    values.linesearch=111
-    values.trust_regions=112
-    values.powell=120
-    values.wolfe=121
-    values.bfgs=130
-    values.model=131
+    info=copy(info_)
+    options=copy(options_)
+
+    values = ecdfoValues()
     info.flag=values.success
     if isempty_(options):
         options.xxx=0

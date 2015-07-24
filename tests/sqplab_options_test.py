@@ -10,8 +10,8 @@ info =
        ae: []
        hl: []
     niter: 0
-				
-				options = 
+                
+                options = 
 
            algo_method: 'quasi-Newton'
     algo_globalization: 'trust regions'
@@ -86,48 +86,57 @@ values =
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from sqplab_options import *
 from runtime import *
 #import numpy as np
 import helper
-import sys
-sys.path.append("../")
-class dummyInfo():
-	def __init__(self):
 
-		self.g= matlabarray([])
-		self.ai= matlabarray([])
-		self. ae= matlabarray([])
-		self.hl= matlabarray([])
-		self.niter= 0
+class dummyInfo():
+    def __init__(self):
+
+        self.g= matlabarray([])
+        self.ai= matlabarray([])
+        self. ae= matlabarray([])
+        self.hl= matlabarray([])
+        self.niter= 0
 
 class Test_sqplab_options(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for sqplab_options which sets the options of the optimization solver 'ecdfo'
+    """
+    def setUp(self):
+        self.options = helper.dummyOptions()
+        self.options.algo_method = char('newton')
+        self.options.algo_descent = char('powell')
+        self.options.hess_approx = char('bfgs')
+                
+        self.info = dummyInfo()
+        #self.values = helper.dummyValues()
 
-	def setUp(self):
-		self.options = helper.dummyOptions()
-		self.options.algo_method = char('newton')
-		self.options.algo_descent = char('powell')
-		self.options.hess_approx = char('bfgs')
-				
-		self.info = dummyInfo()
-		#self.values = helper.dummyValues()
 
-
-	def test_sqplab_options1(self):
-		info,options,values = sqplab_options_(self.info,self.options)
-		#print "algo_method, values", self.options.algo_method, values.newton
-		self.assertEqual(self.options.algo_method, values.newton)
-	
-	def test_sqplab_options2(self):
-		#print "---------------TEST 2-----------------"
-		self.options.algo_globalization = char('trust regions')
-		info,options,values = sqplab_options_(self.info,self.options)
-		
-		self.assertEqual(options.algo_descent, values.powell)
-		self.assertEqual(options.hess_approx, values.bfgs)
-		
+    def test_sqplab_options1(self):
+        """
+        First little test
+        """
+        info,options,values = sqplab_options_(self.info,self.options)
+        #print "algo_method, values", self.options.algo_method, values.newton
+        self.assertEqual(options.algo_method, values.newton)
+    
+    def test_sqplab_options2(self):
+        """ 
+        Second little test
+        """
+        #print "---------------TEST 2-----------------"
+        self.options.algo_globalization = char('trust regions')
+        info,options,values = sqplab_options_(self.info,self.options)
+        
+        self.assertEqual(options.algo_descent, values.powell)
+        self.assertEqual(options.hess_approx, values.bfgs)
+        
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
