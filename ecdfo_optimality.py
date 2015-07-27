@@ -38,8 +38,8 @@ from runtime import *
 #except ImportError:
     #from smop.runtime import *
 def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 6-[x,lm,lb,ub,info,options].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 6-[x,lm,lb,ub,info,options].count(None)+len(args)
 
     global threshold
     n=length_(info.g)
@@ -51,9 +51,9 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
     if options.verbose >= 4:
         fprintf_(char('\\n     lb             x            ub             g            lm\\n'))
         for i in arange_(1,n).reshape(-1):
-            fprintf_(char('%12.5e  %12.5e  %12.5e  %12.5e  %12.5e\\n'),lb[i],x[i],ub[i],info.glag(i),lm[i])
+            fprintf_(char('%12.5e  %12.5e  %12.5e  %12.5e  %12.5e\\n'),lb[i],x[i],ub[i],info.glag[i],lm[i])
     I=find_(bounds[1:n])
-    info.glag[I]=info.glag(I) + lm[I]
+    info.glag[I]=info.glag[I] + lm[I]
     boundsmult=lm[I]
     gradlag=info.glag
     if mi > 0:
@@ -64,13 +64,16 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*arg
         equmult=lm[n + mi + 1:n + mi + me]
         info.glag=info.glag + info.ae.T * lm[n + mi + 1:n + mi + me]
         gradlag=info.glag
-    feas=matlabarray([[max_(0,max_([[x],[info.ci]] - ub,lb - [[x],[info.ci]]))],[info.ce]])
-    v=matlabarray([[x],[info.ci]])
+#    feas=matlabarray([[max_(0,max_([[x],[info.ci]] - ub,lb - [[x],[info.ci]]))],[info.ce]])
+#    v=matlabarray([[x],[info.ci]])
+    feas=concatenate_([max_(0,max_(concatenate_([x, info.ci]) - ub, lb - concatenate_([x,info.ci]))) ,
+										info.ce])
+    v=concatenate_([x,info.ci])
     compl=zeros_(n + mi,1)
-    I=find_((lb > - options.inf) and (abs_(lb - v) > options.dxmin))
+    I=find_(logical_and(lb > - options.inf,abs_(lb - v) > options.dxmin))
     if not isempty_(I):
         compl[I]=max_(compl[I],max_(0,- lm[I]))
-    I=find_((ub < options.inf) and (abs_(ub - v) > options.dxmin))
+    I=find_(logical_and(ub < options.inf,abs_(ub - v) > options.dxmin))
     if not isempty_(I):
         compl[I]=max_(compl[I],max_(0,lm[I]))
     return feas,compl,info
