@@ -30,15 +30,14 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 and 1 should be put when we want the (k-1)-nth column to be deleted. (k-1_nth line in python array which is the k_nth line in matlabarray)
 Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0)-1, 1)*sn.
 
--Matlab code X(:,m)=y translated with X[:,m]=y is OK only if columns_(X) <= M or if y is a row vector (this case has been treated as an exception in the runtine) ; therefore if we do not know for sure, we can replace it by the following code:
-		if columns_(X) <= m:								
+-Matlab code X(:,m)=y translated with X[:,m]=y is OK only if columns_(X) <= M and if X is not the empty matrix. Otherwise, when not sure, we replace that by the following code :
+		if isempty_(X):
+		   X=y
+		elif columns_(X) <= m:								
            X = concatenate_([X, y], axis=1)								
         else:
-            X[:,m]=y		
-		
-		or simpler :
-			X[:,m]=y.T if y is a row vector
-
+            X[:,m]=y	
+			
 -Logicals operators from matlab & and | have to be replaced by logical_and_ and logical_or_.
 	For instance find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1)) has to be replaced by find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))
 	
