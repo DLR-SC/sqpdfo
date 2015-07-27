@@ -23,10 +23,11 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
      matlabarray([[matlabarray([[ 1.,  1.,  1.,  1.,  1.,  1.]])],[ matlabarray([[ 0.  ,  1.  ,  0.  ,  2.  ,  1.  ,  0.  ]])])
   which can not be further used and has to be dealt with a code like this :
       Z=concatenate_([ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2], axis=0) 
-  NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1. Either we recognize the dimensions of the matrix and  then we can choose 0 or 1, or else we can refer to the matlab code.
+  NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1. Either we recognize the dimensions of the matrix and  then we can choose 0 or 1, or else we can refer to the matlab code :
+  [Y, Ynew] or [Y Ynew] in matlabcode should be replaced with axis=1 and [Y ; Ynew] should be replaced with axis =0
     
 -Matlab code AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k-1, 0)/Agn = np.delete(Agn, k-1, 0). 0 means that the (k-1)-nth line will be deleted,
-and 1 should be put when we want the (k-1)-nth column to be deleted.
+and 1 should be put when we want the (k-1)-nth column to be deleted. (k-1_nth line in python array which is the k_nth line in matlabarray)
 Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0)-1, 1)*sn.
 
 -Matlab code X(:,m)=y translated with X[:,m]=y is OK only if columns_(X) <= M or if y is a row vector (this case has been treated as an exception in the runtine) ; therefore if we do not know for sure, we can replace it by the following code:
