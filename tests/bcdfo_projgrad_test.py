@@ -7,8 +7,6 @@ Created on Tue Dec 02 15:13:04 2014
 
 import sys
 sys.path.append("../")
-sys.path.append("tests/")
-
 import unittest
 from bcdfo_projgrad import bcdfo_projgrad_
 from runtime import matlabarray, compare_matlabarray
