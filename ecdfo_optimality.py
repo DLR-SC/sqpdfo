@@ -42,7 +42,7 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
 #    varargin = cellarray(args)
 #    nargin = 6-[x,lm,lb,ub,info,options].count(None)+len(args)
 
-    info_=copy(info_)
+    info=copy(info_)
     global threshold
     n=length_(info.g)
     mi=length_(info.ci)
