@@ -108,7 +108,7 @@ class Test_ecdfo_init_prob(unittest.TestCase):
 
     def test_ecdfo_init_prob(self):
         """
-            Test with some values
+            Test with some values, results compared with matlab
         """
         x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info = ecdfo_init_prob_(5)
         
