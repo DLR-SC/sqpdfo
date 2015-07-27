@@ -119,7 +119,12 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         outdic,fvalue,info.ci,info.ce=f[2,yfull]
         info.f=fvalue
     else:
-        X[:,m]=y.T
+        if isempty_(X):
+            X=y
+        elif columns_(X) <= m:								
+            X = concatenate_([X, y], axis=1)								
+        else:
+            X[:,m]=y
         info.nsimul[2]=info.nsimul[2] + 1
         outdic,fvalue,info.ci,info.ce=f(2,y)
         info.f=fvalue
@@ -155,9 +160,22 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     fX[m]=min_(fxmax,real_(fvalue))
     if not isempty_(info.ci):
-        ciX[:,m]=real_(info.ci.T)
+        if isempty_(ciX):
+            ciX=matlabarray((real_(info.ci))).T
+        elif columns_(ciX) <= m:								
+            ciX = concatenate_([ciX, matlabarray((real_(info.ci))).T], axis=1)								
+        else:
+            ciX[:,m]=matlabarray((real_(info.ci))).T
+#        ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
-        ceX[:,m]=real_(info.ce.T)
+#        ceX[:,m]=real_(info.ce.T)
+        if isempty_(ceX):
+            ceX=matlabarray((real_(info.ce))).T
+        elif columns_(ceX) <= m:								
+            ceX = concatenate_([ceX, matlabarray((real_(info.ce))).T], axis=1)								
+        else:
+            ceX[:,m]=matlabarray((real_(info.ce))).T
+
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
 
