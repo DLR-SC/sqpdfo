@@ -55,11 +55,26 @@ Created on Fri Nov 28 13:59:05 2014
 from __future__ import division
 #try:
 from runtime import *
+from copy import copy
 #except ImportError:
 #from smop.runtime import *
-def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
+def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,ind_Y_=None,i_xbest_=None,cur_degree=None,indfree=None,x_=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 24-[c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,xl,xu,fx,dstatus,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,sigma,info].count(None)+len(args)
+
+
+    info=copy(info_)
+    QZ=copy_(QZ_)
+    RZ=copy_(RZ_)
+    Y=copy_(Y_)
+    fY=copy_(fY_)
+    ciY=copy_(ciY_)
+    ceY=copy_(ceY_)
+    x=copy_(x_)
+    scale=copy_(scale_)
+    ind_Y=copy_(ind_Y_)
+    i_xbest=copy_(i_xbest_)
+
     norm_ceY = zeros_(1,cur_degree)
     dummy_set=find_(dstatus == c.dummy)
     ind_insideBounds=matlabarray([])
