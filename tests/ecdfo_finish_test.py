@@ -125,34 +125,38 @@ ans =
   -0.555111512312578
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from ecdfo_finish import *
 #import numpy as np
 import helper
 
 class dummyInfo():
-	def __init__(self):
-		values = helper.dummyValues()
-		self.flag = values.stop_on_small_trust_region
-		self.f = 0.500000000000000
-		self.glagn = 6.661338147750939e-16
-		self.feasn = 2.220446049250313e-16
-		self.compl = 0
-		self.niter=  4
-		self.nsimul = matlabarray([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    def __init__(self):
+        values = helper.dummyValues()
+        self.flag = values.stop_on_small_trust_region
+        self.f = 0.500000000000000
+        self.glagn = 6.661338147750939e-16
+        self.feasn = 2.220446049250313e-16
+        self.compl = 0
+        self.niter=  4
+        self.nsimul = matlabarray([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 class Test_ecdfo_finish(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for ecdfo_finish which prints output status
+    """ 
+    def setUp(self):
+        self.options = helper.dummyOptions()
+        self.values = helper.dummyValues()
 
-	def setUp(self):
-		self.options = helper.dummyOptions()
-		self.values = helper.dummyValues()
+        pass
 
-		pass
-
-	def test_ecdfo_finish(self):
-		ecdfo_finish_(nb=2,mi=0,me=2,info=dummyInfo(),options=self.options,values=self.values)
+    def test_ecdfo_finish(self):
+        ecdfo_finish_(nb=2,mi=0,me=2,info=dummyInfo(),options=self.options,values=self.values)
 
 if __name__ == '__main__':
-	unittest.main()
-	
+    unittest.main()
+    

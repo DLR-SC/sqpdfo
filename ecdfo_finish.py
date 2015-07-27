@@ -40,8 +40,8 @@ from runtime import *
 #except ImportError:
     #from smop.runtime import *
 def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 6-[nb,mi,me,info,options,values].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 6-[nb,mi,me,info,options,values].count(None)+len(args)
 
     if options.verbose >= 2:
         fprintf_(options.fout,char('%s\\n'),values.dline)
@@ -109,8 +109,8 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
             fprintf_(options.fout,char('  Gradient of the cost function (inf norm)  %11.5e\\n'),info.glagn)
         fprintf_(options.fout,char('  Counters:\\n'))
         fprintf_(options.fout,char('  . nbr of iterations                   %4i\\n'),info.niter)
-        fprintf_(options.fout,char('  . nbr of function evaluations         %4i\\n'),info.nsimul(2) + info.nsimul(4))
-        fprintf_(options.fout,char('  . nbr of gradient evaluations         %4i\\n'),info.nsimul(3) + info.nsimul(4))
+        fprintf_(options.fout,char('  . nbr of function evaluations         %4i\\n'),info.nsimul[2] + info.nsimul(4))
+        fprintf_(options.fout,char('  . nbr of gradient evaluations         %4i\\n'),info.nsimul[3] + info.nsimul(4))
     fprintf_(options.fout,char('%s\\n'),values.sline)
     return
 #def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):

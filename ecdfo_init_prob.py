@@ -21,10 +21,11 @@ from numpy import inf
 #except ImportError:
     #from smop.runtime import *
 def ecdfo_init_prob_(prob=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 1-[prob].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 1-[prob].count(None)+len(args)
 
     global fileoutput,simul_not_initialized
+    eps = 2.2204e-16 
     x0=matlabarray([])
     lx=matlabarray([])
     ux=matlabarray([])
@@ -43,42 +44,38 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         x0=matlabarray([[4.6],[0.0]])
         lx=matlabarray([1.95,- 1e+20])
         ux=matlabarray([1e+20,0.3])
-    else:
-        if prob == 2:
-            n=2
-            nb=0
-            mi=0
-            me=1
-            x0=matlabarray([[- 1],[2.54378]])
-            lx=- inf * ones_(n,1)
-            ux=inf * ones_(n,1)
-        else:
-            if prob == 3:
-                nb=0
-                mi=0
-                me=2
-                x0=matlabarray([[0.0],[0.0],[0.5]])
-                n=length_(x0)
-                lx=matlabarray([- 0.5,0.0,- inf])
-                ux=matlabarray([inf,inf,inf])
-            else:
-                if prob == 4:
-                    nb=0
-                    mi=0
-                    me=3
-                    x0=matlabarray([[1.0],[1.0],[1.0],[0.0]])
-                    n=length_(x0)
-                    lx=- inf * ones_(n,1)
-                    ux=inf * ones_(n,1)
-                else:
-                    if prob == 5:
-                        nb=0
-                        mi=0
-                        me=3
-                        x0=matlabarray([[- 2.0],[2.0],[2.0],[1.0],[1.0]])
-                        n=5
-                        lx=- inf * ones_(n,1)
-                        ux=inf * ones_(n,1)
+    elif prob == 2:
+        n=2
+        nb=0
+        mi=0
+        me=1
+        x0=matlabarray([[- 1],[2.54378]])
+        lx=- inf * ones_(n,1)
+        ux=inf * ones_(n,1)
+    elif prob == 3:
+        nb=0
+        mi=0
+        me=2
+        x0=matlabarray([[0.0],[0.0],[0.5]])
+        n=length_(x0)
+        lx=matlabarray([- 0.5,0.0,- inf])
+        ux=matlabarray([inf,inf,inf])
+    elif prob == 4:
+        nb=0
+        mi=0
+        me=3
+        x0=matlabarray([[1.0],[1.0],[1.0],[0.0]])
+        n=length_(x0)
+        lx=- inf * ones_(n,1)
+        ux=inf * ones_(n,1)
+    elif prob == 5:
+        nb=0
+        mi=0
+        me=3
+        x0=matlabarray([[- 2.0],[2.0],[2.0],[1.0],[1.0]])
+        n=5
+        lx=- inf * ones_(n,1)
+        ux=inf * ones_(n,1)
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info
 #def ecdfo_init_prob_(prob=None,*args,**kwargs):
@@ -86,7 +83,7 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
 #    #nargin = 1-[prob].count(None)+len(args)
 #
 #    global fileoutput,simul_not_initialized
-#    eps =  2.2204e-16				
+#    eps =  2.2204e-16                
 #    x0=matlabarray([])
 #    lx=matlabarray([])
 #    ux=matlabarray([])

@@ -144,52 +144,56 @@ ans =
   -0.333333333013890
    0.666666666736111
   -0.333333333513889
-		
+        
 OUTPUT VALUES
 none
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from ecdfo_iter_printout import *
 #import numpy as np
 import helper
 
 class dummyInfo():
-	def __init__(self):
-		self.g = matlabarray([0,1,0]).T
-		self.ai = matlabarray([])
-		self.ae = ([[1,     1,     1],[ 1,     2,     3]])
-		self.hl = matlabarray([])
-		self.niter = 1
-		self.flag = 0
-		self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-		self.ci = matlabarray([])
-		self.ce = matlabarray([2, 3]).T
-		self.f = 1.500000000000000
-		self.glag = matlabarray([  -0.333333333013890,  0.666666666736111,  -0.333333333513889]).T
-		self.glagn = 0.666666666736111
-		self.feasn = 3
-		self.compl = 0
-		
+    def __init__(self):
+        self.g = matlabarray([0,1,0]).T
+        self.ai = matlabarray([])
+        self.ae = ([[1,     1,     1],[ 1,     2,     3]])
+        self.hl = matlabarray([])
+        self.niter = 1
+        self.flag = 0
+        self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = matlabarray([])
+        self.ce = matlabarray([2, 3]).T
+        self.f = 1.500000000000000
+        self.glag = matlabarray([  -0.333333333013890,  0.666666666736111,  -0.333333333513889]).T
+        self.glagn = 0.666666666736111
+        self.feasn = 3
+        self.compl = 0
+        
 class Test_ecdfo_iter_printout(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for ecdfo_iter_printout which prints out iteration
+    """
+    def setUp(self):
+        self.info = dummyInfo()
+        self.old_delta =  1
+        self.norms =    0
+        self.pc =    0
+        self.itype = None
+        self.options = helper.dummyOptions()
+        self.nb = 2
+        self.mi =  0
+        self.values = helper.dummyValues()
+        self.constrained_pbl =  2
+        self.merit =   5.105551275463990
 
-	def setUp(self):
-		self.info = dummyInfo()
-		self.old_delta =  1
-		self.norms =    0
-		self.pc =    0
-		self.itype = None
-		self.options = helper.dummyOptions()
-		self.nb = 2
-		self.mi =  0
-		self.values = helper.dummyValues()
-		self.constrained_pbl =  2
-		self.merit =   5.105551275463990
-
-	def test_ecdfo_iter_printout(self):
-		ecdfo_iter_printout_(self.info,self.old_delta,self.norms,self.pc,
-		self.itype,self.values,self.nb, self.mi,self.options,self.constrained_pbl,self.merit)
+    def test_ecdfo_iter_printout(self):
+        ecdfo_iter_printout_(self.info,self.old_delta,self.norms,self.pc,
+        self.itype,self.values,self.nb, self.mi,self.options,self.constrained_pbl,self.merit)
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
