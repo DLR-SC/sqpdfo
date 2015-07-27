@@ -35,12 +35,14 @@ global threshold
 from __future__ import division
 #try:
 from runtime import *
+from copy import copy
 #except ImportError:
     #from smop.runtime import *
-def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info=None,options=None,*args,**kwargs):
+def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 6-[x,lm,lb,ub,info,options].count(None)+len(args)
 
+    info_=copy(info_)
     global threshold
     n=length_(info.g)
     mi=length_(info.ci)
