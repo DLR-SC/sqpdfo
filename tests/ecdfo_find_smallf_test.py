@@ -460,11 +460,11 @@ class Test_ecdfo_find_smallf(unittest.TestCase):
         Test with some values, compare the results with matlab
         """
             
-        x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info = ecdfo_find_smallf_(c=self.c,QZ=self.QZ,RZ=self.RZ,Y=self.Y,fY=self.fY,ciY=self.ciY,ceY=self.ceY,ind_Y=self.ind_Y,
-                    i_xbest=self.i_xbest,cur_degree=self.cur_degree,indfree=self.indfree,x=self.x,xl=self.xl,
-                    xu=self.xu,fx=self.fx,dstatus=self.dstatus,whichmodel=self.whichmodel,scale=self.scale,
-                    shift_Y=self.shift_Y,Delta=self.Delta,normgx=self.normgx,kappa_ill=self.kappa_ill,sigma=self.sigma,
-                    info=self.info)
+        x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info = ecdfo_find_smallf_(self.c,self.QZ,self.RZ,self.Y,self.fY,self.ciY,self.ceY,self.ind_Y,
+                    self.i_xbest,self.cur_degree,self.indfree,self.x,self.xl,
+                    self.xu,self.fx,self.dstatus,self.whichmodel,self.scale,
+                    self.shift_Y,self.Delta,self.normgx,self.kappa_ill,self.sigma,
+                    self.info)
                     
         #print "info.ce", info.ce    
         correctx=matlabarray([ [-0.500000000000000,           0,  0.500000000000000]])
