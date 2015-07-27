@@ -60,11 +60,11 @@ from runtime import *
 def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 24-[c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,xl,xu,fx,dstatus,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,sigma,info].count(None)+len(args)
-
+    norm_ceY = zeros_(1,cur_degree)
     dummy_set=find_(dstatus == c.dummy)
     ind_insideBounds=matlabarray([])
     for i in arange_(1,cur_degree).reshape(-1):
-        if ((isempty_(find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
+        if((isempty_(find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
             ind_insideBounds[i]=i
         else:
             ind_insideBounds[i]=1
@@ -73,7 +73,7 @@ def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,i
             norm_ceY[i]=norm_(ceY[:,i])
     else:
         norm_ceY=zeros_(1,cur_degree)
-    meritY=fY + sigma.dot(norm_ceY)
+    meritY=fY + sigma *norm_ceY
     fmin,imin=min_(meritY[ind_insideBounds],nargout=2)
     if (imin != 1 and fmin < meritY[1]):
         QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
