@@ -29,7 +29,7 @@ def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
         x=x - xbase
     if (nquad > 0):
         ndiag=min_(nquad,n)
-        H=diag_(concatenate_([P[n + 2:n + 1 + ndiag],zeros_(1,n - ndiag)]))
+        H=diag_(concatenate_([P[n + 2:n + 1 + ndiag],zeros_(1,n - ndiag)],axis=1))
         nquad=nquad - ndiag
         if (nquad > 0):
             k=2 * n + 1
