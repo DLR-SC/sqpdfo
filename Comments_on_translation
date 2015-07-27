@@ -38,6 +38,9 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 		
 		or simpler :
 			X[:,m]=y.T if y is a row vector
+
+-Logicals operators from matlab & and | have to be replaced by logical_and_ and logical_or_.
+	For instance find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1)) has to be replaced by find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))
 	
 -The matlab elsif are automatically translated with else..if instead of elif
 
