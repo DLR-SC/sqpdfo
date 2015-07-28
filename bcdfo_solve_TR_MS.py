@@ -189,7 +189,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     if (length_(ii) < n and isempty_(ii) != 1):
         D[ii,ii]=0.5 * maxdiag * eye_(length_(ii))
         Dinv=inv_(D)
-        Dinv[ii,ii]=0
+        Dinv[ii,ii]=matlabarray([[0]])
         scri=- V * Dinv * V.T * g
         nscri=norm_(scri)
     else:
