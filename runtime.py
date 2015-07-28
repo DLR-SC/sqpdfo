@@ -210,15 +210,44 @@ class matlabarray(np.ndarray):
             elif columns_(self)==1 and rows_(self)>1:
                 return matlabarray(self.get(index)).T
     
-#        To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
+#        To deal with the special case M[m:n,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
 #        have a line vector. Therefore we here give the same result but transposed 
-        #special case M[:,i]  where 'i'  is an integer or an interval containing a unique number
+    
+    
         elif type(index) is tuple and len(index)==2:
+                #special case M[m:n,i]  where 'i'  is an integer or an interval containing a unique number
                 if type(index[0]) is slice:
-                    if not(type(index[1]) is slice): 
+                    if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
                         return matlabarray(self.get(index)).T
-                    elif index[1].start==index[1].stop:
-                        return matlabarray(self.get(index)).T
+                    elif type(index[1]) is slice:
+                        if index[1].start!=None and index[1].start==index[1].stop:
+                            return matlabarray(self.get(index)).T
+                    elif type(index[1]) is matlabarray:
+                        if numel_(index[1])==1:
+                            return matlabarray(self.get(index)).T
+                #special case M[V,i] where V is a row vector and 'i' is an integer or an interval containing a unique number
+                elif type(index[0]) is matlabarray:
+                    if  rows_(index[0])==1:
+                        if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
+                            return matlabarray(self.get(index)).T
+                        elif type(index[1]) is slice:
+                            if index[1].start!=None and index[1].start==index[1].stop:
+                                return matlabarray(self.get(index)).T
+                        elif type(index[1]) is matlabarray:
+                            if numel_(index[1])==1:
+                                return matlabarray(self.get(index)).T
+                                
+                #special case M[i,V] where V is a column vector and 'i' is an integer or an interval containing a unique number
+                if type(index[1]) is matlabarray:
+                    if columns_(index[1])==1:
+                        if not(type(index[0]) is slice) and not(type(index[0]) is matlabarray): 
+                            return matlabarray(self.get(index)).T
+                        elif type(index[0]) is slice:
+                            if index[0].start!=None and index[0].start==index[0].stop:
+                                return matlabarray(self.get(index)).T
+                        elif type(index[0]) is matlabarray:
+                            if numel_(index[0])==1:
+                                return matlabarray(self.get(index)).T
         #special case V[m:n] where V is a vertical vector 
         elif type(index) is slice:
             if columns_(self)==1 and rows_(self)>1:
@@ -283,27 +312,63 @@ class matlabarray(np.ndarray):
         try:
             if len(indices) == 1:
                 np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
+                return
             # To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
             # have a line vector. Therefore we here give the same result but transposed 
-            #special case M[:,i]  where 'i'  is an integer or an interval containing a unique number
             elif type(index) is tuple and len(index)==2:
-                    if type(index[0]) is slice:
-                        if not(type(index[1]) is slice):
+                #special case M[m:n,i]  where 'i'  is an integer or an interval containing a unique number
+                if type(index[0]) is slice:
+                    if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
+                        np.asarray(self).__setitem__(indices,value.T)
+                        return
+                    elif type(index[1]) is slice:
+                        if index[1].start!=None and index[1].start==index[1].stop:
                             np.asarray(self).__setitem__(indices,value.T)
-                        elif index[1].start==index[1].stop:
+                            return
+                    elif type(index[1]) is matlabarray:
+                        if numel_(index[1])==1:
                             np.asarray(self).__setitem__(indices,value.T)
-                        else:
-                            np.asarray(self).__setitem__(indices,value)
-                    else:
-                        np.asarray(self).__setitem__(indices,value)
+                            return
+                            
+                #special case M[V,i] where V is a row vector and 'i' is an integer or an interval containing a unique number
+                            
+                elif type(index[0]) is matlabarray:
+                    if  rows_(index[0])==1:
+                        if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
+                            np.asarray(self).__setitem__(indices,value.T)
+                            return
+                        elif type(index[1]) is slice:
+                            if index[1].start!=None and index[1].start==index[1].stop:
+                                np.asarray(self).__setitem__(indices,value.T)
+                                return
+                        elif type(index[1]) is matlabarray:
+                            if numel_(index[1])==1:
+                                np.asarray(self).__setitem__(indices,value.T)
+                                return
+                                
+                #special case M[i,V] where V is a column vector and 'i' is an integer or an interval containing a unique number                              
+                if type(index[1]) is matlabarray:
+                    if columns_(index[1])==1:
+                        if not(type(index[0]) is slice) and not(type(index[0]) is matlabarray): 
+                            np.asarray(self).__setitem__(indices,value.T)
+                            return
+                        elif type(index[0]) is slice:
+                            if index[0].start!=None and index[0].start==index[0].stop:
+                                np.asarray(self).__setitem__(indices,value.T)
+                                return                        
+                        elif type(index[0]) is matlabarray:
+                            if numel_(index[0])==1:
+                                np.asarray(self).__setitem__(indices,value.T)
+                                return   
+                                
             #special case V[m:n] where V is a vertical vector 
             elif type(index) is slice:
                    if columns_(self)==1 and rows_(self)>1: 
                        np.asarray(self).__setitem__(indices,value.T)
-                   else:
-                       np.asarray(self).__setitem__(indices,value)
-            else:
-                np.asarray(self).__setitem__(indices,value)
+                       return
+                       
+            np.asarray(self).__setitem__(indices,value)
+            return
         except (ValueError,IndexError):
             if not self.size:
                 new_shape = [self.sizeof(s) for s in indices]                                                              
