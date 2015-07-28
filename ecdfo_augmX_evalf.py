@@ -116,7 +116,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if (scaleX):
             yfull=yfull / scalefacX
         info.nsimul[2]=info.nsimul(2) + 1
-        outdic,fvalue,info.ci,info.ce=f[2,yfull]
+        outdic,fvalue,info.ci,info.ce=f(2,yfull)
         info.f=fvalue
     else:
         if isempty_(X):
@@ -150,31 +150,31 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if not isempty_(info.ci) and size_(info.ci,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ci must be a row vector\\n\\n'))
+            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ci must be a column vector\\n\\n'))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if not isempty_(info.ce) and size_(info.ce,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ce must be a row vector\\n\\n'))
+            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ce must be a column vector\\n\\n'))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     fX[m]=min_(fxmax,real_(fvalue))
     if not isempty_(info.ci):
         if isempty_(ciX):
-            ciX=matlabarray((real_(info.ci))).T
+            ciX=real_(info.ci)
         elif columns_(ciX) <= m:								
-            ciX = concatenate_([ciX, matlabarray((real_(info.ci))).T], axis=1)								
+            ciX = concatenate_([ciX, real_(info.ci)], axis=1)								
         else:
-            ciX[:,m]=matlabarray((real_(info.ci))).T
+            ciX[:,m]=real_(info.ci)
 #        ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
 #        ceX[:,m]=real_(info.ce.T)
         if isempty_(ceX):
-            ceX=matlabarray((real_(info.ce))).T
+            ceX=real_(info.ce)
         elif columns_(ceX) <= m:								
-            ceX = concatenate_([ceX, matlabarray((real_(info.ce))).T], axis=1)								
+            ceX = concatenate_([ceX, real_(info.ce)], axis=1)								
         else:
-            ceX[:,m]=matlabarray((real_(info.ce))).T
+            ceX[:,m]=real_(info.ce)
 
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
