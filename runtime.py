@@ -1004,6 +1004,11 @@ def compare_matlabarray(x, y, abs_tol, rel_tol):
     x=x.flat[:];
     y=y.flat[:];     
      
+    #Delete the indices wherever x and y are infinite with the same sign.
+    indices=np.where(np.logical_or(np.logical_and(x==np.inf, y==np.inf) , np.logical_and(x==-np.inf, y==-np.inf) ))
+    x=np.delete(x,indices)
+    y=np.delete(y,indices)
+     
     #compute error and relative error. sys.float_info.min=2.2250738585072014e-308  to avoid zero division
     error = x-y;
     try:
@@ -1011,8 +1016,8 @@ def compare_matlabarray(x, y, abs_tol, rel_tol):
     except:
         pass
     
-    #Sets rel_error[i] = 0 if either |x[i]| = 0 or |y[i]|<=abs_tol
-    indices=np.where(np.logical_or(abs(x)<=abs_tol, abs(y)<=abs_tol))
+    #Sets rel_error[i] = 0 if either |x[i]|<= 0 or |y[i]|<=abs_tol, since in this case it makes sense only  to look at the absolute error
+    indices=np.where(np.logical_or(abs(x)<=abs_tol, abs(y)<=abs_tol) )
     rel_error[indices] = 0
 
     return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
