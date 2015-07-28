@@ -534,7 +534,8 @@ ans =
 
 @author: jaco_da
 """
-
+import sys
+sys.path.append("../")
 import unittest
 from ecdfo_prelim import *
 from evalfgh import *
@@ -542,153 +543,193 @@ import numpy as np
 import helper
 
 class myDummyOptions():
-	def __init__(self):
-		self.algo_method = char('quasi newton')#char('quasi newton')
-		self.algo_globalization = char('trust regions')
-		self.hess_approx = char('model')
-		self.bfgs_restart = 0
-		self.algo_descent = char('powell')
-		self.tol = matlabarray([1.000000000000000e-05, 1.000000000000000e-05, 1.000000000000000e-05])
-		self.dxmin = 1.000000000000000e-06
-		self.miter = 500
-		self.msimul = 500
-		self.verbose = 2
-		
+    def __init__(self):
+        self.algo_method = char('quasi newton')#char('quasi newton')
+        self.algo_globalization = char('trust regions')
+        self.hess_approx = char('model')
+        self.bfgs_restart = 0
+        self.algo_descent = char('powell')
+        self.tol = matlabarray([1.000000000000000e-05, 1.000000000000000e-05, 1.000000000000000e-05])
+        self.dxmin = 1.000000000000000e-06
+        self.miter = 500
+        self.msimul = 500
+        self.verbose = 0
+        
 class Test_ecdfo_prelim(unittest.TestCase):
+    """
+      Reminder :
+      This class is a test for ecdfo_prelim which realizes the following preliminary jobs:
+% - set default output arguments
+% - set options (default values if absent, numeric values for lexical options)
+% - check the given options
+% - get the possible 'values' of options
+% - compute function values and deduce dimensions
+% - compute an initial multiplier (if not given)
+% - initial printings
+    """ 
+    def setUp(self):
+        
+        self.func = evalfgh_
+        self.x0 = matlabarray([0, 0, 0.500000000000000]).T
+        self.lm0 =matlabarray([])#   Empty matrix: 0-by-1
+        self.Delta0 = 1
+        self.lb = matlabarray([-0.500000000000000, 0, -np.Inf]).T
+        self.ub = matlabarray([np.Inf,np.Inf,np.Inf]).T
+        self.scaleX = 0
+        self.scalefacX = matlabarray([ 1,     1,     1])
+        self.cur_degree =  4
+        self.rep_degree =  4
+        self.plin = 4
+        self.pdiag = 7
+        self.pquad = 10
+        
+        self.c = helper.dummyUnionStruct()
+        self.c.free = 0
+        self.c.fixed = 1
+        self.c.alwaysfixed = 2
+        self.c.in_ = 1
+        self.c.out = 0
+        self.c.unused = 0
+        self.c.inY = 1
+        self.c.dummy = 1
+        self.c.nodummy = 0
 
-	def setUp(self):
-		
-		self.func = evalfgh_
-		self.x0 = matlabarray([0, 0, 0.500000000000000]).T
-		self.lm0 =matlabarray([])#   Empty matrix: 0-by-1
-		self.Delta0 = 1
-		self.lb = matlabarray([-0.500000000000000, 0, -np.Inf]).T
-		self.ub = matlabarray([np.Inf,np.Inf,np.Inf]).T
-		self.scaleX = 0
-		self.scalefacX = matlabarray([ 1,     1,     1])
-		self.cur_degree =  4
-		self.rep_degree =  4
-		self.plin = 4
-		self.pdiag = 7
-		self.pquad = 10
-		
-		self.c = helper.dummyUnionStruct()
-		self.c.free = 0
-		self.c.fixed = 1
-		self.c.alwaysfixed = 2
-		self.c.in_ = 1
-		self.c.out = 0
-		self.c.unused = 0
-		self.c.inY = 1
-		self.c.dummy = 1
-		self.c.nodummy = 0
+        self.initial_Y = char('simplx')
+        self.kappa_ill = 1.000000000000000e+15
+        self.whichmodel =  0
+        self.factor_FPR = 10
+        self.Lambda_FP = 1.000000000000000e-10
+        self.Lambda_CP = 1.200000000000000
+        self.eps_L = 1.000000000000000e-03
+        self.lSolver = 1
+        self.hardcons = 0
+        self.stratLam = 1
+        self.xstatus = matlabarray([])
+        self.sstatus = matlabarray([])
+        self.dstatus = matlabarray([])
+        
+        self.options = myDummyOptions()
+        set_prob(3)
+        #self.values = helper.dummyValues()
+        self.abs_tol=1e-8
+        self.rel_tol=1e-8
 
-		self.initial_Y = char('simplx')
-		self.kappa_ill = 1.000000000000000e+15
-		self.whichmodel =  0
-		self.factor_FPR = 10
-		self.Lambda_FP = 1.000000000000000e-10
-		self.Lambda_CP = 1.200000000000000
-		self.eps_L = 1.000000000000000e-03
-		self.lSolver = 1
-		self.hardcons = 0
-		self.stratLam = 1
-		self.xstatus = matlabarray([])
-		self.sstatus = matlabarray([])
-		self.dstatus = matlabarray([])
-		
-		self.options = myDummyOptions()
-		set_prob(3)
-		#self.values = helper.dummyValues()
+    def test_ecdfo_prelim(self):
+        """
+        Test with somes values, results compared with matlab
+        """
+        #self.options.algo_method = 'quasi newton'
+        #print "################-----STARTING TEST!!!-----#########################"
+        n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(func=self.func,x0=self.x0,lm0=self.lm0,Delta0=self.Delta0,
+        lb=self.lb,ub=self.ub,scaleX=self.scaleX,scalefacX=self.scalefacX,cur_degree=self.cur_degree,rep_degree=self.rep_degree,
+        plin=self.plin,pdiag=self.pdiag,pquad=self.pquad,c=self.c,initial_Y=self.initial_Y,kappa_ill=self.kappa_ill,
+        whichmodel=self.whichmodel,factor_FPR=self.factor_FPR,Lambda_FP=self.Lambda_FP,Lambda_CP=self.Lambda_CP,
+        eps_L=self.eps_L,lSolver=self.lSolver,hardcons=self.hardcons,stratLam=self.stratLam,xstatus=self.xstatus,
+        sstatus=self.sstatus,dstatus=self.dstatus,options=self.options)
+        
+        
+        correctn = 3
+        correctnb = 2
+        correctmi =  0
+        correctme =  2
+        correctx = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
+        correctlm = matlabarray([  0,  0, 0,-0.333333332763891,-0.000000000249999]).T
+        correctlb = matlabarray([-0.500000000000000, 0, -np.Inf]).T
+        correctub = matlabarray([np.Inf, np.Inf, np.Inf]).T
+        correctscalefacX = matlabarray([  1,     1,     1])
+        correctDelta = 1
+        correctnfix = 0
+        correctindfix = matlabarray( [])
+        correctxfix = matlabarray([ 0, 0, 0]).T
+        correctvstatus = matlabarray([0, 0, 0]).T
+        correctxstatus = matlabarray([ 1, 1, 1, 1]).T
+        correctsstatus = matlabarray([ 1,     1,     1,     1])
+        correctdstatus = matlabarray([0, 0, 0, 0]).T
+        correctQZ = matlabarray([
+                         [1,     0,     0,     0],
+                         [0,     1,     0,     0],
+                         [0,     0,     1,     0],
+                         [0,     0,     0,     1]])
+        correctRZ = matlabarray([
+                         [1,     1,     1,     1],
+                         [0,    -1,     0,     0],
+                         [0,     0,    -1,     0],
+                         [0,     0,     0,    -1]])
+        correctscale = matlabarray([1, 1, 1, 1]).T
+        correctpoised =  1
+        correctY_radius =  1
+        correctpoised_model =  1
+        correctX = matlabarray([
+                       [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
+                       [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000],
+                       [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
+        correctfX = matlabarray([ 1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
+        correctY = matlabarray([
+                    [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
+                    [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000],
+                    [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
+        correctfY = matlabarray([ 1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
+        correctciX = matlabarray(  [])
+        correctciY = matlabarray([])
+        correctceX = matlabarray([
+                         [2,     1,     1,     1],
+                         [3,     2,     1,     0]])
+        correctceY = matlabarray([
+                         [2,     1,     1,     1],
+                         [3,     2,     1 ,    0]])
+        correctpoisedness_known =  1
+        correctm = 4
+        correctgx = matlabarray([  0,  1,  0]).T
+        correctnormgx =  1
+        correctfcmodel = matlabarray([
+        [1.500000000000000,                   0,   1.000000000000000,                   0],
+           [2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
+           [3.000000000000000,   1.000000000000000,   2.000000000000000,   3.000000000000000]])
+        correctind_Y = matlabarray([ 1,     2,     3,     4])
+        correcti_xbest = 1
+        correctcur_degree = 4
+        correctrep_degree = 4
+        correctplin = 4
+        correctpdiag = 7
+        correctpquad = 10
+        correctindfree = matlabarray([  1,     2,     3])
+        
+        #print "ecdfo_prelim outputs"
+        #print n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
+        
+        self.assertEqual(n, correctn)
+        self.assertEqual(int(nb), correctnb)
+        self.assertEqual(mi, correctmi)
+        #print "me", me
+        #print "correctme", correctme
+        self.assertEqual(me, correctme)
+        self.assertTrue(compare_matlabarray(correctx,x, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctlm,lm, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctlb,lb, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctub,ub, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctscalefacX,scalefacX, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctindfix,indfix, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctxfix,xfix, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctvstatus,vstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctxstatus,xstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctsstatus,sstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctdstatus,dstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctQZ,QZ, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctRZ,RZ, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctX,X, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctfX,fX, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctY,Y, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctfY,fY, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctciX,ciX, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctciY,ciY, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctceX,ceX, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctceY,ceY, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctgx,gx, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctfcmodel,fcmodel, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctind_Y,ind_Y, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_matlabarray(correctindfree,indfree, self.abs_tol, self.rel_tol))
 
-	def test_ecdfo_prelim(self):
-		#self.options.algo_method = 'quasi newton'
-		#print "################-----STARTING TEST!!!-----#########################"
-		n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(func=self.func,x0=self.x0,lm0=self.lm0,Delta0=self.Delta0,
-		lb=self.lb,ub=self.ub,scaleX=self.scaleX,scalefacX=self.scalefacX,cur_degree=self.cur_degree,rep_degree=self.rep_degree,
-		plin=self.plin,pdiag=self.pdiag,pquad=self.pquad,c=self.c,initial_Y=self.initial_Y,kappa_ill=self.kappa_ill,
-		whichmodel=self.whichmodel,factor_FPR=self.factor_FPR,Lambda_FP=self.Lambda_FP,Lambda_CP=self.Lambda_CP,
-		eps_L=self.eps_L,lSolver=self.lSolver,hardcons=self.hardcons,stratLam=self.stratLam,xstatus=self.xstatus,
-		sstatus=self.sstatus,dstatus=self.dstatus,options=self.options)
-		
-		
-		correctn = 3
-		correctnb = 2
-		correctmi =  0
-		correctme =  2
-		correctx = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
-		correctlm = matlabarray([  0,  0, 0,-0.333333332763891,-0.000000000249999]).T
-		correctlb = matlabarray([-0.500000000000000, 0, -np.Inf]).T
-		correctub = matlabarray([np.Inf, np.Inf, np.Inf]).T
-		correctscalefacX = matlabarray([  1,     1,     1])
-		correctDelta = 1
-		correctnfix = 0
-		correctindfix = matlabarray( [])
-		correctxfix = matlabarray([ 0, 0, 0]).T
-		correctvstatus = matlabarray([0, 0, 0]).T
-		correctxstatus = matlabarray([ 1, 1, 1, 1]).T
-		correctsstatus = matlabarray([ 1,     1,     1,     1])
-		correctdstatus = matlabarray([0, 0, 0, 0]).T
-		correctQZ = matlabarray([
-					     [1,     0,     0,     0],
-					     [0,     1,     0,     0],
-					     [0,     0,     1,     0],
-					     [0,     0,     0,     1]])
-		correctRZ = matlabarray([
-					     [1,     1,     1,     1],
-					     [0,    -1,     0,     0],
-					     [0,     0,    -1,     0],
-					     [0,     0,     0,    -1]])
-		correctscale = matlabarray([1, 1, 1, 1]).T
-		correctpoised =  1
-		correctY_radius =  1
-		correctpoised_model =  1
-		correctX = matlabarray([
-					   [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
-					   [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000],
-					   [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
-		correctfX = matlabarray([ 1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
-		correctY = matlabarray([
-					[0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
-					[1.000000000000000,   1.000000000000000,                   0,   1.000000000000000],
-					[0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
-		correctfY = matlabarray([ 1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
-		correctciX = matlabarray(  [])
-		correctciY = matlabarray([])
-		correctceX = matlabarray([
-					     [2,     1,     1,     1],
-					     [3,     2,     1,     0]])
-		correctceY = matlabarray([
-					     [2,     1,     1,     1],
-					     [3,     2,     1 ,    0]])
-		correctpoisedness_known =  1
-		correctm = 4
-		correctgx = matlabarray([  0,  1,  0]).T
-		correctnormgx =  1
-		correctfcmodel = matlabarray([
-		[1.500000000000000,                   0,   1.000000000000000,                   0],
-		   [2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
-		   [3.000000000000000,   1.000000000000000,   2.000000000000000,   3.000000000000000]])
-		correctind_Y = matlabarray([ 1,     2,     3,     4])
-		correcti_xbest = 1
-		correctcur_degree = 4
-		correctrep_degree = 4
-		correctplin = 4
-		correctpdiag = 7
-		correctpquad = 10
-		correctindfree = matlabarray([  1,     2,     3])
-		
-		#print "ecdfo_prelim outputs"
-		#print n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
-		
-		self.assertEqual(n, correctn)
-		self.assertEqual(int(nb), correctnb)
-		self.assertEqual(mi, correctmi)
-		#print "me", me
-		#print "correctme", correctme
-		self.assertEqual(me, correctme)
-		
-		
+        
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()

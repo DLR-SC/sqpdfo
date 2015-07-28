@@ -62,9 +62,45 @@ from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
 
 def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=None,scalefacX=None,cur_degree=None,rep_degree=None,plin=None,pdiag=None,pquad=None,c=None,initial_Y=None,kappa_ill=None,whichmodel=None,factor_FPR=None,Lambda_FP=None,Lambda_CP=None,eps_L=None,lSolver=None,hardcons=None,stratLam=None,xstatus=None,sstatus=None,dstatus=None,options=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 28-[func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options].count(None)+len(args)
-
+#    varargin = cellarray(args)
+#    nargin = 28-[func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options].count(None)+len(args)
+    
+    info = helper.dummyUnionStruct()
+    info.nsimul = matlabarray([])
+    
+    
+    Y = matlabarray([])
+    gamma1 = 0.010000000000000
+    eps =  2.220446049250313e-16
+    stallfact=10 * eps
+    
+    nfix = None				
+    indfix = None				
+    xfix = None
+    vstatus = None				
+    QZ = None
+    RZ = None
+    scale = None
+    poised = None
+    Y_radius = None
+    poised_model = None
+    X = None
+    fX = None
+    #Y = None
+    fY = None
+    ciX = None
+    ciY = None
+    ceX = None
+    ceY = None
+    poisedness_known = None
+    m = None
+    normgx = None
+    fcmodel = None
+    ind_Y = None
+    i_xbest = None
+    indfree = None
+    
+    
     n=0
     nb=0
     mi=0
@@ -76,9 +112,9 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     info.hl=[]
     info.niter=0
     shift_Y=1
-    x=copy_(NaN)
-    fx=copy_(NaN)
-    gx=copy_(NaN)
+    x=copy_(np.NaN)
+    fx=copy_(np.NaN)
+    gx=copy_(np.NaN)
     checkoptions=1
     if isempty_(options):
         checkoptions=0
@@ -194,18 +230,31 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
         else:
             if (strcmp_(initial_Y,char('simplx'))):
                 I=eye_(n)
-                Y[:,1]=x0
+                if columns_(Y) <= 1:								
+                    Y = x0								
+                else:
+                    Y[:,1]=x0
+#                    Y[:,1]=x0.T
                 for j in arange_(1,n).reshape(-1):
                     step1=- Delta0
-                    Y[:,j + 1]=x0 + step1 * I[:,j]
+                    if columns_(Y) <= j+1:
+                        Y=concatenate_([Y,x0 + step1 * I[:,j]],axis=1)
+                    else:
+                        Y[:,j + 1]=(x0 + step1 * I[:,j])
                     if (cur_degree >= pdiag):
                         step2=copy_(Delta0)
-                        Y[:,j + 1 + n]=x0 + step2 * I[:,j]
+                        if columns_(Y)<=j+1+n:
+                            Y[:,j + 1 + n]=x0 + step2 * I[:,j]
+                        else:
+                            Y=concatenate_([Y,x0 + step2 * I[:,j]],axis=1)
                 if (cur_degree == pquad):
                     k=2 * n + 2
                     for j in arange_(1,n).reshape(-1):
                         for jj in arange_(j + 1,n).reshape(-1):
-                            Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
+                            if columns_(Y)<=k:
+                                Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
+                            else:
+                                Y=concatenate_([Y,0.5 * (Y[:,j + 1] + Y[:,jj + 1])],axis=1)
                             k=k + 1
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
@@ -217,14 +266,14 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
         ceX=matlabarray([])
         ind_Y=matlabarray([])
         for i in arange_(1,cur_degree).reshape(-1):
-            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info=ecdfo_augmX_evalf_(func,Y[:,i],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul(2),xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
+            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
             if (abs_(fX[i]) > 1e+25):
                 break
             if (i == cur_degree):
                 getfY=0
-            ind_Y=matlabarray([ind_Y,i])
+            ind_Y=concatenate_([ind_Y,matlabarray([i])],axis=1)
         fY=copy_(fX)
         ciY=copy_(ciX)
         ceY=copy_(ceX)
@@ -245,7 +294,7 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     m=copy_(cur_degree)
     i_xbest=1
     initmodel=zeros_(1,pquad)
-    rhsY=matlabarray([[fY],[ciY],[ceY]])
+    rhsY=concatenate_([fY,ciY,ceY], axis=0)
     fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
     normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
@@ -263,8 +312,8 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
             gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
         info.ai=gci
     else:
-        info.ci=[]
-        info.ai=[]
+        info.ci=matlabarray([])
+        info.ai=matlabarray([])
     me=size_(ceY,1)
     if me > 0:
         info.ce=ceY[:,1]
@@ -275,33 +324,33 @@ def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=
     else:
         info.ce=[]
         info.ae=[]
-    fprintf_(char('\\n'))
-    fprintf_(char('**************************************************************************************\\n'))
-    fprintf_(char('*                                                                                    *\\n'))
-    fprintf_(char('*            EC-DFO: equality-constrained minimization without derivatives           *\\n'))
-    fprintf_(char('*                                                                                    *\\n'))
-    fprintf_(char('*                            (c)  A. Troeltzsch, 2013                                *\\n'))
-    fprintf_(char('*                                                                                    *\\n'))
-    fprintf_(char('**************************************************************************************\\n'))
-    fprintf_(char('\\n'))
-    values.dline=char('-------------------------------------------')
-    values.dline=strcat_(values.dline,values.dline)
-    values.eline=char('===========================================')
-    values.eline=strcat_(values.eline,values.eline)
-    values.sline=char('*******************************************')
-    values.sline=strcat_(values.sline,values.sline)
-    if options.verbose < 4:
-        fprintf_(options.fout,char('iter neval        fval            merit      '))
-        if (nb + mi + me > 0):
-            fprintf_(options.fout,char(' |grad Lag|   feasibility'))
-        else:
-            fprintf_(options.fout,char('gradient'))
-        fprintf_(options.fout,char('     delta    stepsize'))
-        if options.algo_method == values.quasi_newton:
-            fprintf_(options.fout,char('  BFGS\\n'))
-        else:
-            fprintf_(options.fout,char('  \\n'))
-        fprintf_(options.fout,char('  \\n'))
+#    fprintf_(char('\\n'))
+#    fprintf_(char('**************************************************************************************\\n'))
+#    fprintf_(char('*                                                                                    *\\n'))
+#    fprintf_(char('*            EC-DFO: equality-constrained minimization without derivatives           *\\n'))
+#    fprintf_(char('*                                                                                    *\\n'))
+#    fprintf_(char('*                            (c)  A. Troeltzsch, 2013                                *\\n'))
+#    fprintf_(char('*                                                                                    *\\n'))
+#    fprintf_(char('**************************************************************************************\\n'))
+#    fprintf_(char('\\n'))
+#    values.dline=char('-------------------------------------------')
+#    values.dline=strcat_(values.dline,values.dline)
+#    values.eline=char('===========================================')
+#    values.eline=strcat_(values.eline,values.eline)
+#    values.sline=char('*******************************************')
+#    values.sline=strcat_(values.sline,values.sline)
+#    if options.verbose < 4:
+#        fprintf_(options.fout,char('iter neval        fval            merit      '))
+#        if (nb + mi + me > 0):
+#            fprintf_(options.fout,char(' |grad Lag|   feasibility'))
+#        else:
+#            fprintf_(options.fout,char('gradient'))
+#        fprintf_(options.fout,char('     delta    stepsize'))
+#        if options.algo_method == values.quasi_newton:
+#            fprintf_(options.fout,char('  BFGS\\n'))
+#        else:
+#            fprintf_(options.fout,char('  \\n'))
+#        fprintf_(options.fout,char('  \\n'))
     if options.verbose >= 4:
         fprintf_(options.fout,char('%s'),values.sline)
         fprintf_(options.fout,char('ecdfo optimization solver (Version 0.4.4, February 2009, entry point)\\n\\n'))
