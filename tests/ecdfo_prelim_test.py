@@ -620,12 +620,12 @@ class Test_ecdfo_prelim(unittest.TestCase):
         """
         #self.options.algo_method = 'quasi newton'
         #print "################-----STARTING TEST!!!-----#########################"
-        n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(func=self.func,x0=self.x0,lm0=self.lm0,Delta0=self.Delta0,
-        lb=self.lb,ub=self.ub,scaleX=self.scaleX,scalefacX=self.scalefacX,cur_degree=self.cur_degree,rep_degree=self.rep_degree,
-        plin=self.plin,pdiag=self.pdiag,pquad=self.pquad,c=self.c,initial_Y=self.initial_Y,kappa_ill=self.kappa_ill,
-        whichmodel=self.whichmodel,factor_FPR=self.factor_FPR,Lambda_FP=self.Lambda_FP,Lambda_CP=self.Lambda_CP,
-        eps_L=self.eps_L,lSolver=self.lSolver,hardcons=self.hardcons,stratLam=self.stratLam,xstatus=self.xstatus,
-        sstatus=self.sstatus,dstatus=self.dstatus,options=self.options)
+        n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(self.func,self.x0,self.lm0,self.Delta0,
+        self.lb,self.ub,self.scaleX,self.scalefacX,self.cur_degree,self.rep_degree,
+        self.plin,self.pdiag,self.pquad,self.c,self.initial_Y,self.kappa_ill,
+        self.whichmodel,self.factor_FPR,self.Lambda_FP,self.Lambda_CP,
+        self.eps_L,self.lSolver,self.hardcons,self.stratLam,self.xstatus,
+        self.sstatus,self.dstatus,self.options)
         
         
         correctn = 3

@@ -60,10 +60,41 @@ from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
 from sqplab_checkoptions import sqplab_checkoptions_
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
+from copy import copy
 
-def ecdfo_prelim_(func=None,x0=None,lm0=None,Delta0=None,lb=None,ub=None,scaleX=None,scalefacX=None,cur_degree=None,rep_degree=None,plin=None,pdiag=None,pquad=None,c=None,initial_Y=None,kappa_ill=None,whichmodel=None,factor_FPR=None,Lambda_FP=None,Lambda_CP=None,eps_L=None,lSolver=None,hardcons=None,stratLam=None,xstatus=None,sstatus=None,dstatus=None,options=None,*args,**kwargs):
+def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,whichmodel_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 28-[func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options].count(None)+len(args)
+    
+
+    func=copy(func_)
+    x0=copy_(x0_)
+    lm0=copy_(lm0_)
+    Delta0=copy_(Delta0_)
+    lb=copy_(lb_)
+    ub=copy_(ub_)
+    scaleX=copy_(scaleX_)
+    scalefacX=copy_(scalefacX_)
+    cur_degree=copy_(cur_degree_)
+    rep_degree=copy_(rep_degree_)
+    plin=copy_(plin_)
+    pdiag=copy_(pdiag_)
+    pquad=copy_(pquad_)
+    c=copy(c_)
+    initial_Y=copy(initial_Y_)
+    kappa_ill=copy_(kappa_ill_)
+    whichmodel=copy_(whichmodel_)
+    factor_FPR=copy_(factor_FPR_)
+    Lambda_FP=copy_(Lambda_FP_)
+    Lambda_CP=copy_(Lambda_CP_)
+    eps_L=copy_(eps_L_)
+    lSolver=copy_(lSolver_)
+    hardcons=copy_(hardcons_)
+    stratLam=copy_(stratLam_)
+    xstatus=copy_(xstatus_)
+    sstatus=copy_(sstatus_)
+    dstatus=copy_(dstatus_)
+    options=copy(options_)
     
     info = helper.dummyUnionStruct()
     info.nsimul = matlabarray([])
