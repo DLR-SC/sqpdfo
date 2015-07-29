@@ -56,6 +56,7 @@ from __future__ import division
 #try:
 from runtime import *
 from copy import copy
+from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
 #except ImportError:
 #from smop.runtime import *
 def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,ind_Y_=None,i_xbest_=None,cur_degree=None,indfree=None,x_=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
