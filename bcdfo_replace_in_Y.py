@@ -23,5 +23,5 @@ def bcdfo_replace_in_Y_(QZ_=None,RZ_=None,ynew=None,Y_=None,j=None,xbase_=None,w
     scale=copy_(scale_)
 
     Y[:,j]=ynew
-    QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(copy_(Y),whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
+    QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     return QZ,RZ,Y,xbase,scale
