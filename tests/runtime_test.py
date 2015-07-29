@@ -89,25 +89,25 @@ class Test_runtime(unittest.TestCase):
 #
 #        print "lboundsafter\n", lbounds
 
-    def test_runtime_eig_(self):
-           M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-           print "eigenvalues of M : \n", eig_(M)
-           print "eigenvalues and eigenvectors of M : \n", eig_(M,2)
-           
-    def test_runtime_isvector_(self):
-          M = matlabarray([[10, 11, 12]])
-          M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-          M3 = matlabarray([[10],[15], [18]])
-          self.assertTrue(isvector_(M))
-          self.assertFalse(isvector_(M2))
-          self.assertTrue(isvector_(M3))
-          
-    def test_runtime_diag_(self):
-          M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-          V=diag_(M)
-          print "diag of a matrix M : \n", V
-          M=diag_(V)
-          print "diag of a vector V : \n", M
+#    def test_runtime_eig_(self):
+#           M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#           print "eigenvalues of M : \n", eig_(M)
+#           print "eigenvalues and eigenvectors of M : \n", eig_(M,2)
+#           
+#    def test_runtime_isvector_(self):
+#          M = matlabarray([[10, 11, 12]])
+#          M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#          M3 = matlabarray([[10],[15], [18]])
+#          self.assertTrue(isvector_(M))
+#          self.assertFalse(isvector_(M2))
+#          self.assertTrue(isvector_(M3))
+#          
+#    def test_runtime_diag_(self):
+#          M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#          V=diag_(M)
+#          print "diag of a matrix M : \n", V
+#          M=diag_(V)
+#          print "diag of a vector V : \n", M
 #          
 #          
 #          
@@ -275,45 +275,207 @@ class Test_runtime(unittest.TestCase):
                                     [0,0,0,0]]))
                                     
     def test_indexing(self):
-        """Here are good examples of working indexing, for getting values or setting values"""
-        M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M5 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M6 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-        M8 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        """Here are good examples of working indexing, for getting values or setting values
+        Theses examples are certainly not exhaustive, but they helped me debug a lot and more may be
+        coming in the future, if more bugs are to be found"""
 
-        ind = matlabarray([[0,1,2], [3,4,5],[6, 7,8]])
-        ind2=matlabarray([[1,2,3]])
+
+
+#EXAMPLES OF GETTING VALUES
+        M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+
+        ind=matlabarray([[1,2,3]])
         self.assertTrue(isequal_(M[1,3],[[12]]))
         self.assertTrue(isequal_(M[:,2],[[11],[14],[17]]))
         self.assertTrue(isequal_(M[:,2:2],[[11],[14],[17]]))
         self.assertTrue(isequal_(M[1,:],[[10,11,12]]))
         self.assertTrue(isequal_(M[1:1,:],[[10,11,12]]))
 
-        self.assertTrue(isequal_(M[ind2,1],[[10],[13],[16]]))
-        self.assertTrue(isequal_(M[3,ind2],[[16,17,18]]))
-        self.assertTrue(isequal_(M[ind2.T,1],[[10],[13],[16]]))
-        self.assertTrue(isequal_(M[ind2.T,1:1],[[10],[13],[16]]))
-        self.assertTrue(isequal_(M[3,ind2.T],[[16,17,18]]))
-        self.assertTrue(isequal_(M[3:3,ind2.T],[[16,17,18]]))
+        self.assertTrue(isequal_(M[ind,1],[[10],[13],[16]]))
+        self.assertTrue(isequal_(M[3,ind],[[16,17,18]]))
+        self.assertTrue(isequal_(M[ind.T,1],[[10],[13],[16]]))
+        self.assertTrue(isequal_(M[ind.T,1:1],[[10],[13],[16]]))
+        self.assertTrue(isequal_(M[3,ind.T],[[16,17,18]]))
+        self.assertTrue(isequal_(M[3:3,ind.T],[[16,17,18]]))
+
+        M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        ind=matlabarray([1,2,3])
+        self.assertTrue(isequal_(M[ind,1],[[10],[13],[16]]))
+        self.assertTrue(isequal_(M[3,ind],[[16,17,18]]))
+
 
         M[1,3]=12
         self.assertTrue(isequal_(M[1,3],[[12]]))
+#        
+        V=matlabarray([[2,3,4,5]])
+        self.assertTrue(isequal_(V[1:3],[[2,3,4]]))
+        self.assertTrue(isequal_(V[:],[[2],[3],[4],[5]])) #same result in matlab
+        self.assertTrue(isequal_(V[ind],[[2,3,4]]))
+        self.assertTrue(isequal_(V[ind.T],[[2,3,4]]))
+
         
-        #WARNING : we cannot give here a row vector, this would not work.
-        M2[:,2]=matlabarray([[1,2,3]]).T
+        V=matlabarray([[2],[3],[4],[5]])
+        self.assertTrue(isequal_(V[1:3],[[2],[3],[4]]))
+        self.assertTrue(isequal_(V[:],[[2],[3],[4],[5]]))
+        self.assertTrue(isequal_(V[ind],[[2],[3],[4]]))
+        self.assertTrue(isequal_(V[ind.T],[[2],[3],[4]]))
+
+
+#EXAMPLES OF SETTING VALUES    
+
+
+    #CHANGING VECTORS OF THE MATRICES
+        M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M5 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M6 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#        
+        ind=matlabarray([[1,2,3]])
+        M2[:,2]=matlabarray([[1,2,3]]).T       
         M3[:,2:2]=matlabarray([[1,2,3]]).T
+        M4[ind,2]=matlabarray([[1,2,3]]).T
+        M5[ind.T,2]=matlabarray([[1,2,3]]).T
+##
         self.assertTrue(isequal_(M2, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
         self.assertTrue(isequal_(M3, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        self.assertTrue(isequal_(M4, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        self.assertTrue(isequal_(M5, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+#        
+        ind=matlabarray([1,2,3])
+        M6[ind,2]=matlabarray([[1,2,3]]).T
+        self.assertTrue(isequal_(M6, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+#
+#
+        M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M5 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M6 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
         
-        #WARNING : we cannot give here a column vector, this would not work.
-        M4[1,:]=matlabarray([[1,2,3]])
-        M5[1:1,:]=matlabarray([[1,2,3]])
+        ind=matlabarray([[1,2,3]])
+        M2[:,2]=matlabarray([[1,2,3]])       
+        M3[:,2:2]=matlabarray([[1,2,3]])
+        M4[ind,2]=matlabarray([[1,2,3]])
+        M5[ind.T,2]=matlabarray([[1,2,3]])
+#
+        self.assertTrue(isequal_(M2, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        self.assertTrue(isequal_(M3, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        self.assertTrue(isequal_(M4, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        self.assertTrue(isequal_(M5, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+#        
+        ind=matlabarray([1,2,3])
+        M6[ind,2]=matlabarray([[1,2,3]])
+        self.assertTrue(isequal_(M6, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+#        
+     #CHANGING ROWS OF THE MATRICES
+        ind=matlabarray([[1,2,3]])
+        M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M5 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M6 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        
+        
+        M2[1,:]=matlabarray([[1,2,3]])         
+        M3[1:1,:]=matlabarray([[1,2,3]])
+        M4[1,ind]=matlabarray([[1,2,3]])
+        M5[1,ind.T]=matlabarray([[1,2,3]])
+        self.assertTrue(isequal_(M2, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        self.assertTrue(isequal_(M3, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))        
         self.assertTrue(isequal_(M4, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
         self.assertTrue(isequal_(M5, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        
+        ind=matlabarray([1,2,3])
+        M6[1,ind]=matlabarray([[1,2,3]])
+        self.assertTrue(isequal_(M6, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        
+        ind=matlabarray([[1,2,3]])
+        M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M5 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M6 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        
+        
+        M2[1,:]=matlabarray([[1,2,3]]).T      
+        M3[1:1,:]=matlabarray([[1,2,3]]).T
+        M4[1,ind]=matlabarray([[1,2,3]]).T
+        M5[1,ind.T]=matlabarray([[1,2,3]]).T
+        self.assertTrue(isequal_(M2, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        self.assertTrue(isequal_(M3, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))        
+        self.assertTrue(isequal_(M4, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        self.assertTrue(isequal_(M5, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        
+        ind=matlabarray([1,2,3])
+        M6[1,ind]=matlabarray([[1,2,3]]).T
+        self.assertTrue(isequal_(M6, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
+        
+        
+    #EXAMPLES WITH VECTORS
+        
+        #Row vector
+        ind=matlabarray([[1,2,3]])
+        V=matlabarray([[2,3,4,5]])
+        V2=matlabarray([[2,3,4,5]])
+        V3=matlabarray([[2,3,4,5]])
+        V4=matlabarray([[2,3,4,5]])
+        V[ind]=matlabarray([[8,9,10]])
+        V2[1:3]=matlabarray([[8,9,10]])
+        V3[:]=matlabarray([[8,9,10,11]])
+        V4[1]=matlabarray([30])
+
+        self.assertTrue(isequal_(V, [[8,9,10,5]]))
+        self.assertTrue(isequal_(V2, [[8,9,10,5]]))
+        self.assertTrue(isequal_(V3, [[8,9,10,11]]))
+        self.assertTrue(isequal_(V4, [[30,3,4,5]]))
+
+        ind=matlabarray([[1,2,3]])
+        V=matlabarray([[2,3,4,5]])
+        V2=matlabarray([[2,3,4,5]])
+        V3=matlabarray([[2,3,4,5]])
+        V4=matlabarray([[2,3,4,5]])
+        V[ind]=matlabarray([[8,9,10]]).T
+        V2[1:3]=matlabarray([[8,9,10]]).T
+        V3[:]=matlabarray([[8,9,10,11]]).T
+        V4[1]=matlabarray([30]).T
+
+        self.assertTrue(isequal_(V, [[8,9,10,5]]))
+        self.assertTrue(isequal_(V2, [[8,9,10,5]]))
+        self.assertTrue(isequal_(V3, [[8,9,10,11]]))
+        self.assertTrue(isequal_(V4, [[30,3,4,5]]))
+        
+        
+        #Column vector
+        ind=matlabarray([[1,2,3]]).T
+        V=matlabarray([[2,3,4,5]]).T
+        V2=matlabarray([[2,3,4,5]]).T
+        V3=matlabarray([[2,3,4,5]]).T
+        V4=matlabarray([[2,3,4,5]]).T
+        V[ind]=matlabarray([[8,9,10]])
+        V2[1:3]=matlabarray([[8,9,10]])
+        V3[:]=matlabarray([[8,9,10,11]])
+        V4[1]=matlabarray([30])
+
+        self.assertTrue(isequal_(V, [[8],[9],[10],[5]]))
+        self.assertTrue(isequal_(V2, [[8],[9],[10],[5]]))
+        self.assertTrue(isequal_(V3, [[8],[9],[10],[11]]))
+        self.assertTrue(isequal_(V4, [[30],[3],[4],[5]]))
+        
+        ind=matlabarray([[1,2,3]]).T
+        V=matlabarray([[2,3,4,5]]).T
+        V2=matlabarray([[2,3,4,5]]).T
+        V3=matlabarray([[2,3,4,5]]).T
+        V4=matlabarray([[2,3,4,5]]).T
+        V[ind]=matlabarray([[8,9,10]]).T
+        V2[1:3]=matlabarray([[8,9,10]]).T
+        V3[:]=matlabarray([[8,9,10,11]]).T
+        V4[1]=matlabarray([30]).T
+
+        self.assertTrue(isequal_(V, [[8],[9],[10],[5]]))
+        self.assertTrue(isequal_(V2, [[8],[9],[10],[5]]))
+        self.assertTrue(isequal_(V3, [[8],[9],[10],[11]]))
+        self.assertTrue(isequal_(V4, [[30],[3],[4],[5]]))
 
                 
         

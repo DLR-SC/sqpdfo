@@ -184,7 +184,12 @@ class matlabarray(np.ndarray):
                 try:
                     indices.append(int(ix)-1)
                 except:
-                    indices.append(np.asarray(ix).astype("int32")-1)
+                    
+                    #This way we only have to deal with the case where indices are row vectors, when there are vectors.
+                    if isvectorColumn_(np.asarray(ix)):
+                        indices.append((np.asarray(ix).astype("int32")-1).reshape(-1))
+                    else:
+                        indices.append(np.asarray(ix).astype("int32")-1)
         if len(indices) == 2 and isvector(indices[0]) and isvector(indices[1]):
             indices[0].shape = (-1,1)
             indices[1].shape = (-1,)
@@ -196,6 +201,7 @@ class matlabarray(np.ndarray):
         return self.__getitem__(slice(i,j))
 
     def __getitem__(self,index):
+
         if type(index) is matlabarray:
             
             #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
@@ -205,14 +211,11 @@ class matlabarray(np.ndarray):
                     return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
                 except:
                     pass
-#            To deal with the special case V[M] where M is a matrix and V is a vertical vector. This has to return a column vector, but without thoses lines, we
-#        have a line vector. Therefore we here give the same result but transposed.
-            elif columns_(self)==1 and rows_(self)>1:
-                return matlabarray(self.get(index)).T
-    
-#        To deal with the special case M[m:n,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
-#        have a line vector. Therefore we here give the same result but transposed 
-    
+#         
+            #special case V[M] where M is a matrix and V is a vertical vector.
+            elif isvectorColumn_(self):
+                    return matlabarray(self.get(index)).T
+                    
     
         elif type(index) is tuple and len(index)==2:
                 #special case M[m:n,i]  where 'i'  is an integer or an interval containing a unique number
@@ -227,7 +230,6 @@ class matlabarray(np.ndarray):
                             return matlabarray(self.get(index)).T
                 #special case M[V,i] where V is a row vector and 'i' is an integer or an interval containing a unique number
                 elif type(index[0]) is matlabarray:
-                    if  rows_(index[0])==1:
                         if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
                             return matlabarray(self.get(index)).T
                         elif type(index[1]) is slice:
@@ -236,21 +238,10 @@ class matlabarray(np.ndarray):
                         elif type(index[1]) is matlabarray:
                             if numel_(index[1])==1:
                                 return matlabarray(self.get(index)).T
-                                
-                #special case M[i,V] where V is a column vector and 'i' is an integer or an interval containing a unique number
-                if type(index[1]) is matlabarray:
-                    if columns_(index[1])==1:
-                        if not(type(index[0]) is slice) and not(type(index[0]) is matlabarray): 
-                            return matlabarray(self.get(index)).T
-                        elif type(index[0]) is slice:
-                            if index[0].start!=None and index[0].start==index[0].stop:
-                                return matlabarray(self.get(index)).T
-                        elif type(index[0]) is matlabarray:
-                            if numel_(index[0])==1:
-                                return matlabarray(self.get(index)).T
+
         #special case V[m:n] where V is a vertical vector 
         elif type(index) is slice:
-            if columns_(self)==1 and rows_(self)>1:
+            if isvectorColumn_(self):
                 return matlabarray(self.get(index)).T
                                                       
         return matlabarray(self.get(index))
@@ -285,6 +276,11 @@ class matlabarray(np.ndarray):
 
     def __setitem__(self,index,value):
 
+        #This way we only have to deal with the case where value is a row vector, when it is a vector.
+        if type(value) is matlabarray:
+            if isvectorColumn_(value):
+                value=value.reshape(-1)
+
         if type(index) is matlabarray:
             #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
 #            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
@@ -300,73 +296,14 @@ class matlabarray(np.ndarray):
                         except:
                             pass                                                                        
                                                                                                     
-##           To deal with the special case V[M] where M is a matrix and V is a vertical vector. This code is however not necessary since this is done in 
-##            the "try: else:" below. But for coherence with the __getitem__ function, I keep this code commented
-#            elif columns_(self)==1 and rows_(self)>1:
-#                indices = self.compute_indices(index)
-#                np.asarray(self).__setitem__(indices,value)                                                                       
-#                return
+
                                                                                                 
                                                                                                 
         indices = self.compute_indices(index)
         try:
             if len(indices) == 1:
                 np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
-                return
-            # To deal with the special case M[:,i] where 'i'  is an integer or an interval containing a unique number or V[m:n] where V is a vertical vector. This has to return a column vector, but without thoses lines, we
-            # have a line vector. Therefore we here give the same result but transposed 
-            elif type(index) is tuple and len(index)==2:
-                #special case M[m:n,i]  where 'i'  is an integer or an interval containing a unique number
-                if type(index[0]) is slice:
-                    if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
-                        np.asarray(self).__setitem__(indices,value.T)
-                        return
-                    elif type(index[1]) is slice:
-                        if index[1].start!=None and index[1].start==index[1].stop:
-                            np.asarray(self).__setitem__(indices,value.T)
-                            return
-                    elif type(index[1]) is matlabarray:
-                        if numel_(index[1])==1:
-                            np.asarray(self).__setitem__(indices,value.T)
-                            return
-                            
-                #special case M[V,i] where V is a row vector and 'i' is an integer or an interval containing a unique number
-                            
-                elif type(index[0]) is matlabarray:
-                    if  rows_(index[0])==1:
-                        if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
-                            np.asarray(self).__setitem__(indices,value.T)
-                            return
-                        elif type(index[1]) is slice:
-                            if index[1].start!=None and index[1].start==index[1].stop:
-                                np.asarray(self).__setitem__(indices,value.T)
-                                return
-                        elif type(index[1]) is matlabarray:
-                            if numel_(index[1])==1:
-                                np.asarray(self).__setitem__(indices,value.T)
-                                return
-                                
-                #special case M[i,V] where V is a column vector and 'i' is an integer or an interval containing a unique number                              
-                if type(index[1]) is matlabarray:
-                    if columns_(index[1])==1:
-                        if not(type(index[0]) is slice) and not(type(index[0]) is matlabarray): 
-                            np.asarray(self).__setitem__(indices,value.T)
-                            return
-                        elif type(index[0]) is slice:
-                            if index[0].start!=None and index[0].start==index[0].stop:
-                                np.asarray(self).__setitem__(indices,value.T)
-                                return                        
-                        elif type(index[0]) is matlabarray:
-                            if numel_(index[0])==1:
-                                np.asarray(self).__setitem__(indices,value.T)
-                                return   
-                                
-            #special case V[m:n] where V is a vertical vector 
-            elif type(index) is slice:
-                   if columns_(self)==1 and rows_(self)>1: 
-                       np.asarray(self).__setitem__(indices,value.T)
-                       return
-                       
+                return                       
             np.asarray(self).__setitem__(indices,value)
             return
         except (ValueError,IndexError):
@@ -684,7 +621,23 @@ def isequal_(a,b):
                           
 def isvector_(a):
     """test if the argument is a line or column vector"""
-    return (size_(a)==1).any()                         
+    return (size_(a)==1).any()  
+
+def isvectorRow_(a):
+    if ndims_(a)==1:
+        return True
+    elif ndims_(a)==2:
+        if a.shape[0]==1 and a.shape[1]>=1:
+            return True
+            
+    return False
+    
+def isvectorColumn_(a):
+    if ndims_(a)==2:
+        if a.shape[0]>=1 and a.shape[1]==1:
+            return True
+            
+    return False
                           
 def isscalar_(a):
     """np.isscalar returns True if a.__class__ is a scalar
@@ -833,6 +786,10 @@ def zeros_(*args,**kwargs):
     """
     if not args:
         return 0.0
+#    else:
+#        for i,arg in enumerate(args):
+#            if (np.asanyarray(arg)<0).any():
+#                return matlabarray([])
     if len(args) == 1:
         if numel_(args)==1:
             args += args
