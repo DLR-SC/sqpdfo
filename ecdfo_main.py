@@ -41,7 +41,7 @@ from numpy import inf
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
 from ecdfo_iter_printout import ecdfo_iter_printout_
-from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_
+from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_, set_Threshold
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
 from bcdfo_augment_Y import bcdfo_augment_Y_
 from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
@@ -52,16 +52,17 @@ from ecdfo_computeHessian import ecdfo_computeHessian_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
+from bcdfo_include_in_Y import bcdfo_include_in_Y_
 #from ecdfo_func import get_prob
 #except ImportError:
     #from smop.runtime import *
 
 def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit=None,i_xbest=None,lb=None,ub=None,m=None,X=None,fX=None,ciX=None,ceX=None,ind_Y=None,QZ=None,RZ=None,delta=None,cur_degree=None,neval=None,maxeval=None,maxit=None,fcmodel=None,gx=None,normgx=None,show_errg=None,pquad=None,pdiag=None,plin=None,stallfact=None,eps_rho=None,Deltamax=None,rep_degree=None,epsilon=None,verbose=None,eta1=None,eta2=None,gamma1=None,gamma2=None,gamma3=None,interpol_TR=None,factor_CV=None,Lambda_XN=None,Lambda_CP=None,factor_FPU=None,factor_FPR=None,Lambda_FP=None,criterion_S=None,criterion_FP=None,criterion_CP=None,mu=None,theta=None,eps_TR=None,eps_L=None,lSolver=None,stratLam=None,eps_current=None,vstatus=None,xstatus=None,sstatus=None,dstatus=None,ndummyY=None,sspace_save=None,xspace_save=None,xfix=None,fxmax=None,poised_model=None,M=None,kappa_ill=None,kappa_th=None,eps_bnd=None,poised=None,Y_radius=None,c=None,level=None,whichmodel=None,hardcons=None,noisy=None,scaleX=None,scalefacX=None,CNTsin=None,shrink_Delta=None,scale=None,shift_Y=None,info=None,options=None,values=None,*args,**kwargs):
-    varargin = cellarray(args)
-    nargin = 89-[func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,level,whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values].count(None)+len(args)
+#    varargin = cellarray(args)
+#    nargin = 89-[func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,level,whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values].count(None)+len(args)
 
     old_delta=copy_(delta)
-    sigma=1
+    sigma=matlabarray([[1]])
     rho_factor=0.3
     tau1=copy_(gamma2)
     tau2=copy_(gamma3)
@@ -100,7 +101,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             info.flag=values.stop_on_max_iter
             ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-        if info.nsimul(2) >= options.msimul:
+        if info.nsimul[2] >= options.msimul:
             info.flag=values.stop_on_max_simul
             ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
@@ -125,7 +126,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 fprintf_(options.fout,char('  feasibility     = %12.5e\\n'),info.feasn)
             else:
                 fprintf_(options.fout,char(' |grad f| = %12.5e\\n'),info.glagn)
-        if ((info.glagn <= options.tol(1)) and (info.feasn <= options.tol(2)) and (info.compl <= options.tol(3))) or delta <= epsilon * 1e-05 or (pred == - 1.0):
+        if ((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3])) or delta <= epsilon * 1e-05 or (pred == - 1.0):
             augment=rep_degree - cur_degree
             if (augment <= 0):
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
@@ -133,7 +134,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
                     disp_([char('error on gradient before set improvement = '),num2str_(errg)])
-                if ((((info.glagn <= options.tol(1)) and (info.feasn <= options.tol(2)) and (info.compl <= options.tol(3)) and errg <= epsilon) or delta <= epsilon * 1e-05) and strcmp_(level,char('toplevel'))):
+                if ((((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3]) and errg <= epsilon) or delta <= epsilon * 1e-05) and strcmp_(level,char('toplevel'))):
                     info.niter=info.niter + 1
                     itype=char('conv')
                     ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -198,15 +199,15 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 if me > 0:
                     ceY[:,j]=info.ce.T
                 poised_model=0
-                if (strcmp_(msg[1:5],char('Error'))):
+                if (strcmp_(msg,char('Error'))):
                     if (strcmp_(level,char('toplevel'))):
                         disp_(msg)
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             i_xold=copy_(i_xbest)
             x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info=ecdfo_find_smallf_(c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,lb,ub,fx,dstatus,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,sigma,info,nargout=12)
-            fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
             gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-            normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+            normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
             if mi > 0:
                 gci=zeros_(mi,n)
                 for i in arange_(1,mi).reshape(-1):
@@ -239,7 +240,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
                 disp_([char('error on gradient after set improvement = '),num2str_(errg)])
-            if ((info.glagn / factor_CV <= options.tol(1)) and (info.feasn / factor_CV <= options.tol(2)) and (info.compl / factor_CV <= options.tol(3)) and errg <= epsilon and cur_degree >= rep_degree and strcmp_(level,char('toplevel'))):
+            if ((info.glagn / factor_CV <= options.tol[1]) and (info.feasn / factor_CV <= options.tol[2]) and (info.compl / factor_CV <= options.tol[3]) and errg <= epsilon and cur_degree >= rep_degree and strcmp_(level,char('toplevel'))):
                 info.niter=info.niter + 1
                 itype=char('conv')
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -248,13 +249,13 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             if options.verbose >= 3:
                 disp_(char('not converged after improvement of interpolation set'))
             delta=copy_(radius)
-        if radius_has_been_rejected == false:
+        if radius_has_been_rejected == matlabarray([false]):
             f0=info.f
             ce0=info.ce
             ce0n=norm_(ce0)
             merit0=f0 + sigma * ce0n
-            prec_r=options.tol(2) / 10
-            prec_t=options.tol(1) / 10
+            prec_r=options.tol[2] / 10
+            prec_t=options.tol[1] / 10
             if options.verbose >= 5:
                 fprintf_(options.fout,char('\\nStep computation: merit = %12.5e\\n'),merit0)
             if options.verbose == 4:
@@ -274,7 +275,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
             fprintf_(options.fout,char('  Full step:\\n    |s| = %8.2e\\n'),norms)
         qcost=info.g.T * s + 0.5 * (s.T * M * s)
         if rpred == 0:
-            sigmab=0
+            sigmab=matlabarray([0.0])
         else:
             sigmab=qcost / ((1 - rho_factor) * rpred)
         if sigma < sigmab:
@@ -370,9 +371,9 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                     if (not shift_Y):
                         x=Y[:,1]
                     poised_model=0
-                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel[1,:],ind_Y,i_xold,m,gx,scale,shift_Y)
+                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel[1,:],ind_Y,i_xold,m,gx,scale,shift_Y)
                     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-                    normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+                    normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                     if mi > 0:
                         gci=zeros_(mi,n)
                         for i in arange_(1,mi).reshape(-1):
@@ -545,9 +546,9 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                                 else:
                                     if (shrink_Delta == 1 and delta > epsilon):
                                         delta=gamma2 * delta
-                                fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                                fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
                                 gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-                                normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+                                normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                                 if mi > 0:
                                     gci=zeros_(mi,n)
                                     for i in arange_(1,mi).reshape(-1):
