@@ -139,7 +139,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                     itype=char('conv')
                     ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
                     info.flag=values.success
-                    msg=matlabarray([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
+                    msg='Convergence in '+int2str_(neval)+' evaluations of the objective function.'
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 else:
                     info.niter=info.niter + 1
@@ -244,7 +244,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 info.niter=info.niter + 1
                 itype=char('conv')
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
-                msg=matlabarray([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
+                msg='Convergence in '+int2str_(neval)+' evaluations of the objective function.'
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             if options.verbose >= 3:
                 disp_(char('not converged after improvement of interpolation set'))
@@ -575,7 +575,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                                     disp_([char('************************************* Trust-region'),char(' radius small *********************************')])
                                 else:
                                     disp_([char('******************************** Trust-region'),char(' radius small ****************************')])
-                            msg=matlabarray([char('Algorithm stopped after '),int2str_(neval),char(' evaluations of the objective function because Delta small.')])
+                            msg='Algorithm stopped after '+int2str_(neval)+' evaluations of the objective function because Delta small.'
                             info.flag=values.stop_on_small_trust_region
                             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 info.ce=ce0
