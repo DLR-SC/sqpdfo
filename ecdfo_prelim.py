@@ -261,31 +261,31 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         else:
             if (strcmp_(initial_Y,char('simplx'))):
                 I=eye_(n)
-                if columns_(Y) <= 1:								
-                    Y = x0								
+                if isempty_(Y):								
+                    Y = copy_(x0)								
                 else:
                     Y[:,1]=x0
 #                    Y[:,1]=x0.T
                 for j in arange_(1,n).reshape(-1):
                     step1=- Delta0
-                    if columns_(Y) <= j+1:
-                        Y=concatenate_([Y,x0 + step1 * I[:,j]],axis=1)
+                    if isempty_(Y):
+                        Y=x0 + step1 * I[:,j]
                     else:
-                        Y[:,j + 1]=(x0 + step1 * I[:,j])
+                        Y[:,j + 1]=x0 + step1 * I[:,j]
                     if (cur_degree >= pdiag):
                         step2=copy_(Delta0)
-                        if columns_(Y)<=j+1+n:
-                            Y[:,j + 1 + n]=x0 + step2 * I[:,j]
+                        if isempty_(Y):
+                            Y=x0 + step2 * I[:,j]
                         else:
-                            Y=concatenate_([Y,x0 + step2 * I[:,j]],axis=1)
+                            Y[:,j + 1 + n]=x0 + step2 * I[:,j]
                 if (cur_degree == pquad):
                     k=2 * n + 2
                     for j in arange_(1,n).reshape(-1):
                         for jj in arange_(j + 1,n).reshape(-1):
-                            if columns_(Y)<=k:
-                                Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
+                            if isempty_(Y):
+                                Y=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
                             else:
-                                Y=concatenate_([Y,0.5 * (Y[:,j + 1] + Y[:,jj + 1])],axis=1)
+                                Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
                             k=k + 1
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)

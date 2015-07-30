@@ -120,9 +120,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         info.f=fvalue
     else:
         if isempty_(X):
-            X=y
-        elif columns_(X) <= m:								
-            X = concatenate_([X, y], axis=1)								
+            X=copy_(y)
         else:
             X[:,m]=y
         info.nsimul[2]=info.nsimul[2] + 1
@@ -161,18 +159,14 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
     fX[m]=min_(fxmax,real_(fvalue))
     if not isempty_(info.ci):
         if isempty_(ciX):
-            ciX=real_(info.ci)
-        elif columns_(ciX) <= m:								
-            ciX = concatenate_([ciX, real_(info.ci)], axis=1)								
+            ciX=real_(info.ci)							
         else:
             ciX[:,m]=real_(info.ci)
 #        ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
 #        ceX[:,m]=real_(info.ce.T)
         if isempty_(ceX):
-            ceX=real_(info.ce)
-        elif columns_(ceX) <= m:								
-            ceX = concatenate_([ceX, real_(info.ce)], axis=1)								
+            ceX=real_(info.ce)						
         else:
             ceX[:,m]=real_(info.ce)
 

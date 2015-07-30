@@ -32,11 +32,10 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 
 -Matlab code X(:,m)=y where y is a column vector is translated by X[:,m]=y is OK only if columns_(X) <= M and if X is not the empty matrix. Otherwise, when not sure (in almost every case), we replace that by the following code :
 		if isempty_(X):
-		   X=y
-		#elif columns_(X) <= m:						NORMALLY THESE 2 LINES (WITH #) ARE NOT NEEDED ANYMORE, DUE TO RUNTIME MODIFICATION		
-           #X = concatenate_([X, y], axis=1)								
+		   X=copy_(y) #Note that the copy_ is obligatory, unless y is not a variable but a result of a function (sum, multiplication like y+z or z*y for instance)							
         else:
-            X[:,m]=y				
+            X[:,m]=y
+			
 -Logicals operators from matlab & and | have to be replaced by logical_and_ and logical_or_.
 	For instance find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1)) has to be replaced by find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))
 	
