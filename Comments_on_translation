@@ -33,12 +33,10 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 -Matlab code X(:,m)=y where y is a column vector is translated by X[:,m]=y is OK only if columns_(X) <= M and if X is not the empty matrix. Otherwise, when not sure (in almost every case), we replace that by the following code :
 		if isempty_(X):
 		   X=y
-		elif columns_(X) <= m:								
-           X = concatenate_([X, y], axis=1)								
+		#elif columns_(X) <= m:						NORMALLY THESE 2 LINES (WITH #) ARE NOT NEEDED ANYMORE, DUE TO RUNTIME MODIFICATION		
+           #X = concatenate_([X, y], axis=1)								
         else:
-            X[:,m]=y	
-		#WARNING : y has to be a column vector !
-			
+            X[:,m]=y				
 -Logicals operators from matlab & and | have to be replaced by logical_and_ and logical_or_.
 	For instance find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1)) has to be replaced by find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))
 	
@@ -62,14 +60,14 @@ In this case, we would not want Y to be modified during the call. Therefore Y ha
 	-roots function from matlab has to be handled in python like in the following example :
 	   root  = roots([norm(V(:,imu))^2 2*V(:,imu)'*scri nscri^2-Delta^2]);
 	   s     = scri + root(1)*V(:,imu);
-	  IS TRANSLATED IN PYTHON BY :
+	  SHOULD BE TRANSLATED IN PYTHON BY :
 		p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
 		root=max(p2.r) #CAREFUL, p2.r is an ARRAY and not a MATLABARRAY, therefore we use max from numpy and not max_ from runtime
 		s=scri + root * V[:,imu]
 		
 	-sort function from matlab has to be handled in python like in the following example :
 	    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
-		IS TRANSLATED IN PYTHON BY :
+		SHOULD BE IN PYTHON BY :
 		dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
 		jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])
  
