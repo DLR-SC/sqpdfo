@@ -69,7 +69,7 @@ In this case, we would not want Y to be modified during the call. Therefore Y ha
 	    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
 		SHOULD BE IN PYTHON BY :
 		dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
-		jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])
+		jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])+1 #NOTE THAT THE +1 IS IMPORTANT SINCE WE ARE DEALING WITH INDICES OF MATLABARRAY !
  
 PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
 

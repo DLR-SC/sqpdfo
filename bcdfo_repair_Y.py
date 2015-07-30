@@ -35,7 +35,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         d[j]=norm_(Y[:,j] - Y[:,1])
 #    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
     dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
-    jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])
+    jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])+1
     if (verbose):
         d
         dsorted
