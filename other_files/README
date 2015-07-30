@@ -13,3 +13,4 @@ ecdfo_solve_TR_bc_dave is apparently Dave's older version of ecdfo_solve_TR_bc i
 matrix_algebra contains some linear algebra functions but I am not sured where it is used
 runtime_old_with_comments is a copy of runtime dated from 17.07.15 which has a lot of things commented in it that makes the code harder to read and which are not necessarily very important. Therefore comments are saved here, and
 in the main runtime there are only main comments.
+3 files starting with var* are matlabfiles (.mat) containing matlab variables to compare test in matlab and in python, because writing variables by hand is not easy and therefore if needed, executing test in matlab will be easier.
