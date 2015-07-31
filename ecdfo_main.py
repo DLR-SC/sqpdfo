@@ -41,7 +41,7 @@ from numpy import inf
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
 from ecdfo_iter_printout import ecdfo_iter_printout_
-from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_, set_Threshold
+from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
 from bcdfo_augment_Y import bcdfo_augment_Y_
 from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
@@ -53,7 +53,6 @@ from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
-#from ecdfo_func import get_prob
 #except ImportError:
     #from smop.runtime import *
 
@@ -426,7 +425,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                     poised_model=0
                     fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
                     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-                    normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+                    normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                     if mi > 0:
                         gci=zeros_(mi,n)
                         for i in arange_(1,mi).reshape(-1):
@@ -493,7 +492,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                                     delta=gamma2 * delta
                             fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
                             gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-                            normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+                            normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                             if mi > 0:
                                 gci=zeros_(mi,n)
                                 for i in arange_(1,mi).reshape(-1):

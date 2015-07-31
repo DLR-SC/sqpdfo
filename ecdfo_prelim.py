@@ -328,7 +328,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     rhsY=concatenate_([fY,ciY,ceY], axis=0)
     fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
-    normgx=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
+    normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
     if any_(size_(gx) != [n,1]):
         if options.verbose:
             fprintf_(options.fout,char('### ecdfo: the computed gradient g has a wrong size, (%0i,%0i) instead of (%0i,1)\\n\\n'),size_(gx),n)
