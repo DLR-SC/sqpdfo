@@ -38,6 +38,7 @@ import unittest
 from ecdfo_func import *
 #import numpy as np
 #import helper
+from ecdfo_global_variables import set_prob
 
 
 class Test_ecdfo_func(unittest.TestCase):

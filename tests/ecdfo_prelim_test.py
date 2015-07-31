@@ -541,6 +541,7 @@ from ecdfo_prelim import *
 from evalfgh import *
 import numpy as np
 import helper
+from ecdfo_global_variables import set_prob
 
 class myDummyOptions():
     def __init__(self):

@@ -318,6 +318,7 @@ from ecdfo_solve_TR_bc import *
 from evalfgh import evalfgh_
 #import numpy as np
 import helper
+from ecdfo_global_variables import set_threshold
 
 class dummyInfo():
     def __init__(self):
@@ -372,7 +373,7 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         """
             This is a test with some values and compared with matlab results.
         """
-        set_Threshold(1.000000000000000e-08)
+        set_threshold(1.000000000000000e-08)
         xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
         self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
         self.options,self.values,self.radius_has_been_rejected,self.lm,

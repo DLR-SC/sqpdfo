@@ -850,8 +850,11 @@ import unittest
 from evalfgh import evalfgh_
 from runtime import matlabarray
 from ecdfo_main import *
+from ecdfo_global_variables import set_prob, set_threshold
 import numpy as np
 import helper
+
+
 
 class dummyInfo():
     def __init__(self):        
@@ -904,7 +907,9 @@ class Test_ecdfo_main(unittest.TestCase):
     """
     def setUp(self):
         
-        set_Threshold(1.000000000000000e-08)
+        set_threshold(1.000000000000000e-08)
+        set_prob(3)        
+
         self.func = evalfgh_
         self.n = 3
         self.nb = 2
@@ -1065,6 +1070,7 @@ class Test_ecdfo_main(unittest.TestCase):
         
         self.abs_tol=1e-5
         self.rel_tol=1e-5
+
 
     def test_ecdfo_main(self):
              

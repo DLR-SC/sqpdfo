@@ -25,21 +25,26 @@ Created on Tue Dec 02 17:30:25 2014
 #from __future__ import division
 #try:
 from runtime import *
+from ecdfo_init_prob import ecdfo_init_prob_
+#from ecdfo import ecdfo_
 #except ImportError:
 #from smop.runtime import *
 
-clear(char('all'))
-close(char('all'))
-_format(char('long'))
+
+#clear(char('all'))
+#close(char('all'))
+#_format(char('long'))
 global n,nb,mi,me,prob,threshold
-prob=4
-x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob(prob,nargout=13)
+set_prob(3)
+x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+lb=matlabarray([])
+ub=matlabarray([])
 lb[arange_(1,n)]=lx
 ub[arange_(1,n)]=ux
 if mi:
     lb[arange_(n + 1,n + mi)]=li
     ub[arange_(n + 1,n + mi)]=ui
-threshold=1e-08
+set_threshold(1e-08)
 options.algo_method=char('quasi-Newton')
 options.algo_globalization=char('trust regions')
 options.hess_approx=char('model')
@@ -55,5 +60,37 @@ options.miter=500
 options.msimul=500
 options.verbose=2
 lm=[]
-x,lm,info=ecdfo(evalfgh,x,lm,lb,ub,options,nargout=3)
+x,lm,info=ecdfo_(evalfgh,x,lm,lb,ub,options,nargout=3)
 x
+
+
+
+#clear(char('all'))
+#close(char('all'))
+#_format(char('long'))
+#global n,nb,mi,me,prob,threshold
+#prob=4
+#x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob(prob,nargout=13)
+#lb[arange_(1,n)]=lx
+#ub[arange_(1,n)]=ux
+#if mi:
+#    lb[arange_(n + 1,n + mi)]=li
+#    ub[arange_(n + 1,n + mi)]=ui
+#threshold=1e-08
+#options.algo_method=char('quasi-Newton')
+#options.algo_globalization=char('trust regions')
+#options.hess_approx=char('model')
+#options.bfgs_restart=0
+#options.algo_descent=char('Powell')
+#if nb + mi + me == 0:
+#    options.algo_descent=char('Wolfe')
+#options.tol[1]=1e-05
+#options.tol[2]=1e-05
+#options.tol[3]=1e-05
+#options.dxmin=dxmin
+#options.miter=500
+#options.msimul=500
+#options.verbose=2
+#lm=[]
+#x,lm,info=ecdfo(evalfgh,x,lm,lb,ub,options,nargout=3)
+#x

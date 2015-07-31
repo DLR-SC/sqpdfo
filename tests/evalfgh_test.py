@@ -49,6 +49,7 @@ sys.path.append("../")
 import unittest
 from evalfgh import *
 from ecdfo_func import *
+from ecdfo_global_variables import set_prob
 #import numpy as np
 #import helper
 

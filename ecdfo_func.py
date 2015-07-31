@@ -16,18 +16,13 @@ from __future__ import division
 from runtime import *
 #except ImportError:
 #    from smop.runtime import *
-
-prob = 3
-
-def set_prob(val):
-    global prob
-    prob = val
+from ecdfo_global_variables import get_prob
   
 def ecdfo_func_(x=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 1-[x].count(None)+len(args)
 
-    global prob
+    prob=get_prob()
     msg=matlabarray([])
     f=matlabarray([])
     ci=matlabarray([])

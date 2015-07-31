@@ -69,10 +69,7 @@ from ecdfo_check_convex import *
 from sqplab_lsmult import *
 from sqplab_tcg import *
 from copy import copy
-
-def set_Threshold(val):
-    global threshold
-    threshold = val
+from ecdfo_global_variables import get_threshold
 
 def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me=None,M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,radius_has_been_rejected=None,lm_=None,ceY=None,ciY=None,gx=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -86,7 +83,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     info=copy(info_)
     lm=copy_(lm_)
 
-    global threshold
+    threshold=get_threshold()
     lm_computed=0
     n=length_(x)
     I=eye_(n)
