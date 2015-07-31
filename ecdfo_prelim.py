@@ -364,12 +364,12 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    fprintf_(char('*                                                                                    *\\n'))
 #    fprintf_(char('**************************************************************************************\\n'))
 #    fprintf_(char('\\n'))
-#    values.dline=char('-------------------------------------------')
-#    values.dline=strcat_(values.dline,values.dline)
-#    values.eline=char('===========================================')
-#    values.eline=strcat_(values.eline,values.eline)
-#    values.sline=char('*******************************************')
-#    values.sline=strcat_(values.sline,values.sline)
+    values.dline=char('-------------------------------------------')
+    values.dline=strcat_(values.dline,values.dline)
+    values.eline=char('===========================================')
+    values.eline=strcat_(values.eline,values.eline)
+    values.sline=char('*******************************************')
+    values.sline=strcat_(values.sline,values.sline)
 #    if options.verbose < 4:
 #        fprintf_(options.fout,char('iter neval        fval            merit      '))
 #        if (nb + mi + me > 0):
