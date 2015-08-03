@@ -24,9 +24,12 @@ Created on Tue Dec 02 17:30:25 2014
 
 #from __future__ import division
 #try:
+import helper
 from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
-#from ecdfo import ecdfo_
+from ecdfo_global_variables import set_prob, set_threshold,get_prob
+from ecdfo import ecdfo_
+from evalfgh import evalfgh_
 #except ImportError:
 #from smop.runtime import *
 
@@ -34,11 +37,16 @@ from ecdfo_init_prob import ecdfo_init_prob_
 #clear(char('all'))
 #close(char('all'))
 #_format(char('long'))
-global n,nb,mi,me,prob,threshold
+#global n,nb,mi,me,prob,threshold
+
 set_prob(3)
+prob=get_prob()
+options = helper.dummyUnionStruct()
+options.tol=matlabarray([])
+
 x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
-lb=matlabarray([])
-ub=matlabarray([])
+lb=zeros_(1,n)
+ub=zeros_(1,n)
 lb[arange_(1,n)]=lx
 ub[arange_(1,n)]=ux
 if mi:
@@ -59,9 +67,9 @@ options.dxmin=dxmin
 options.miter=500
 options.msimul=500
 options.verbose=2
-lm=[]
-x,lm,info=ecdfo_(evalfgh,x,lm,lb,ub,options,nargout=3)
-x
+lm=matlabarray([])
+x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+print x
 
 
 
