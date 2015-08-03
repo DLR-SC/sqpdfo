@@ -16,91 +16,24 @@ class Test_runtime(unittest.TestCase):
     def setUp(self):
         pass
 
-#    def test_runtime_boolean_indexing1(self):
-#        B2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-#        indfree2 = matlabarray([[0,1,2], [3,4,5],[6, 7,8]])
-#        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
-#        ilb2 = matlabarray([[False, False, False], [False, False, False], [False, False, False]])
-#
-#
-#        print "B2\n", B2
-#        print "indfree2\n", indfree2
-#        print "ilb2\n", ilb2
-#
-#
-#        ret = indfree2[ilb2]
-#        print "indfree2[ilb2]\n", ret
-#        
-#        B2[ilb2] = indfree2[ilb2]
-#        
-#        print "B2\n", B2
-#        
-#        
-#    def test_runtime_boolean_indexing2(self):
-#        B2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-#        indfree2 = matlabarray([[0,1,2], [3,4,5],[6, 7,8]])
-#        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
-#        ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
-#
-#
-#        print "B2\n", B2
-#        print "indfree2\n", indfree2
-#        print "ilb2\n", ilb2
-#
-#
-#        ret = indfree2[ilb2]
-#        print "indfree2[ilb2]\n", ret
-#        
-#        B2[ilb2] = indfree2[ilb2]
-#        
-#        print "B2\n", B2
-#        
-#    def test_runtime_boolean_indexing3(self):
-#        B2 = matlabarray([[10, 11, 12, 13, 14, 15, 16, 17, 18]]).T
-#        indfree2 = matlabarray([[0,1,2, 3,4,5, 6, 7,8]]).T
-#        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
-#        ilb2 = matlabarray([[False, True, False, True, True, True, False, True, False]]).T
-#
-#
-#        print "B2\n", B2
-#        print "indfree2\n", indfree2
-#        print "ilb2\n", ilb2
-#
-#
-#        ret = indfree2[ilb2]
-#        print "indfree2[ilb2]\n", ret
-#        
-#        B2[ilb2] = indfree2[ilb2]
-#        
-#        print "B2\n", B2
-#
-#    def test_runtime_boolean_indexing4(self):
-#        lbounds = matlabarray([[-np.inf, -np.inf, -np.inf]]).T
-#        ilb = matlabarray([[False, True, False]]).T
-#        lb = matlabarray([[-0.5, 0.0, -np.inf]]).T
-#        indfree = matlabarray([[1,2,3]]).T
-#
-#        print "lbounds\n", lbounds
-#        print "ilb\n", ilb
-#        print "lb\n", lb
-#        print "indfree\n", indfree
-#
-#        lbounds[ilb]=lb[indfree[ilb]]
-#
+    def test_runtime_isvector_(self):
+          M = matlabarray([[10, 11, 12]])
+          M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+          M3 = matlabarray([[10],[15], [18]])
+          self.assertTrue(isvector_(M))
+          self.assertFalse(isvector_(M2))
+          self.assertTrue(isvector_(M3))
 #        print "lboundsafter\n", lbounds
+
+    #Thoses commented tests were just to see if the functions computed solutions like we want : eig_ and diag_ normally work
+#like the equivalent matlab functions
 
 #    def test_runtime_eig_(self):
 #           M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
 #           print "eigenvalues of M : \n", eig_(M)
 #           print "eigenvalues and eigenvectors of M : \n", eig_(M,2)
 #           
-#    def test_runtime_isvector_(self):
-#          M = matlabarray([[10, 11, 12]])
-#          M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
-#          M3 = matlabarray([[10],[15], [18]])
-#          self.assertTrue(isvector_(M))
-#          self.assertFalse(isvector_(M2))
-#          self.assertTrue(isvector_(M3))
+
 #          
 #    def test_runtime_diag_(self):
 #          M = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
@@ -113,6 +46,87 @@ class Test_runtime(unittest.TestCase):
 #          
           
           #EXAMPLES OF UTILISATION OF MATLABARRAYS IN PYTHON :
+
+    def test_runtime_boolean_indexing1(self):
+        B2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        indfree2 = matlabarray([[0,1,2], [3,4,5],[6, 7,8]])
+        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
+        ilb2 = matlabarray([[False, False, False], [False, False, False], [False, False, False]])
+
+#
+#        print "B2\n", B2
+#        print "indfree2\n", indfree2
+#        print "ilb2\n", ilb2
+#
+#
+        ret = indfree2[ilb2]
+#        print "indfree2[ilb2]\n", ret
+        self.assertTrue(isempty_(ret))
+
+        B2[ilb2] = indfree2[ilb2]
+        self.assertTrue(isequal_(B2,matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])))
+
+#        print "B2\n", B2
+#        
+#        
+    def test_runtime_boolean_indexing2(self):
+        B2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        indfree2 = matlabarray([[0,1,2], [3,4,5],[6, 7,8]])
+        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
+        ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
+
+
+#        print "B2\n", B2
+#        print "indfree2\n", indfree2
+#        print "ilb2\n", ilb2
+#
+
+        ret = indfree2[ilb2]
+#        print "indfree2[ilb2]\n", ret
+        self.assertTrue(isequal_(ret,matlabarray([[0,2,6,8]])))
+
+        B2[ilb2] = indfree2[ilb2]
+        self.assertTrue(isequal_(B2,matlabarray([[0, 11, 2],[13, 14, 15], [6, 17, 8]])))
+
+#        print "B2\n", B2
+#        
+    def test_runtime_boolean_indexing3(self):
+        B2 = matlabarray([[10, 11, 12, 13, 14, 15, 16, 17, 18]]).T
+        indfree2 = matlabarray([[0,1,2, 3,4,5, 6, 7,8]]).T
+        #ilb2 = matlabarray([[True, False, True], [False, False, False], [True, False, True]])
+        ilb2 = matlabarray([[False, True, False, True, True, True, False, True, False]]).T
+
+
+#        print "B2\n", B2
+#        print "indfree2\n", indfree2
+#        print "ilb2\n", ilb2
+
+
+        ret = indfree2[ilb2]
+        self.assertTrue(isequal_(ret,matlabarray([[1],[3],[4],[5],[7]])))
+
+#        print "indfree2[ilb2]\n", ret
+        
+        B2[ilb2] = indfree2[ilb2]
+        self.assertTrue(isequal_(B2,matlabarray([[10, 1, 12, 3, 4, 5, 16, 7, 18]]).T))
+
+#        print "B2\n", B2
+#
+    def test_runtime_boolean_indexing4(self):
+        lbounds = matlabarray([[-np.inf, -np.inf, -np.inf]]).T
+        ilb = matlabarray([[False, True, False]]).T
+        lb = matlabarray([[-0.5, 0.0, -np.inf]]).T
+        indfree = matlabarray([[1,2,3]]).T
+
+#        print "lbounds\n", lbounds
+#        print "ilb\n", ilb
+#        print "lb\n", lb
+#        print "indfree\n", indfree
+
+        lbounds[ilb]=lb[indfree[ilb]]
+        self.assertTrue(isequal_(lbounds,[[-np.inf], [0.0], [-np.inf]]))
+
+
           
     def test010(self):
         """Two-dimensional assignment to []"""
@@ -156,23 +170,23 @@ class Test_runtime(unittest.TestCase):
 #            self.assertTrue(isequal_(a, [[123],
 #                                         [123],
 #                                         [123]]))
-    @unittest.skip("wonders of matlab")
-    def test050(self):
-        """
-        Compare to test060
-        octave> a=[]
-        a = []
-        octave> a(:,:)=99
-        a =  99
-        octave> a
-        a =  99
-        octave> size(a)
-        ans =
-        1   1
-        """
-        a = matlabarray()
-        a[:,:] = 99
-        self.assertTrue(isequal_(a.item(0), 99))
+#    @unittest.skip("wonders of matlab")
+#    def test050(self):
+#        """
+#        Compare to test060
+#        octave> a=[]
+#        a = []
+#        octave> a(:,:)=99
+#        a =  99
+#        octave> a
+#        a =  99
+#        octave> size(a)
+#        ans =
+#        1   1
+#        """
+#        a = matlabarray()
+#        a[:,:] = 99
+#        self.assertTrue(isequal_(a.item(0), 99))
 
     def test060(self):
         """One-dimensional assignment to empty array
@@ -224,23 +238,23 @@ class Test_runtime(unittest.TestCase):
         a[1:a.shape[0]] = 9
         self.assertTrue(isempty_(a))
 
-    @unittest.skip("wonders of matlab")
-    def test080(self):
-        """
-        octave> a=[]
-        a = []
-        octave> a(1:end,5) = 5
-        a = [](0x5)        % notice 0x5
-        """
+#    @unittest.skip("wonders of matlab")
+#    def test080(self):
+#        """
+#        octave> a=[]
+#        a = []
+#        octave> a(1:end,5) = 5
+#        a = [](0x5)        % notice 0x5
+#        """
 
-    def test084(self):
-        """
-        octave> a=[]
-        a = []
-        octave> a(:,5) = 5
-        a =
-        0   0   0   0   5
-        """
+#    def test084(self):
+#        """
+#        octave> a=[]
+#        a = []
+#        octave> a(:,5) = 5
+#        a =
+#        0   0   0   0   5
+#        """
 
     def test090(self):
         a = matlabarray([[11,22,33]])
@@ -275,9 +289,9 @@ class Test_runtime(unittest.TestCase):
                                     [0,0,0,0]]))
                                     
     def test_indexing(self):
-        """Here are good examples of working indexing, for getting values or setting values
+        """Here are some more good examples of working indexing, for getting values or setting values
         Theses examples are certainly not exhaustive, but they helped me debug a lot and more may be
-        coming in the future, if more bugs are to be found"""
+        coming in the future, if more bugs are to be found. Also, previous tests are also important"""
 
 
 
@@ -307,6 +321,8 @@ class Test_runtime(unittest.TestCase):
         M[1,3]=12
         self.assertTrue(isequal_(M[1,3],[[12]]))
 #        
+        
+        #EXAMPLES WITH VECTORS
         V=matlabarray([[2,3,4,5]])
         self.assertTrue(isequal_(V[1:3],[[2,3,4]]))
         self.assertTrue(isequal_(V[:],[[2],[3],[4],[5]])) #same result in matlab
@@ -320,6 +336,16 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(V[ind],[[2],[3],[4]]))
         self.assertTrue(isequal_(V[ind.T],[[2],[3],[4]]))
 
+
+        ind=matlabarray([[True,False,True,False]])
+        V=matlabarray([[2,3,4,5]])
+        self.assertTrue(isequal_(V[ind],[[2,4]]))
+        self.assertTrue(isequal_(V[ind.T],[[2,4]]))
+
+        ind=matlabarray([[True,False,True,False]])
+        V=matlabarray([[2,3,4,5]]).T
+        self.assertTrue(isequal_(V[ind],[[2],[4]]))
+        self.assertTrue(isequal_(V[ind.T],[[2],[4]]))
 
 #EXAMPLES OF SETTING VALUES    
 
@@ -476,6 +502,36 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(V2, [[8],[9],[10],[5]]))
         self.assertTrue(isequal_(V3, [[8],[9],[10],[11]]))
         self.assertTrue(isequal_(V4, [[30],[3],[4],[5]]))
+        
+        ind=matlabarray([[True,False,True,False]]).T
+        V=matlabarray([[2,3,4,5]]).T
+        V2=matlabarray([[2,3,4,5]]).T
+        V3=matlabarray([[2,3,4,5]]).T
+        V4=matlabarray([[2,3,4,5]]).T
+        V[ind]=matlabarray([[8,9]])
+        V2[ind]=matlabarray([[8,9]]).T
+        V3[ind.T]=matlabarray([[8,9]])
+        V4[ind.T]=matlabarray([[8,9]]).T
+        self.assertTrue(isequal_(V, [[8],[3],[9],[5]]))
+        self.assertTrue(isequal_(V2, [[8],[3],[9],[5]]))
+        self.assertTrue(isequal_(V3, [[8],[3],[9],[5]]))
+        self.assertTrue(isequal_(V4, [[8],[3],[9],[5]]))
+        
+        ind=matlabarray([[True,False,True,False]]).T
+        V=matlabarray([[2,3,4,5]])
+        V2=matlabarray([[2,3,4,5]])
+        V3=matlabarray([[2,3,4,5]])
+        V4=matlabarray([[2,3,4,5]])
+        V[ind]=matlabarray([[8,9]])
+        V2[ind]=matlabarray([[8,9]]).T
+        V3[ind.T]=matlabarray([[8,9]])
+        V4[ind.T]=matlabarray([[8,9]]).T
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+
+
 
                 
         

@@ -204,14 +204,27 @@ class matlabarray(np.ndarray):
 
         if type(index) is matlabarray:
             
+
             #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
 #            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
             if self.shape == index.shape and  np.logical_or(index == 0, index == 1).all() :
                 try:
-                    return matlabarray([np.ndarray.__getitem__(self.T, np.asarray(index.T))]).T
+                    if isvectorColumn_(self):
+                        return matlabarray([np.ndarray.__getitem__(self, index)]).T
+                    else:
+                        return matlabarray([np.ndarray.__getitem__(self, index)])
                 except:
                     pass
-#         
+            #Same case as above but when self and index are vectors and one is row and the other is column
+            elif self.shape == (index.T).shape and  np.logical_or(index == 0, index == 1).all():
+                try:
+                    if isvectorColumn_(self):
+                        return matlabarray([np.ndarray.__getitem__(self, index.T)]).T
+                    else:
+                        return matlabarray([np.ndarray.__getitem__(self, index.T)])
+                except:
+                    pass
+                    
             #special case V[M] where M is a matrix and V is a vertical vector.
             elif isvectorColumn_(self):
                     return matlabarray(self.get(index)).T
@@ -278,8 +291,7 @@ class matlabarray(np.ndarray):
 
         #This way we only have to deal with the case where value is a row vector, when it is a vector.
         if type(value) is matlabarray:
-            if isvectorColumn_(value):
-                value=value.reshape(-1)
+            value=value.reshape(-1)
 
         if type(index) is matlabarray:
             #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
@@ -291,11 +303,21 @@ class matlabarray(np.ndarray):
                     else:
 #                      print "np.asarray(value.T)", np.asarray(value.T)[0]
                         try:
-                            np.asarray(self.T).__setitem__(np.asarray(index.T), np.asarray(value.T)[0]) 
+                            np.asarray(self).__setitem__(index, value) 
                             return
                         except:
                             pass                                                                        
-                                                                                                    
+        #Same case as above but when self and index are vectors and one is row and the other is column
+            elif self.shape == (index.T).shape and  np.logical_or(index == 0, index == 1).all():
+                 if isempty_(value):
+#               print "Isempty"
+                     pass
+                 else:
+                     try:
+                         np.asarray(self).__setitem__(index.T, value) 
+                         return
+                     except:
+                         pass                                                                                     
 
                                                                                                 
                                                                                                 
