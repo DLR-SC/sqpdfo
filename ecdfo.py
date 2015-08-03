@@ -12,66 +12,41 @@ from __future__ import division
 import helper
 import numpy as np
 from ecdfo_main import ecdfo_main_
-
+from ecdfo_global_variables import get_prob
 from ecdfo_prelim import ecdfo_prelim_
-
+from ecdfo_finish import ecdfo_finish_
 try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
 
 
-clear(char('all'))
-close(char('all'))
-_format(char('long'))
-global n,nb,mi,me,prob,threshold
-prob=1
-x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob(prob,nargout=13)
-lb[arange_(1,n)]=lx
-ub[arange_(1,n)]=ux
-if mi:
-    lb[arange_(n + 1,n + mi)]=li
-    ub[arange_(n + 1,n + mi)]=ui
-threshold=1e-08
-options.algo_method=char('quasi-Newton')
-options.algo_globalization=char('trust regions')
-options.hess_approx=char('model')
-options.bfgs_restart=0
-options.algo_descent=char('Powell')
-if nb + mi + me == 0:
-    options.algo_descent=char('Wolfe')
-options.tol[1]=1e-05
-options.tol[2]=1e-05
-options.tol[3]=1e-05
-options.dxmin=dxmin
-options.miter=500
-options.msimul=500
-options.verbose=2
-lm=[]
-x,lm,info=ecdfo(evalfgh,x,lm,lb,ub,options,nargout=3)
-x
+
 
 def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwargs):
-    varargin = cellarray(args)
+#    varargin = cellarray(args)
     nargin = 6-[func,x0,lm0,lb,ub,options].count(None)+len(args)
 
-    global prob,threshold
+    c = helper.dummyUnionStruct()
+    info = helper.dummyUnionStruct()
+    eps = 2.2204e-16
+    prob=get_prob
     c.free=0
     c.fixed=1
     c.alwaysfixed=2
-    c.in=1
+    c.in_=1
     c.out=0
     c.unused=0
     c.inY=1
     c.dummy=1
     c.nodummy=0
-    x=copy_(NaN)
-    fx=copy_(NaN)
-    gx=copy_(NaN)
+    x=copy_(np.NaN)
+    fx=copy_(np.NaN)
+    gx=copy_(np.NaN)
     nit=0
     nitold=0
     neval=0
-    errg=copy_(Inf)
+    errg=copy_(np.Inf)
     X=matlabarray([])
     fX=matlabarray([])
     xstatus=matlabarray([])
@@ -81,8 +56,8 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     xspace_save=matlabarray([])
     ndummyY=0
     info.flag=0
-    rand_(char('seed'),pi / sqrt_(2))
-    randn_(char('seed'),5)
+#    rand_(char('seed'),np.pi / sqrt_(2))
+#    randn_(char('seed'),5)
     if (size_(x0,1) == 1 and size_(x0,2) > 1):
         x0=x0.T
     n=length_(x0)
@@ -102,7 +77,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     epsilon=1e-05
     maxeval=200 * n
     maxit=copy_(maxeval)
-    verbose=1
+    verbose=0
     show_errg=0
     initial_Y=char('simplx')
     eta1=0.0001
