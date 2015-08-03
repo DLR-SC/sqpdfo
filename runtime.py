@@ -682,13 +682,31 @@ try:
 except:
     pass
 
-def max_(a, d=None, nargout=None):
+def max_(a_, d=None, nargout=None):
+    """min_ and max_ function normally returns the same as matlab min and max in the following cases :
+        min_(a,b) where a,b are integer, inf or nan
+        min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
+        One case not implemented but not necessary yet is the following :
+        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
+        (same for max_ obviously)
+    """
+    a=copy_(a_)    
+    
     if isempty_(a):
         ret = matlabarray([])                    
     elif d is not None:
-        ret = np.maximum(a,d)
+        if isnan_(d).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
+            ret=a
+        elif isnan_(a).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
+            ret=d
+        else:
+            ret = np.maximum(a,d)
     else:
-        ret = matlabarray(np.amax(np.asarray(a)))
+        if isnan_(a).all():
+            ret=np.nan
+        else:
+            a[isnan_(a)]=-np.inf #otherwise max_ will return NaN, but we want it to be like matlab which do not return NaN in this case                                    
+            ret = matlabarray(np.amax(np.asarray(a)))
                                 
     if nargout == 2:
         if isempty_(a):
@@ -699,16 +717,37 @@ def max_(a, d=None, nargout=None):
     else:
         return ret    
 
-def min_(a, d=None, nargout=None):#, nargout=0):
+def min_(a_, d=None, nargout=None):#, nargout=0):
     #print "a", a
-#    print "len(a)", len(a)                
+#    print "len(a)", len(a)     
+    """min_ and max_ function normally returns the same as matlab min and max in the following cases :
+        min_(a,b) where a,b are integer, inf or nan
+        min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
+        One case not implemented but not necessary yet is the following :
+        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
+        (same for max_ obviously)
+    """
+
+
+    a=copy_(a_)    
+           
     if isempty_(a):
         ret = matlabarray([])                    
     elif d is not None:
-        ret = np.minimum(a,d)
+        if isnan_(d).all(): #otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
+            ret=a
+        elif isnan_(a).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
+            ret=d
+        else:
+            ret = np.minimum(a,d)
     else:
-        ret = matlabarray(np.amin(np.asarray(a)))
-                                
+        if isnan_(a).all():
+            ret=np.nan
+        else:
+            a[isnan_(a)]=np.inf #otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case                                    
+            ret = matlabarray(np.amin(np.asarray(a)))
+       
+
     if nargout == 2:
         if isempty_(a):
             ret2 = matlabarray([])                                    
