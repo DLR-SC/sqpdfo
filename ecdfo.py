@@ -56,15 +56,15 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     xspace_save=matlabarray([])
     ndummyY=0
     info.flag=0
-#    rand_(char('seed'),np.pi / sqrt_(2))
-#    randn_(char('seed'),5)
+#    rand_('seed',np.pi / sqrt_(2))
+#    randn_('seed',5)
     if (size_(x0,1) == 1 and size_(x0,2) > 1):
         x0=x0.T
     n=length_(x0)
     pquad=((n + 1) * (n + 2)) / 2
     pdiag=2 * n + 1
     plin=n + 1
-    msg=char('Unexpected exit')
+    msg='Unexpected exit'
     poisedness_known=0
     eps_rho=1e-14
     stallfact=10 * eps
@@ -77,9 +77,9 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     epsilon=1e-05
     maxeval=200 * n
     maxit=copy_(maxeval)
-    verbose=0
+    verbose=options.verbose
     show_errg=0
-    initial_Y=char('simplx')
+    initial_Y='simplx'
     eta1=0.0001
     eta2=0.9
     gamma1=0.01
@@ -92,9 +92,9 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     Lambda_FP=1e-10
     factor_FPU=1
     factor_FPR=10
-    criterion_S=char('distance')
-    criterion_FP=char('distance')
-    criterion_CP=char('standard')
+    criterion_S='distance'
+    criterion_FP='distance'
+    criterion_CP='standard'
     mu0=0
     mu=0
     theta=1
@@ -114,7 +114,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     shrink_Delta=1
     Deltamax=factor_Dmax * Delta0
     if nargin < 2:
-        fprintf_(char('\\n### EC-DFO: the first 2 arguments are required\\n\\n'))
+        fprintf_('\n### EC-DFO: the first 2 arguments are required\n\n')
         x=matlabarray([])
         lm=matlabarray([])
         info.flag=1
@@ -137,8 +137,8 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     if prob == 100:
         Delta0=0.01
         epsilon=0.001
-        if exist_(char('fvalues_ecdfo_karmanogive.dat'),char('file')) == 2:
-            delete_(char('fvalues_ecdfo_karmanogive.dat'))
+        if exist_('fvalues_ecdfo_karmanogive.dat','file') == 2: #Those 2 lines (exist_ and delete_) have not been dealt with, but only concerns prob==100
+            delete_('fvalues_ecdfo_karmanogive.dat')
     x0
     n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
     if info.flag:
@@ -148,14 +148,14 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     fxmax=min_(1e+25,factor_fmax * abs_(fx))
     M=eye_(n)
     if (verbose):
-        fid=fopen_(char('convhist.m'),char('w'))
-        fprintf_(fid,char('function A=history \\n A=[ \\n'))
-        fprintf_(fid,char('%6d  %+.14e %.2e \\n'),neval,fx,normgx)
+        fid=fopen_('convhist.m','w')
+        fprintf_(fid,'function A=history \n A=[ \n')
+        fprintf_(fid,'%6d  %+.14e %.2e \n'%(neval,fx,normgx))
         fclose_(fid)
-    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,char('toplevel'),whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
+    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
     if (verbose):
-        fid=fopen_(char('convhist.m'),char('a'))
-        fprintf_(fid,char('];'))
+        fid=fopen_('convhist.m','a')
+        fprintf_(fid,'];')
         fclose_(fid)
     if (nfix > 0):
         I=eye_(n + nfix)
@@ -173,39 +173,39 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
     ecdfo_finish_(nb,mi,me,info_best,options,values)
     if options.verbose > 2:
         if nb:
-            fprintf_(options.fout,char('VARIABLES:\\n'))
-            fprintf_(options.fout,char('i     lower bound          x            upper bound       multiplier\\n'))
+            fprintf_(options.fout,'VARIABLES:\n')
+            fprintf_(options.fout,'i     lower bound          x            upper bound       multiplier\n')
             for i in arange_(1,min_(n,40)).reshape(-1):
-                fprintf_(options.fout,char('%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'),i,lb[i],x[i],ub[i],lm[i])
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'%(i,lb[i],x[i],ub[i],lm[i]))
             if (n > 40):
-                fprintf_(options.fout,char('.....\\n'))
+                fprintf_(options.fout,'.....\n')
             else:
-                fprintf_(options.fout,char('\\n'))
+                fprintf_(options.fout,'\n')
         else:
-            fprintf_(options.fout,char('VARIABLES:\\n'))
-            fprintf_(options.fout,char('%16.6e\\n'),x[1:min_(n,40)])
+            fprintf_(options.fout,'VARIABLES:\n')
+            fprintf_(options.fout,'%16.6e\\n',x[1:min_(n,40)])
             if (n > 40):
-                fprintf_(options.fout,char('.....\\n'))
+                fprintf_(options.fout,'.....\n')
             else:
-                fprintf_(options.fout,char('\\n'))
+                fprintf_(options.fout,'\n')
         if mi:
-            fprintf_(options.fout,char('INEQUALITY CONSTRAINTS:\\n'))
-            fprintf_(options.fout,char('i     lower bound          ci           upper bound       multiplier\\n'))
+            fprintf_(options.fout,'INEQUALITY CONSTRAINTS:\n')
+            fprintf_(options.fout,'i     lower bound          ci           upper bound       multiplier\n')
             for i in arange_(1,min_(mi,40)).reshape(-1):
-                fprintf_(options.fout,char('%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'),i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i])
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'%(i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i]))
             if (mi > 40):
-                fprintf_(options.fout,char('\\n.....'))
+                fprintf_(options.fout,'\n.....')
             else:
-                fprintf_(options.fout,char('\\n'))
+                fprintf_(options.fout,'\n')
         if me:
-            fprintf_(options.fout,char('EQUALITY CONSTRAINTS:\\n'))
-            fprintf_(options.fout,char('i         ce            multiplier\\n'))
+            fprintf_(options.fout,'EQUALITY CONSTRAINTS:\n')
+            fprintf_(options.fout,'i         ce            multiplier\n')
             for i in arange_(1,min_(me,40)).reshape(-1):
-                fprintf_(options.fout,char('%0i %+16.6e %+16.6e\\n'),i,ceX[i,i_xbest],lm[n + mi + i])
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e\\n'&(i,ceX[i,i_xbest],lm[n + mi + i]))
             if (me > 40):
-                fprintf_(options.fout,char('.....\\n'))
+                fprintf_(options.fout,'.....\n')
             else:
-                fprintf_(options.fout,char('\\n'))
+                fprintf_(options.fout,'\n')
     return x,lm,info
 				
 #def set_prob(value):

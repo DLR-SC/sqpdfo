@@ -46,7 +46,7 @@ def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
         A=(V * S * U.T).T
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
-                disp_([char('### ecdfo_check_cond: '),char("matrix is non symmetric. Resetting A=(A+A')/2.")])
+                disp_('### ecdfo_check_cond: ',"matrix is non symmetric. Resetting A=(A+A')/2.")
             A=0.5*(A + A.T)
     return A,badcond
 

@@ -46,12 +46,12 @@ def sqplab_badsimul_(outdic=None,info_=None,options=None,values=None,*args,**kwa
 
     if outdic == 2:
         if options.verbose:
-            fprintf_(options.fout,char('\\n\\n### sqplab: the simulator wants to stop\\n'))
+            fprintf_(options.fout,'\n\n### sqplab: the simulator wants to stop\n')
         info.flag=values.stop_on_simul
     else:
         if outdic > 2:
             if options.verbose:
-                fprintf_(options.fout,char('\\n\\n### sqplab: error with the simulator (outdic = %0i)\\n'),outdic)
+                fprintf_(options.fout,'\n\n### sqplab: error with the simulator (outdic = %0i)\n'%(outdic))
             info.flag=values.fail_on_simul
     return info
 

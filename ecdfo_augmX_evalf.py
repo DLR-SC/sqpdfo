@@ -128,18 +128,18 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         info.f=fvalue
     if outdic == 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: initial point x is out of domain\\n\\n'))
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if isnan_(fvalue):
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is NaN at the point x\\n\\n'))
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
             x=copy_(y)
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if isinf_(fvalue):
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is Inf at the point x\\n\\n'))
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
             x=copy_(y)
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
@@ -148,12 +148,12 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if not isempty_(info.ci) and size_(info.ci,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ci must be a column vector\\n\\n'))
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ci must be a column vector\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if not isempty_(info.ce) and size_(info.ce,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo_augmX_evalf: the computed ce must be a column vector\\n\\n'))
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ce must be a column vector\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     fX[m]=min_(fxmax,real_(fvalue))

@@ -591,6 +591,8 @@ def fopen_(*args):
 def fclose_(*args):
     if args[0] == -1:
         print "No file to close, continue..."
+    else:
+        args[0].close()
 
 def fullfile_(*args):
     return os.path.join(*args)
@@ -938,9 +940,24 @@ def pinv_(A):
 def solve_(A,b):
     return np.linalg.solve(A,b)
 
-def fprintf_(*args,**kwargs):
-    print args, kwargs  
-    
+def fprintf_(fid,*args, **kwargs):
+    """This is supposed to work approximately like the matlab fprintf function in the following case in the cases where
+    fid=1 (returns output on the screen), fid=2 (returns output in standard error ouput) or fid is a file identifier"""
+    out = ""
+    for arg in args:
+        try:
+            out = out + str(arg)
+        except Exception as e:
+            print "Display Error:", e.message()
+    if  fid==1:
+        print out
+    elif fid==2:
+        print >>sys.stderr, out
+    elif type(fid)==file:
+        print >>fid, out
+    else:
+        print fid+out
+        
 def poly1d_(A, r=0):
     #Careful : A.r which gives then the roots of the polynom is an array instead of a matlab array
     return np.poly1d(A,r) 

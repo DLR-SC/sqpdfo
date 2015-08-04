@@ -82,35 +82,35 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     latub=length_(atub)
     lfree=length_(free)
     if (verbose > 0):
-        disp_(char(' '))
-        disp_(char('   **************************************************************'))
-        disp_(char('   *                                                            *'))
-        disp_(char('   *                          BLLS                              *'))
-        disp_(char('   *                                                            *'))
-        disp_(char('   *   a direct bound-constrained linear least-squares solver   *'))
-        disp_(char('   *                                                            *'))
-        disp_(char('   *                                                            *'))
-        disp_(char('   *     (c) Ph. Sampaio, Ph. L. Toint, A. Troeltzsch, 2014     *'))
-        disp_(char('   *                                                            *'))
-        disp_(char('   **************************************************************'))
-        disp_(char(' '))
-        disp_([char('     The problem has '),int2str_(n),char(' variables and '),int2str_(m),char(' rows.')])
-        disp_(char(' '))
+        disp_(' ')
+        disp_('   **************************************************************')
+        disp_('   *                                                            *')
+        disp_('   *                          BLLS                              *')
+        disp_('   *                                                            *')
+        disp_('   *   a direct bound-constrained linear least-squares solver   *')
+        disp_('   *                                                            *')
+        disp_('   *                                                            *')
+        disp_('   *     (c) Ph. Sampaio, Ph. L. Toint, A. Troeltzsch, 2014     *')
+        disp_('   *                                                            *')
+        disp_('   **************************************************************')
+        disp_(' ')
+        disp_('     The problem has ',int2str_(n),' variables and ',int2str_(m),' rows.')
+        disp_(' ')
         if (verbose > 2):
             problem_matrix=copy_(A)
             right_hand_side=b.T
             lower_bounds=lb.T
             upper_bounds=ub.T
-            disp_(char(' '))
-        fprintf_(char('     nit     ||r||    optimality'))
-        fprintf_(char('                 nfr nlow nupp\\n\\n'))
-        fprintf_(char('   %5d  %.4e  %.4e                %4d %4d %4d\\n'),nit,resn,opt,lfree,latlb,latub)
+            disp_(' ')
+        fprintf_('     nit     ||r||    optimality')
+        fprintf_('                 nfr nlow nupp\n\n')
+        fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n' % (nit,resn,opt,lfree,latlb,latub))
         if (verbose > 1):
             if (verbose > 2):
                 unconstrained_solution=s.T
-            disp_(char(' '))
-            disp_(char('   --------------------------------------------------------------'))
-            disp_(char(' '))
+            disp_(' ')
+            disp_('   --------------------------------------------------------------')
+            disp_(' ')
     if (opt <= epsconv or resn <= epsres):
         maxit=0
     else:
@@ -118,12 +118,12 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     for i in arange_(1,maxit).reshape(-1):
         nit=nit + 1
         if (verbose > 1):
-            disp_([char('   Iteration '),int2str_(i)])
-            disp_(char(' '))
-            fprintf_(char('   Cauchy point projected search\\n'))
-            fprintf_(char('       k     ||r||     stepsize'))
-            fprintf_(char('                  nfr nlow nupp\\n'))
-            fprintf_(char('   %5d  %.4e                            %4d %4d %4d'),0,resn,lfree,latlb,latub)
+            disp_('   Iteration ',int2str_(i))
+            disp_(' ')
+            fprintf_('   Cauchy point projected search\n')
+            fprintf_('       k     ||r||     stepsize')
+            fprintf_('                  nfr nlow nupp\n')
+            fprintf_('   %5d  %.4e                            %4d %4d %4d'%(0,resn,lfree,latlb,latub))
         g=A.T * res
         alpha=(norm_(g) / norm_(A * g)) ** 2
         for kc in arange_(1,maxback).reshape(-1):
@@ -132,7 +132,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             ltry=g.T * dtry
             qtry=ltry + 0.5 * norm_(A * dtry) ** 2
             if (verbose > 1):
-                fprintf_(char('\\n   %5d  %.4e  %.4e'),kc,norm_(A * stry - b),alpha)
+                fprintf_('\n   %5d  %.4e  %.4e'&(kc,norm_(A * stry - b),alpha))
             if (qtry <= armijor * ltry):
                 break
             else:
@@ -154,7 +154,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
         res=A * s - b
         resn=norm_(res)
         if (verbose > 1):
-            fprintf_(char('                %4d %4d %4d\\n'),lfree,latlb,latub)
+            fprintf_('                %4d %4d %4d\n'%(lfree,latlb,latub))
             if (verbose > 2):
                 Cauchy_point=s.T
                 indices_of_free_variables=copy_(free)
@@ -162,17 +162,17 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                 indices_of_variables_at_their_upper_bound=copy_(atub)
         if (lfree == 0 or resn <= epsres):
             if (verbose > 1):
-                fprintf_(char('   No nested subspace search\\n'))
+                fprintf_('   No nested subspace search\n')
             opt=0
         else:
             if (verbose > 1):
-                fprintf_(char('   Nested subspace search\\n'))
-                fprintf_(char('       k     ||r||     stepsize      ||r*||'))
-                fprintf_(char('      nfr nlow nupp\\n'))
-                fprintf_(char('   %5d  %.4e                            %4d %4d %4d\\n'),0,resn,lfree,latlb,latub)
+                fprintf_('   Nested subspace search\n')
+                fprintf_('       k     ||r||     stepsize      ||r*||')
+                fprintf_('      nfr nlow nupp\n')
+                fprintf_('   %5d  %.4e                            %4d %4d %4d\n'&(0,resn,lfree,latlb,latub))
             for k in arange_(1,n).reshape(-1):
                 if (verbose > 2):
-                    disp_([char('    > Solving in subspace '),int2str_(k)])
+                    disp_('    > Solving in subspace ',int2str_(k))
                     indices_of_free_variables=copy_(free)
                     indices_of_variables_at_their_lower_bound=copy_(atlb)
                     indices_of_variables_at_their_upper_bound=copy_(atub)
@@ -213,7 +213,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             latlbt=length_(atlbt)
                             latubt=length_(atubt)
                             lfreet=length_(freet)
-                            fprintf_(char('   %5dp %.4e  %.4e   %.4e   %4d %4d %4d\\n'),kb,rtryn,alpha,rsubon,lfreet,latlbt,latubt)
+                            fprintf_('   %5dp %.4e  %.4e   %.4e   %4d %4d %4d\n'%(kb,rtryn,alpha,rsubon,lfreet,latlbt,latubt))
                         if (lnatbt == 0):
                             break
                         if (verbose == 0):
@@ -260,7 +260,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         rsub=(1 - alpha) * res + alpha * rsubo
                         rsubn=norm_(rsub)
                         if (verbose > 1):
-                            fprintf_(char('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\\n'),k,rsubn,alpha,rsubon,lfree,latlb,latub)
+                            fprintf_('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,rsubn,alpha,rsubon,lfree,latlb,latub))
                         natlb=free[find_(abs_(ssub[free] - lb[free]) <= epsfeas)]
                         natub=free[find_(abs_(ssub[free] - ub[free]) <= epsfeas)]
                         atlb=matlabarray([atlb,natlb])
@@ -285,7 +285,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     res=copy_(rsubo)
                     resn=copy_(rsubon)
                     if (verbose > 1):
-                        fprintf_(char('   %5df %.4e  %.4e   %.4e   %4d %4d %4d\\n'),k,resn,1,resn,lfree,latlb,latub)
+                        fprintf_('   %5df %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,resn,1,resn,lfree,latlb,latub))
                         if (verbose > 2):
                             current_subspace_solution=ssub.T
                             indices_of_variables_at_their_lower_bound=copy_(atlb)
@@ -294,26 +294,26 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     break
             opt=norm_(min_(max_(s - A.T * res,lb),ub) - s)
         if (verbose == 1):
-            fprintf_(char('   %5d  %.4e  %.4e                %4d %4d %4d\\n'),nit,resn,opt,lfree,latlb,latub)
+            fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n'%(nit,resn,opt,lfree,latlb,latub))
         else:
             if (verbose > 1):
-                disp_(char(' '))
-                fprintf_(char('     nit    ||r||     optimality'))
-                fprintf_(char('                 nfr nlow nupp\\n\\n'))
-                fprintf_(char('   %5d  %.4e  %.4e                %4d %4d %4d\\n'),nit,resn,opt,lfree,latlb,latub)
+                disp_(' ')
+                fprintf_('     nit    ||r||     optimality')
+                fprintf_('                 nfr nlow nupp\n\n')
+                fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n'%(nit,resn,opt,lfree,latlb,latub))
                 if (verbose > 2):
                     current_solution=s.T
                     indices_of_free_variables=copy_(free)
                     indices_of_variables_at_their_lower_bound=copy_(atlb)
                     indices_of_variables_at_their_upper_bound=copy_(atub)
-                disp_(char('   --------------------------------------------------------------'))
-                disp_(char(' '))
+                disp_('   --------------------------------------------------------------')
+                disp_(' ')
         if (opt <= epsconv or resn <= epsres):
             break
     if (exitc == 0 and nit >= maxiter):
         exitc=1
     if (verbose > 0):
-        disp_(char(' '))
+        disp_(' ')
         if (verbose > 2):
             indices_of_free_variables=copy_(free)
             indices_of_variables_at_their_lower_bound=copy_(atlb)
@@ -321,14 +321,14 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             final_solution=s.T
             final_residual=res.T
         if (exitc == 1):
-            disp_(char('   !!! maxit reached !!!'))
+            disp_('   !!! maxit reached !!!')
             keyboard
         else:
             if (exitc == - 1):
-                disp_(char('   !!! Cauchy point calculation failure :-(  !!!'))
+                disp_('   !!! Cauchy point calculation failure :-(  !!!')
             else:
-                disp_(char('   ---> Solved.'))
-        disp_(char(' '))
+                disp_('   ---> Solved.')
+        disp_(' ')
     return s,resn,opt,exitc
 #def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #    #varargin = cellarray(args)

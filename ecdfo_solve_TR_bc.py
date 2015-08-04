@@ -130,7 +130,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if (x[i] - gradlag[i] <= lb[i]) and (abs_(x[i] - lb[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
-                    disp_([char('lb '),num2str_(i),char(' is initially active')])
+                    disp_('lb ',num2str_(i),' is initially active')
 #                constraints=matlabarray([[constraints],[0]])
 #                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
                 constraints=concatenate_([constraints,matlabarray([[0]])])
@@ -138,7 +138,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if (x[i] - gradlag[i] >= ub[i]) and (abs_(x[i] - ub[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
-                    disp_([char('ub '),num2str_(i),char(' is initially active')])
+                    disp_('ub ',num2str_(i),' is initially active')
 #                constraints=matlabarray([[constraints],[0]])
 #                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
                 constraints=concatenate_([constraints,matlabarray([[0]])])
@@ -151,9 +151,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 
         iter_active=iter_active + 1
         if options.verbose >= 3:
-            disp_([char('********* Loop over active set ********* iteration '),num2str_(iter_active),char(' *********')])
+            disp_('********* Loop over active set ********* iteration ',num2str_(iter_active),' *********')
         if options.verbose >= 3:
-            fprintf_(options.fout,char('  Restoration step:\\n'))
+            fprintf_(options.fout,'  Restoration step:\n')
         delta_r=xi * delta
         sol=gconstraints.T * constraints
         if iter_active == 1 and norm_(sol) > 1e-14:
@@ -174,10 +174,10 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             xr=x + r
             norm2_r=r.T * r
             norm_r=sqrt_(norm2_r)
-            if strcmp_(msg[1:5],char('error')) or strcmp_(msg[1:5],char('limit')):
+            if strcmp_(msg[1:5],'error') or strcmp_(msg[1:5],'limit'):
                 info_r.flag=- 1
             else:
-                if strcmp_(msg[1:8],char('boundary')) or (delta_r - norm_r < 1e-08):
+                if strcmp_(msg[1:8],'boundary') or (delta_r - norm_r < 1e-08):
                     info_r.flag=1
                 else:
                     info_r.flag=0
@@ -185,35 +185,35 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             rpred=rpred + rpred_m
             if rpred < 0:
                 if options.verbose >= 3:
-                    fprintf_(options.fout,char('\\n### ecdfo_solve_TR_bc: rpred = %9.2e should not be negative\\n\\n'),rpred)
+                    fprintf_(options.fout,'\n### ecdfo_solve_TR_bc: rpred = %9.2e should not be negative\n\n'%(rpred))
             active_r=(info_r.flag == 1) or (info_r.flag == 2)
             if options.verbose >= 5:
                 if - 1 == info_r.flag:
-                    fprintf_(options.fout,char('    max of %0i iterations reached\\n'),20 * me)
+                    fprintf_(options.fout,'    max of %0i iterations reached\n'%(20 * me))
                 else:
                     if 0 == info_r.flag:
-                        fprintf_(options.fout,char('    precision is less than required tolerance %8.2e\\n'),prec_r)
+                        fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_r))
                     else:
                         if 1 == info_r.flag:
-                            fprintf_(options.fout,char('    TR boundary is reached\\n'))
+                            fprintf_(options.fout,'    TR boundary is reached\n')
                         else:
                             if 2 == info_r.flag:
-                                fprintf_(options.fout,char('    negative curvature direction encountered\\n'))
-                fprintf_(options.fout,char('    |r|   = %8.2e\\n'),norm_r)
-                fprintf_(options.fout,char('    rpred = %8.2e\\n'),rpred)
+                                fprintf_(options.fout,'    negative curvature direction encountered\n')
+                fprintf_(options.fout,'    |r|   = %8.2e\n'%(norm_r))
+                fprintf_(options.fout,'    rpred = %8.2e\n'%(rpred))
         else:
             if options.verbose >= 5:
-                fprintf_(options.fout,char('    unchanged\\n'))
+                fprintf_(options.fout,'    unchanged\n')
             r=zeros_(size_(x))
             active_r=copy_(false)
             xr=copy_(x)
             norm2_r=0.0
             norm_r=0.0
         if options.verbose == 3:
-            disp_([char('r = ('),num2str_(r.T),char(')')])
-            disp_([char('delta_r = '),num2str_(delta_r),char(', norm_r = '),num2str_(norm_r)])
+            disp_('r = (',num2str_(r.T),')')
+            disp_('delta_r = ',num2str_(delta_r),', norm_r = ',num2str_(norm_r))
         if options.verbose >= 3:
-            fprintf_(options.fout,char('  Tangent step:\\n'))
+            fprintf_(options.fout,'  Tangent step:\n')
         delta_t=copy_(delta)
         deg_freedom=n - length_(constraints)
         if deg_freedom > 0:
@@ -225,24 +225,24 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             active_t=(info_t.flag == 1) or (info_t.flag == 2)
             if options.verbose >= 5:
                 if - 1 == info_t.flag:
-                    fprintf_(options.fout,char('    max of %0i iterations reached\\n'),20 * (n - me))
+                    fprintf_(options.fout,'    max of %0i iterations reached\n'%(20 * (n - me)))
                 else:
                     if 0 == info_t.flag:
-                        fprintf_(options.fout,char('    precision is less than required tolerance %8.2e\\n'),prec_t)
+                        fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_t))
                     else:
                         if 1 == info_t.flag:
-                            fprintf_(options.fout,char('    TR boundary is reached\\n'))
+                            fprintf_(options.fout,'    TR boundary is reached\n')
                         else:
                             if 2 == info_t.flag:
-                                fprintf_(options.fout,char('    negative curvature direction encountered\\n'))
-                fprintf_(options.fout,char('    |t| = %8.2e\\n'),norm_(t))
+                                fprintf_(options.fout,'    negative curvature direction encountered\n')
+                fprintf_(options.fout,'    |t| = %8.2e\n'%(norm_(t)))
         else:
             t=zeros_(1,n).T
             active_t=0
         if options.verbose == 3:
-            disp_([char('t = ('),num2str_(t.T),char(')')])
-            disp_([char('delta_t = '),num2str_(delta_t),char(', norm_t = '),num2str_(norm_(t))])
-            disp_([char('delta '),num2str_(delta),char(', norm_s = '),num2str_(norm_(r + t))])
+            disp_('t = (',num2str_(t.T),')')
+            disp_('delta_t = ',num2str_(delta_t),', norm_t = ',num2str_(norm_(t)))
+            disp_('delta ',num2str_(delta),', norm_s = ',num2str_(norm_(r + t)))
         xnew=x + r + t
         x_active=zeros_(size_(xnew))
         x_viol=zeros_(size_(xnew))
@@ -252,7 +252,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #                x_fix=matlabarray([x_fix,i])
                 x_fix=concatenate_([x_fix, matlabarray([[i]])], axis=1)
                 if options.verbose >= 3:
-                    disp_([char('lb '),int2str_(i),char(' is violated')])
+                    disp_('lb ',int2str_(i),' is violated')
 #                constraints=matlabarray([[constraints],[0]])
 #                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
                 constraints=concatenate_([constraints,matlabarray([[0]])])
@@ -263,14 +263,14 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 if (abs_(xnew[i] - lb[i]) < 1e-07):
                     x_active[i]=- i
                     if options.verbose >= 3:
-                        disp_([char('lb '),int2str_(i),char(' is active')])
+                        disp_('lb ',int2str_(i),' is active')
                 else:
                     if (xnew[i] - ub[i] > threshold):
                         x_viol[i]=i
 #                        x_fix=matlabarray([x_fix,i])
                         x_fix=concatenate_([x_fix, matlabarray([[i]])], axis=1)
                         if options.verbose >= 3:
-                            disp_([char('ub '),int2str_(i),char(' is violated')])
+                            disp_('ub ',int2str_(i),' is violated')
 #                        constraints=matlabarray([[constraints],[0]])
 #                        gconstraints=matlabarray([[gconstraints],[I[i,:]]])
                             constraints=concatenate_([constraints,matlabarray([[0]])])
@@ -281,17 +281,17 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                         if (abs_(xnew[i] - ub[i]) < 1e-07):
                             x_active[i]=i
                             if options.verbose >= 3:
-                                disp_([char('ub '),int2str_(i),char(' is active')])
+                                disp_('ub ',int2str_(i),' is active')
         if sum_(x_viol) == 0:
             violated=0
             if options.verbose >= 3:
-                disp_(char('no new bound violated'))
+                disp_('no new bound violated')
         else:
             if options.verbose >= 3:
                 disp_(x_fix)
         if norm_(r + t) <= 1e-16:
             if options.verbose >= 3 and (iter_active >= 10 * n or delta < delta_min):
-                disp_(char('### ecdfo_solve_TR_bc: active-set iteration limit exceeded ###'))
+                disp_('### ecdfo_solve_TR_bc: active-set iteration limit exceeded ###')
                 return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
             lbounds=- inf * ones_(size_(x))
             ubounds=inf * ones_(size_(x))
@@ -302,10 +302,10 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
             min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
             if options.verbose >= 3:
-                disp_([char('smallest Lagrange multiplier (for the bounds) = '),num2str_(min_lm)])
+                disp_('smallest Lagrange multiplier (for the bounds) = ',num2str_(min_lm))
             if min_lm < 0:
                 if options.verbose >= 3:
-                    disp_(char('Zero step but not converged - release one bound!!'))
+                    disp_('Zero step but not converged - release one bound!!')
                 constraints=constraints[1:me]
                 gconstraints=gconstraints[1:me,:]
                 xa=find_(x_active < 0).T
@@ -342,20 +342,20 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                     x_fix
             else:
                 if options.verbose >= 3:
-                    disp_(char('Zero step and converged - go back to TR-loop...'))
+                    disp_('Zero step and converged - go back to TR-loop...')
                 finished=1
         else:
             if violated == 0:
                 if options.verbose >= 3:
-                    disp_(char('non zero feasible step - go back to TR-loop...'))
+                    disp_('non zero feasible step - go back to TR-loop...')
                 finished=1
             else:
                 if options.verbose >= 3:
-                    disp_(char('non zero infeasible step - continue finding correct active set...'))
+                    disp_('non zero infeasible step - continue finding correct active set...')
         if violated == 1:
             tstep=copy_(t)
             if options.verbose >= 3:
-                disp_(char('shorten tangential step'))
+                disp_('shorten tangential step')
 #            aT=matlabarray([[eye_(n)],[- eye_(n)]])
             aT=concatenate_([eye_(n),- eye_(n)])
             aTx=aT * xr
@@ -372,9 +372,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             x=xr + tstep
             step=r + tstep
             if options.verbose == 3:
-                disp_([char('t = ('),num2str_(tstep.T),char(')')])
-                disp_([char('delta_t = '),num2str_(delta_t),char(', norm_t = '),num2str_(norm_(tstep))])
-                disp_([char('delta '),num2str_(delta),char(', norm_s = '),num2str_(norm_(r + tstep))])
+                disp_('t = (',num2str_(tstep.T),')')
+                disp_('delta_t = ',num2str_(delta_t),', norm_t = ',num2str_(norm_(tstep)))
+                disp_('delta ',num2str_(delta),', norm_s = ',num2str_(norm_(r + tstep)))
             glocal=glocal + M * step
             for i in arange_(1,me).reshape(-1):
                 gconstraints[i,:]=gconstraints[i,:] + (M * step).T

@@ -94,11 +94,11 @@ import helper
 
 class myOptions():
     def __init__(self):
-        self.algo_method = char('quasi-newton')
-        self.algo_globalization = char('trust regions')
-        self.hess_approx = char('model')
+        self.algo_method = 'quasi-newton'
+        self.algo_globalization = 'trust regions'
+        self.hess_approx = 'model'
         self.bfgs_restart = 0
-        self.algo_descent = char('powell')
+        self.algo_descent = 'powell'
         self.tol = matlabarray( [1.000000000000000e-05, 1.000000000000000e-05, 1.000000000000000e-05])
         self.dxmin = 1.000000000000000e-06
         self.miter = 500

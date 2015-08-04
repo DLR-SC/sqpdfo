@@ -84,107 +84,100 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
     info.flag=values.success
     if isempty_(options):
         options.xxx=0
-    if isfield_(options,char('fout')):
+    if isfield_(options,'fout'):
         if options.fout < 0:
-            fprintf_(char('\\n### ecdfo: options.fout = "%0i" is not a valid file identifier (use \'fopen\' to have a valid one)'),options.fout)
-            fprintf_(char('\\n            options.fout is set to 1\\n\\n'))
+            fprintf_('\n### ecdfo: options.fout = "%0i" is not a valid file identifier (use \'fopen\' to have a valid one)'%(options.fout))
+            fprintf_('\n            options.fout is set to 1\n\n')
             options.fout=1
     else:
         options.fout=1
-    if isfield_(options,char('verbose')):
+    if isfield_(options,'verbose'):
         if (options.verbose < 0) or (options.verbose > 6):
-            fprintf_(options.fout,char('\\n### ecdfo: options.verbose = "%0i" and should be in [0,6], reset to 1\\n\\n'),options.verbose)
+            fprintf_(options.fout,'\n### ecdfo: options.verbose = "%0i" and should be in [0,6], reset to 1\n\n'%(options.verbose))
             options.verbose=1
     else:
         options.verbose=1
-    if isfield_(options,char('algo_method')):
-        if char('newton') == lower___(regexprep___(strtrim___(options.algo_method),char('  *'),char(' '))):
+    if isfield_(options,'algo_method'):
+        algo_method_str=options.algo_method.lower().replace(" ","")
+        if 'newton' == algo_method_str:
             options.algo_method=values.newton
-        else:
-            if [char('quasi-newton'),char('quasi newton'),char('quasinewton')] == lower___(regexprep___(strtrim___(options.algo_method),char('  *'),char(' '))):
-                options.algo_method=values.quasi_newton
-            else:
-                if [char('cheap quasi-newton'),char('cheap quasi newton'),char('cheap quasinewton')] == lower___(regexprep___(strtrim___(options.algo_method),char('  *'),char(' '))):
-                    options.algo_method=values.cheap_quasi_newton
-                else:
-                    if options.verbose:
-                        fprintf_(options.fout,char('\\n### ecdfo: options.algo_method "%s" not recognized\\n\\n'),options.algo_method)
-                    info.flag=values.fail_on_argument
-                    return info,options,values
+        elif (algo_method_str=='quasi-newton') or (algo_method_str=='quasi newton') or (algo_method_str=='quasinewton'): 
+            options.algo_method=values.quasi_newton
+        elif (algo_method_str=='cheap quasi-newton')or(algo_method_str=='cheap quasi newton') or(algo_method_str=='cheap quasinewton'):
+            options.algo_method=values.cheap_quasi_newton
+        elif options.verbose:
+            fprintf_(options.fout,'\n### ecdfo: options.algo_method "{}" not recognized\n\n'.format(options.algo_method))
+            info.flag=values.fail_on_argument
+            return info,options,values
     else:
         options.algo_method=values.quasi_newton
-    if isfield_(options,char('algo_globalization')):
-        if [char('unit step-size'),char('unit stepsize')] == lower___(regexprep___(strtrim___(options.algo_globalization),char('  *'),char(' '))):
+    if isfield_(options,'algo_globalization'):
+        algo_globalization_str=options.algo_globalization.lower().replace(" ","")
+        if (algo_globalization_str=='unit step-size') or (algo_globalization_str=='unit stepsize') :
             options.algo_globalization=values.unit_stepsize
-        else:
-            if [char('line-search'),char('linesearch')] == lower___(regexprep___(strtrim___(options.algo_globalization),char('  *'),char(' '))):
-                options.algo_globalization=values.linesearch
-            else:
-                if [char('trust regions'),char('trust-regions'),char('trustregions')] == lower___(regexprep___(strtrim___(options.algo_globalization),char('  *'),char(' '))):
-                    options.algo_globalization=values.trust_regions
-                else:
-                    if options.verbose:
-                        fprintf_(options.fout,char('\\n### ecdfo: options.algo_globalization "%s" not recognized\\n\\n'),options.algo_globalization)
-                    info.flag=values.fail_on_argument
-                    return info,options,values
+        elif (algo_globalization_str=='line-search') or (algo_globalization_str=='linesearch'):
+            options.algo_globalization=values.linesearch
+        elif (algo_globalization_str=='trust regions')or(algo_globalization_str=='trust-regions')or(algo_globalization_str=='trustregions'):
+            options.algo_globalization=values.trust_regions
+        elif options.verbose:
+            fprintf_(options.fout,'\n### ecdfo: options.algo_globalization "%s" not recognized\n\n'%(options.algo_globalization))
+            info.flag=values.fail_on_argument
+            return info,options,values
     else:
         options.algo_globalization=values.linesearch
-    if isfield_(options,char('algo_descent')):
-        if char('powell') == lower__(regexprep__(strtrim__(options.algo_descent),char('  *'),char(' '))):
+    if isfield_(options,'algo_descent'):
+        algo_descent_str=options.algo_descent.lower().replace(" ","")
+        if (algo_descent_str=='powell'):
             options.algo_descent=values.powell
-        else:
-            if char('wolfe') == lower__(regexprep__(strtrim__(options.algo_descent),char('  *'),char(' '))):
-                options.algo_descent=values.wolfe
-            else:
-                if options.verbose:
-                    fprintf_(options.fout,char('\\n### ecdfo: options.algo_descent "%s" not recognized\\n\\n'),options.algo_descent)
-                info.flag=values.fail_on_argument
-                return info,options,values
-    if isfield_(options,char('dxmin')):
+        elif (algo_descent_str=='wolfe'):
+            options.algo_descent=values.wolfe
+        elif options.verbose:
+            fprintf_(options.fout,'\n### ecdfo: options.algo_descent "%s" not recognized\n\n'%(options.algo_descent))
+            info.flag=values.fail_on_argument
+            return info,options,values
+    if isfield_(options,'dxmin'):
         if (options.dxmin <= 0):
             if options.verbose:
-                fprintf_(options.fout,char('\\n### ecdfo: options.dxmin = %g must be > 0\\n\\n'),options.dxmin)
+                fprintf_(options.fout,'\n### ecdfo: options.dxmin = %g must be > 0\n\n'%(options.dxmin))
             info.flag=values.fail_on_argument
             return info,options,values
     else:
         options.dxmin=1e-08
-    if isfield_(options,char('inf')):
+    if isfield_(options,'inf'):
         if options.inf <= 0:
             if options.verbose:
-                fprintf_(char('\\n### ecdfo: incorrect value of options.inf %g (should be > 0)\\n\\n'),options.inf)
+                fprintf_('\n### ecdfo: incorrect value of options.inf %g (should be > 0)\n\n'%(options.inf))
             info.flag=values.fail_on_argument
             return info,options,values
     else:
         options.inf=inf
-    if isfield_(options,char('miter')):
+    if isfield_(options,'miter'):
         if options.miter <= 0:
             if options.verbose:
-                fprintf_(char('\\n### ecdfo: incorrect value of options.miter %g (should be > 0)\\n\\n'),options.miter)
+                fprintf_('\n### ecdfo: incorrect value of options.miter %g (should be > 0)\n\n'%(options.miter))
             info.flag=values.fail_on_argument
             return info,options,values
     else:
         options.miter=1000
-    if isfield_(options,char('tol')):
+    if isfield_(options,'tol'):
         if any_(options.tol <= 0):
             if options.verbose:
-                fprintf_(char('\\n### ecdfo: incorrect value of some options.tol (should be > 0)\\n\\n'))
+                fprintf_('\n### ecdfo: incorrect value of some options.tol (should be > 0)\n\n')
             info.flag=values.fail_on_argument
             return info,options,values
     else:
         options.tol=[[1e-06],[1e-06],[1e-06]]
-    if not isfield_(options,char('df1')):
+    if not isfield_(options,'df1'):
         options.df1=0
-    if isfield_(options,char('hess_approx')):
-        if char('bfgs') == lower__(regexprep__(strtrim__(options.hess_approx),char('  *'),char(' '))):
+    if isfield_(options,'hess_approx'):
+        if 'bfgs' == options.hess_approx.lower().replace(" ",""):
             options.hess_approx=values.bfgs
-        else:
-            if char('model') == lower__(regexprep__(strtrim__(options.hess_approx),char('  *'),char(' '))):
-                options.hess_approx=values.model
-            else:
-                if options.verbose:
-                    fprintf_(options.fout,char('\\n### ecdfo: options.hess_approx "%s" not recognized\\n\\n'),options.hess_approx)
-                info.flag=values.fail_on_argument
-                return info,options,values
+        elif 'model' == options.hess_approx.lower().replace(" ",""):
+            options.hess_approx=values.model
+        elif options.verbose:
+            fprintf_(options.fout,'\n### ecdfo: options.hess_approx "%s" not recognized\n\n'%(options.hess_approx))
+            info.flag=values.fail_on_argument
+            return info,options,values
     return info,options,values
 
     

@@ -110,9 +110,9 @@ class Test_sqplab_options(unittest.TestCase):
     """
     def setUp(self):
         self.options = helper.dummyOptions()
-        self.options.algo_method = char('newton')
-        self.options.algo_descent = char('powell')
-        self.options.hess_approx = char('bfgs')
+        self.options.algo_method = 'newton'
+        self.options.algo_descent = 'powell'
+        self.options.hess_approx = 'bfgs'
                 
         self.info = dummyInfo()
         #self.values = helper.dummyValues()
@@ -131,7 +131,7 @@ class Test_sqplab_options(unittest.TestCase):
         Second little test
         """
         #print "---------------TEST 2-----------------"
-        self.options.algo_globalization = char('trust regions')
+        self.options.algo_globalization = 'trust regions'
         info,options,values = sqplab_options_(self.info,self.options)
         
         self.assertEqual(options.algo_descent, values.powell)

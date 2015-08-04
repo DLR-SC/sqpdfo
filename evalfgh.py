@@ -62,34 +62,34 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
     #out7=matlabarray([])
     #out8=matlabarray([])
     if simul_not_initialized:
-        foutxy=fopen_(char('results.out'),char('w'))
+        foutxy=fopen_('results.out','w')
         _iter=0
         simul_not_initialized=0
     if key == 1:
         if nargin < 1:
-            fprintf_(fileoutput,char('\\n(simulopt) >>> not enough input arguments (%0i < 1) with key = %0i\\n\\n'),nargin,key)
+            fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 1) with key = %0i\n\n'%(nargin,key))
             msg=- 2
             return msg,out2,out3,out4
     else:
         if key == 2:
             if nargin < 2:
-                fprintf_(fileoutput,char('\\n(simulopt) >>> not enough input arguments (%0i < 2) with key = %0i\\n\\n'),nargin,key)
+                fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 2) with key = %0i\n\n'%(nargin,key))
                 msg=- 2
                 return msg,out2,out3,out4
             msg,out2,out3,out4=ecdfo_func_(xy,nargout=4)
         else:
             if key == 5:
                 if nargin < 3:
-                    fprintf_(fileoutput,char('\\n(simulopt) >>> not enough input arguments (%0i < 3) with key = %0i\\n\\n'),nargin,key)
+                    fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 3) with key = %0i\n\n'%(nargin,key))
                     msg=- 2
                     return msg,out2,out3,out4
                 if nargout < 2:
-                    fprintf_(fileoutput,char('\\n(simulopt) >>> not enough output arguments (%0i < 2) with key = %0i\\n\\n'),nargout,key)
+                    fprintf_(fileoutput,'\n(simulopt) >>> not enough output arguments (%0i < 2) with key = %0i\n\n'%(nargout,key))
                     msg=- 2
                     return msg,out2,out3,out4
                 msg,out2=ecdfo_hessian_lagr_(xy,lm,nargout=2)
             else:
-                fprintf_(fileoutput,char('\\n(simulopt) >>> unexpected value of key (=%i)\\n\\n'),key)
+                fprintf_(fileoutput,'\n(simulopt) >>> unexpected value of key (=%i)\n\n'%(key))
                 msg=- 2
                 return msg,out2,out3,out4
     return msg,out2,out3,out4

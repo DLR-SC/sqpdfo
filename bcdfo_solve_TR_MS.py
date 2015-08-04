@@ -70,24 +70,24 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     neigd=0
     hardcase=0
     if (verbose):
-        disp_(char(' bcdfo_solve_TR_MS : ============ enter'))
+        disp_(' bcdfo_solve_TR_MS : ============ enter')
     if (length_(find_(isnan_(H))) != 0):
-        disp_(char(' bcdfo_solve_TR_MS : H contains NaNs!'))
-        msg=char('error1')
+        disp_(' bcdfo_solve_TR_MS : H contains NaNs!')
+        msg='error1'
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ error exit'))
+            disp_(' bcdfo_solve_TR_MS : ============ error exit')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
     if (length_(find_( ~isreal_(H))) != 0):
-        disp_(char(' bcdfo_solve_TR_MS : H contains imaginary parts!'))
-        msg=char('error2')
+        disp_(' bcdfo_solve_TR_MS : H contains imaginary parts!')
+        msg='error2'
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ error exit'))
+            disp_(' bcdfo_solve_TR_MS : ============ error exit')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
     if (length_(find_(isinf_(H))) != 0):
-        disp_(char(' bcdfo_solve_TR_MS : H contains infinite elements!'))
-        msg=char('error3')
+        disp_(' bcdfo_solve_TR_MS : H contains infinite elements!')
+        msg='error3'
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ error exit'))
+            disp_(' bcdfo_solve_TR_MS : ============ error exit')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
     gnorm=norm_(g)
     goverD=gnorm / Delta
@@ -101,7 +101,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     Dlower=(1 - eps_D) * Delta
     Dupper=(1 + eps_D) * Delta
     if Delta == 0:
-        msg=char('bcdfo_solve_TR_MS : trust region is zero - exit !')
+        msg='bcdfo_solve_TR_MS : trust region is zero - exit !'
         if verbose:
             disp_(msg)
         sfound=1
@@ -109,16 +109,16 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
         _lambda=0
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
     if (gnorm ** 2 < epsilon):
-        msg=char('zero gradient')
+        msg='zero gradient'
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ zero gradient:'))
+            disp_(' bcdfo_solve_TR_MS : ============ zero gradient:')
         sfound=1
         norms=norm_(s)
         _lambda=0
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
     else:
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ nonzero gradient:'))
+            disp_(' bcdfo_solve_TR_MS : ============ nonzero gradient:')
         if (lower == 0):
             _lambda=0
         else:
@@ -127,7 +127,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             new_lambda=- 1
             sfound=0
             if (verbose):
-                disp_([char(' bcdfo_solve_TR_MS ('),int2str_(i),char('): lower = '),num2str_(lower),char(' lambda = '),num2str_(_lambda),char(' upper = '),num2str_(upper)])
+                disp_(' bcdfo_solve_TR_MS (',int2str_(i),'): lower = ',num2str_(lower),' lambda = ',num2str_(_lambda),' upper = ',num2str_(upper))
             R,p=chol_(H + _lambda * eye_(n),nargout=2)
             if (length_(find_(isnan_(R))) != 0):
                 H
@@ -135,10 +135,10 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                 norm_(g)
                 R
                 p
-                disp_(char(' bcdfo_solve_TR_MS : NaNs in Cholesky factorization'))
-                msg=char('error4')
+                disp_(' bcdfo_solve_TR_MS : NaNs in Cholesky factorization')
+                msg='error4'
                 if (verbose):
-                    disp_(char(' bcdfo_solve_TR_MS : ============ error exit'))
+                    disp_(' bcdfo_solve_TR_MS : ============ error exit')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
             nfact=nfact + 1
             if (p == 0):
@@ -146,18 +146,18 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                 sfound=1
                 norms=norm_(s)
                 if (verbose):
-                    disp_([char(' bcdfo_solve_TR_MS ('),int2str_(i),char('): ||s|| = '),num2str_(norms),char(' Delta  = '),num2str_(Delta)])
+                    disp_(' bcdfo_solve_TR_MS (',int2str_(i),'): ||s|| = ',num2str_(norms),' Delta  = ',num2str_(Delta))
                 if ((_lambda <= epsilon and norms <= Dupper) or (norms >= Dlower and norms <= Dupper)):
                     w=H * s
                     value=g.T * s + 0.5 * s.T * w
                     gplus=g + w
                     norms=norm_(s)
                     if (norms < (1 - eps_D) * Delta):
-                        msg=char('interior solution')
+                        msg='interior solution'
                     else:
-                        msg=char('boundary solution')
+                        msg='boundary solution'
                     if (verbose):
-                        disp_(char(' bcdfo_solve_TR_MS : ============ successful exit'))
+                        disp_(' bcdfo_solve_TR_MS : ============ successful exit')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
                 w=numpy.linalg.solve(R.T,s)
                 normw2=w.T * w
@@ -182,7 +182,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     mu,imu=min_(diag_(D),nargout=2)
     if (verbose):
         gamma=abs_(V[:,imu].T * g)
-        disp_([char(' bcdfo_solve_TR_MS : ============ pseudo hard case: gamma = '),num2str_(gamma),char(' ||g|| = '),num2str_(norm_(g))])
+        disp_(' bcdfo_solve_TR_MS : ============ pseudo hard case: gamma = ',num2str_(gamma),' ||g|| = ',num2str_(norm_(g)))
     D=D - mu * eye_(n)
     maxdiag=max_(diag_(D))
     ii=find_(abs_(diag_(D)) < 1e-10 * maxdiag)
@@ -203,7 +203,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
         s=Delta * scri / nscri
     _lambda=- mu
     if (verbose):
-        disp_([char(' bcdfo_solve_TR_MS : ============ ||scri|| = '),num2str_(norm_(scri)),char(' lambda = '),num2str_(_lambda)])
+        disp_(' bcdfo_solve_TR_MS : ============ ||scri|| = ',num2str_(norm_(scri)),' lambda = ',num2str_(_lambda))
     hardcase=1
     w=H * s
     value=g.T * s + 0.5 * s.T * w
@@ -212,9 +212,9 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     if abs_(value) <= 1e-15:
         s=zeros_(size_(s))
     if (norms < (1 - eps_D) * Delta):
-        msg = [ 'interior solution ( '+ str( nfact )+' factorizations,  lambda = '+ str( _lambda )+ ')' ]
+        msg = 'interior solution ( '+ str( nfact )+' factorizations,  lambda = '+ str( _lambda )+ ')' 
     else:
-        msg = [ 'boundary solution ( '+ str( nfact )+ ' factorizations, '+str( neigd )+ ' eigen decomposition, lambda = '+ str( _lambda )+ ' )']
+        msg = 'boundary solution ( '+ str( nfact )+ ' factorizations, '+str( neigd )+ ' eigen decomposition, lambda = '+ str( _lambda )+ ' )'
         if (verbose):
-            disp_(char(' bcdfo_solve_TR_MS : ============ hard case exit'))
+            disp_(' bcdfo_solve_TR_MS : ============ hard case exit')
     return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase

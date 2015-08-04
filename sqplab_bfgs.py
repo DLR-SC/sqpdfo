@@ -310,49 +310,49 @@ def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,value
     if norm_(s) == 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
-            fprintf_(options.fout,char('\\n### sqplab_bfgs: null step s\\n\\n'))
+            fprintf_(options.fout,'\n### sqplab_bfgs: null step s\n\n')
         return M,pc,info,values
     ys=y.T * s
     if options.verbose >= 4:
-        fprintf_(options.fout,char(" y'*s/(s'*s) = %9.3e\\n"),ys / (s.T * s))
+        fprintf_(options.fout," y'*s/(s'*s) = %9.3e\n"%(ys / (s.T * s)))
     Ms=M * s
     sMs=s.T * Ms
     if sMs <= 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
-            fprintf_(options.fout,char('\\n### sqplab_bfgs: BFGS Hessian approximation is not positive definite:\\n'))
-            fprintf_(options.fout,char("            s'*M*s = %g <= 0\\n\\n"),sMs)
+            fprintf_(options.fout,'\n### sqplab_bfgs: BFGS Hessian approximation is not positive definite:\n')
+            fprintf_(options.fout,"            s'*M*s = %g <= 0\n\n"%(sMs))
         return M,pc,info,values
     if (options.algo_descent == values.powell) and (ys < eta * sMs):
         pc=(1 - eta) * sMs / (sMs - ys)
         if options.verbose >= 4:
-            fprintf_(options.fout,char("  Powell's corrector = %7.1e\\n"),pc)
+            fprintf_(options.fout,"  Powell's corrector = %7.1e\n"%(pc))
         y=pc * y + (1 - pc) * Ms
         ys=y.T * s
         if options.verbose >= 4:
-            fprintf_(options.fout,char(" (new y'*s/(s'*s) = %7.1e\\n)"),ys / (s.T * s))
+            fprintf_(options.fout," (new y'*s/(s'*s) = %7.1e\n)"%(ys / (s.T * s)))
         if ys <= 0:
             info.flag=values.fail_strange
             if options.verbose >= 4:
-                fprintf_(options.fout,char("\\n### sqplab_bfgs: y'*s = %9.3e not positive despite correction:\\n\\n"),ys).T
+                fprintf_(options.fout,"\n### sqplab_bfgs: y'*s = %9.3e not positive despite correction:\n\n"%(ys).T)
             return M,pc,info,values
     else:
         if ys <= 0:
             if options.verbose >= 4:
-                fprintf_(options.fout,char("\\n### sqplab_bfgs: y'*s = %9.3e is nonpositive\\n\\n"),ys).T
+                fprintf_(options.fout,"\n### sqplab_bfgs: y'*s = %9.3e is nonpositive\n\n"%(ys).T)
             info.flag=values.fail_strange
             return M,pc,info,values
     if first:
         ol=(y.T * y) / ys
         M=ol * eye_(n)
         if options.verbose >= 4:
-            fprintf_(options.fout,char('  OL coefficient = %g\\n'),ol)
+            fprintf_(options.fout,'  OL coefficient = %g\n'%(ol))
         Ms=ol * s
         sMs=s.T * Ms
     M=M - (Ms * Ms.T) / sMs + (y * y.T) / ys
     if options.verbose >= 6:
         eigM=sort_(eig_(M))
-        fprintf_(options.fout,char('  eig(M): min = %g, max = %g, cond = %g\\n'),min_(eigM),max_(eigM),max_(eigM) / min_(eigM))
+        fprintf_(options.fout,'  eig(M): min = %g, max = %g, cond = %g\n'%(min_(eigM),max_(eigM),max_(eigM) / min_(eigM)))
     return M,pc,info,values
     
 #def sqplab_bfgs_(M=None,y=None,s=None,first=None,info=None,options=None,values=None,*args,**kwargs):

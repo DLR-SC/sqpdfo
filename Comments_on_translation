@@ -43,8 +43,25 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 
 -Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~' or one might later use (not isreal_(H).all) (or isreal_(H).any() when there is no negation) which may be quicker.
 
--The disp_ and fprint_ have not been dealt with yet, but they eventually will have to be modified.
+-The disp_ and fprint_ fundamentally do the same thing. Here are some automatically translated false python code and its correction :
+                            fprintf_(1,char('%s%d%s %12.8e %s %12.8e\\n'),char(' bcdfo_solve_TR_MS_bc ('),i,char('): |s_i| = '),norms_b,char('  |bound_i| = '),delta_b)
+							SHOULD BE TRANSLATED BY (Working with version 2.7):
+							fprintf_(1,'%s%d%s %12.8e %s %12.8e\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b))
+							
+							NB:Please note that one backslash \ also had to be deleted for \\n 
+							fid=fopen_(char('convhist.m'),char('w'))
+							fprintf_(fid,char('function A=history \\n A=[ \\n'))
+							SHOULD BE TRANSLATED BY :
+							fid=fopen_('convhist.m','w')
+							fprintf_(fid,'function A=history \n A=[ \n')
+							
+							fprintf_(options.fout,'VARIABLES:\\n')
+							SHOULD BE TRANSLATED  BY:
+							fprintf_(options.fout,'VARIABLES:\n') 
 
+
+-The function isa(func,'function_handle') in matlab should be  translated by isinstance(evalfgh_, types.FunctionType) (with import types as a header of the file)
+							
 -When multiplying a number by a matrix, the number must be first in python. For instance, 3*matlabarray([[-0.10526316,  0.9944444 ]]) and NOT matlabarray([[-0.10526316,  0.9944444 ]])*3.
 
 -Python will addition matrix which do not have the same dimension without giving some kind of errors or warnings. Therefore checking dimensions of matrices might sometimes be useful.

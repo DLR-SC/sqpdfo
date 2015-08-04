@@ -53,13 +53,13 @@ if mi:
     lb[arange_(n + 1,n + mi)]=li
     ub[arange_(n + 1,n + mi)]=ui
 set_threshold(1e-08)
-options.algo_method=char('quasi-Newton')
-options.algo_globalization=char('trust regions')
-options.hess_approx=char('model')
+options.algo_method='quasi-Newton'
+options.algo_globalization='trust regions'
+options.hess_approx='model'
 options.bfgs_restart=0
-options.algo_descent=char('Powell')
+options.algo_descent='Powell'
 if nb + mi + me == 0:
-    options.algo_descent=char('Wolfe')
+    options.algo_descent='Wolfe'
 options.tol[1]=1e-05
 options.tol[2]=1e-05
 options.tol[3]=1e-05

@@ -48,6 +48,7 @@ from runtime import *
 #except ImportError:
 #    from smop.runtime import *
 #import sys
+import types
 import helper
 import numpy as np
 from sqplab_options import *
@@ -156,12 +157,12 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     n=size_(x0,1)
     if size_(x0,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo: the initial x must be an n-vector\\n\\n'))
+            fprintf_(options.fout,'### ecdfo: the initial x must be an n-vector\n\n')
         info.flag=values.fail_on_argument
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     if n < 1:
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo: the initial x must be an n-vector with n > 0\\n\\n'))
+            fprintf_(options.fout,'### ecdfo: the initial x must be an n-vector with n > 0\n\n')
         info.flag=values.fail_on_argument
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     if isempty_(lb):
@@ -179,7 +180,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     temp=zeros_(n,1)
     for j in arange_(1,n).reshape(-1):
         if (lb[j] > ub[j]):
-            disp_([char('Error: Lower bound of component '),int2str_(j),char(' exceeds upper bound !!')])
+            disp_('Error: Lower bound of component ',int2str_(j),' exceeds upper bound !!')
             info.flag=2
             return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
         temp[j]=ub[j] - lb[j]
@@ -192,7 +193,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
                 continue
             else:
                 Delta0=0.5 * temp[j]
-                disp_([char(' Diff. between lower and upper bound of component '),int2str_(j),char(' is less than 2*Delta0 !! New Delta0='),num2str_(Delta0)])
+                disp_(' Diff. between lower and upper bound of component ',int2str_(j),' is less than 2*Delta0 !! New Delta0=',num2str_(Delta0))
         templ=lb[j] - x0[j]
         tempu=ub[j] - x0[j]
         if (templ >= - Delta0):
@@ -211,7 +212,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     if (nfix > 0):
         nfree=n - nfix
         if (nfree <= 0):
-            disp_(char('No free variables. Please, enlarge search space!'))
+            disp_('No free variables. Please, enlarge search space!')
             info.flag=2
             return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
         indfree=setdiff_(arange_(1,n),indfix)
@@ -243,8 +244,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     while (getfY):
 
         if (options.verbose > 2):
-            disp_([char(' Degree of the initial  model = '),int2str_(cur_degree)])
-        if (strcmp_(initial_Y,char('random'))):
+            disp_(' Degree of the initial  model = ',int2str_(cur_degree))
+        if (strcmp_(initial_Y,'random')):
             Y[:,1]=x0
             ill_init=1
             while (ill_init):
@@ -259,7 +260,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,Delta0,factor_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,1,kappa_ill,nargout=8)
             poisedness_known=1
         else:
-            if (strcmp_(initial_Y,char('simplx'))):
+            if (strcmp_(initial_Y,'simplx')):
                 I=eye_(n)
                 if isempty_(Y):								
                     Y = copy_(x0)								
@@ -313,7 +314,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         if (getfY):
             Delta0=gamma1 * Delta0
             if (Delta0 < stallfact * norm_(x0)):
-                disp_(char('Error: cannot find enough finite objective function values'),char('in the neighbourhood of the starting point! Terminating.'))
+                disp_('Error: cannot find enough finite objective function values','in the neighbourhood of the starting point! Terminating.')
                 if (nfix > 0):
                     I=eye_(n + nfix)
                     x=I[:,indfix] * xl_(indfix) + I[:,indfree] * x
@@ -331,7 +332,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
     if any_(size_(gx) != [n,1]):
         if options.verbose:
-            fprintf_(options.fout,char('### ecdfo: the computed gradient g has a wrong size, (%0i,%0i) instead of (%0i,1)\\n\\n'),size_(gx),n)
+            fprintf_(options.fout,'### ecdfo: the computed gradient g has a wrong size, (%0i,%0i) instead of (%0i,1)\n\n'%(size_(gx),n))
         info.flag=values.fail_on_simul
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     info.g=gx
@@ -355,123 +356,123 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     else:
         info.ce=[]
         info.ae=[]
-#    fprintf_(char('\\n'))
-#    fprintf_(char('**************************************************************************************\\n'))
-#    fprintf_(char('*                                                                                    *\\n'))
-#    fprintf_(char('*            EC-DFO: equality-constrained minimization without derivatives           *\\n'))
-#    fprintf_(char('*                                                                                    *\\n'))
-#    fprintf_(char('*                            (c)  A. Troeltzsch, 2013                                *\\n'))
-#    fprintf_(char('*                                                                                    *\\n'))
-#    fprintf_(char('**************************************************************************************\\n'))
-#    fprintf_(char('\\n'))
-    values.dline=char('-------------------------------------------')
+    fprintf_('\n')
+    fprintf_('**************************************************************************************\n')
+    fprintf_('*                                                                                    *\n')
+    fprintf_('*            EC-DFO: equality-constrained minimization without derivatives           *\n')
+    fprintf_('*                                                                                    *\n')
+    fprintf_('*                            (c)  A. Troeltzsch, 2013                                *\n')
+    fprintf_('*                                                                                    *\n')
+    fprintf_('**************************************************************************************\n')
+    fprintf_('\n')
+    values.dline='-------------------------------------------'
     values.dline=strcat_(values.dline,values.dline)
-    values.eline=char('===========================================')
+    values.eline='==========================================='
     values.eline=strcat_(values.eline,values.eline)
-    values.sline=char('*******************************************')
+    values.sline='*******************************************'
     values.sline=strcat_(values.sline,values.sline)
-#    if options.verbose < 4:
-#        fprintf_(options.fout,char('iter neval        fval            merit      '))
-#        if (nb + mi + me > 0):
-#            fprintf_(options.fout,char(' |grad Lag|   feasibility'))
-#        else:
-#            fprintf_(options.fout,char('gradient'))
-#        fprintf_(options.fout,char('     delta    stepsize'))
-#        if options.algo_method == values.quasi_newton:
-#            fprintf_(options.fout,char('  BFGS\\n'))
-#        else:
-#            fprintf_(options.fout,char('  \\n'))
-#        fprintf_(options.fout,char('  \\n'))
+    if options.verbose < 4:
+        fprintf_(options.fout,'iter neval        fval            merit      ')
+        if (nb + mi + me > 0):
+            fprintf_(options.fout,' |grad Lag|   feasibility')
+        else:
+            fprintf_(options.fout,'gradient')
+        fprintf_(options.fout,'     delta    stepsize')
+        if options.algo_method == values.quasi_newton:
+            fprintf_(options.fout,'  BFGS\n')
+        else:
+            fprintf_(options.fout,'  \n')
+        fprintf_(options.fout,'  \n')
     if options.verbose >= 4:
-        fprintf_(options.fout,char('%s'),values.sline)
-        fprintf_(options.fout,char('ecdfo optimization solver (Version 0.4.4, February 2009, entry point)\\n\\n'))
-        if isa_(func,char('function_handle')):
+        fprintf_(options.fout,'%s'%(values.sline))
+        fprintf_(options.fout,'ecdfo optimization solver (Version 0.4.4, February 2009, entry point)\n\n')
+        if isinstance(func, types.FunctionType):
             func_name=func2str_(func)
         else:
             func_name=copy_(func)
-        fprintf_(options.fout,char('  name: "%s"\\n'),func_name)
-        fprintf_(options.fout,char('  dimensions:\\n'))
-        fprintf_(options.fout,char('  . variables (n):               %4i\\n'),n)
+        fprintf_(options.fout,'  name: "%s"\n'%(func_name))
+        fprintf_(options.fout,'  dimensions:\n')
+        fprintf_(options.fout,'  . variables (n):               %4i\n'%(n))
         if nb > 0:
-            fprintf_(options.fout,char('  . bounds on variables (nb):    %4i (%0i lower, %0i double, %0i upper)\\n'),nb,nb_lo,nb_up)
+            fprintf_(options.fout,'  . bounds on variables (nb):    %4i (%0i lower, %0i double, %0i upper)\n'%(nb,nb_lo,nb_up))
         if mi > 0:
-            fprintf_(options.fout,char('  . inequality constraints (mi): %4i\\n'),mi)
+            fprintf_(options.fout,'  . inequality constraints (mi): %4i\n'%(mi))
         if me > 0:
-            fprintf_(options.fout,char('  . equality constraints (me):   %4i\\n'),me)
-        fprintf_(options.fout,char('  required tolerances for optimality:\\n'))
+            fprintf_(options.fout,'  . equality constraints (me):   %4i\n'%(me))
+        fprintf_(options.fout,'  required tolerances for optimality:\n')
         if nb + mi + me > 0:
-            fprintf_(options.fout,char('  . gradient of the Lagrangian      %8.2e\\n'),options.tol(1))
-            fprintf_(options.fout,char('  . feasibility                     %8.2e\\n'),options.tol(2))
+            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol(1)))
+            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol(2)))
             if nb + mi > 0:
-                fprintf_(options.fout,char('  . complementarity                 %8.2e\\n'),options.tol(3))
+                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol(3)))
         else:
-            fprintf_(options.fout,char('  . gradient of the cost function   %8.2e\\n'),options.tol(1))
-        fprintf_(options.fout,char('  counters:\\n'))
-        fprintf_(options.fout,char('  . max iterations                  %4i\\n'),options.miter)
-        fprintf_(options.fout,char('  . max function evaluations        %4i\\n'),options.msimul)
-        fprintf_(options.fout,char('  algorithm:\\n'))
+            fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol(1)))
+        fprintf_(options.fout,'  counters:\n')
+        fprintf_(options.fout,'  . max iterations                  %4i\n'%(options.miter))
+        fprintf_(options.fout,'  . max function evaluations        %4i\n'%(options.msimul))
+        fprintf_(options.fout,'  algorithm:\n')
         if values.newton == options.algo_method:
-            fprintf_(options.fout,char('  . Newton method\\n'))
+            fprintf_(options.fout,'  . Newton method\n')
         else:
             if values.quasi_newton == options.algo_method:
-                fprintf_(options.fout,char('  . quasi-Newton method\\n'))
+                fprintf_(options.fout,'  . quasi-Newton method\n')
             else:
                 if values.cheap_quasi_newton == options.algo_method:
-                    fprintf_(options.fout,char('  . cheap quasi-Newton method\\n'))
+                    fprintf_(options.fout,'  . cheap quasi-Newton method\n')
         if values.unit_stepsize == options.algo_globalization:
-            fprintf_(options.fout,char('  . unit step-size\\n'))
+            fprintf_(options.fout,'  . unit step-size\n')
         else:
             if values.linesearch == options.algo_globalization:
                 if options.algo_method == values.newton:
-                    fprintf_(options.fout,char("  . globalization by Armijo's linesearch\\n"))
+                    fprintf_(options.fout,"  . globalization by Armijo's linesearch\n")
                 else:
                     if options.algo_method == values.quasi_newton:
-                        if isfield_(options,char('algo_descent')):
+                        if isfield_(options,'algo_descent'):
                             if options.algo_descent == values.powell:
-                                fprintf_(options.fout,char("  . globalization by Armijo's linesearch (descent ensured by Powell corrections)\\n"))
+                                fprintf_(options.fout,"  . globalization by Armijo's linesearch (descent ensured by Powell corrections)\n")
                             else:
                                 if options.algo_descent == values.wolfe:
                                     if nb + mi + me == 0:
-                                        fprintf_(options.fout,char("  . globalization by Wolfe's linesearch\\n"))
+                                        fprintf_(options.fout,"  . globalization by Wolfe's linesearch\n")
                         else:
-                            fprintf_(options.fout,char("  . globalization by Armijo's linesearch\\n"))
+                            fprintf_(options.fout,"  . globalization by Armijo's linesearch\n")
             else:
                 if values.trust_regions == options.algo_globalization:
-                    fprintf_(options.fout,char('  . globalization by trust regions\\n'))
-        fprintf_(options.fout,char('  various input/initial values:\\n'))
+                    fprintf_(options.fout,'  . globalization by trust regions\n')
+        fprintf_(options.fout,'  various input/initial values:\n')
         if (options.algo_method == values.quasi_newton) and (nb + mi + me == 0) and (options.df1 > 0) and (info.f > 0):
-            fprintf_(options.fout,char('  . expected initial decrease       %8.2e\\n'),options.df1 * info.f)
+            fprintf_(options.fout,'  . expected initial decrease       %8.2e\n'%(options.df1 * info.f))
         if nb + mi > 0:
-            fprintf_(options.fout,char('  . infinite bound threshold        %8.2e\\n'),options.inf)
-        fprintf_(options.fout,char('  . |x|_2                           %8.2e\\n'),norm_(x))
+            fprintf_(options.fout,'  . infinite bound threshold        %8.2e\n'%(options.inf))
+        fprintf_(options.fout,'  . |x|_2                           %8.2e\n'%(norm_(x)))
     if (nb + mi + me > 0):
         if isempty_(lm0):
             lm,info=sqplab_lsmult_(x,[],[],info,options,values,nargout=2)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
             if options.verbose >= 4:
-                fprintf_(options.fout,char('  . |lm|_2                          %8.2e (default: least-squares value)\\n'),norm_(lm))
+                fprintf_(options.fout,'  . |lm|_2                          %8.2e (default: least-squares value)\n'%(norm_(lm)))
         else:
             lm=copy_(lm0)
             if options.verbose >= 4:
-                fprintf_(options.fout,char('  . |lm|_2                          %8.2e\\n'),norm_(lm))
+                fprintf_(options.fout,'  . |lm|_2                          %8.2e\n'%(norm_(lm)))
     feas,compl,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     if options.verbose >= 4:
-        fprintf_(options.fout,char('  . |g|_inf                         %8.2e\\n'),norm_(info.g,inf))
+        fprintf_(options.fout,'  . |g|_inf                         %8.2e\n'%(norm_(info.g,inf)))
         if nb + mi + me > 0:
-            fprintf_(options.fout,char('  . |glag|_inf                      %8.2e\\n'),norm_(info.glag,inf))
+            fprintf_(options.fout,'  . |glag|_inf                      %8.2e\n'%(norm_(info.glag,inf)))
         if nb:
-            fprintf_(options.fout,char('  . |x^#|_inf                       %8.2e\\n'),norm_(feas[1:n],inf))
+            fprintf_(options.fout,'  . |x^#|_inf                       %8.2e\n'%(norm_(feas[1:n],inf)))
         if mi:
-            fprintf_(options.fout,char('  . |ci^#|_inf                      %8.2e\\n'),norm_(feas[n + 1:n + mi],inf))
+            fprintf_(options.fout,'  . |ci^#|_inf                      %8.2e\n'%(norm_(feas[n + 1:n + mi],inf)))
         if me:
-            fprintf_(options.fout,char('  . |ce|_inf                        %8.2e\\n'),norm_(feas[n + mi + 1:n + mi + me],inf))
+            fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'%(norm_(feas[n + mi + 1:n + mi + me],inf)))
         if nb + mi > 0:
-            fprintf_(options.fout,char('  . |complementarity|_inf           %8.2e\\n'),norm_(compl,inf))
-        fprintf_(options.fout,char('  tunings:\\n'))
-        fprintf_(options.fout,char('  . printing level                  %0i\\n'),options.verbose)
+            fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'%(norm_(compl,inf)))
+        fprintf_(options.fout,'  tunings:\n')
+        fprintf_(options.fout,'  . printing level                  %0i\n'%(options.verbose))
     info,options=sqplab_checkoptions_(nb,mi,me,0,info,options,values,nargout=2)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values

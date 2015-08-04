@@ -22,7 +22,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
     verbose=0
     theta=1e-13
     eps_bound=1e-05
-    msg=char('no free variables')
+    msg='no free variables'
     _lambda=0
     value=0
     nfact=0
@@ -38,27 +38,27 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
     ind_free=arange_(1,n)
     nfree=copy_(n)
     if (verbose):
-        disp_(char('bcdfo_solve_TR_MS_bc: enter'))
+        disp_('bcdfo_solve_TR_MS_bc: enter')
     if (not isempty_(find_(isnan_(H)))):
         if (verbose):
-            disp_(char('Error in bcdfo_solve_TR_MS_bc: H contains NaNs!'))
-        msg=char('error1')
+            disp_('Error in bcdfo_solve_TR_MS_bc: H contains NaNs!')
+        msg='error1'
         if (verbose):
-            disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+            disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
     if (not isempty_(find_(~ isreal_(H)))):
         if (verbose):
-            disp_(char('Error in bcdfo_solve_TR_MS_bc: H contains imaginary parts!'))
-        msg=char('error2')
+            disp_('Error in bcdfo_solve_TR_MS_bc: H contains imaginary parts!')
+        msg='error2'
         if (verbose):
-            disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+            disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
     if (not isempty_(find_(isinf_(H)))):
         if (verbose):
-            disp_(char('Error in bcdfo_solve_TR_MS_bc: H contains infinite elements!'))
-        msg=char('error3')
+            disp_('Error in bcdfo_solve_TR_MS_bc: H contains infinite elements!')
+        msg='error3'
         if (verbose):
-            disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+            disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
 #    ind_g_crit=find_((abs_(lb) <= 1e-10 and g > 0) or (ub <= 1e-10 and g < 0))
     ind_g_crit=find_(logical_or(logical_and(g>0, abs_(lb) <= 1e-10), logical_and(g < 0, ub <= 1e-10)))
@@ -75,7 +75,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
 
             j=j + 1
             if (verbose >= 1):
-                disp_([char('('),num2str_(j),char(') ---- minimizing in the (sub)space of '),num2str_(length_(ind_free)),char(' variable(s)')])
+                disp_('(',num2str_(j),') ---- minimizing in the (sub)space of ',num2str_(length_(ind_free)),' variable(s)')
             g_reduced=g[ind_free]
             H_reduced=H[ind_free,ind_free]
             s_deltaMS,_lambda,norms_deltaMS,value_red,gplus_red,nfact_r,neigd_r,msg,hardcase=bcdfo_solve_TR_MS_(g_reduced,H_reduced,Delta,eps_D,nargout=9)
@@ -93,19 +93,19 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                 ind_free=setdiff_(arange_(1,n),ind_active)
                 nfree=length_(ind_free)
                 if (verbose):
-                    disp_(char('fixed one or more variables'))
+                    disp_('fixed one or more variables')
                 if (nfree == 0):
                     norms=norm_(s)
                     value=0.5 * s.T * H * s + s.T * g0
                     if (verbose):
-                        disp_(char('no inactive variables anymore - return'))
-                        disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                        disp_('no inactive variables anymore - return')
+                        disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
             else:
                 new_call_to_MS=0
 
         if (verbose == 2):
-            disp_(char('check if step inside bounds'))
+            disp_('check if step inside bounds')
         out_of_ubound=find_((ub[ind_free] - s_after_reduced_ms[ind_free]) < 0.0)
         out_of_lbound=find_((s_after_reduced_ms[ind_free] - lb[ind_free]) < 0.0)
         out_of_ubound_init=copy_(out_of_ubound)
@@ -114,10 +114,10 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             back_inside=0
             lambda0=copy_(_lambda)
             if (verbose == 2):
-                disp_(char('step outside bounds!'))
+                disp_('step outside bounds!')
                 out_of_ubound
                 out_of_lbound
-                disp_([char('lambda_0='),num2str_(lambda0)])
+                disp_('lambda_0=',num2str_(lambda0))
             lower=copy_(_lambda)
             if (stratLam == 0):
                 _lambda=max_(2.0,2 * _lambda)
@@ -144,7 +144,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                 old_lambda=copy_(_lambda)
                 new_lambda=- 1
                 if (verbose):
-                    disp_([char(' bcdfo_solve_TR_MS_bc ('),int2str_(i),char('): lower = '),num2str_(lower),char(' lambda = '),num2str_(_lambda),char(' upper = '),num2str_(upper)])
+                    disp_(' bcdfo_solve_TR_MS_bc (',int2str_(i),'): lower = ',num2str_(lower),' lambda = ',num2str_(_lambda),' upper = ',num2str_(upper))
                 R,p=chol_(H[ind_free,ind_free] + _lambda * eye_(nfree),nargout=2)
                 if (not isempty_(find_(isnan_(R)))):
                     H
@@ -152,10 +152,10 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                     norm_(g)
                     R
                     p
-                    disp_(char('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization'))
-                    msg=char('error4')
+                    disp_('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
+                    msg='error4'
                     if (verbose):
-                        disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                        disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
                 nfact=nfact + 1
                 if (p == 0 and hardcase == 0):
@@ -233,26 +233,26 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                         lambda_save[i]=_lambda
                         norms_b_save[i]=norms_b
                         if (outside == 0):
-                            fprintf_(1,char('%s%d%s %12.8e %s %12.8e %s\\n'),char(' bcdfo_solve_TR_MS_bc ('),i,char('): |s_i| = '),norms_b,char('  |bound_i| = '),delta_b,char('   s < bounds'))
+                            fprintf_('%s%d%s %12.8e %s %12.8e %s\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b,'   s < bounds'))
                         else:
-                            fprintf_(1,char('%s%d%s %12.8e %s %12.8e\\n'),char(' bcdfo_solve_TR_MS_bc ('),i,char('): |s_i| = '),norms_b,char('  |bound_i| = '),delta_b)
+                            fprintf_('%s%d%s %12.8e %s %12.8e\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b))
                     out_of_uEpsbound=find_((ub[ind_free] - s_duringH[ind_free]) < - eps_bound)
                     out_of_lEpsbound=find_((s_duringH[ind_free] - lb[ind_free]) < - eps_bound)
                     if (isempty_(out_of_uEpsbound) and isempty_(out_of_lEpsbound)):
                         if (verbose >= 2):
-                            disp_(char('all components inside the bounds + eps_bound'))
+                            disp_('all components inside the bounds + eps_bound')
                         back_inside=1
                         ind_u_active=find_(abs_(ub[ind_free] - s_duringH[ind_free]) <= eps_bound)
                         ind_l_active=find_(abs_(s_duringH[ind_free] - lb[ind_free]) <= eps_bound)
                         if ((length_(ind_u_active) + length_(ind_l_active)) != 0):
                             if (verbose >= 2):
-                                disp_([char('all components inside the bounds + eps_bound, '),num2str_(length_(ind_u_active) + length_(ind_l_active)),char(' component/s close to one of its bounds')])
+                                disp_('all components inside the bounds + eps_bound, ',num2str_(length_(ind_u_active) + length_(ind_l_active)),' component/s close to one of its bounds')
                             s_afterH=s + I[:,ind_free] * s_deltaH
                             if (length_(ind_u_active) > 0):
                                 s_afterH[ind_free[ind_u_active]]=ub[ind_free[ind_u_active]]
                             if (length_(ind_l_active) > 0):
                                 s_afterH[ind_free[ind_l_active]]=lb[ind_free[ind_l_active]]
-                            msg=char('boundary solution')
+                            msg='boundary solution'
                             break
                     if (stratLam == 0):
                         if (back_inside == 0):
@@ -293,7 +293,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                             _lambda=real_(max_(sqrt_(lower * upper),lower + theta_range))
                 else:
                     if (verbose):
-                        disp_(char('unsuccessful factorization'))
+                        disp_('unsuccessful factorization')
                     hardcase=0
                     lower=copy_(_lambda)
                     t=0.5
@@ -301,36 +301,36 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                 if (i >= 100):
                     s[1:n]=0.0
                     norms=0
-                    msg=char('limit in bc-MS exceeded')
+                    msg='limit in bc-MS exceeded'
                     if (verbose):
-                        disp_(char('Error in bcdfo_solve_TR_MS_bc: iteration limit in bc-MS exceeded!'))
-                        disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                        disp_('Error in bcdfo_solve_TR_MS_bc: iteration limit in bc-MS exceeded!')
+                        disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
 
         else:
             if (verbose >= 2):
-                disp_(char('step inside bounds!'))
-            msg=char('(partly) interior solution')
+                disp_('step inside bounds!')
+            msg='(partly) interior solution'
             s=copy_(s_after_reduced_ms)
             norms=norm_(s)
             value=0.5 * s.T * H * s + s.T * g0
             if (verbose):
-                disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                disp_('bcdfo_solve_TR_MS_bc: exit!')
             return s,_lambda,norms,value,gplus,nfact,neigd,msg
         s=copy_(s_afterH)
         norms=norm_(s)
         value=0.5 * s.T * H * s + s.T * g0
         Delta=Delta0 - norms
         if (Delta < - eps_bound):
-            disp_(char('Error in bcdfo_solve_TR_MS_bc: delta smaller than zero !!!!!!'))
-            msg=char('error7')
+            disp_('Error in bcdfo_solve_TR_MS_bc: delta smaller than zero !!!!!!')
+            msg='error7'
             if (verbose):
-                disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                disp_('bcdfo_solve_TR_MS_bc: exit!')
             return s,_lambda,norms,value,gplus,nfact,neigd,msg
         else:
             if (Delta < 0):
                 if (verbose):
-                    disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                    disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg
         g=g0 + H * s
 #        ind_active=find_((ub - s) <= eps_bound or (s - lb) <= eps_bound)
@@ -342,10 +342,10 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             ng_reduced=norm_(g[ind_free],inf)
             if (ng_reduced <= 1e-05):
                 if (verbose >= 2):
-                    disp_(char('point first order critical - return'))
+                    disp_('point first order critical - return')
                     ng_reduced
                 if (verbose):
-                    disp_(char('bcdfo_solve_TR_MS_bc: exit!'))
+                    disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg
 #            ind_g_crit=find_((abs_(lb[ind_free]) <= 1e-10 and g[ind_free] > 0) or (ub[ind_free] <= 1e-10 and g[ind_free] < 0))
             ind_g_crit=find_(logical_or(logical_and(abs(lb[ind_free]) <= 1e-10, g[ind_free] > 0), logical_and(ub[ind_free] <= 1e-10, g[ind_free] < 0)))

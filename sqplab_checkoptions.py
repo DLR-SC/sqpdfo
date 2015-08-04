@@ -51,50 +51,50 @@ def sqplab_checkoptions_(nb=None,mi=None,me=None,ms=None,info_=None,options_=Non
     info.flag=values.success
     if options.algo_method == values.cheap_quasi_newton:
         if options.verbose:
-            fprintf_(options.fout,char('\\n### sqplab_checkoptions: the cheap quasi-Newton method is not a valid\\n'))
-            fprintf_(options.fout,char('### approach when there is no state constraint\\n\\n'))
+            fprintf_(options.fout,'\n### sqplab_checkoptions: the cheap quasi-Newton method is not a valid\n')
+            fprintf_(options.fout,'### approach when there is no state constraint\n\n')
         info.flag=values.fail_on_problem
         return info,options
     if values.unit_stepsize == options.algo_globalization:
         if options.algo_method != values.newton:
-            if not isfield_(options,char('algo_descent')):
+            if not isfield_(options,'algo_descent'):
                 if options.verbose:
-                    fprintf_(options.fout,char('\\n### sqplab_checkoptions: positive definiteness of the matrices is ensured\\n'))
-                    fprintf_(options.fout,char('### by Powell corrections\\n\\n'))
+                    fprintf_(options.fout,'\n### sqplab_checkoptions: positive definiteness of the matrices is ensured\n')
+                    fprintf_(options.fout,'### by Powell corrections\n\n')
                 options.algo_descent=values.powell
             else:
                 if options.algo_descent == values.wolfe:
                     if options.verbose:
-                        fprintf_(options.fout,char('\\n### sqplab_checkoptions: positive definiteness of the matrices cannot be ensured\\n'))
-                        fprintf_(options.fout,char('### by the Wolfe linesearch when unit stepsize is required; Powell corrections\\n'))
-                        fprintf_(options.fout,char('### will be used instead\\n\\n'))
+                        fprintf_(options.fout,'\n### sqplab_checkoptions: positive definiteness of the matrices cannot be ensured\n')
+                        fprintf_(options.fout,'### by the Wolfe linesearch when unit stepsize is required; Powell corrections\n')
+                        fprintf_(options.fout,'### will be used instead\n\n')
                     options.algo_descent=values.powell
     else:
         if values.linesearch == options.algo_globalization:
             if options.algo_method == values.newton:
-                if isfield_(options,char('algo_descent')):
+                if isfield_(options,'algo_descent'):
                     if options.verbose:
-                        fprintf_(options.fout,char("\\n### sqplab_checkoptions: descent cannot be ensured for Newton's method\\n"))
-                        fprintf_(options.fout,char('### by using Powell corrections or Wolfe linesearch\\n\\n'))
+                        fprintf_(options.fout,"\n### sqplab_checkoptions: descent cannot be ensured for Newton's method\n")
+                        fprintf_(options.fout,'### by using Powell corrections or Wolfe linesearch\n\n')
                     info.flag=values.fail_on_argument
                     return info,options
                 else:
                     if options.verbose:
-                        fprintf_(options.fout,char("\\n### sqplab_checkoptions: Armijo's linesearch can fail with Newton's method,\\n"))
-                        fprintf_(options.fout,char('###                      use unit step-size instead\\n\\n'))
+                        fprintf_(options.fout,"\n### sqplab_checkoptions: Armijo's linesearch can fail with Newton's method,\n")
+                        fprintf_(options.fout,'###                      use unit step-size instead\n\n')
             else:
-                if not isfield_(options,char('algo_descent')):
+                if not isfield_(options,'algo_descent'):
                     if options.verbose:
-                        fprintf_(options.fout,char('\\n### sqplab_checkoptions: descent ensured by Powell corrections\\n'))
+                        fprintf_(options.fout,'\n### sqplab_checkoptions: descent ensured by Powell corrections\n')
                         if nb + mi + me + ms == 0:
-                            fprintf_(options.fout,char('### setting "options.algo_descent = \'Wolfe\'" should be better\\n\\n'))
+                            fprintf_(options.fout,'### setting "options.algo_descent = \'Wolfe\'" should be better\n\n')
                     options.algo_descent=values.powell
                 else:
                     if (options.algo_descent == values.wolfe) and (nb + mi + me + ms != 0):
                         if options.verbose:
-                            fprintf_(options.fout,char('\\n### sqplab_checkoptions: positive definiteness of the matrices cannot be ensured\\n'))
-                            fprintf_(options.fout,char('### by the Wolfe linesearch when constraints are present; Powell corrections\\n'))
-                            fprintf_(options.fout,char('### will be used instead\\n\\n'))
+                            fprintf_(options.fout,'\n### sqplab_checkoptions: positive definiteness of the matrices cannot be ensured\n')
+                            fprintf_(options.fout,'### by the Wolfe linesearch when constraints are present; Powell corrections\n')
+                            fprintf_(options.fout,'### will be used instead\n\n')
                         options.algo_descent=values.powell
     return info,options
     

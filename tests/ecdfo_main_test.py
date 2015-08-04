@@ -991,9 +991,9 @@ class Test_ecdfo_main(unittest.TestCase):
         self.factor_FPU = 1.0
         self.factor_FPR = 10.0
         self.Lambda_FP = 1.000000000000000e-10
-        self.criterion_S = char('distance')
-        self.criterion_FP = char('distance')
-        self.criterion_CP = char('standard')
+        self.criterion_S = 'distance'
+        self.criterion_FP = 'distance'
+        self.criterion_CP = 'standard'
         self.mu = 0.0
         self.theta = 1.0
         self.eps_TR = 1.000000000000000e-04
@@ -1048,7 +1048,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.c.inY = 1
         self.c.dummy = 1
         self.c.nodummy = 0
-        self.level = char('toplevel')
+        self.level = 'toplevel'
         self.whichmodel = 0
         self.hardcons = 0
         self.noisy = 0

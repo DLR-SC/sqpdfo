@@ -35,16 +35,16 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     pos=0
     for i in arange_(1,lc).reshape(-1):
         j=choice[i]
-        if (criterion == char('weighted')):
+        if (criterion == 'weighted'):
             if (succ == 1):
                 cv=norm_(Y[:,j] - x) ** 2 * abs_(Lvals[j])
             else:
                 cv=norm_(Y[:,j] - Y[:,1]) ** 2 * abs_(Lvals[j])
         else:
-            if (criterion == char('standard')):
+            if (criterion == 'standard'):
                 cv=abs_(Lvals[j])
             else:
-                if (criterion == char('distance')):
+                if (criterion == 'distance'):
                     if (succ == 1):
                         cv=norm_(Y[:,j] - x)
                     else:

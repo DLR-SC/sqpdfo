@@ -545,11 +545,11 @@ from ecdfo_global_variables import set_prob
 
 class myDummyOptions():
     def __init__(self):
-        self.algo_method = char('quasi newton')#char('quasi newton')
-        self.algo_globalization = char('trust regions')
-        self.hess_approx = char('model')
+        self.algo_method = 'quasi newton'#'quasi newton')
+        self.algo_globalization = 'trust regions'
+        self.hess_approx = 'model'
         self.bfgs_restart = 0
-        self.algo_descent = char('powell')
+        self.algo_descent = 'powell'
         self.tol = matlabarray([1.000000000000000e-05, 1.000000000000000e-05, 1.000000000000000e-05])
         self.dxmin = 1.000000000000000e-06
         self.miter = 500
@@ -595,7 +595,7 @@ class Test_ecdfo_prelim(unittest.TestCase):
         self.c.dummy = 1
         self.c.nodummy = 0
 
-        self.initial_Y = char('simplx')
+        self.initial_Y = 'simplx'
         self.kappa_ill = 1.000000000000000e+15
         self.whichmodel =  0
         self.factor_FPR = 10

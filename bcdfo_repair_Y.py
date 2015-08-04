@@ -27,13 +27,13 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
     verbose=0
     max_improve_loops=20
     if (verbose):
-        disp_([char('--- enter bcdfo_repair_Y  for Delta = '),num2str_(Delta),char(' ---')])
+        disp_('--- enter bcdfo_repair_Y  for Delta = ',num2str_(Delta),' ---')
     n,p1=size_(Y,nargout=2)
     replaced=matlabarray([])
     d=zeros_(1,p1)
     for j in arange_(2,p1).reshape(-1):
         d[j]=norm_(Y[:,j] - Y[:,1])
-#    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
+#    dsorted,jsorted=sort_(d,'descend',nargout=2)
     dsorted=matlabarray(sort_(np.asarray(d).reshape(-1))[::-1])
     jsorted=matlabarray(argsort_(np.asarray(d).reshape(-1))[::-1])+1
     if (verbose):
@@ -48,7 +48,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             else:
                 y,improvement,msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose):
-                disp_([char('lambda = '),num2str_(improvement),char(' at j='),num2str_(jmax)])
+                disp_('lambda = ',num2str_(improvement),' at j=',num2str_(jmax))
             QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,y,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
 #            replaced=matlabarray([replaced,jmax])
             replaced=concatenate_([replaced,jmax], axis=1)
@@ -59,7 +59,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
     if (verbose):
         replaced
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-        disp_([char('after distant replace: poisedness(Y) = '),num2str_(poised),char(' Y_radius  = '),num2str_(Y_radius)])
+        disp_('after distant replace: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
     for k in arange_(1,max_improve_loops).reshape(-1):
         maximprove=0
         for j in arange_(2,p1).reshape(-1):
@@ -68,7 +68,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             else:
                 y,improvement, msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose > 1):
-                disp_([char(' ==> j = '),int2str_(j),char(' improve = '),num2str_(improvement)])
+                disp_(' ==> j = ',int2str_(j),' improve = ',num2str_(improvement))
                 y
             if (improvement > maximprove):
                 maximprove=copy_(improvement)
@@ -78,15 +78,15 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             Y_radius=max_(d)
             if (verbose):
                 replaced
-                disp_([char('maximprove(small)= '),num2str_(maximprove),char(', jmax= '),int2str_(jmax)])
+                disp_('maximprove(small)= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-                disp_([char('after everything: poisedness(Y) = '),num2str_(poised),char(' Y_radius  = '),num2str_(Y_radius)])
-                disp_([char('--- exit 1 bcdfo_repair_Y in round k='),num2str_(k),char(' ---')])
+                disp_('after everything: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
+                disp_('--- exit 1 bcdfo_repair_Y in round k=',num2str_(k),' ---')
             if (isempty_(replaced)):
                 maximprove=0
             return QZ,RZ,Y,replaced,maximprove,Y_radius,xbase,scale
         if (verbose):
-            disp_([char('maximprove= '),num2str_(maximprove),char(', jmax= '),int2str_(jmax)])
+            disp_('maximprove= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
         QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ymax,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
         d[jmax]=norm_(ymax - Y[:,1])
         if (length_(find_(replaced == jmax)) == 0):
@@ -95,6 +95,6 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
     if (verbose):
         replaced
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-        disp_([char('after everything: poisedness(Y) = '),num2str_(poised),char(' Y_radius  = '),num2str_(Y_radius)])
-        disp_([char('--- exit 2 bcdfo_repair_Y after round k='),num2str_(k),char('  ---')])
+        disp_('after everything: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
+        disp_('--- exit 2 bcdfo_repair_Y after round k=',num2str_(k),'  ---')
     return QZ,RZ,Y,replaced,maximprove,Y_radius,xbase,scale    

@@ -36,7 +36,7 @@ class Test_bcdfo_include_in_Y(unittest.TestCase):
         Y = matlabarray([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]])
         whichmodel = 0
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, whichmodel, 1, 1, 1, 1e15 )
-        QZplus, RZplus, Yplus, pos, xbase, scale = bcdfo_include_in_Y_(matlabarray([-1,1]).T, QZ, RZ, copy_(Y), matlabarray(range(2,6)), 0.01, char('weighted'), xbase, whichmodel, 0, scale, 1, 1, 1, 1e15 )
+        QZplus, RZplus, Yplus, pos, xbase, scale = bcdfo_include_in_Y_(matlabarray([-1,1]).T, QZ, RZ, copy_(Y), matlabarray(range(2,6)), 0.01, 'weighted', xbase, whichmodel, 0, scale, 1, 1, 1, 1e15 )
         #print QZplus, RZplus, Yplus, pos, xbase, scale
         
         correctQZplus = matlabarray([

@@ -95,7 +95,7 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
     else:
         lb=lb[:]
         if any_(size_(lb) != [n,1]):
-            fprintf_(char('\\n### sqplab_lsmult: incorrect size of lb\\n\\n'))
+            fprintf_('\n### sqplab_lsmult: incorrect size of lb\n\n')
             info.flag=values.fail_strange
             return lm,info
     if (nargin < 5) or isempty_(ub):
@@ -103,7 +103,7 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
     else:
         ub=ub[:]
         if any_(size_(ub) != [n,1]):
-            fprintf_(char('\\n### sqplab_lsmult: incorrect size of ub\\n\\n'))
+            fprintf_('\n### sqplab_lsmult: incorrect size of ub\n\n')
             info.flag=values.fail_strange
             return lm,info
     A=concatenate_([eye_(n),info.ae])

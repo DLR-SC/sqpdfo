@@ -42,7 +42,7 @@ def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
         A=v * d * v.T
         if not isempty_(find_(~ isreal_(A),1)):
             if options.verbose >= 3:
-                disp_(char('### ecdfo_check_convex: matrix is non symmetric. Resetting A.'))
+                disp_('### ecdfo_check_convex: matrix is non symmetric. Resetting A.')
             A=0.5*(A + A.T)
             
     return A

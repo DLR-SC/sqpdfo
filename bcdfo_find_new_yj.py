@@ -27,12 +27,12 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
     ynew=zeros_(1,n)
     improvement=0
     if (verbose):
-        disp_(char('--------- enter find_new_yj '))
+        disp_('--------- enter find_new_yj ')
     if (j < 2):
         return ynew,improvement,msgTR
     Lj=bcdfo_computeLj_(QZ,RZ,j,Y,whichmodel,scale,shift_Y)
     if (length_(find_(isnan_(Lj))) != 0 or length_(find_(~ isreal_(Lj))) != 0 or length_(find_(isinf_(Lj))) != 0):
-        msgTR=char('Error0: Lagrange polynomial contains NaN or Inf or nonreal components!!')
+        msgTR='Error0: Lagrange polynomial contains NaN or Inf or nonreal components!!'
         if (verbose):
             disp_(msgTR)
         return ynew,improvement,msgTR
@@ -51,9 +51,9 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
         pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta,eps_L,nargout=9)
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta,eps_L,nargout=9)
     if (verbose):
-        disp_([char(' === find_new_yj: j = '),int2str_(j),char(' positive value = '),num2str_(pvalue),char(' step:')])
+        disp_(' === find_new_yj: j = ',int2str_(j),' positive value = ',num2str_(pvalue),' step:')
         pstep.T
-        disp_([char(' === find_new_yj: j = '),int2str_(j),char(' negative value = '),num2str_(mvalue),char(' step:')])
+        disp_(' === find_new_yj: j = ',int2str_(j),' negative value = ',num2str_(mvalue),' step:')
         mstep.T
     if (mvalue < pvalue):
         improvement=abs_(mvalue)
@@ -62,5 +62,5 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
         improvement=abs_(pvalue)
         ynew=Y[:,1] + pstep
     if (verbose):
-        disp_(char('--------- exit find_new_yj '))
+        disp_('--------- exit find_new_yj ')
     return ynew,improvement,msgTR

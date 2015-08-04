@@ -92,14 +92,14 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
     delta2=delta * delta
     dAd=matlabarray([])
     if plevel:
-        fprintf_(fout,char('    TCG solver; required tolerance %8.2e\\n'),tol)
-        fprintf_(fout,char('    iter       cost        |res|   curvature  stepsize   |step|\\n'))
+        fprintf_(fout,'    TCG solver; required tolerance %8.2e\n'%(tol))
+        fprintf_(fout,'    iter       cost        |res|   curvature  stepsize   |step|\n')
     _iter=0
     while 1:
 
         _iter=_iter + 1
         if plevel:
-            fprintf_(fout,char('    %4i  %14.7e  %7.1e'),_iter,cost,sqrt_(g2))
+            fprintf_(fout,'    %4i  %14.7e  %7.1e'%(_iter,cost,sqrt_(g2)))
         if g2 <= tol2:
             info.flag=0
             break
@@ -114,31 +114,31 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
         Ad=A * d
         dAd=d.T * Ad
         if plevel:
-            fprintf_(fout,char('  %9.2e'),dAd / (d.T * d))
+            fprintf_(fout,'  %9.2e'%(dAd / (d.T * d)))
         if dAd <= 0:
             x,alpha=dogleg_(x,x + d,delta,nargout=2)
             info.flag=2
             if plevel:
-                fprintf_(fout,char('  %8.2e  %8.2e\\n'),alpha,norm_(x))
+                fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,char('    %4i  %14.7e  %7.1e\\n'),_iter + 1,cost)
+                fprintf_(fout,'    %4i  %14.7e  %7.1e\n'%(_iter + 1,cost))
             break
         alpha=- (g.T * d) / dAd
         xx=x + alpha * d
         if plevel:
-            fprintf_(fout,char('  %8.2e'),alpha)
+            fprintf_(fout,'  %8.2e'%(alpha))
         if xx.T * xx > delta2:
             x,alpha=dogleg_(x,xx,delta,nargout=2)
             info.flag=1
             if plevel:
-                fprintf_(fout,char('  %8.2e  %8.2e\\n'),alpha,norm_(x))
+                fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,char('    %4i  %14.7e  %7.1e\\n'),_iter + 1,cost)
+                fprintf_(fout,'    %4i  %14.7e  %7.1e\n'%(_iter + 1,cost))
             break
         else:
             x=copy_(xx)
         if plevel:
-            fprintf_(fout,char('  %8.2e\\n'),norm_(x))
+            fprintf_(fout,'  %8.2e\n'%(norm_(x)))
         g=g + alpha * Ad
         g2_=copy_(g2)
         g2=g.T * g

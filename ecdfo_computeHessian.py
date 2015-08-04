@@ -55,9 +55,9 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             if options.hess_approx == values.bfgs:
                 if options.verbose >= 4:
                     if constrained_pbl:
-                        fprintf_(options.fout,char('\\nBFGS update:\\n'))
+                        fprintf_(options.fout,'\nBFGS update:\n')
                     else:
-                        fprintf_(options.fout,char('\\nBFGS inverse update:\\n'))
+                        fprintf_(options.fout,'\nBFGS inverse update:\n')
                 y=- info.g
                 if me:
                     y=y - info.ae.T * lm[n + mi + 1:n + mi + me]
@@ -99,7 +99,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                         M=bcdfo_hessP_(fcmodel[1,:],x,x,scale,shift_Y)
                 else:
                     if options.verbose:
-                        fprintf_(options.fout,char('\\n### ecdfo: options.hess_approx not recognized\\n\\n'))
+                        fprintf_(options.fout,'\n### ecdfo: options.hess_approx not recognized\n\n')
                     info.flag=values.fail_on_argument
                     return M,pc,info
     return M,pc,info

@@ -103,7 +103,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                 else:
                     badcond=1
                 if (badcond):
-                    U,S,V=svd_(Z,char('econ'),nargout=3)
+                    U,S,V=svd_(Z,'econ',nargout=3)
                     Sdiag=diag_(S)
                     indices=find_(Sdiag < _del)
                     Sdiag[indices]=_del
