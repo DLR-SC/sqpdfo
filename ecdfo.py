@@ -19,6 +19,7 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
+from copy import copy
 
 
 
@@ -167,7 +168,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwarg
         n=n + nfix
     if (scaleX):
         x=x / scalefacX
-    info_best=copy_(info)
+    info_best=copy(info)
     info_best.f=fx
     x=X[:,i_xbest]
     ecdfo_finish_(nb,mi,me,info_best,options,values)

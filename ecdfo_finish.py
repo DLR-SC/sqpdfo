@@ -48,54 +48,38 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
         fprintf_(options.fout,'  Exit code %i: '%(info.flag))
         if values.success == info.flag:
             fprintf_(options.fout,'converged')
-        else:
-            if values.fail_on_argument == info.flag:
-                fprintf_(options.fout,'wrong argument')
-            else:
-                if values.fail_on_problem == info.flag:
-                    fprintf_(options.fout,'unaccepted problem structure')
-                else:
-                    if values.fail_on_simul == info.flag:
-                        fprintf_(options.fout,'error when calling the simulator')
-                    else:
-                        if values.stop_on_simul == info.flag:
-                            fprintf_(options.fout,'the simulator wants to stop')
-                        else:
-                            if values.stop_on_max_iter == info.flag:
-                                fprintf_(options.fout,'max iteration reached')
-                            else:
-                                if values.stop_on_max_simul == info.flag:
-                                    fprintf_(options.fout,'max simulation reached')
-                                else:
-                                    if values.stop_on_dxmin == info.flag:
-                                        fprintf_(options.fout,'too small variation in x (dxmin active)')
-                                    else:
-                                        if values.fail_on_non_decrease == info.flag:
-                                            fprintf_(options.fout,'the merit function cannot be decreased')
-                                        else:
-                                            if values.fail_on_ascent_dir == info.flag:
-                                                fprintf_(options.fout,'ascent direction encountered in linesearch')
-                                            else:
-                                                if values.fail_on_max_ls_iter == info.flag:
-                                                    fprintf_(options.fout,'too many stepsize trials in linesearch')
-                                                else:
-                                                    if values.fail_on_ill_cond == info.flag:
-                                                        fprintf_(options.fout,'ill conditioning')
-                                                    else:
-                                                        if values.fail_on_null_step == info.flag:
-                                                            fprintf_(options.fout,'null step d is solution of %0i QPs'%(values.max_null_steps + 1))
-                                                        else:
-                                                            if values.fail_on_infeasible_QP == info.flag:
-                                                                fprintf_(options.fout,'infeasible QP')
-                                                            else:
-                                                                if values.fail_on_unbounded_QP == info.flag:
-                                                                    fprintf_(options.fout,'unbounded QP')
-                                                                else:
-                                                                    if values.fail_strange == info.flag:
-                                                                        fprintf_(options.fout,'strange failure, call a guru')
-                                                                    else:
-                                                                        if values.stop_on_small_trust_region == info.flag:
-                                                                            fprintf_(options.fout,'trust region radius small')
+        elif values.fail_on_argument == info.flag:
+            fprintf_(options.fout,'wrong argument')
+        elif values.fail_on_problem == info.flag:
+            fprintf_(options.fout,'unaccepted problem structure')
+        elif values.fail_on_simul == info.flag:
+            fprintf_(options.fout,'error when calling the simulator')
+        elif values.stop_on_simul == info.flag:
+            fprintf_(options.fout,'the simulator wants to stop')
+        elif values.stop_on_max_iter == info.flag:
+            fprintf_(options.fout,'max iteration reached')
+        elif values.stop_on_max_simul == info.flag:
+            fprintf_(options.fout,'max simulation reached')
+        elif values.stop_on_dxmin == info.flag:
+            fprintf_(options.fout,'too small variation in x (dxmin active)')
+        elif values.fail_on_non_decrease == info.flag:
+            fprintf_(options.fout,'the merit function cannot be decreased')
+        elif values.fail_on_ascent_dir == info.flag:
+            fprintf_(options.fout,'ascent direction encountered in linesearch')
+        elif values.fail_on_max_ls_iter == info.flag:
+            fprintf_(options.fout,'too many stepsize trials in linesearch')
+        elif values.fail_on_ill_cond == info.flag:
+            fprintf_(options.fout,'ill conditioning')
+        elif values.fail_on_null_step == info.flag:
+            fprintf_(options.fout,'null step d is solution of %0i QPs'%(values.max_null_steps + 1))
+        elif values.fail_on_infeasible_QP == info.flag:
+            fprintf_(options.fout,'infeasible QP')
+        elif values.fail_on_unbounded_QP == info.flag:
+            fprintf_(options.fout,'unbounded QP')
+        elif values.fail_strange == info.flag:
+            fprintf_(options.fout,'strange failure, call a guru')
+        elif values.stop_on_small_trust_region == info.flag:
+            fprintf_(options.fout,'trust region radius small')
         fprintf_(options.fout,'\n')
         fprintf_(options.fout,'%s\n'%(values.dline))
         fprintf_(options.fout,'  Final function value                     %12.5e\n'%(info.f))
@@ -109,8 +93,8 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
             fprintf_(options.fout,'  Gradient of the cost function (inf norm)  %11.5e\n'%(info.glagn))
         fprintf_(options.fout,'  Counters:\n')
         fprintf_(options.fout,'  . nbr of iterations                   %4i\n'%(info.niter))
-        fprintf_(options.fout,'  . nbr of function evaluations         %4i\n'%(info.nsimul[2] + info.nsimul(4)))
-        fprintf_(options.fout,'  . nbr of gradient evaluations         %4i\n'%(info.nsimul[3] + info.nsimul(4)))
+        fprintf_(options.fout,'  . nbr of function evaluations         %4i\n'%(info.nsimul[2] + info.nsimul[4]))
+        fprintf_(options.fout,'  . nbr of gradient evaluations         %4i\n'%(info.nsimul[3] + info.nsimul[4]))
     fprintf_(options.fout,'%s\n'%(values.sline))
     return
 #def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
