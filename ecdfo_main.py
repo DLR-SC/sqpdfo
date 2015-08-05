@@ -423,7 +423,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                     if me > 0:
                         ceY[:,cur_degree]=info.ce.T
                     poised_model=0
-                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
                     gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
                     normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                     if mi > 0:
@@ -490,7 +490,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                             else:
                                 if (shrink_Delta == 1 and delta > epsilon):
                                     delta=gamma2 * delta
-                            fcmodel=bcdfo_computeP_(QZ,RZ,Y,[[fY],[ciY],[ceY]],whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
                             gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
                             normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                             if mi > 0:
