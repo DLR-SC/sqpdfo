@@ -568,7 +568,15 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(V3, [[8],[3],[9],[5]]))
         self.assertTrue(isequal_(V4, [[8],[3],[9],[5]]))
         
-    #ADDITION OF SCALARS TO A ROW VECTOR
+    #ADDITION OF SCALARS TO A ROW VECTOR          
+        V=matlabarray([[1]])
+        V[:,2]=2
+        self.assertTrue(isequal_(V, [[1,2]]))
+        
+        V=matlabarray([[1]])
+        V[2]=2
+        self.assertTrue(isequal_(V, [[1,2]]))        
+        
         V=matlabarray([[2,3,4,5]])
         V[5]=6
         self.assertTrue(isequal_(V, [[2,3,4,5,6]]))
