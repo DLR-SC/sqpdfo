@@ -109,7 +109,7 @@ class Test_sqplab_options(unittest.TestCase):
       This class is a test for sqplab_options which sets the options of the optimization solver 'ecdfo'
     """
     def setUp(self):
-        self.options = helper.dummyOptions()
+        self.options = helper.dummyUnionStruct()
         self.options.algo_method = 'newton'
         self.options.algo_descent = 'powell'
         self.options.hess_approx = 'bfgs'
