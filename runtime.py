@@ -500,13 +500,15 @@ class char(matlabarray):
         if self.ndim == 2:
             return "\n".join("".join(s) for s in self)
         raise NotImplementedError
-                                
+
 def abs_(a):
     """
     Unless the argument is already as subclass of ndarray,
     convert the argument to ndarray, then apply numpy.abs
     """
+
     return np.abs(np.asanyarray(a))
+
 
 def arange_(start,stop,step=1,**kwargs):
     """
@@ -950,13 +952,13 @@ def fprintf_(fid,*args, **kwargs):
         except Exception as e:
             print "Display Error:", e.message()
     if  fid==1:
-        print out
+        print out,
     elif fid==2:
-        print >>sys.stderr, out
+        print >>sys.stderr, out,
     elif type(fid)==file:
-        print >>fid, out
+        print >>fid, out,
     else:
-        print fid+out
+        print fid+out,
         
 def poly1d_(A, r=0):
     #Careful : A.r which gives then the roots of the polynom is an array instead of a matlab array
