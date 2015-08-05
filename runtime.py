@@ -359,10 +359,10 @@ class matlabarray(np.ndarray):
                 np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
             else:
                 new_shape = list(self.shape)
-                if self.flags["C_CONTIGUOUS"]:
-                    new_shape[0] = self.sizeof(indices[0])
-                elif self.flags["F_CONTIGUOUS"]:
+                if self.flags["F_CONTIGUOUS"]: #This if has to be first on account of matlabarray implementation which make matlabarrays as F-Contiguous
                     new_shape[-1] = self.sizeof(indices[-1])
+                elif self.flags["C_CONTIGUOUS"]:
+                    new_shape[0] = self.sizeof(indices[0])
                 self.resize(new_shape,refcheck=0)                                                            
                 np.asarray(self).__setitem__(indices,value)
 

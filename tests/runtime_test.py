@@ -350,7 +350,7 @@ class Test_runtime(unittest.TestCase):
 #EXAMPLES OF SETTING VALUES    
 
 
-    #CHANGING VECTORS OF THE MATRICES
+    #CHANGING COLUMNS OF THE MATRICES
         M2 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
         M3 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
         M4 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
@@ -389,10 +389,29 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(M3, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
         self.assertTrue(isequal_(M4, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
         self.assertTrue(isequal_(M5, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
-#        
+#    
         ind=matlabarray([1,2,3])
         M6[ind,2]=matlabarray([[1,2,3]])
         self.assertTrue(isequal_(M6, matlabarray([[10, 1, 12],[13, 2, 15], [16, 3, 18]])))
+        
+#    ADDING COLUMNS
+   
+        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        ind=matlabarray([[1,2,3]])
+        M7[:,4]=ind
+        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12,1],[13, 14, 15,2], [16, 17, 18, 3],])))
+        
+        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M7[:,4]=ind.T
+        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12,1],[13, 14, 15,2], [16, 17, 18, 3],])))
+        
+        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M7[ind,4]=ind
+        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12,1],[13, 14, 15,2], [16, 17, 18, 3],])))
+        
+        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+        M7[ind,4]=ind.T
+        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12,1],[13, 14, 15,2], [16, 17, 18, 3],])))
 #        
      #CHANGING ROWS OF THE MATRICES
         ind=matlabarray([[1,2,3]])
@@ -437,6 +456,25 @@ class Test_runtime(unittest.TestCase):
         M6[1,ind]=matlabarray([[1,2,3]]).T
         self.assertTrue(isequal_(M6, matlabarray([[1, 2, 3],[13, 14, 15], [16, 17, 18]])))
         
+    
+    #ADDING ROWS THIS WAY DOES NOT WORK DUE TO IMPLEMENTATION OF MATLAB ARRAYS AS F-CONTIGUOUS (i.e. Fortran contiguous, with a memory column by column)
+   
+#        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#        ind=matlabarray([[1,2,3]])
+#        M7[4,:]=ind
+#        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18],[1,2,3]])))
+#        
+#        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#        M7[4,:]=ind.T
+#        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18],[1,2,3]])))
+#        
+#        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#        M7[4,:]=ind
+#        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18],[1,2,3]])))
+#        
+#        M7 = matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18]])
+#        M7[4,:]=ind.T
+#        self.assertTrue(isequal_(M7, matlabarray([[10, 11, 12],[13, 14, 15], [16, 17, 18],[1,2,3]])))
         
     #EXAMPLES WITH VECTORS
         
@@ -471,6 +509,19 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(V3, [[8,9,10,11]]))
         self.assertTrue(isequal_(V4, [[30,3,4,5]]))
         
+        ind=matlabarray([[True,False,True,False]]).T
+        V=matlabarray([[2,3,4,5]])
+        V2=matlabarray([[2,3,4,5]])
+        V3=matlabarray([[2,3,4,5]])
+        V4=matlabarray([[2,3,4,5]])
+        V[ind]=matlabarray([[8,9]])
+        V2[ind]=matlabarray([[8,9]]).T
+        V3[ind.T]=matlabarray([[8,9]])
+        V4[ind.T]=matlabarray([[8,9]]).T
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
+        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
         
         #Column vector
         ind=matlabarray([[1,2,3]]).T
@@ -517,23 +568,31 @@ class Test_runtime(unittest.TestCase):
         self.assertTrue(isequal_(V3, [[8],[3],[9],[5]]))
         self.assertTrue(isequal_(V4, [[8],[3],[9],[5]]))
         
-        ind=matlabarray([[True,False,True,False]]).T
+    #ADDITION OF SCALARS TO A ROW VECTOR
         V=matlabarray([[2,3,4,5]])
-        V2=matlabarray([[2,3,4,5]])
-        V3=matlabarray([[2,3,4,5]])
-        V4=matlabarray([[2,3,4,5]])
-        V[ind]=matlabarray([[8,9]])
-        V2[ind]=matlabarray([[8,9]]).T
-        V3[ind.T]=matlabarray([[8,9]])
-        V4[ind.T]=matlabarray([[8,9]]).T
-        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
-        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
-        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
-        self.assertTrue(isequal_(V, [[8,3, 9,5]]))
-
-
-
-                
+        V[5]=6
+        self.assertTrue(isequal_(V, [[2,3,4,5,6]]))
+        V[6]=matlabarray([7])
+        self.assertTrue(isequal_(V, [[2,3,4,5,6,7]]))
+        V[7]=matlabarray([[8]])
+        self.assertTrue(isequal_(V, [[2,3,4,5,6,7,8]]))
+        V[8]=matlabarray([[9]]).T
+        self.assertTrue(isequal_(V, [[2,3,4,5,6,7,8,9]]))
+        V[1,9]=10
+        self.assertTrue(isequal_(V, [[2,3,4,5,6,7,8,9,10]]))  
         
+    #ADDITION OF SCALARS TO A COLUMN VECTOR DOES NOT WORK DUE TO IMPLEMENTATION OF MATLAB ARRAYS AS F-CONTIGUOUS (i.e. Fortran contiguous, with a memory column by column)
+#        V=matlabarray([[2,3,4,5]]).T
+#        V[5]=6
+#        self.assertTrue(isequal_(V, matlabarray([[2,3,4,5,6]].T)))
+#        V[6]=matlabarray([7])
+#        self.assertTrue(isequal_(V, matlabarray([[2,3,4,5,6,7]].T)))
+#        V[7]=matlabarray([[8]])
+#        self.assertTrue(isequal_(V, matlabarray([[2,3,4,5,6,7,8]].T)))
+#        V[8]=matlabarray([[9]]).T
+#        self.assertTrue(isequal_(V, matlabarray([[2,3,4,5,6,7,8,9]].T)))
+#        V[1,9]=10
+#        self.assertTrue(isequal_(V,matlabarray([[2,3,4,5,6,7,8,9,10]].T))) 
+#        
 if __name__ == '__main__':
     unittest.main()
