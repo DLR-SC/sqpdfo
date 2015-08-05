@@ -71,6 +71,8 @@ argument is returned at the end of the function. For instance, bcdfo_repair_Y mo
 QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale = bcdfo_repair_Y_( QZ, RZ, Y, 0.7, 10, 1.0e-10, 1.1, 0.001, xbase, 1, 0, 0, matlabarray([-10,-10]), matlabarray([10,10]), matlabarray([1,2]), 1, scale, 0, 1, 1e15 )
 In this case, we would not want Y to be modified during the call. Therefore Y has to be copied in bcdfo_repair_Y, even though it is returned at the end. 
 
+-Some copy_ should be transformed into copy when we do not want the objects to become matlabarray (imported with 'from copy import copy')
+
 -There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case, those are the followings :
 
 	-roots function from matlab has to be handled in python like in the following example :

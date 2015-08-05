@@ -37,6 +37,7 @@ from __future__ import division
 import sys
 from runtime import *
 from numpy import inf
+from copy import copy
 
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
@@ -457,7 +458,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                         if (rho >= eta1):
                             criterion_FPn='weighted'
                         else:
-                            criterion_FPn=copy_(criterion_FP)
+                            criterion_FPn=copy(criterion_FP)
                         QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,find_(d > FPlength),Lambda_FP,criterion_FPn,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
                         if (pos > 0):
                             itype='repF'
@@ -505,7 +506,7 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                             if (rho >= eta1):
                                 criterion_CPn='standard'
                             else:
-                                criterion_CPn=copy_(criterion_CP)
+                                criterion_CPn=copy(criterion_CP)
                             if (rho >= eta1):
                                 Lambda_CPn=1e-15
                             else:
