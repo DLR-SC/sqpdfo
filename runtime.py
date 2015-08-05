@@ -507,8 +507,8 @@ def abs_(a):
     convert the argument to ndarray, then apply numpy.abs
     """
 
+    
     return np.abs(np.asanyarray(a))
-
 
 def arange_(start,stop,step=1,**kwargs):
     """
@@ -686,7 +686,7 @@ try:
 except:
     pass
 
-def max_(a_, d=None, nargout=None):
+def max_(a, d=None, nargout=None):
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
         min_(a,b) where a,b are integer, inf or nan
         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
@@ -694,34 +694,25 @@ def max_(a_, d=None, nargout=None):
         min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
-    a=copy_(a_)    
-    
+
     if isempty_(a):
         ret = matlabarray([])                    
-    elif d is not None:
-        if isnan_(d).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
-            ret=a
-        elif isnan_(a).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
-            ret=d
-        else:
-            ret = np.maximum(a,d)
+    elif  d is not None:
+        ret=np.fmax(a,d)
     else:
-        if isnan_(a).all():
-            ret=np.nan
-        else:
-            a[isnan_(a)]=-np.inf #otherwise max_ will return NaN, but we want it to be like matlab which do not return NaN in this case                                    
-            ret = matlabarray(np.amax(np.asarray(a)))
+        ret=matlabarray(np.nanmax(np.asarray(a)))
+
                                 
     if nargout == 2:
         if isempty_(a):
             ret2 = matlabarray([])                                    
         else:
-            ret2 = np.argmax(a)                                                
+            ret2 = np.nanargmax(a)                                                
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
         return ret    
 
-def min_(a_, d=None, nargout=None):#, nargout=0):
+def min_(a, d=None, nargout=None):#, nargout=0):
     #print "a", a
 #    print "len(a)", len(a)     
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
@@ -731,32 +722,20 @@ def min_(a_, d=None, nargout=None):#, nargout=0):
         min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
-
-
-    a=copy_(a_)    
-           
+    
     if isempty_(a):
         ret = matlabarray([])                    
     elif d is not None:
-        if isnan_(d).all(): #otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
-            ret=a
-        elif isnan_(a).all():#otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case  
-            ret=d
-        else:
-            ret = np.minimum(a,d)
+        ret=np.fmin(a,d)
     else:
-        if isnan_(a).all():
-            ret=np.nan
-        else:
-            a[isnan_(a)]=np.inf #otherwise min_ will return NaN, but we want it to be like matlab which do not return NaN in this case                                    
-            ret = matlabarray(np.amin(np.asarray(a)))
+        ret = matlabarray(np.nanmin(np.asarray(a)))
        
 
     if nargout == 2:
         if isempty_(a):
             ret2 = matlabarray([])                                    
         else:
-            ret2 = np.argmin(a)                                                
+            ret2 = np.nanargmin(a)                                                
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
         return ret                                
