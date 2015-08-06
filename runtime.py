@@ -69,6 +69,8 @@ Coexistence of matlab matrices and numpy arrays
 (*) Such expressions _are_ legal in Octave.  TBD
 
 """
+import warnings
+#warnings.simplefilter('error', RuntimeWarning)
 import scipy
 import numpy as np
 import os,sys
@@ -122,11 +124,10 @@ class matlabarray(np.ndarray):
         return cls
 
     def __mul__(self, other):
-        if self.shape == (1,1):                                                                                              
-            return float(self[1]) * other
-            #sys.exit(1)                                                
-        elif other.shape == (1,1):                                                           
-            return np.dot(self , float(other[1]))
+        if self.shape == (1,1):                                                                                             
+            return float(self[1]) * other                                 
+        elif other.shape == (1,1):                  
+            return float(other[1]) * self
         ret = np.dot(self, other)            
         return ret
                                 
@@ -290,7 +291,7 @@ class matlabarray(np.ndarray):
     def __setitem__(self,index,value):
 
         #This way we only have to deal with the case where value is a row vector, when it is a vector.
-        if type(value) is matlabarray:
+        if type(value) is matlabarray and isvector_(value):
             value=value.reshape(-1)
 
         if type(index) is matlabarray:
@@ -507,8 +508,12 @@ def abs_(a):
     convert the argument to ndarray, then apply numpy.abs
     """
 
-    
-    return np.abs(np.asanyarray(a))
+    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
+    warnings.simplefilter('ignore', RuntimeWarning)
+    ret = matlabarray(np.abs(np.asanyarray(a)))
+    warnings.simplefilter('default', RuntimeWarning)
+    return ret
+
 
 def arange_(start,stop,step=1,**kwargs):
     """
@@ -723,23 +728,27 @@ def min_(a, d=None, nargout=None):#, nargout=0):
         (same for max_ obviously)
     """
     
+    
+    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
+    warnings.simplefilter('ignore', RuntimeWarning)
     if isempty_(a):
         ret = matlabarray([])                    
     elif d is not None:
         ret=np.fmin(a,d)
     else:
-        ret = matlabarray(np.nanmin(np.asarray(a)))
-       
-
+        ret = matlabarray(np.nanmin(np.asarray(a)))   
     if nargout == 2:
         if isempty_(a):
             ret2 = matlabarray([])                                    
         else:
-            ret2 = np.nanargmin(a)                                                
+            ret2 = np.nanargmin(a)  
+        warnings.simplefilter('default', RuntimeWarning)                                              
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
+        warnings.simplefilter('default', RuntimeWarning)
         return ret                                
 
+    warnings.simplefilter()
 def mod_(a,b):
     try:
         return a % b
@@ -998,6 +1007,10 @@ def sqrt_(x):
 def real_(x):
     ret = np.real(x)
     #print "type np real ret", type(ret)
+    return ret
+
+def imag_(x):
+    ret = np.imag(x)
     return ret
 
 def exp_(x):
