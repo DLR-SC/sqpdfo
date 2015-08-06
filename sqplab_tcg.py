@@ -121,7 +121,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,'    %4i  %14.7e  %7.1e\n'%(_iter + 1,cost))
+                fprintf_(fout,'    %4i  %14.7e\n'%(_iter + 1,cost))
             break
         alpha=- (g.T * d) / dAd
         xx=x + alpha * d
@@ -133,7 +133,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,'    %4i  %14.7e  %7.1e\n'%(_iter + 1,cost))
+                fprintf_(fout,'    %4i  %14.7ee\n'%(_iter + 1,cost))
             break
         else:
             x=copy_(xx)

@@ -185,14 +185,14 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
             fprintf_(options.fout,'VARIABLES:\n')
             fprintf_(options.fout,'i     lower bound          x            upper bound       multiplier\n')
             for i in arange_(1,min_(n,40)).reshape(-1):
-                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'%(i,lb[i],x[i],ub[i],lm[i]))
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\n'%(i,lb[i],x[i],ub[i],lm[i]))
             if (n > 40):
                 fprintf_(options.fout,'.....\n')
             else:
                 fprintf_(options.fout,'\n')
         else:
             fprintf_(options.fout,'VARIABLES:\n')
-            fprintf_(options.fout,'%16.6e\\n',x[1:min_(n,40)])
+            fprintf_(options.fout,'\n',x[1:min_(n,40)])
             if (n > 40):
                 fprintf_(options.fout,'.....\n')
             else:
@@ -201,7 +201,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
             fprintf_(options.fout,'INEQUALITY CONSTRAINTS:\n')
             fprintf_(options.fout,'i     lower bound          ci           upper bound       multiplier\n')
             for i in arange_(1,min_(mi,40)).reshape(-1):
-                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\\n'%(i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i]))
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\n'%(i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i]))
             if (mi > 40):
                 fprintf_(options.fout,'\n.....')
             else:
@@ -210,7 +210,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
             fprintf_(options.fout,'EQUALITY CONSTRAINTS:\n')
             fprintf_(options.fout,'i         ce            multiplier\n')
             for i in arange_(1,min_(me,40)).reshape(-1):
-                fprintf_(options.fout,'%0i %+16.6e %+16.6e\\n'&(i,ceX[i,i_xbest],lm[n + mi + i]))
+                fprintf_(options.fout,'%0i %+16.6e %+16.6e\n'%(i,ceX[i,i_xbest],lm[n + mi + i]))
             if (me > 40):
                 fprintf_(options.fout,'.....\n')
             else:

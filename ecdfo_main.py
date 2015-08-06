@@ -337,8 +337,9 @@ def ecdfo_main_(func=None,n=None,nb=None,mi=None,me=None,lm=None,nitold=None,nit
                 succ=1
             else:
                 succ=0
-            if options.verbose == 4:
-                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\n'%(delta,norm_r,norm_(t),norms,sigma,rho))
+            if options.verbose == 4:   
+                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %9.2e\n'%(delta,norms,sigma,rho))
+#                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\n'%(delta,norm_r,norm_(t),norms,sigma,rho))
             i_xold=copy_(i_xbest)
             pos=0
             if (rho >= eta1):

@@ -387,26 +387,26 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         fprintf_(options.fout,'%s'%(values.sline))
         fprintf_(options.fout,'ecdfo optimization solver (Version 0.4.4, February 2009, entry point)\n\n')
         if isinstance(func, types.FunctionType):
-            func_name=func2str_(func)
+            func_name=str(func)
         else:
             func_name=copy_(func)
         fprintf_(options.fout,'  name: "%s"\n'%(func_name))
         fprintf_(options.fout,'  dimensions:\n')
         fprintf_(options.fout,'  . variables (n):               %4i\n'%(n))
         if nb > 0:
-            fprintf_(options.fout,'  . bounds on variables (nb):    %4i (%0i lower, %0i double, %0i upper)\n'%(nb,nb_lo,nb_up))
+            fprintf_(options.fout,'  . bounds on variables (nb):    (%0i lower, %0i double, %0i upper)\n'%(nb,nb_lo,nb_up))
         if mi > 0:
             fprintf_(options.fout,'  . inequality constraints (mi): %4i\n'%(mi))
         if me > 0:
             fprintf_(options.fout,'  . equality constraints (me):   %4i\n'%(me))
         fprintf_(options.fout,'  required tolerances for optimality:\n')
         if nb + mi + me > 0:
-            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol(1)))
-            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol(2)))
+            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol[1]))
+            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol[2]))
             if nb + mi > 0:
-                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol(3)))
+                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol[3]))
         else:
-            fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol(1)))
+            fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol[1]))
         fprintf_(options.fout,'  counters:\n')
         fprintf_(options.fout,'  . max iterations                  %4i\n'%(options.miter))
         fprintf_(options.fout,'  . max function evaluations        %4i\n'%(options.msimul))
