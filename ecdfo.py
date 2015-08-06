@@ -24,8 +24,16 @@ from copy import copy
 
 
 
-def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options=None,*args,**kwargs):
+def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,**kwargs):
 #    varargin = cellarray(args)
+
+    func=copy(func_)
+    x0=copy_(x0_)
+    lm0=copy_(lm0_)
+    lb=copy_(lb_)
+    ub=copy_(ub_)
+    options=copy(options_)
+
     nargin = 6-[func,x0,lm0,lb,ub,options].count(None)+len(args)
 
     c = helper.dummyUnionStruct()
