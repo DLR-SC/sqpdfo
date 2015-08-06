@@ -73,6 +73,8 @@ In this case, we would not want Y to be modified during the call. Therefore Y ha
 
 -Some copy_ should be transformed into copy when we do not want the objects to become matlabarray (imported with 'from copy import copy')
 
+-When there may be complex numbers, A' should be replaced in python by A.conj().T and not A.T. This is for instance important in : A=0.5*(A + A.conj().T)
+
 -There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case, those are the followings :
 
 	-roots function from matlab has to be handled in python like in the following example :
