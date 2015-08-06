@@ -42,10 +42,13 @@ def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
         A=v * d * v.T
         if not isempty_(find_(~ isreal_(A),1)):
             if options.verbose >= 3:
+                #This is a little bit weird since we did not test if it was symmetric. Maybe an copy/paste with ecdfo_check_cond ?
                 disp_('### ecdfo_check_convex: matrix is non symmetric. Resetting A.')
-            A=0.5*(A + A.T)
-            
-    return A
+            A=0.5*(A+A.conj().T)
+
+    #On account of the test asking if there is a non real in A, I suppose that we only want the real parts (also having imaginary parts raise errors on problem 5 in ecdfo_func),
+    #hence the real conversion
+    return real_(A)
 
 #def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
 #    #varargin = cellarray(args)
