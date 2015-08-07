@@ -273,8 +273,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                             disp_('ub ',int2str_(i),' is violated')
 #                        constraints=matlabarray([[constraints],[0]])
 #                        gconstraints=matlabarray([[gconstraints],[I[i,:]]])
-                            constraints=concatenate_([constraints,matlabarray([[0]])])
-                            gconstraints=concatenate_([gconstraints,I[i,:]])
+                        constraints=concatenate_([constraints,matlabarray([[0]])])
+                        gconstraints=concatenate_([gconstraints,I[i,:]])
                         violated=1
                         break
                     else:
