@@ -37,34 +37,27 @@ Created on Fri Nov 14 16:27:59 2014
 #try:
 from runtime import *
 from ecdfo_func import *
+from ecdfo_global_variables import *
 #except ImportError:
 #    from smop.runtime import *
 
-simul_not_initialized = 1
 
-def set_simul_not_initialized(val):
-	global simul_not_initialized
-	simul_not_initialized = val
 
 def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
     #varargin = cellarray(args)
     nargin = 3-[key,xy,lm].count(None)+len(args)
 
-    global fileoutput,simul_not_initialized
-    global foutxy
-    global n,nb,mi,me,_iter,prob
+    fileoutput = get_fileoutput()
+    simul_not_initialized = get_simul_not_initialized()
     msg=matlabarray([])
     out2=matlabarray([])
     out3=matlabarray([])
     out4=matlabarray([])
-    #out5=matlabarray([])
-    #out6=matlabarray([])
-    #out7=matlabarray([])
-    #out8=matlabarray([])
+
     if simul_not_initialized:
-        foutxy=fopen_('results.out','w')
-        _iter=0
-        simul_not_initialized=0
+        set_foutxy(fopen_('results.out','w'))
+        set_iter(0)
+        set_simul_not_initialized(0)
     if key == 1:
         if nargin < 1:
             fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 1) with key = %0i\n\n'%(nargin,key))

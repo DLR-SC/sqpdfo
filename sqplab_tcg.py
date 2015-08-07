@@ -67,6 +67,7 @@ Created on Wed Nov 12 13:52:22 2014
 from __future__ import division
 #try:
 from runtime import *
+from ecdfo_global_variables import *
 #except ImportError:
 #from smop.runtime import *
 
@@ -94,20 +95,20 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
     if plevel:
         fprintf_(fout,'    TCG solver; required tolerance %8.2e\n'%(tol))
         fprintf_(fout,'    iter       cost        |res|   curvature  stepsize   |step|\n')
-    _iter=0
+    set_iter(0)
     while 1:
 
-        _iter=_iter + 1
+        set_iter(get_iter() + 1)
         if plevel:
-            fprintf_(fout,'    %4i  %14.7e  %7.1e'%(_iter,cost,sqrt_(g2)))
+            fprintf_(fout,'    %4i  %14.7e  %7.1e'%(get_iter(),cost,sqrt_(g2)))
         if g2 <= tol2:
             info.flag=0
             break
-        if _iter > max_iter:
-            _iter=copy_(max_iter)
+        if get_iter() > max_iter:
+            set_iter(copy_(max_iter))
             info.flag=- 1
             break
-        if _iter == 1:
+        if get_iter() == 1:
             d=- g
         else:
             d=- g + (g2 / g2_) * d
@@ -121,7 +122,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,'    %4i  %14.7e\n'%(_iter + 1,cost))
+                fprintf_(fout,'    %4i  %14.7e\n'%(get_iter() + 1,cost))
             break
         alpha=- (g.T * d) / dAd
         xx=x + alpha * d
@@ -133,7 +134,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
                 cost=0.5 * (x.T * A * x) - b.T * x
-                fprintf_(fout,'    %4i  %14.7ee\n'%(_iter + 1,cost))
+                fprintf_(fout,'    %4i  %14.7ee\n'%(get_iter()+ 1,cost))
             break
         else:
             x=copy_(xx)
@@ -145,7 +146,7 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
         if plevel:
             cost=0.5 * (x.T * (g - b))
 
-    info.iter=_iter
+    info.iter=get_iter()
     info.prec=sqrt_(g2)
     if not isempty_(dAd):
         info.curv=dAd / (d.T * d)

@@ -18,21 +18,21 @@ from __future__ import division
 #try:
 from runtime import *
 from numpy import inf
+from ecdfo_global_variables import *
 #except ImportError:
     #from smop.runtime import *
 def ecdfo_init_prob_(prob=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 1-[prob].count(None)+len(args)
 
-    global fileoutput,simul_not_initialized
     eps = 2.2204e-16 
     x0=matlabarray([])
     lx=matlabarray([])
     ux=matlabarray([])
     li=matlabarray([])
     ui=matlabarray([])
-    fileoutput=1
-    simul_not_initialized=1
+    set_fileoutput(1)
+    set_simul_not_initialized(1)
     dxmin=1e-06
     dcimin=sqrt_(eps)
     infb=1e+20

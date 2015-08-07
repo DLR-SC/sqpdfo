@@ -43,7 +43,6 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
 #    nargin = 6-[x,lm,lb,ub,info,options].count(None)+len(args)
 
     info=copy(info_)
-    global threshold
     n=length_(info.g)
     mi=length_(info.ci)
     me=length_(info.ce)
