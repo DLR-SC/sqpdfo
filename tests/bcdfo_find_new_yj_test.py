@@ -39,7 +39,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( copy_(Y) , whichmodel, 1, 1,1, 1e15 )
         ynew, improvement,msgTR = bcdfo_find_new_yj_( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, whichmodel, scale, 1)
 
-        correctynew = matlabarray([3.280776988023534, 0.959774286524791]).T
+        correctynew = matlabarray([3.280776988023534, -0.959774286524791]).T
         correctimprovement =  314.8805392927235
 #        print "ynew", ynew
 #        print "improvement", improvement

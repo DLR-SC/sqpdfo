@@ -699,6 +699,8 @@ def max_(a, d=None, nargout=None):
         min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
+    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
+    warnings.simplefilter('ignore', RuntimeWarning)
 
     if isempty_(a):
         ret = matlabarray([])                    
@@ -712,9 +714,11 @@ def max_(a, d=None, nargout=None):
         if isempty_(a):
             ret2 = matlabarray([])                                    
         else:
-            ret2 = np.nanargmax(a)                                                
+            ret2 = np.nanargmax(a)
+        warnings.simplefilter('default', RuntimeWarning)                                                                                              
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
+        warnings.simplefilter('default', RuntimeWarning)                                              
         return ret    
 
 def min_(a, d=None, nargout=None):#, nargout=0):
@@ -913,16 +917,20 @@ def chol_(A,nargout=2):
     except:
         R = matlabarray([[]])
         p = 1
-    return R,p
+    return R,p   
     
-def qr_(A, nargout=2):
-    return np.linalg.qr((A))
+def qr_(A,nargout=2):
+    return np.linalg.qr(A)
     
 def inv_(A):
     return np.linalg.inv(A)
      
-def norm_(A, order=None, axis=None):
-    return np.linalg.norm(A, order,axis)
+def norm_(A, order=2, axis=None):
+    if axis==None:
+        return np.linalg.norm(np.asarray(A), order,axis)
+    else:
+        return np.linalg.norm(np.asarray(A), order,axis-1)
+
     
 def pinv_(A):
     return np.linalg.pinv(A)
