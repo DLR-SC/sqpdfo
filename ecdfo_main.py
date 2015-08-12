@@ -565,7 +565,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             if me > 0:
                                 ceY[:,pos]=info.ce.T
                             if (rho >= eta1):
-                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=bcdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
                                 fx=copy_(fxplus)
                                 info.f=fx
                                 if mi > 0:
@@ -620,7 +620,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 if me > 0:
                                     ceY[:,pos]=info.ce.T
                                 if (rho >= eta1):
-                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=bcdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
                                     fx=copy_(fxplus)
                                     info.f=fx
                                     if mi > 0:
@@ -1122,7 +1122,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                            if me > 0:
 #                                ceY[:,pos]=info.ce.T
 #                            if (rho >= eta1):
-#                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=bcdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+#                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
 #                                fx=copy_(fxplus)
 #                                info.f=fx
 #                                if mi > 0:
@@ -1177,7 +1177,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                                if me > 0:
 #                                    ceY[:,pos]=info.ce.T
 #                                if (rho >= eta1):
-#                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=bcdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+#                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
 #                                    fx=copy_(fxplus)
 #                                    info.f=fx
 #                                    if mi > 0:
