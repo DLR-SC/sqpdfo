@@ -344,6 +344,7 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
       accordingly.
     """ 
     def setUp(self):
+
         self.simul = evalfgh_
         self.x = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
         self.lb = matlabarray([ -0.500000000000000, 0, -np.Inf]).T
@@ -373,6 +374,7 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         """
             This is a test with some values and compared with matlab results.
         """
+        set_check_condition(0)                
         set_threshold(1.000000000000000e-08)
         xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
         self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
@@ -386,11 +388,12 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         correctactive_r =  0
         correctactive_t =  0
         correctlm_computed = 0
-        correctlm = matlabarray([0, -9.999999994999984e-1, 0, -3.750022514736884e-10, 8.333378431757410e-11]).T
+        correctlm = matlabarray([0, 0, 0,   -0.333333332763891,  -0.000000000249999]).T
         
         #print "THRU"
         #print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
 #        print xnew
+
         self.assertTrue(compare_matlabarray(correctxnew, xnew, 1e-6, 1e-3))
         self.assertAlmostEqual(correctdelta, delta, places=6)
         self.assertAlmostEqual(correctrpred, rpred, places=6)
