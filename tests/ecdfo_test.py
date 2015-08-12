@@ -88,7 +88,7 @@ import unittest
 from evalfgh import evalfgh_
 from runtime import matlabarray, char, compare_matlabarray, isempty_
 from ecdfo import ecdfo_
-from ecdfo_global_variables import set_prob, set_threshold
+from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized
 import numpy as np
 import helper
 
@@ -103,7 +103,7 @@ class myOptions():
         self.dxmin = 1.000000000000000e-06
         self.miter = 500
         self.msimul = 500
-        self.verbose = 0
+        self.verbose = 2
 
 class Test_ecdfo(unittest.TestCase):
     """
@@ -114,6 +114,8 @@ class Test_ecdfo(unittest.TestCase):
 
         set_prob(3)
         set_threshold(1e-08)
+        set_fileoutput(1)
+        set_simul_not_initialized(1)
         self.func = evalfgh_
         self.x0 = matlabarray([0, 0, 0.500000000000000]).T
         self.lm0 = matlabarray( [])
