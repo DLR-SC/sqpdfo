@@ -850,7 +850,7 @@ import unittest
 from evalfgh import evalfgh_
 from runtime import matlabarray
 from ecdfo_main import *
-from ecdfo_global_variables import set_prob, set_threshold
+from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 import helper
 
@@ -908,7 +908,10 @@ class Test_ecdfo_main(unittest.TestCase):
     def setUp(self):
         
         set_threshold(1.000000000000000e-08)
-        set_prob(3)        
+        set_prob(3)     
+        set_fileoutput(1)
+        set_simul_not_initialized(1)
+        set_check_condition(0)
 
         self.func = evalfgh_
         self.n = 3
@@ -978,7 +981,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.Deltamax = 100000.0
         self.rep_degree = 4
         self.epsilon = 1.000000000000000e-05
-        self.verbose = 1
+        self.verbose = 2
         self.eta1 = 1.000000000000000e-04
         self.eta2 = 0.900000000000000
         self.gamma1 = 0.010000000000000
@@ -1094,7 +1097,7 @@ class Test_ecdfo_main(unittest.TestCase):
         correctceX = matlabarray([
   [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   -0.000007353481509, 0.000010233764458,     0.000009376443116],
   [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,  -0.000002704791005,  0.000020502831926 ,    0.000008206893176]])
-        correctind_Y = matlabarray([   6,     10, 9,     7,     8,    11])
+        correctind_Y = matlabarray([   6,     9, 10,     7,     8,    11])
         correctDelta = 5.672511970824019
         correcteps_current =  1.000000000000000e-05
         correctcur_degree =  6
@@ -1133,7 +1136,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.assertTrue(compare_matlabarray(correctm, m, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(correctX, X, self.abs_tol, 1e-3))
         self.assertEqual(correctciX, ciX)
-        self.assertTrue(compare_matlabarray(correctceX, ceX, self.abs_tol, 1e-3))
+        self.assertTrue(compare_matlabarray(correctceX, ceX, 1e-4, 1e-3))
         self.assertTrue(compare_matlabarray(correctind_Y, ind_Y, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(correctDelta, Delta, self.abs_tol, self.rel_tol))
         self.assertEqual(correcteps_current, eps_current)
