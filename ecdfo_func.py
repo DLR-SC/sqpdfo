@@ -50,6 +50,8 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce[2]=x[2] * x[3] - 5 * x[4] * x[5]
         ce[3]=x[1] ** 3 + x[2] ** 3 + 1
         ce=matlabarray(ce).T
+    elif prob ==6:
+        f=-(0.592*((exp_(1)-1)*x[1])/((-0.408*x[1]+1)*(exp_(x[1])-1)) -1)
     msg=0
     return msg,f,ci,ce
     

@@ -76,6 +76,15 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         n=5
         lx=- inf * ones_(n,1)
         ux=inf * ones_(n,1)
+    elif prob==6:
+        n=1
+        nb=1
+        mi=0
+        me=0
+        x0=matlabarray([[0.6]])
+        lx=matlabarray([0.5])
+        ux=matlabarray([0.8])
+        
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info
 #def ecdfo_init_prob_(prob=None,*args,**kwargs):
