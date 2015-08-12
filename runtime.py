@@ -70,6 +70,7 @@ Coexistence of matlab matrices and numpy arrays
 
 """
 import warnings
+from copy import copy
 #warnings.simplefilter('error', RuntimeWarning)
 import scipy
 import numpy as np
@@ -289,6 +290,10 @@ class matlabarray(np.ndarray):
         return n 
 
     def __setitem__(self,index,value):
+
+        #If value is an empty matrix, no changes are done
+        if isempty_(value):
+            return
 
         #This way we only have to deal with the case where value is a row vector, when it is a vector.
         if type(value) is matlabarray and isvector_(value):
@@ -926,8 +931,11 @@ def inv_(A):
     return np.linalg.inv(A)
      
 def norm_(A, order=2, axis=None):
+    if isempty_(A):
+        return 0
+    
     if axis==None:
-        return np.linalg.norm(np.asarray(A), order,axis)
+            return np.linalg.norm(np.asarray(A), order,axis)
     else:
         return np.linalg.norm(np.asarray(A), order,axis-1)
 
@@ -964,11 +972,12 @@ def eye_(n):
     return matlabarray(np.eye(n))
     
 def concatenate_(arrs, axis=0):
+    copy_arrs=copy(arrs)
     for arr in arrs:
         if isempty_(arr):
-            arrs.remove(arr)
+            copy_arrs.remove(arr)
     #print "concatenate arrs", arrs            
-    return matlabarray(np.concatenate(arrs, axis))
+    return matlabarray(np.concatenate(copy_arrs, axis))
     
 def sign_(A):
     return np.sign(A)
