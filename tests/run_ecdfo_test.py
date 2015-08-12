@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 02 17:32:15 2014
@@ -9,7 +10,7 @@ sys.path.append("../")
 import helper
 from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
-from ecdfo_global_variables import set_prob, set_threshold,get_prob
+from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
 import unittest
@@ -27,7 +28,8 @@ class Test_run_ecdfo(unittest.TestCase):
         pass
 
     def test_run_ecdfo_prob1(self):
-        set_prob(1) 
+        set_prob(1)
+        set_check_condition(0)
         prob=get_prob()
         options = helper.dummyUnionStruct()
         options.tol=matlabarray([])
@@ -73,6 +75,7 @@ class Test_run_ecdfo(unittest.TestCase):
         
     def test_run_ecdfo_prob2(self):
         set_prob(2) 
+        set_check_condition(0)
         prob=get_prob()
         options = helper.dummyUnionStruct()
         options.tol=matlabarray([])
@@ -106,7 +109,6 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_matlabarray(x, matlabarray([[   0.333326758778846,  0.666659126169760]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(lm, matlabarray([[0,0,    -1.333312643708242]]), self.abs_tol, self.rel_tol))
 
-        #Relative big difference for info.g[1] between matlab and python : python gives something around -0.7375 and matlab -0.1
         self.assertTrue(compare_matlabarray(info.g, matlabarray([[    1.333307035124744,    1.333318252334031]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(info.ae, matlabarray([[ 1.000000000014289,  1.000000000017430]]), self.abs_tol, self.rel_tol))
         self.assertEqual(info.niter,6)
@@ -115,8 +117,9 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_matlabarray(info.nsimul, matlabarray([[0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 ]]), self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(info.f, 0.666647846741449,places=10)
         self.assertEqual(info.compl,0)
-        
+#        
     def test_run_ecdfo_prob3(self):
+        set_check_condition(0)
         set_prob(3) 
         prob=get_prob()
         options = helper.dummyUnionStruct()
@@ -160,13 +163,5 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertAlmostEqual(info.f,   0.500000000000000,places=10)
         self.assertEqual(info.compl,0)
 
-
-    def test_run_ecdfo_prob4(self):
-        """Prob4 has actually better results that matlab since matlab does not converge (python does) and has a code 99 'strange failure' error. """
-        pass        
-        
-    def test_run_ecdfo_prob5(self):
-        pass
-        
 if __name__ == '__main__':
     unittest.main()
