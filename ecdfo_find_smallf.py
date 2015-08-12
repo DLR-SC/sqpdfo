@@ -37,7 +37,7 @@ Created on Fri Nov 28 13:59:05 2014
 %
 %  PROGRAMMING: A. Troeltzsch, August 2010 + March 2013.
 %
-%  DEPENDENCIES: bcdfo_swap_in_Y
+%  DEPENDENCIES: ecdfo_swap_in_Y
 %
 %  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 %
