@@ -33,13 +33,15 @@ from evalfgh import evalfgh_
 #except ImportError:
 #from smop.runtime import *
 
+import time
+tic = time.clock()
 
 #clear(char('all'))
 #close(char('all'))
 #_format(char('long'))
 #global n,nb,mi,me,prob,threshold
 
-set_prob(3)
+set_prob(4) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 prob=get_prob()
 options = helper.dummyUnionStruct()
 options.tol=matlabarray([])
@@ -66,11 +68,13 @@ options.tol[3]=1e-05
 options.dxmin=dxmin
 options.miter=500
 options.msimul=500
-options.verbose=2
+options.verbose=0
 lm=matlabarray([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
 print x
 
+toc = time.clock()
+print "Elapsed time is " + str(toc - tic) + " seconds."
 
 
 #clear(char('all'))
