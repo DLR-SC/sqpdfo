@@ -71,6 +71,7 @@ from ecdfo_check_convex import *
 from ecdfo_check_cond import *
 from blls import *
 from copy import copy
+from ecdfo_global_variables import get_check_condition
 
 #except ImportError:
 #    from smop.runtime import *
@@ -83,6 +84,12 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
 
     nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
     
+    #If somewhere we have done set_check_condition (in the tests for instance we have set_check_condition(0)), then
+    #we get this value, otherwise we take '1' by default.
+    try:
+        check_condition=get_check_condition()
+    except:
+        check_condition=1    
     lm=matlabarray([])
     info.flag=values.success
     badcond=0
@@ -119,7 +126,6 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
         if (ub[i] < options.inf) and (abs_(x[i] - ub[i]) < options.dxmin):
             lo[i]=0
     AA=A * A.T
-    check_condition=0
     if check_condition:
         cthreshold=1e+17
         AA,badcond=ecdfo_check_cond_(AA,cthreshold,options,nargout=2)

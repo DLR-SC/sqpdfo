@@ -46,6 +46,10 @@ def set_foutxy(value):
 def set_iter(value):
     global _iter
     _iter=value
+    
+def set_check_condition(value):
+    global check_condition
+    check_condition=value
 
     
 def get_prob():
@@ -65,3 +69,6 @@ def get_foutxy():
     
 def get_iter():
     return _iter
+    
+def get_check_condition():
+    return check_condition

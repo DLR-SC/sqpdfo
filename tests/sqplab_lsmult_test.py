@@ -171,6 +171,7 @@ import sys
 sys.path.append("../")
 import unittest
 from sqplab_lsmult import *
+from ecdfo_global_variables import set_check_condition
 import numpy as np
 import helper
 
@@ -199,6 +200,7 @@ class Test_sqplab_lsmult(unittest.TestCase):
            subject to possible bounds on lm,
     """ 
     def setUp(self):
+        set_check_condition(0)                
         self.x = matlabarray([0.5, 1.0, 0.5])
         self.lb = matlabarray([])
         self.ub = matlabarray([])

@@ -541,7 +541,7 @@ from ecdfo_prelim import *
 from evalfgh import *
 import numpy as np
 import helper
-from ecdfo_global_variables import set_prob
+from ecdfo_global_variables import set_prob, set_check_condition
 
 class myDummyOptions():
     def __init__(self):
@@ -611,6 +611,7 @@ class Test_ecdfo_prelim(unittest.TestCase):
         
         self.options = myDummyOptions()
         set_prob(3)
+        set_check_condition(0)
         #self.values = helper.dummyValues()
         self.abs_tol=1e-8
         self.rel_tol=1e-8
