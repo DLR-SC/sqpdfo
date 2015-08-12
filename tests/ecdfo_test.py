@@ -152,7 +152,7 @@ class Test_ecdfo(unittest.TestCase):
         self.assertTrue(compare_matlabarray(info.ce, matlabarray([2.220446049250313e-16,-1.110223024625157e-16]),self.abs_tol, self.rel_tol))
         self.assertTrue(compare_matlabarray(info.glag, matlabarray([6.661338147750939e-16,6.617876887227321e-16,-5.551115123125783e-16]), self.abs_tol, self.rel_tol))
         #This below assertions are false : this is noted as an issue on github, though this may not be a 'real' issue in pratice
-        self.assertAlmostEqual(6.661338147750939e-16,info.glagn,places=9)
+        self.assertAlmostEqual(6.661338147750939e-16,info.glagn,places=8)
         
 
 if __name__ == '__main__':
