@@ -50,7 +50,7 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
     gradlag=info.g
     bounds=(abs_(lb - x) < 1e-05) + (abs_(ub - x) < 1e-05)
     if options.verbose >= 4:
-        fprintf_('\n     lb             x            ub             g            lm\n')
+        fprintf_('\n     lb             x            ub             glag            lm\n')
         for i in arange_(1,n).reshape(-1):
             fprintf_('%12.5e  %12.5e  %12.5e  %12.5e  %12.5e\n'%(lb[i],x[i],ub[i],info.glag[i],lm[i]))
     I=find_(bounds[1:n])
