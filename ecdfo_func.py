@@ -52,6 +52,17 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce=matlabarray(ce).T
     elif prob ==6:
         f=-(0.592*((exp_(1)-1)*x[1])/((-0.408*x[1]+1)*(exp_(x[1])-1)) -1)
+    elif prob==7:  #alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
+        f=x[1]
+        ce[1]=6.3*x[5]*x[8]+x[1]-5.04*x[2]-0.35*x[3]-x[4]-3.36*x[6]
+        ce[2]=-0.819672131147541*x[2]+x[5]-0.819672131147541*x[6]
+        ce[3]=0.98*x[4]-x[7]*(0.01*x[5]*x[10]+x[4])
+        ce[4]=x[2]*x[9]+10*x[3]+x[6]
+        ce[5]=x[5]*x[12]-x[2]*(1.12+0.13167*x[9]-0.067*x[9]*x[9]) 
+        ce[6]=x[8]*x[13]-0.01*(1.098*x[9]- 0.038*x[9]*x[9]) -0.325*x[7]  - 0.57425
+        ce[7]=x[10]*x[14]+22.2*x[11]-35.82
+        ce[8]=x[11]*x[15]-3*x[8]+1.33
+        ce=matlabarray(ce).T
     msg=0
     return msg,f,ci,ce
     

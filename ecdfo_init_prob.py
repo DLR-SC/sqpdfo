@@ -84,7 +84,14 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         x0=matlabarray([[0.6]])
         lx=matlabarray([0.5])
         ux=matlabarray([0.8])
-        
+    elif prob==7: #alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
+        n=15
+        nb=15
+        me=8
+        mi=0
+        x0=matlabarray([[-0.9,1.745,1.2,1.1,3.048,1.974,0.893,0.928,8,3.6,1.50,1,1,1,1]]).T
+        lx=matlabarray([-inf,0,0,0,0,0,0.85,0.9,3,1.2,1.45,0.99,0.99,0.9,0.99])
+        ux=matlabarray([inf,2,1.6,1.2,5,2,0.93,0.95,12,4,1.62,1.01010101010101,1.01010101010101,1.11111111111111,1.01010101010101])
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info
 #def ecdfo_init_prob_(prob=None,*args,**kwargs):
