@@ -579,13 +579,20 @@ def find_(a,n=None,d=None,nargout=1):
                                                 
         if n is not None:
             i = i.take(range(n))
-        return matlabarray(i)
+        if isvectorColumn_(a):
+            return matlabarray(i).T
+        else:
+            return matlabarray(i)
     if nargout == 2:
         i,j = np.nonzero(np.asarray(a))
         if n is not None:
             i = i.take(n)
             j = j.take(n)
-        return (matlabarray((i+1).reshape(-1,1)),
+        if isvectorColumn_(a):
+            return (matlabarray((i+1).reshape(1,-1)),
+                matlabarray((j+1).reshape(1,-1)))
+        else:
+            return (matlabarray((i+1).reshape(-1,1)),
                 matlabarray((j+1).reshape(-1,1)))
     raise NotImplementedError
 
@@ -976,8 +983,11 @@ def concatenate_(arrs, axis=0):
     for arr in arrs:
         if isempty_(arr):
             copy_arrs.remove(arr)
-    #print "concatenate arrs", arrs            
-    return matlabarray(np.concatenate(copy_arrs, axis))
+    #print "concatenate arrs", arrs  
+    if copy_arrs==[]:
+        return matlabarray([])
+    else:
+        return matlabarray(np.concatenate(copy_arrs, axis))
     
 def sign_(A):
     return np.sign(A)
