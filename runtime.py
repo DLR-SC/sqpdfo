@@ -514,9 +514,9 @@ def abs_(a):
     """
 
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
-    warnings.simplefilter('ignore', RuntimeWarning)
+#    warnings.simplefilter('ignore', RuntimeWarning)
     ret = matlabarray(np.abs(np.asanyarray(a)))
-    warnings.simplefilter('default', RuntimeWarning)
+#    warnings.simplefilter('default', RuntimeWarning)
     return ret
 
 
@@ -712,7 +712,7 @@ def max_(a, d=None, nargout=None):
         (same for max_ obviously)
     """
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
-    warnings.simplefilter('ignore', RuntimeWarning)
+#    warnings.simplefilter('ignore', RuntimeWarning)
 
     if isempty_(a):
         ret = matlabarray([])                    
@@ -727,10 +727,10 @@ def max_(a, d=None, nargout=None):
             ret2 = matlabarray([])                                    
         else:
             ret2 = np.nanargmax(a)
-        warnings.simplefilter('default', RuntimeWarning)                                                                                              
+#        warnings.simplefilter('default', RuntimeWarning)                                                                                              
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
-        warnings.simplefilter('default', RuntimeWarning)                                              
+#        warnings.simplefilter('default', RuntimeWarning)                                              
         return ret    
 
 def min_(a, d=None, nargout=None):#, nargout=0):
@@ -746,7 +746,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     
     
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
-    warnings.simplefilter('ignore', RuntimeWarning)
+#    warnings.simplefilter('ignore', RuntimeWarning)
     if isempty_(a):
         ret = matlabarray([])                    
     elif d is not None:
@@ -758,10 +758,10 @@ def min_(a, d=None, nargout=None):#, nargout=0):
             ret2 = matlabarray([])                                    
         else:
             ret2 = np.nanargmin(a)  
-        warnings.simplefilter('default', RuntimeWarning)                                              
+#        warnings.simplefilter('default', RuntimeWarning)                                              
         return ret, ret2+1 #+1 added since we deal with indices of matlabarray
     else:
-        warnings.simplefilter('default', RuntimeWarning)
+#        warnings.simplefilter('default', RuntimeWarning)
         return ret                                
 
     warnings.simplefilter()
