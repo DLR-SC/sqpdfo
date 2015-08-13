@@ -204,9 +204,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         if (verbose >= 1):
                             rtry=A * stry - b
                             rtryn=norm_(rtry)
-                            atlbt=matlabarray([atlb,natlbt])
-                            atubt=matlabarray([atub,natubt])
-                            atbt=matlabarray([atlbt,atubt])
+                            atlb=concatenate_([atlb,natlbt], axis=1)
+                            atub=concatenate_([atub,natubt],axis=1)
+                            atb=concatenate_([atlbt,atubt],axis=1)
                             freet=copy_(inds)
 #                            freet[atbt]=[]
                             freet = np.delete(free, atbt - 1)
@@ -224,9 +224,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             res=copy_(rtry)
                             resn=copy_(rtryn)
                             if (verbose == 0):
-                                atlb=matlabarray([atlb,natlbt])
-                                atub=matlabarray([atub,natubt])
-                                atb=matlabarray([atlb,atub])
+                                atlb=concatenate_([atlb,natlbt], axis=1)
+                                atub=concatenate_([atub,natubt],axis=1)
+                                atb=concatenate_([atlb,atub],axis=1)
                                 free=copy_(inds)
 #                                free[atb]=[]
                                 free = np.delete(free, atb - 1)
@@ -263,9 +263,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             fprintf_('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,rsubn,alpha,rsubon,lfree,latlb,latub))
                         natlb=free[find_(abs_(ssub[free] - lb[free]) <= epsfeas)]
                         natub=free[find_(abs_(ssub[free] - ub[free]) <= epsfeas)]
-                        atlb=matlabarray([atlb,natlb])
-                        atub=matlabarray([atub,natub])
-                        atb=matlabarray([atlb,atub])
+                        atlb=concatenate_([atlb,natlbt], axis=1)
+                        atub=concatenate_([atub,natubt],axis=1)
+                        atb=concatenate_([atlb,atub],axis=1)
                         free=copy_(inds)
 #                        free[atb]=[]
                         free = np.delete(free, atb - 1)
