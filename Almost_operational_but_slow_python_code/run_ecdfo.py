@@ -41,7 +41,7 @@ tic = time.clock()
 #_format(char('long'))
 #global n,nb,mi,me,prob,threshold
 
-set_prob(4) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_prob(5) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 prob=get_prob()
 options = helper.dummyUnionStruct()
 options.tol=matlabarray([])
@@ -68,7 +68,7 @@ options.tol[3]=1e-05
 options.dxmin=dxmin
 options.miter=500
 options.msimul=500
-options.verbose=0
+options.verbose=2
 lm=matlabarray([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
 print x

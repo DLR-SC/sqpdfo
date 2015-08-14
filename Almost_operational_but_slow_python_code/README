@@ -1,0 +1,5 @@
+SQPDFO Optimizer
+================
+
+This is a python implementation of the SQPDFO Optimizer.
+Unfortunately, implementing it so with matlabarrrays make it so that some big problems, when functions are called thousands of times, are running very slow.
