@@ -20,7 +20,7 @@ def bcdfo_evalP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs
 #    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 
     if (shift_Y):
-        value=P * bcdfo_evalZ_((x - xbase) * scale[2],size_(P,2))
+        value=P.dot(  bcdfo_evalZ_((x - xbase) * scale[1],size_(P,2)))
     else:
-        value=P * bcdfo_evalZ_(x,size_(P,2))
+        value=P.dot(  bcdfo_evalZ_(x,size_(P,2)))
     return value
