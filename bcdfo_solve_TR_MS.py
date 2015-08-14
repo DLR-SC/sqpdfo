@@ -50,7 +50,8 @@ Created on Thu Jul 16 12:41:45 2015
 
 #from __future__ import division
 from runtime import *
-import numpy
+from numpy import *
+from copy import copy
 #from numpy import inf
 def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -65,25 +66,25 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     norms=0
     _lambda=0
     value=0
-    gplus=copy_(g)
+    gplus=copy(g)
     nfact=0
     neigd=0
     hardcase=0
     if (verbose):
         disp_(' bcdfo_solve_TR_MS : ============ enter')
-    if (length_(find_(isnan_(H))) != 0):
+    if (length_(find_(isnan(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains NaNs!')
         msg='error1'
         if (verbose):
             disp_(' bcdfo_solve_TR_MS : ============ error exit')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
-    if (length_(find_( ~isreal_(H))) != 0):
+    if (length_(find_( ~isreal(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains imaginary parts!')
         msg='error2'
         if (verbose):
             disp_(' bcdfo_solve_TR_MS : ============ error exit')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
-    if (length_(find_(isinf_(H))) != 0):
+    if (length_(find_(isinf(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains infinite elements!')
         msg='error3'
         if (verbose):
@@ -123,18 +124,13 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             _lambda=0
         else:
             _lambda=max_(sqrt_(lower * upper),lower + theta * (upper - lower))
-        for i in arange_(1,nitmax).reshape(-1):
+        for i in range(0,nitmax):
             new_lambda=- 1
             sfound=0
             if (verbose):
                 disp_(' bcdfo_solve_TR_MS (',int2str_(i),'): lower = ',num2str_(lower),' lambda = ',num2str_(_lambda),' upper = ',num2str_(upper))
             R,p=chol_(H + _lambda * eye_(n),nargout=2)
-            if (length_(find_(isnan_(R))) != 0):
-                H
-                _lambda
-                norm_(g)
-                R
-                p
+            if (length_(find_(isnan(R))) != 0):
                 disp_(' bcdfo_solve_TR_MS : NaNs in Cholesky factorization')
                 msg='error4'
                 if (verbose):
@@ -148,8 +144,8 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                 if (verbose):
                     disp_(' bcdfo_solve_TR_MS (',int2str_(i),'): ||s|| = ',num2str_(norms),' Delta  = ',num2str_(Delta))
                 if ((_lambda <= epsilon and norms <= Dupper) or (norms >= Dlower and norms <= Dupper)):
-                    w=H * s
-                    value=g.T * s + 0.5 * s.T * w
+                    w=H.dot(s)
+                    value=g.T.dot(s) + 0.5 *s.T.dot(w)
                     gplus=g + w
                     norms=norm_(s)
                     if (norms < (1 - eps_D) * Delta):
@@ -160,56 +156,56 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                         disp_(' bcdfo_solve_TR_MS : ============ successful exit')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
                 w=numpy.linalg.solve(R.T,s)
-                normw2=w.T * w
+                normw2=w.T.dot(w)
                 new_lambda=_lambda + ((norms - Delta) / Delta) * (norms ** 2 / normw2)
                 if (norms > Dupper):
-                    lower=copy_(_lambda)
+                    lower=copy(_lambda)
                 else:
-                    upper=copy_(_lambda)
+                    upper=copy(_lambda)
                 theta_range=theta * (upper - lower)
                 if (new_lambda > lower + theta_range and new_lambda < upper - theta_range):
-                    _lambda=copy_(new_lambda)
+                    _lambda=copy(new_lambda)
                 else:
                     _lambda=max_(sqrt_(lower * upper),lower + theta_range)
             else:
-                lower=copy_(_lambda)
+                lower=copy(_lambda)
                 t=0.5
                 _lambda=(1 - t) * lower + t * upper
             if (upper - lower < theta * max_(1,upper)):
                 break
     V,D=eig_(H,nargout=2)
     neigd=neigd + 1
-    mu,imu=min_(diag_(D),nargout=2)
+    mu,imu=min_(diag(D),nargout=2)
     if (verbose):
-        gamma=abs_(V[:,imu].T * g)
+        gamma=abs_(V[:,imu].reshape(1,-1).dot( g))
         disp_(' bcdfo_solve_TR_MS : ============ pseudo hard case: gamma = ',num2str_(gamma),' ||g|| = ',num2str_(norm_(g)))
     D=D - mu * eye_(n)
-    maxdiag=max_(diag_(D))
-    ii=find_(abs_(diag_(D)) < 1e-10 * maxdiag)
-    if (length_(ii) < n and isempty_(ii) != 1):
+    maxdiag=max_(diag(D))
+    ii=find_(abs(diag(D)) < 1e-10 * maxdiag)
+    if (length_(ii) < n and  not(isempty_(ii))):
         D[ii,ii]=0.5 * maxdiag * eye_(length_(ii))
         Dinv=inv_(D)
-        Dinv[ii,ii]=matlabarray([[0]])
-        scri=- V * Dinv * V.T * g
+        Dinv[ii,ii]=0
+        scri=- V .dot( Dinv.dot( V.T .dot(g)))
         nscri=norm_(scri)
     else:
         scri=zeros_(n,1)
         nscri=0
     if (nscri <= Delta):
-        p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
+        p2=poly1d([norm_(V[:,imu]) ** 2,2 * V[:,imu].reshape(1,-1).dot( scri),nscri ** 2 - Delta ** 2])
         root=max(p2.r)
-        s=scri + root * V[:,imu]
+        s=scri + root * V[:,imu].reshape(-1,1)
     else:
         s=Delta * scri / nscri
     _lambda=- mu
     if (verbose):
         disp_(' bcdfo_solve_TR_MS : ============ ||scri|| = ',num2str_(norm_(scri)),' lambda = ',num2str_(_lambda))
     hardcase=1
-    w=H * s
-    value=g.T * s + 0.5 * s.T * w
+    w=H.dot(s)
+    value=g.T .dot( s ) + 0.5 *s.T.dot(w)
     gplus=g + w
     norms=norm_(s)
-    if abs_(value) <= 1e-15:
+    if abs(value) <= 1e-15:
         s=zeros_(size_(s))
     if (norms < (1 - eps_D) * Delta):
         msg = 'interior solution ( '+ str( nfact )+' factorizations,  lambda = '+ str( _lambda )+ ')' 
