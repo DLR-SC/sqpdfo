@@ -108,444 +108,6 @@ def isvector(a):
     except:
         return False
 
-class matlabarray(np.ndarray):
-    """
-    >>> matlabarray()
-    matlabarray([], shape=(0, 0), dtype=float64)
-    """
-
-    def __new__(cls,a=[],dtype=None):
-        cls = np.array(a,
-                       dtype=dtype,
-                       copy=False,
-                       order="F",
-                       ndmin=2).view(cls).copy(order="F")
-        if cls.size == 0:
-            cls.shape = (0,0)
-        return cls
-
-    def __mul__(self, other):
-        if self.shape == (1,1):                                                                                             
-            return float(self[1]) * other                                 
-        elif other.shape == (1,1):                  
-            return float(other[1]) * self
-        ret = np.dot(self, other)            
-        return ret
-                                
-    def __rmul__(self, other):
-        ret = np.dot(other, self)                                
-        return ret
-                                
-    def dot(self, other):
-        return np.multiply(self, other)                                
-                                
-    def __eq__(self, other):
-        if other is None:
-            return False                                    
-        elif type(other) is list:#len(self) != len(other):
-            return self in other
-        elif (type(other) is float or type(other) is int or type(other) is np.int64 or type(other) is np.ndarray):
-            
-           if self.shape == (1,1):
-              return float(other) == float(self)
-           else:
-               return np.ndarray.__eq__(self, other)#False                                
-        if self.shape != other.shape:
-            return False                                    
-        return (np.array(self) == np.array(other)).all()
-                                                                 
-
-    def __copy__(self):
-        return np.ndarray.copy(self,order="F")
-
-    def __iter__(self):
-        """ must define iter or char won't work"""
-        return np.asarray(self).__iter__()
-
-    def compute_indices(self,index):
-        if not isinstance(index,tuple):
-           index = index,
-        if len(index) != 1 and len(index) != self.ndim:
-            raise IndexError
-        indices = []
-        for i,ix in enumerate(index):
-            if ix.__class__ is end:
-                indices.append(self.shape[i]-1+ix.n)
-            elif ix.__class__ is slice:
-                if self.size == 0 and ix.stop is None:
-                    raise IndexError
-                if len(index) == 1:
-                    n = self.size
-                else:
-                    n = self.shape[i]
-                indices.append(np.arange((ix.start or 1)-1,
-                                          ix.stop  or n,
-                                          ix.step  or 1,
-                                          dtype=int))
-            else:
-                try:
-                    indices.append(int(ix)-1)
-                except:
-                    
-                    #This way we only have to deal with the case where indices are row vectors, when there are vectors.
-                    if isvectorColumn_(np.asarray(ix)):
-                        indices.append((np.asarray(ix).astype("int32")-1).reshape(-1))
-                    else:
-                        indices.append(np.asarray(ix).astype("int32")-1)
-        if len(indices) == 2 and isvector(indices[0]) and isvector(indices[1]):
-            indices[0].shape = (-1,1)
-            indices[1].shape = (-1,)
-        return tuple(indices)
-
-    def __getslice__(self,i,j):
-        if i == 0 and j == sys.maxsize:
-            return self.reshape(-1,1,order="F")
-        return self.__getitem__(slice(i,j))
-
-    def __getitem__(self,index):
-
-        if type(index) is matlabarray:
-            
-
-            #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
-#            if self.shape == index.shape and  np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all() :
-            if self.shape == index.shape and  np.logical_or(index == 0, index == 1).all() :
-                try:
-                    if isvectorColumn_(self):
-                        return matlabarray([np.ndarray.__getitem__(self, index)]).T
-                    else:
-                        return matlabarray([np.ndarray.__getitem__(self, index)])
-                except:
-                    pass
-            #Same case as above but when self and index are vectors and one is row and the other is column
-            elif self.shape == (index.T).shape and  np.logical_or(index == 0, index == 1).all():
-                try:
-                    if isvectorColumn_(self):
-                        return matlabarray([np.ndarray.__getitem__(self, index.T)]).T
-                    else:
-                        return matlabarray([np.ndarray.__getitem__(self, index.T)])
-                except:
-                    pass
-                    
-            #special case V[M] where M is a matrix and V is a vertical vector.
-            elif isvectorColumn_(self):
-                    return matlabarray(self.get(index)).T
-                    
-    
-        elif type(index) is tuple and len(index)==2:
-                #special case M[m:n,i]  where 'i'  is an integer or an interval containing a unique number
-                if type(index[0]) is slice:
-                    if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
-                        return matlabarray(self.get(index)).T
-                    elif type(index[1]) is slice:
-                        if index[1].start!=None and index[1].start==index[1].stop:
-                            return matlabarray(self.get(index)).T
-                    elif type(index[1]) is matlabarray:
-                        if numel_(index[1])==1:
-                            return matlabarray(self.get(index)).T
-                #special case M[V,i] where V is a row vector and 'i' is an integer or an interval containing a unique number
-                elif type(index[0]) is matlabarray:
-                        if not(type(index[1]) is slice) and not(type(index[1]) is matlabarray): 
-                            return matlabarray(self.get(index)).T
-                        elif type(index[1]) is slice:
-                            if index[1].start!=None and index[1].start==index[1].stop:
-                                return matlabarray(self.get(index)).T
-                        elif type(index[1]) is matlabarray:
-                            if numel_(index[1])==1:
-                                return matlabarray(self.get(index)).T
-
-        #special case V[m:n] where V is a vertical vector 
-        elif type(index) is slice:
-            if isvectorColumn_(self):
-                return matlabarray(self.get(index)).T
-                                                      
-        return matlabarray(self.get(index))
-
-    def get(self,index):        
-        indices = self.compute_indices(index)
-        if len(indices) == 1:
-            return np.ndarray.__getitem__(self.reshape(-1,order="F"),indices)
-        else:
-            return np.ndarray.__getitem__(self,indices)
-
-    def __setslice__(self,i,j,value):                  
-                                        
-        if i == 0 and j == sys.maxsize:
-            index = slice(None,None)
-        else:
-            index = slice(i,j)
-        self.__setitem__(index,value)
-        
-    def sizeof(self,ix):
-        if isinstance(ix,int):
-            n = ix+1
-        elif isinstance(ix,slice):
-            n = ix.stop
-        elif isinstance(ix,(list,np.ndarray)):
-            n = max(ix)+1
-        else:
-            assert 0,ix
-        if not isinstance(n,int):
-            raise IndexError
-        return n 
-
-    def __setitem__(self,index,value):
-
-        #If value is an empty matrix, no changes are done
-        if isempty_(value):
-            return
-
-        #This way we only have to deal with the case where value is a row vector, when it is a vector.
-        if type(value) is matlabarray and isvector_(value):
-            value=value.reshape(-1)
-
-        if type(index) is matlabarray:
-            #This says that index and self have the same shape and index contains only booleans (0 or 1 or True or False)
-#            if self.shape == index.shape and np.logical_or(np.logical_or(np.logical_or(index == 1,  index == 0), index == matlabarray([True])), index == matlabarray([False])).all():
-            if self.shape == index.shape and  np.logical_or(index == 0, index == 1).all() :
-                    if isempty_(value):
-#                      print "Isempty"
-                        pass
-                    else:
-#                      print "np.asarray(value.T)", np.asarray(value.T)[0]
-                        try:
-                            np.asarray(self).__setitem__(index, value) 
-                            return
-                        except:
-                            pass                                                                        
-        #Same case as above but when self and index are vectors and one is row and the other is column
-            elif self.shape == (index.T).shape and  np.logical_or(index == 0, index == 1).all():
-                 if isempty_(value):
-#               print "Isempty"
-                     pass
-                 else:
-                     try:
-                         np.asarray(self).__setitem__(index.T, value) 
-                         return
-                     except:
-                         pass                                                                                     
-
-                                                                                                
-                                                                                                
-        indices = self.compute_indices(index)
-        try:
-            if len(indices) == 1:
-                np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
-                return                       
-            np.asarray(self).__setitem__(indices,value)
-            return
-        except (ValueError,IndexError):
-            if not self.size:
-                new_shape = [self.sizeof(s) for s in indices]                                                              
-                self.resize(new_shape,refcheck=0)
-                np.asarray(self).__setitem__(indices,value)
-            elif len(indices) == 1:
-                # One-dimensional resize is only implemented for
-                # two cases:
-                #
-                # a. empty matrices having shape [0 0]. These
-                #    matries may be resized to any shape.  A[B]=C
-                #    where A=[], and B is specific -- A[1:10]=C
-                #    rather than A[:]=C or A[1:end]=C
-                if self.size and not isvector_or_scalar(self):
-                    raise IndexError("One-dimensional resize "
-                                     "works only on vectors, and "
-                                     "row and column matrices")
-                # One dimensional resize of scalars creates row matrices
-                # ai = 3
-                # a(4) = 1
-                # 3 0 0 1
-                n = self.sizeof(indices[0]) # zero-based
-                if max(self.shape) == 1:
-                    new_shape = list(self.shape)
-                    new_shape[-1] = n
-                else:
-                    new_shape = [(1 if s==1 else n) for s in self.shape]
-                self.resize(new_shape,refcheck=0)
-                np.asarray(self).reshape(-1,order="F").__setitem__(indices,value)
-            else:
-                new_shape = list(self.shape)
-                if self.flags["F_CONTIGUOUS"]: #This if has to be first on account of matlabarray implementation which make matlabarrays as F-Contiguous
-                    new_shape[-1] = self.sizeof(indices[-1])
-                elif self.flags["C_CONTIGUOUS"]:
-                    new_shape[0] = self.sizeof(indices[0])
-                self.resize(new_shape,refcheck=0)                                                            
-                np.asarray(self).__setitem__(indices,value)
-
-    def __repr__(self):
-        return self.__class__.__name__ + repr(np.asarray(self))[5:]
-
-    def __str__(self):
-        return str(np.asarray(self))
- 
-    def __add__(self,other):
-        return matlabarray(np.asarray(self)+np.asarray(other))
-
-    def __neg__(self):
-        return matlabarray(np.asarray(self).__neg__())
-                                                       
-class end(object):
-    def __add__(self,n):
-        self.n = n
-        return self
-    def __sub__(self,n):
-        self.n = -n
-        return self
-####
-class cellarray(matlabarray):
-    """
-    Cell array corresponds to matlab ``{}``
-
-
-    """
-
-    def __new__(cls, a=[]):
-        """
-        Create a cell array and initialize it with a.
-        Without arguments, create an empty cell array.
-
-        Parameters:
-        a : list, ndarray, matlabarray, etc.
-
-        >>> a=cellarray([123,"hello"])
-        >>> print a.shape
-        (1, 2)
-
-        >>> print a[1]
-        123
-
-        >>> print a[2]
-        hello
-        """
-        obj = np.array(a,
-                       dtype=object,
-                       order="F",
-                       ndmin=2).view(cls).copy(order="F")
-        if obj.size == 0:
-            obj.shape = (0,0)
-        return obj
-
-    def __getitem__(self,index): 
-        return self.get(index)
-
-
-class cellstr(matlabarray):
-    """
-    >>> s=cellstr(char('helloworldkitty').reshape(3,5))
-    >>> s
-    cellstr([['hello', 'world', 'kitty']], dtype=object)
-    >>> print s
-    hello
-    world
-    kitty
-    >>> s.shape
-    (1, 3)
-    """
-
-    def __new__(cls, a):
-        """
-        Given a two-dimensional char object,
-        create a cell array where each cell contains
-        a line.
-        """
-        obj = np.array(["".join(s) for s in a], 
-                       dtype=object,
-                       copy=False,
-                       order="C",
-                       ndmin=2).view(cls).copy(order="F")
-        if obj.size == 0:
-            obj.shape = (0,0)
-        return obj
-
-    def __str__(self):
-        return "\n".join("".join(s) for s in self.reshape(-1))
-
-    def __getitem__(self,index): 
-        return self.get(index)
-
-
-class char(matlabarray):
-    """
-    class char is a rectangular string matrix, which
-    inherits from matlabarray all its features except
-    dtype.
-
-    >>> s=char()
-    >>> s.shape
-    (0, 0)
-
-    >>> s=char('helloworld').reshape(2,5)
-    >>> print s
-    hello
-    world
-
-    >>> s.shape
-    (2, 5)
-    """
-
-    def __new__(cls, a=""):
-        if not isinstance(a,str):
-            raise NotImplementedError
-        obj = np.array(list(a),
-                       dtype='|S1',
-                       copy=False,
-                       order="F",
-                       ndmin=2).view(cls).copy(order="F")
-        if obj.size == 0:
-            obj.shape = (0,0)
-        return obj
-
-    def __getitem__(self,index): 
-        return self.get(index)
-
-    def __str__(self):
-        if self.ndim == 0:
-            return ""
-        if self.ndim == 1:
-            return "".join(s for s in self)
-        if self.ndim == 2:
-            return "\n".join("".join(s) for s in self)
-        raise NotImplementedError
-
-def abs_(a):
-    """
-    Unless the argument is already as subclass of ndarray,
-    convert the argument to ndarray, then apply numpy.abs
-    """
-
-    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
-#    warnings.simplefilter('ignore', RuntimeWarning)
-    ret = matlabarray(np.abs(np.asanyarray(a)))
-#    warnings.simplefilter('default', RuntimeWarning)
-    return ret
-
-
-def arange_(start,stop,step=1,**kwargs):
-    """
-    >>> a=arange_(1,10) # 1:10
-    >>> size_(a)
-    matlabarray([[ 1, 10]])
-    """
-    return matlabarray(np.arange(start,
-                                 stop+1,
-                                 step,
-                                 **kwargs).reshape(1,-1),**kwargs)
-
-def ceil_(a):
-    """
-    Unless the argument is already as subclass of ndarray,
-    convert the argument to ndarray, then apply numpy.ceil
-    """
-    return np.ceil(np.asanyarray(a))
-
-def cell_(*args):
-    if len(args) == 1:
-        args += args
-    return cellarray(np.zeros(args,dtype=object,order="F"))
-
-def copy_(a):
-    return matlabarray(np.asanyarray(a).copy(order="F"))
-
 def disp_(*args):
     out = ""
     for arg in args:
@@ -629,28 +191,6 @@ def intersect_(a,b,nargout=1):
             return np.array(c)
     raise NotImplementedError
 
-#def inf_(*args):
-#    t = np.empty(np.prod(args))
-#    t[:] = np.inf
-#    return t.reshape(args)
-#
-#Inf_ = inf_
-#
-#def int_(t):
-#    return np.int(t)
-#
-#def int32_(t):
-#    return np.int(t)
-#
-
-def iscellstr_(a):
-    return isinstance(a,cellarray) and all(isinstance(t,str) for t in a)
-
-def ischar_(a):
-    try:
-        return a.dtype == "|S1"
-    except AttributeError:
-        return False
 
 def isempty_(a):
     try:
@@ -715,16 +255,16 @@ def max_(a, d=None, nargout=None):
 #    warnings.simplefilter('ignore', RuntimeWarning)
 
     if isempty_(a):
-        ret = matlabarray([])                    
+        ret = np.array([])                    
     elif  d is not None:
         ret=np.fmax(a,d)
     else:
-        ret=matlabarray(np.nanmax(np.asarray(a)))
+        ret=np.nanmax(a)
 
                                 
     if nargout == 2:
         if isempty_(a):
-            ret2 = matlabarray([])                                    
+            ret2 = np.array([])                                    
         else:
             ret2 = np.nanargmax(a)
 #        warnings.simplefilter('default', RuntimeWarning)                                                                                              
@@ -748,14 +288,14 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
 #    warnings.simplefilter('ignore', RuntimeWarning)
     if isempty_(a):
-        ret = matlabarray([])                    
+        ret = np.array([])                    
     elif d is not None:
         ret=np.fmin(a,d)
     else:
-        ret = matlabarray(np.nanmin(np.asarray(a)))   
+        ret = np.nanmin(a)   
     if nargout == 2:
         if isempty_(a):
-            ret2 = matlabarray([])                                    
+            ret2 = np.array([])                                    
         else:
             ret2 = np.nanargmin(a)  
 #        warnings.simplefilter('default', RuntimeWarning)                                              
@@ -803,7 +343,7 @@ def size_(a, b=0, nargout=1):
     >>> size_(zeros_(3,3)) + 1
     matlabarray([[4, 4]])
     """
-    s = np.asarray(a).shape
+    s = a.shape
     if s is ():
         return 1 if b else (1,)*nargout
     # a is not a scalar
@@ -811,7 +351,7 @@ def size_(a, b=0, nargout=1):
         if b:
             return s[b-1]
         else:
-            return matlabarray(s) if nargout <= 1 else s
+            return np.array(s) if nargout <= 1 else s
     except IndexError:
         return 1
 
@@ -855,16 +395,11 @@ def zeros_(*args,**kwargs):
     """
     if not args:
         return 0.0
-#    else:
-#        for i,arg in enumerate(args):
-#            if (np.asanyarray(arg)<0).any():
-#                return matlabarray([])
     if len(args) == 1:
         if numel_(args)==1:
             args += args
-        else:
-            return matlabarray(np.zeros(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-    return matlabarray(np.zeros(args,**kwargs))
+
+    return np.zeros(args,**kwargs)
 
 
 def ones_(*args,**kwargs):
@@ -882,9 +417,7 @@ def ones_(*args,**kwargs):
     if len(args) == 1:
         if numel_(args)==1:
             args += args
-        else:
-            return matlabarray(np.ones(np.asarray(args[0])[0], *args[1:],order="F",**kwargs))
-    return matlabarray(np.ones(args,**kwargs))
+    return np.ones(args,**kwargs)
                 
 #------------------------------------------------------------------------------
 #                Added Functions Start here.
@@ -976,18 +509,17 @@ def poly1d_(A, r=0):
     return np.poly1d(A,r) 
     
 def eye_(n):
-    return matlabarray(np.eye(n))
+    return np.eye(n)
     
 def concatenate_(arrs, axis=0):
     copy_arrs=copy(arrs)
     for arr in arrs:
         if isempty_(arr):
             copy_arrs.remove(arr)
-    #print "concatenate arrs", arrs  
     if copy_arrs==[]:
-        return matlabarray([])
+        return np.array([])
     else:
-        return matlabarray(np.concatenate(copy_arrs, axis))
+        return np.concatenate(copy_arrs, axis)
     
 def sign_(A):
     return np.sign(A)
@@ -1113,13 +645,10 @@ def strcat_(*args):
 def randn_(msg, number):
     print "Warning: randn does not do anything, because it's discouraged syntax"
     
-def compare_matlabarray(x, y, abs_tol, rel_tol):
+def compare_array(x, y, abs_tol, rel_tol):
     """  Function which compares the matlabarray x and y and returns true if all the elements are
      approximately the same according to the absolute tolerance (abs_tol) and to the relative tolerance (rel_tol)
-    """
-    #Conversion of matlabarrays to python arrays
-    x=np.array(x);
-    y=np.array(y);    
+    """ 
     
     #Flatening of x and y
     x=x.flat[:];
