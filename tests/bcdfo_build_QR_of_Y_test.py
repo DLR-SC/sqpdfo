@@ -13,11 +13,11 @@ sys.path.append("../")
 import unittest
 from bcdfo_build_QR_of_Y import *
 from bcdfo_evalZ import *
-import numpy as np
+from numpy import *
 from runtime import *
 import helper
 from random import random
-from runtime import matlabarray, compare_matlabarray
+from runtime import compare_array
 
 class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
     """
@@ -36,46 +36,45 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
         """
         Tests with whichmodel=0 and an active shift : we verifiy that xbase and scale are OK
         """
-        Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
+        Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-        self.assertTrue(compare_matlabarray(xbase, matlabarray([1,1]), self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(scale, matlabarray([1,0.499993750117185,0.499993750117185,0.249993750156246,0.249993750156246,0.249993750156246]), self.abs_tol, self.rel_tol))
-
-        Y = matlabarray([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
+        self.assertTrue(compare_array(xbase, array([1,1]), self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(scale, array([1,0.499993750117185,0.499993750117185,0.249993750156246,0.249993750156246,0.249993750156246]), self.abs_tol, self.rel_tol))
+        Y = array([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
-        self.assertTrue(compare_matlabarray(xbase, matlabarray([0,0]), self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(scale, matlabarray([1,0.5, 0.5, 0.25, 0.25, 0.25]), self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(xbase, array([0,0]), self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(scale, array([1,0.5, 0.5, 0.25, 0.25, 0.25]), self.abs_tol, self.rel_tol))
         
     def test_bcdfo_build_QR_of_Y_1(self):
         """
         Tests with whichmodel=0 and an active shift : we verifiy that the model value calculated with QZ and RZ is OK
         """
-        Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
+        Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-        model = ( QZ * np.linalg.solve( RZ.T , matlabarray([1, 2, 3, 4, 5, 6 ]).T ) ).T
-        res =  model*bcdfo_evalZ_( (matlabarray([[1],[3]])-xbase)*scale[2],6)
-        self.assertTrue(compare_matlabarray(scale, matlabarray([1,0.499993750117185,0.499993750117185,0.249993750156246,0.249993750156246,0.249993750156246]), self.abs_tol, self.rel_tol))
+        model = ( QZ.dot(np.linalg.solve( RZ.T , array([[1, 2, 3, 4, 5, 6 ]]).T ) )).T
+        res =  model.dot(bcdfo_evalZ_( (array([[1],[3]])-xbase)*scale[2],6))
+        self.assertTrue(compare_array(scale, array([1,0.499993750117185,0.499993750117185,0.249993750156246,0.249993750156246,0.249993750156246]), self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(float(res), 6,places=13)
         
     def test_bcdfo_build_QR_of_Y_2(self):
         """
         Tests with whichmodel=0 and an active shift : we verifiy that the model value calculated with QZ and RZ is OK
         """
-        Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
+        Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
         for i in range(0,100):
-            model = ( QZ * np.linalg.solve( RZ.T , matlabarray([random(),random(),random(),random(),random(), 6 ]).T ) ).T
-            res = np.dot(model, bcdfo_evalZ_( (matlabarray([[1],[3]])-xbase)*scale[2],6))
+            model = ( QZ .dot(np.linalg.solve( RZ.T , array([[random(),random(),random(),random(),random(), 6 ]]).T )) ).T
+            res = np.dot(model, bcdfo_evalZ_( (array([[1],[3]])-xbase)*scale[2],6))
             self.assertAlmostEqual(float(res), 6,places=13)
-        
+        array([1,3])
     def test_bcdfo_build_QR_of_Y_3(self):       
         """
         Tests with whichmodel=0 and an active shift : we verifiy that the model value calculated with QZ and RZ is OK
         """
-        Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
+        Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-        model = ( QZ * np.linalg.solve( RZ.T , matlabarray([0,0,0,0,0, 6 ]).T ) ).T
-        res = np.dot(model, bcdfo_evalZ_( (matlabarray([[1],[3]])-xbase)*scale[2],6))
+        model = ( QZ.dot( np.linalg.solve( RZ.T , array([[0,0,0,0,0, 6 ]]).T ) )).T
+        res = np.dot(model, bcdfo_evalZ_( (array([[1],[3]])-xbase)*scale[2],6))
 
         self.assertAlmostEqual(float(res), 6,places=14)
         
@@ -83,10 +82,10 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
         """
         Tests with whichmodel=0 and an active shift : we verifiy that the model value calculated with QZ and RZ is OK
         """
-        Y = matlabarray([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
+        Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-        model = ( QZ * np.linalg.solve( RZ.T , matlabarray([6,0,0,03,0,0 ]).T ) ).T
-        res = np.dot(model, bcdfo_evalZ_( (matlabarray([[1],[1]])-xbase)*scale[2],6))
+        model = ( QZ.dot( np.linalg.solve( RZ.T , array([[6,0,0,03,0,0 ]]).T ))).T
+        res = np.dot(model, bcdfo_evalZ_( (array([[1],[1]])-xbase)*scale[2],6))
 
         self.assertAlmostEqual(float(res), 6,places=15)
 

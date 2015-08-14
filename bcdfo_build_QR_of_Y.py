@@ -10,7 +10,8 @@ try:
 except ImportError:
     from smop.runtime import *
 from bcdfo_evalZ import *
-from numpy import copy
+from copy import copy
+from numpy import *
     
 def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -18,7 +19,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
 
     #Copy only if necessary
     if (shift_Y):
-        Y=copy_(Y_)
+        Y=copy(Y_)
     else:
         Y=Y_
         
@@ -33,26 +34,26 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
     if (_del < 1e-10):
         _del=1e-10
     if (whichmodel == 0):
-        q=copy_(p1)
+        q=copy(p1)
     else:
         q=((n + 1) * (n + 2)) / 2
     if (whichmodel == 3 and p1 < q):
         whichmodel=2
             
     if (shift_Y and (p1 > 1)):
-        xbase=Y[:,1]
+        xbase=copy(Y[:,0])
         scaleY=0
-        for i in arange_(1,p1).reshape(-1):
+        for i in range(0,p1):
             Y[:,i]=Y[:,i] - xbase
             scaleY=max_(scaleY,norm_(Y[:,i]))
-        scale=concatenate_([matlabarray([[1]]),scaleY ** - 1 * ones_(1,min_(n,q - 1)),scaleY ** - 2 * ones_(1,q - n - 1)], axis=1).T
+        scale=concatenate_([array([[1]]),scaleY ** - 1 * ones_(1,min_(n,q - 1)),scaleY ** - 2 * ones_(1,q - n - 1)], axis=1).T
         Y=Y / scaleY
     else:
         scale=ones_(q,1)
         xbase=zeros_(size_(Y,1),1)
     if (whichmodel == 0):
         Z=bcdfo_evalZ_(Y,q)
-        if (length_(find_(isnan_(Z))) == 0 and length_(find_(isinf_(Z))) == 0):
+        if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
             condZ=cond_(Z)
             if (condZ > kappa_ill):
                 badcond=1
@@ -74,10 +75,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                 F=bcdfo_evalZ_(Y,p1).T
             else:
                 M=bcdfo_evalZ_(Y,q).T
-                ML=M[:,1:n + 1]
-                MQ=M[:,n + 2:q]
-                F=matlabarray([[MQ * MQ.T,ML],[ML.T,zeros_(n + 1,n + 1)]])
-            if (length_(find_(isnan_(F))) == 0 and length_(find_(isinf_(F))) == 0):
+                ML=M[:,0:n + 1]
+                MQ=M[:,n + 1:q]
+                F=concatenate([MQ.dot(MQ.T),ML,ML.T,zeros_(n + 1,n + 1)], axis=1)
+            if (length_(find_(isnan(F))) == 0 and length_(find_(isinf(F))) == 0):
                 condZ=cond_(F)
                 if (condZ > kappa_ill):
                     badcond=1
@@ -96,7 +97,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         else:
             if (whichmodel == 2):
                 Z=bcdfo_evalZ_(Y,q)
-                if (length_(find_(isnan_(Z))) == 0 and length_(find_(isinf_(Z))) == 0):
+                if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
                     condZ=cond_(Z)
                     if (condZ > kappa_ill):
                         badcond=1
@@ -115,7 +116,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             else:
                 if (whichmodel == 3):
                     Z=bcdfo_evalZ_(Y,q).T
-                    if (length_(find_(isnan_(Z))) == 0 and length_(find_(isinf_(Z))) == 0):
+                    if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
                         condZ=cond_(Z)
                         if (condZ > kappa_ill):
                             badcond=1
@@ -131,4 +132,4 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                         QZ,RZ=qr_(M,nargout=2)
                     else:
                         QZ,RZ=qr_(Z,nargout=2)
-    return QZ,RZ,xbase,scale
+    return QZ,RZ,xbase.reshape(-1,1),scale

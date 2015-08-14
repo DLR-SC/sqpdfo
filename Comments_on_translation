@@ -21,6 +21,12 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
     Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0) (first indices from slices has to be decremented)
   NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1. Either we recognize the dimensions of the matrix and  then we can choose 0 or 1, or else we can refer to the matlab code :
   [Y, Ynew] or [Y Ynew] in matlabcode should be replaced with axis=1 and [Y ; Ynew] should be replaced with axis =0
+  
+-Matrix multiplication with python arrays is A.dot(B), the translation with SMOP does not take well into account the differences between .* and * in matlab, we have to be careful.
+
+- xbase=Y[:,1] should by replaced  xbase=copy(Y[:,0])
+
+-Whenever we got a vector by slicing, it becomes in python an array such as array([1,2]) instead of array([[1,2]]) or array([[1],[2]). We have to be careful and reshape when necessary.
     
 -Matlab code AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k-1, 0)/Agn = np.delete(Agn, k-1, 0). 0 means that the (k-1)-nth line will be deleted,
 and 1 should be put when we want the (k-1)-nth column to be deleted. (k-1_nth line in python array which is the k_nth line in matlabarray)
