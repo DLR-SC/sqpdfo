@@ -1,0 +1,5 @@
+SQPDFO Optimizer
+================
+
+This is a python implementation of the SQPDFO Optimizer.
+We are trying to make it work with normal python arrays, instead of creating the subclass matlabarrays.

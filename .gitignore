@@ -1,0 +1,5 @@
+#To ignore all the compiled files .pyc
+*.pyc
+*.npy
+*.out
+*.m
