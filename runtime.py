@@ -128,35 +128,25 @@ def find_(a,n=None,d=None,nargout=1):
     if d:
         raise NotImplementedError
 
-    # there is no promise that nonzero or flatnonzero
-    # use or will use indexing of the argument without
-    # converting it to array first.  So we use asarray
-    # instead of asanyarray
-    if nargout == 1:
-        i = np.flatnonzero(np.asarray(a)).reshape(1,-1)+1
-        #print "a\n", a
-        #print "i\n", i    
+    elif nargout == 1:
+        i = np.flatnonzero(a).reshape(1,-1)+1  
         if isempty_(i):
-            return matlabarray([])
+            return np.array([])
                                                 
         if n is not None:
             i = i.take(range(n))
-        if isvectorColumn_(a):
-            return matlabarray(i).T
-        else:
-            return matlabarray(i)
-    if nargout == 2:
+            return np.array(i)
+    elif nargout == 2:
         i,j = np.nonzero(np.asarray(a))
         if n is not None:
             i = i.take(n)
             j = j.take(n)
-        if isvectorColumn_(a):
-            return (matlabarray((i+1).reshape(1,-1)),
-                matlabarray((j+1).reshape(1,-1)))
-        else:
-            return (matlabarray((i+1).reshape(-1,1)),
-                matlabarray((j+1).reshape(-1,1)))
-    raise NotImplementedError
+
+        return (np.array((i+1).reshape(-1,1)),
+                np.array((j+1).reshape(-1,1)))
+    
+    else:
+        raise NotImplementedError
 
 def floor_(a):
     return np.floor_(np.asanyarray(a))
@@ -204,23 +194,23 @@ def isequal_(a,b):
                           
 def isvector_(a):
     """test if the argument is a line or column vector"""
-    return (size_(a)==1).any()  
+    return a.ndim==1
 
-def isvectorRow_(a):
-    if ndims_(a)==1:
-        return True
-    elif ndims_(a)==2:
-        if a.shape[0]==1 and a.shape[1]>=1:
-            return True
-            
-    return False
-    
-def isvectorColumn_(a):
-    if ndims_(a)==2:
-        if a.shape[0]>=1 and a.shape[1]==1:
-            return True
-            
-    return False
+#def isvectorRow_(a):
+#    if a.ndim==1:
+#        return True
+#    elif ndims_(a)==2:
+#        if a.shape[0]==1 and a.shape[1]>=1:
+#            return True
+#            
+#    return False
+#    
+#def isvectorColumn_(a):
+#    if ndims_(a)==2:
+#        if a.shape[0]>=1 and a.shape[1]==1:
+#            return True
+#            
+#    return False
                           
 def isscalar_(a):
     """np.isscalar returns True if a.__class__ is a scalar
@@ -268,7 +258,7 @@ def max_(a, d=None, nargout=None):
         else:
             ret2 = np.nanargmax(a)
 #        warnings.simplefilter('default', RuntimeWarning)                                                                                              
-        return ret, ret2+1 #+1 added since we deal with indices of matlabarray
+        return ret, ret2
     else:
 #        warnings.simplefilter('default', RuntimeWarning)                                              
         return ret    
@@ -299,7 +289,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
         else:
             ret2 = np.nanargmin(a)  
 #        warnings.simplefilter('default', RuntimeWarning)                                              
-        return ret, ret2+1 #+1 added since we deal with indices of matlabarray
+        return ret, ret2
     else:
 #        warnings.simplefilter('default', RuntimeWarning)
         return ret                                
@@ -311,10 +301,10 @@ def mod_(a,b):
     except ZeroDivisionError:
         return a
 def ndims_(a):
-    return np.asarray(a).ndim
+    return a.ndim
 
 def numel_(a):
-    return np.asarray(a).size
+    return a.size
 
 def rand_(*args,**kwargs):
     if not args:
@@ -344,8 +334,9 @@ def size_(a, b=0, nargout=1):
     matlabarray([[4, 4]])
     """
     s = a.shape
-    if s is ():
-        return 1 if b else (1,)*nargout
+    #not sure what the 2 following lines are for
+#    if s is ():
+#        return 1 if b else (1,)*nargout
     # a is not a scalar
     try:
         if b:
@@ -432,22 +423,7 @@ def eig_(A, nargout=1):
     else:
         D,V = np.linalg.eig(A) #when A is a matlabarray, linalg.eig(A) returns D as a python array and V as a matlabarray
         return V,matlabarray(np.diag(D))
-    
-def diag_(A):
-    if isvector_(A):
-        return matlabarray(np.diag(A.reshape(-1)))
-    else:
-        return matlabarray(np.diag(A))
-    
-def isreal_(A):
-    return matlabarray(np.isreal(np.asarray(A)))
-    
-def isnan_(A):
-    return matlabarray(np.isnan(np.asarray(A)))
-    
-def isinf_(A):
-    return matlabarray(np.isinf(np.asarray(A)))
-    
+            
 def cond_(A):
     return np.linalg.cond(A)
     
