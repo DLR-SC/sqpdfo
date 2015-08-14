@@ -26,8 +26,15 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 
 - xbase=Y[:,1] should by replaced  xbase=copy(Y[:,0])
 
--Whenever we got a vector by slicing, it becomes in python an array such as array([1,2]) instead of array([[1,2]]) or array([[1],[2]). We have to be careful and reshape when necessary.
-    
+-Whenever we got a vector by slicing, it becomes in python an array such as array([1,2]) instead of array([[1,2]]) or array([[1],[2]). We have to be careful and reshape when necessary, because it is considered 
+as a line vector for calculation.
+Also, .T or transpose() does nothing for an array such as array([1,2]). 
+ 
+-All copy_ should be transformed into copy 
+
+-for i in arange_(1,p1).reshape(-1)  should be replaced by for i in range(0,p1) so that index i does not even have to be modified in the following lines
+
+ 
 -Matlab code AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k-1, 0)/Agn = np.delete(Agn, k-1, 0). 0 means that the (k-1)-nth line will be deleted,
 and 1 should be put when we want the (k-1)-nth column to be deleted. (k-1_nth line in python array which is the k_nth line in matlabarray)
 Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0)-1, 1)*sn.
@@ -72,10 +79,6 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 argument is returned at the end of the function. For instance, bcdfo_repair_Y modifies and returns Y, but it may be returned under an other name in matlab, for instance Yplus:
 QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale = bcdfo_repair_Y_( QZ, RZ, Y, 0.7, 10, 1.0e-10, 1.1, 0.001, xbase, 1, 0, 0, matlabarray([-10,-10]), matlabarray([10,10]), matlabarray([1,2]), 1, scale, 0, 1, 1e15 )
 In this case, we would not want Y to be modified during the call. Therefore Y has to be copied in bcdfo_repair_Y, even though it is returned at the end. 
-
--Some copy_ should be transformed into copy when we do not want the objects to become matlabarray (imported with 'from copy import copy')
-
--for i in arange_(1,p1).reshape(-1)  should be replaced by for i in range(0,p1) so that index i does not even have to be modified in the following lines
 
 -When there may be complex numbers, A' should be replaced in python by A.conj().T and not A.T. This is for instance important in : A=0.5*(A + A.conj().T)
 
