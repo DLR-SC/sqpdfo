@@ -17,12 +17,8 @@ These files have been translated by SMOP, i.e. automatic translation. These are 
 
 -This kind of  matlab code
 	Z  = [ ones( 1, m ); X(1:n,1:m); 0.5*X(1:ndiag,1:m).^2 ];
- is automatically converted like this :
-    Z=matlabarray([[ones_(1,m)],[X[1:n,1:m]],[0.5 * X[1:ndiag,1:m] ** 2]])
- which does not work ; it actually does not give an error, but returns a matlabarray containing other matlabarrays like
-     matlabarray([[matlabarray([[ 1.,  1.,  1.,  1.,  1.,  1.]])],[ matlabarray([[ 0.  ,  1.  ,  0.  ,  2.  ,  1.  ,  0.  ]])])
-  which can not be further used and has to be dealt with a code like this :
-      Z=concatenate_([ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2], axis=0) 
+ has to be dealt with a code like this :
+    Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0) (first indices from slices has to be decremented)
   NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1. Either we recognize the dimensions of the matrix and  then we can choose 0 or 1, or else we can refer to the matlab code :
   [Y, Ynew] or [Y Ynew] in matlabcode should be replaced with axis=1 and [Y ; Ynew] should be replaced with axis =0
     

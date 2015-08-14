@@ -73,16 +73,16 @@ def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
         Z=ones_(1,m)
     else:
         if (q <= n + 1):
-            Z=concatenate_((ones_(1,m),X[1:nlin,1:m]),axis=0)
+            Z=concatenate_((ones_(1,m),X[0:nlin,0:m]),axis=0)
         else:
             ndiag=min_(n,nquad)
-            Z=concatenate_((ones_(1,m),X[1:n,1:m],0.5 * X[1:ndiag,1:m] ** 2), axis=0)
+            Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0)
             nquad=nquad - ndiag
             if (nquad > 0):
-                for k in arange_(1,n - 1).reshape(-1):
+                for k in range(1,n):
                     nsd=min_(n - k,nquad)
                     if (nsd > 0):
-                        Z=concatenate_((Z,X[k + 1:k + nsd,1:m].dot(X[1:nsd,1:m])),axis=0)
+                        Z=concatenate_((Z,X[k:k + nsd,0:m]*(X[0:nsd,0:m])),axis=0)
                         nquad=nquad - nsd
                     if (nquad == 0):
                         break
