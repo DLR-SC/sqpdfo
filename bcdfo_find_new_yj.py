@@ -14,7 +14,7 @@ from bcdfo_computeLj import bcdfo_computeLj_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_hessP import bcdfo_hessP_
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
-
+from numpy import *
 
 
 
@@ -31,7 +31,7 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
     if (j < 2):
         return ynew,improvement,msgTR
     Lj=bcdfo_computeLj_(QZ,RZ,j,Y,whichmodel,scale,shift_Y)
-    if (length_(find_(isnan_(Lj))) != 0 or length_(find_(~ isreal_(Lj))) != 0 or length_(find_(isinf_(Lj))) != 0):
+    if (length_(find_(isnan(Lj))) != 0 or length_(find_(~ isreal(Lj))) != 0 or length_(find_(isinf(Lj))) != 0):
         msgTR='Error0: Lagrange polynomial contains NaN or Inf or nonreal components!!'
         if (verbose):
             disp_(msgTR)
@@ -41,13 +41,13 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
     if (shift_Y):
         g=bcdfo_gradP_(Lj,zeros_(n,1),xbase,scale,0)
         H=bcdfo_hessP_(Lj,zeros_(n,1),xbase,scale,0)
-        pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta * scale[2],eps_L,nargout=9)
-        pstep=pstep / scale[2]
-        mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta * scale[2],eps_L,nargout=9)
-        mstep=mstep / scale[2]
+        pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta * scale[1],eps_L,nargout=9)
+        pstep=pstep / scale[1]
+        mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta * scale[1],eps_L,nargout=9)
+        mstep=mstep / scale[1]
     else:
-        g=bcdfo_gradP_(Lj,Y[:,1],xbase,scale,0)
-        H=bcdfo_hessP_(Lj,Y[:,1],xbase,scale,0)
+        g=bcdfo_gradP_(Lj,Y[:,0],xbase,scale,0)
+        H=bcdfo_hessP_(Lj,Y[:,0],xbase,scale,0)
         pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta,eps_L,nargout=9)
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta,eps_L,nargout=9)
     if (verbose):
@@ -56,11 +56,11 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
         disp_(' === find_new_yj: j = ',int2str_(j),' negative value = ',num2str_(mvalue),' step:')
         mstep.T
     if (mvalue < pvalue):
-        improvement=abs_(mvalue)
-        ynew=Y[:,1] + mstep
+        improvement=abs(mvalue)
+        ynew=Y[:,0].reshape(-1,1) + mstep
     else:
-        improvement=abs_(pvalue)
-        ynew=Y[:,1] + pstep
+        improvement=abs(pvalue)
+        ynew=Y[:,0].reshape(-1,1) + pstep
     if (verbose):
         disp_('--------- exit find_new_yj ')
     return ynew,improvement,msgTR

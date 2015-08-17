@@ -10,8 +10,8 @@ sys.path.append("../")
 import unittest
 from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from runtime import matlabarray, compare_matlabarray, copy_
-import numpy as np
+from runtime import compare_array
+from numpy import array
 #import helper
 
 class Test_bcdfo_find_new_yj(unittest.TestCase):
@@ -34,42 +34,42 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
             fiftheen significant digit, which leads to mvalue < pvalue in python instead of mvalue > pvalue in matlab. It is interesting to keep this in
             memory, but this is not really a bug.
         """
-        Y = matlabarray([[ 3.0, 1.0, 0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
+        Y = array([[ 3.0, 1.0, 0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
         whichmodel = 0
-        QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( copy_(Y) , whichmodel, 1, 1,1, 1e15 )
-        ynew, improvement,msgTR = bcdfo_find_new_yj_( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, whichmodel, scale, 1)
+        QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y , whichmodel, 1, 1,1, 1e15 )
+        ynew, improvement,msgTR = bcdfo_find_new_yj_( QZ, RZ, Y, 4, 1.0, 0.001, xbase, 1, whichmodel, scale, 1)
 
-        correctynew = matlabarray([3.280776988023534, -0.959774286524791]).T
+        correctynew = array([[3.280776988023534, -0.959774286524791]]).T
         correctimprovement =  314.8805392927235
 #        print "ynew", ynew
 #        print "improvement", improvement
         self.assertAlmostEqual(correctimprovement, improvement, 11)
-        self.assertTrue(compare_matlabarray(correctynew, ynew, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctynew, ynew, self.abs_tol, self.rel_tol))
         
         #Same test as above but without the shifting in the interpolation points
-        Y = matlabarray([[ 3.0, 1.0, 0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
+        Y = array([[ 3.0, 1.0, 0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
         whichmodel = 0
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y , whichmodel, 0, 1,1, 1e15 )
-        ynew, improvement, msgTR = bcdfo_find_new_yj_( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, whichmodel, scale, 0 )
+        ynew, improvement, msgTR = bcdfo_find_new_yj_( QZ, RZ, Y, 4, 1.0, 0.001, xbase, 1, whichmodel, scale, 0 )
 
-        correctynew = matlabarray([3.280776988023534, -0.959774286524791]).T
+        correctynew = array([[3.280776988023534, -0.959774286524791]]).T
         correctimprovement =  314.8805392927235
 #        print "ynew", ynew
 #        print "improvement", improvement
         
         self.assertAlmostEqual(correctimprovement, improvement, places=11)
-        self.assertTrue(compare_matlabarray(correctynew, ynew, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctynew, ynew, self.abs_tol, self.rel_tol))
   
   
 # Not sure where this example comes from
 #          #changed example to reproduce results from MATLAB, due to optimization
-#        Y = matlabarray([[ 3.0, 1.0, 1.0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
+#        Y = array([[ 3.0, 1.0, 1.0, 2.0, 1.0, 0.0],[0.0, 0.0, 1.0, 0.0, 0.01, 2.0 ]])
 #        whichmodel = 0
 #        QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y , whichmodel, 1, 1,1, 1e15 )
 #        ynew, improvement = bcdfo_find_new_yj_( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, whichmodel, scale, 1 )
 #
 #
-#        #QZ = matlabarray(
+#        #QZ = array(
 #    #[[1.0000,         0,         0,         0,         0,         0],
 #    #[     0,   -0.9636,   -0.0783,   -0.2555,         0,   -0.0000],
 #    # [    0,         0,   -0.7308,    0.2240,    0.5993,    0.2378],
@@ -77,7 +77,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 #    #   [  0,         0,   -0.1013,    0.0311,   -0.4806,    0.8705],
 #    #    [ 0,         0,    0.6081,   -0.1863,    0.6402 ,   0.4309]])
 #
-#        #RZ = matlabarray(
+#        #RZ = array(
 #
 #   #[ [1.0000,    1.0000,    1.0000,    1.0000,    1.0000,    1.0000],
 #   #  [    0,    0.5756,    0.8943,    0.2775,    0.5756,    0.8943],
@@ -86,7 +86,7 @@ class Test_bcdfo_find_new_yj(unittest.TestCase):
 #   #     [ 0,         0,         0,         0,    0.0007,   -0.0370],
 #   #     [ 0,        0,         0 ,        0,         0 ,   0.0670]])
 #
-#        correctynew = matlabarray([3.2866, 0.9581]).T
+#        correctynew = array([3.2866, 0.9581]).T
 #        correctimprovement = 217.2211
 #        #print "ynew", ynew
 #        #print "improvement", improvement
