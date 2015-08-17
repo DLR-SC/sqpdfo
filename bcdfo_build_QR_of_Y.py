@@ -61,10 +61,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             badcond=1
         if (badcond):
             U,S,V=svd_(Z,0,nargout=3)
-            Sdiag=diag_(S)
+            Sdiag=diag(S)
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
-            S=diag_(Sdiag)
+            S=diag(Sdiag)
             M=(V * S * U.T).T
             QZ,RZ=qr_(M,nargout=2)
         else:
@@ -86,10 +86,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                 badcond=1
             if (badcond):
                 U,S,V=svd_(F,0,nargout=3)
-                Sdiag=diag_(S)
+                Sdiag=diag(S)
                 indices=find_(Sdiag < _del)
                 Sdiag[indices]=_del
-                S=diag_(Sdiag)
+                S=diag(Sdiag)
                 M=(V * S.T * U.T).T
                 QZ,RZ=qr_(M,nargout=2)
             else:
@@ -105,10 +105,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                     badcond=1
                 if (badcond):
                     U,S,V=svd_(Z,'econ',nargout=3)
-                    Sdiag=diag_(S)
+                    Sdiag=diag(S)
                     indices=find_(Sdiag < _del)
                     Sdiag[indices]=_del
-                    S=diag_(Sdiag)
+                    S=diag(Sdiag)
                     M=(V * S.T * U.T).T
                     QZ,RZ=qr_(M,nargout=2)
                 else:
@@ -124,10 +124,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                         badcond=1
                     if (badcond):
                         U,S,V=svd_(Z,0,nargout=3)
-                        Sdiag=diag_(S)
+                        Sdiag=diag(S)
                         indices=find_(Sdiag < _del)
                         Sdiag[indices]=_del
-                        S=diag_(Sdiag)
+                        S=diag(Sdiag)
                         M=(V * S * U.T).T
                         QZ,RZ=qr_(M,nargout=2)
                     else:
