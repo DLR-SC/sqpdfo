@@ -446,8 +446,14 @@ def inv_(A):
 def norm_(A, order=2, axis=None):
     if isempty_(A):
         return 0
+        
+#for some reason, python does not give exactly (so precision differs
+#after the 10nth variable or so, but still this makes differences...) the same 2-norm
+#when it does it calcultes the norm of an array([a b c...]) and array([[a b c...]]).
+#And it is closer to matlab when it is like array([[a b c..]]). Hence those 2 lines
     if isvector_or_scalar_(A):
-        A=A.reshape(-1,1)        
+        #A=A.reshape(-1,1) <- this also works
+        A=A.reshape(1,-1)        
         
     if axis==None:
         return np.linalg.norm(A, order,axis)
