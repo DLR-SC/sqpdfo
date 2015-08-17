@@ -20,9 +20,9 @@ def bcdfo_poisedness_Y_(QZ=None,RZ=None,Y=None,eps_L=None,xbase=None,lSolver=Non
     _lambda=0
     n,p1=size_(Y,nargout=2)
     Y_radius=0
-    for j in arange_(2,p1).reshape(-1):
-        Y_radius=max_(Y_radius,norm_(Y[:,j] - Y[:,1]))
-    for j in arange_(2,p1).reshape(-1):
+    for j in range(1,p1):
+        Y_radius=max_(Y_radius,norm_(Y[:,j] - Y[:,0]))
+    for j in range(1,p1):
         if (hardcons == 1):
             y,improvement, msgTR=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Y_radius,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
         else:

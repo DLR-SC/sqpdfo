@@ -12,7 +12,7 @@ import unittest
 from bcdfo_poisedness_Y import *#bcdfo_poisedness_Y_
 from bcdfo_build_QR_of_Y import *#bcdfo_build_QR_of_Y
 import numpy as np
-from runtime import matlabarray
+from numpy import array
 #import helper
 
 class Test_bcdfo_poisedness_Y(unittest.TestCase):
@@ -31,7 +31,7 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
         """
         This is the test written in the Matlab Code. Results are the same.
         """
-        Y = matlabarray([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
+        Y = array([ [ 0, 1, 0, 2, 1, 0 ], [ 0, 0, 1, 0, 0.01, 2] ])
         #print Y
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
 

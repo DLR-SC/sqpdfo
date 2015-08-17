@@ -10,17 +10,18 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
+from numpy import array
     
 def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 5-[n,x,g,bl,bu].count(None)+len(args)
-    gn=matlabarray()
+    gn=zeros_(n,1)
     gnorm=0.0
-    for i in arange_(1,n).reshape(-1):
-        gi=g[i]
+    for i in range(0,n):
+        gi=g[i,0]
         if gi < 0.0:
-            gn[i]=- min_(abs_(bu[i] - x[i]),- gi)
+            gn[i,0]=- min_(abs(bu[i,0] - x[i,0]),- gi)
         else:
-            gn[i]=min_(abs_(bl[i] - x[i]),gi)
-        gnorm=max_(gnorm,abs_(gn[i]))
-    return gnorm,gn
+            gn[i,0]=min_(abs(bl[i,0] - x[i,0]),gi)
+        gnorm=max_(gnorm,abs(gn[i,0]))
+    return gnorm, gn

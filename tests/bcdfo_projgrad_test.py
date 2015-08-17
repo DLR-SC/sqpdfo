@@ -9,7 +9,8 @@ import sys
 sys.path.append("../")
 import unittest
 from bcdfo_projgrad import bcdfo_projgrad_
-from runtime import matlabarray, compare_matlabarray
+from runtime import compare_array
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -38,57 +39,57 @@ class Test_bcdfo_projgrad(unittest.TestCase):
         
         #TEST 1 WITH UNDISTURBING BOUNDS 
         n = 2
-        x = matlabarray([0.5,0.5]).T
-        g = matlabarray([-1,-1]).T
-        bl = matlabarray([0,0]).T
-        bu = matlabarray([2,2]).T
+        x = array([[0.5,0.5]]).T
+        g = array([[-1,-1]]).T
+        bl = array([[0,0]]).T
+        bu = array([[2,2]]).T
         
         gnorm, gn = bcdfo_projgrad_(n,x,g,bl,bu)
         
         #print "gnorm", gnorm
         #print "gn", gn
         
-        correctgn = matlabarray([-1,-1]).T
+        correctgn = array([[-1,-1]]).T
         correctgnorm = 1
         
-        self.assertTrue(compare_matlabarray(correctgn, gn, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgn, gn, self.abs_tol, self.rel_tol))
         self.assertEqual(gnorm, correctgnorm)
 
         #TEST 2 WITH A DISTURBING UPPER BOUND
         n = 2
-        x = matlabarray([0.5,0.5]).T
-        g = matlabarray([-1,-1]).T
-        bl = matlabarray([0,0]).T
-        bu = matlabarray([1,2]).T
+        x = array([[0.5,0.5]]).T
+        g = array([[-1,-1]]).T
+        bl = array([[0,0]]).T
+        bu = array([[1,2]]).T
         
         gnorm, gn = bcdfo_projgrad_(n,x,g,bl,bu)
         
         #print "gnorm", gnorm
         #print "gn", gn
         
-        correctgn = matlabarray([-0.5,-1]).T
+        correctgn = array([[-0.5,-1]]).T
         correctgnorm = 1
         
-        self.assertTrue(compare_matlabarray(correctgn, gn, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgn, gn, self.abs_tol, self.rel_tol))
         self.assertEqual(gnorm, correctgnorm)
         
         
         #1 TEST 3 WITH A DISTURBING LOWER BOUND
         n= 2
-        x = matlabarray([0.5,0.5]).T
-        g = matlabarray([-1,1]).T
-        bl = matlabarray([0,0]).T
-        bu = matlabarray([2,2]).T
+        x = array([[0.5,0.5]]).T
+        g = array([[-1,1]]).T
+        bl = array([[0,0]]).T
+        bu = array([[2,2]]).T
         
         gnorm, gn = bcdfo_projgrad_(n,x,g,bl,bu)
         
         #print "gnorm", gnorm
         #print "gn", gn
         
-        correctgn = matlabarray([-1,0.5]).T
+        correctgn = array([[-1,0.5]]).T
         correctgnorm = 1
         
-        self.assertTrue(compare_matlabarray(correctgn, gn, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgn, gn, self.abs_tol, self.rel_tol))
         self.assertEqual(gnorm, correctgnorm)
 
 if __name__ == '__main__':
