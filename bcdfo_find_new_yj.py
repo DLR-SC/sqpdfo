@@ -26,9 +26,10 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
     n=size_(Y,1)
     ynew=zeros_(1,n)
     improvement=0
+    msgTR=''
     if (verbose):
         disp_('--------- enter find_new_yj ')
-    if (j < 2):
+    if (j < 1):
         return ynew,improvement,msgTR
     Lj=bcdfo_computeLj_(QZ,RZ,j,Y,whichmodel,scale,shift_Y)
     if (length_(find_(isnan(Lj))) != 0 or length_(find_(~ isreal(Lj))) != 0 or length_(find_(isinf(Lj))) != 0):
