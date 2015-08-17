@@ -129,21 +129,20 @@ def find_(a,n=None,d=None,nargout=1):
         raise NotImplementedError
 
     elif nargout == 1:
-        i = np.flatnonzero(a).reshape(1,-1)+1  
+        i = np.flatnonzero(a).reshape(1,-1)
         if isempty_(i):
             return np.array([])
                                                 
         if n is not None:
             i = i.take(range(n))
-            return np.array(i)
+        return np.array(i)
     elif nargout == 2:
         i,j = np.nonzero(np.asarray(a))
         if n is not None:
             i = i.take(n)
             j = j.take(n)
 
-        return (np.array((i+1).reshape(-1,1)),
-                np.array((j+1).reshape(-1,1)))
+        return np.array(i).reshape(1,-1), np.array(j).reshape(1,-1)
     
     else:
         raise NotImplementedError
@@ -183,8 +182,10 @@ def intersect_(a,b,nargout=1):
 
 
 def isempty_(a):
+    if a is None:
+        return True
     try:
-        return 0 in np.asarray(a).shape
+        return 0 in a.shape
     except AttributeError:
         return False
 
@@ -419,24 +420,24 @@ def ones_(*args,**kwargs):
 
 def eig_(A, nargout=1):
     if nargout == 1:
-        return matlabarray(np.linalg.eigvals(A))
+        return np.linalg.eigvals(A)
     else:
         D,V = np.linalg.eig(A) #when A is a matlabarray, linalg.eig(A) returns D as a python array and V as a matlabarray
-        return V,matlabarray(np.diag(D))
+        return V,np.diag(D)
             
 def cond_(A):
     return np.linalg.cond(A)
     
 def svd_(A, full_matrices=1, *args,**kwargs):
     u,s,v= np.linalg.svd(A, full_matrices)
-    return u, matlabarray(np.diag(s)), v.T
+    return u, np.diag(s), v.T
     
 def chol_(A,nargout=2):
     try: #there is in python a exception when the matrix is not positive definite, which does not occur on matlab
         R = np.linalg.cholesky(A).T
         p = 0
     except:
-        R = matlabarray([[]])
+        R = np.array([])
         p = 1
     return R,p   
     
