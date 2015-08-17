@@ -45,7 +45,6 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
         self.assertEqual(hardcase,0)
         
         s, lamb, norms, value, gplus, nfact, neigd, msg, hardcase =bcdfo_solve_TR_MS_( array([ [2] , [0] ]), array([[ 4, 0], [0, -15 ]]), 1.0, 0.001 )
-        print s
         correctS = array( [-0.1052631578947368,0.9944444014574307])
         correctgplus=array( [1.578947368421053, -14.91666602186146])
         self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
@@ -55,7 +54,7 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
         self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,45)
         self.assertEqual(neigd,1)
-        self.assertEqual(msg, 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = [[ 15.]] )')
+        self.assertEqual(msg, 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )')
 #        self.assertEqual(str(msg), "[[ 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )']]") # for Anke's translation
         self.assertEqual(hardcase,1)
 
