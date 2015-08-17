@@ -83,7 +83,7 @@ try:
 except:
     pass
 
-def isvector_or_scalar(a):
+def isvector_or_scalar_(a):
     """
     one-dimensional arrays having shape [N],
     row and column matrices having shape [1 N] and
@@ -96,7 +96,7 @@ def isvector_or_scalar(a):
         return a.size and a.ndim-a.shape.count(1) <= 1
     except:
         return False
-def isvector(a):
+def isvector_(a):
     """
     one-dimensional arrays having shape [N],
     row and column matrices having shape [1 N] and
@@ -192,10 +192,6 @@ def isempty_(a):
 def isequal_(a,b):
     return np.array_equal(np.asanyarray(a),
                           np.asanyarray(b))
-                          
-def isvector_(a):
-    """test if the argument is a line or column vector"""
-    return a.ndim==1
 
 #def isvectorRow_(a):
 #    if a.ndim==1:
@@ -450,11 +446,13 @@ def inv_(A):
 def norm_(A, order=2, axis=None):
     if isempty_(A):
         return 0
-    
+    if isvector_or_scalar_(A):
+        A=A.reshape(-1,1)        
+        
     if axis==None:
-            return np.linalg.norm(np.asarray(A), order,axis)
+        return np.linalg.norm(A, order,axis)
     else:
-        return np.linalg.norm(np.asarray(A), order,axis-1)
+        return np.linalg.norm(A, order,axis-1)
 
     
 def pinv_(A):
