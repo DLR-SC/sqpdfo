@@ -36,13 +36,14 @@ Created on Fri Nov 07 15:15:41 2014
 from runtime import *
 #except ImportError:
 #    from smop.runtime import *
+from copy import copy
 
 
 def sqplab_badsimul_(outdic=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 4-[outdic,info,options,values].count(None)+len(args)
     
-    info=copy_(info_)
+    info=copy(info_)
 
     if outdic == 2:
         if options.verbose:

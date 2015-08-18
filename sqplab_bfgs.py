@@ -293,15 +293,16 @@ values =
 from __future__ import division
 #try:
 from runtime import *
+from copy import copy
 #except ImportError:
     #from smop.runtime import *
 def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
 
-    M=copy_(M_)
-    y=copy_(y_)
-    info=copy_(info_)
+    M=copy(M_)
+    y=copy(y_)
+    info=copy(info_)
 
     eta=0.2
     n=length_(s)
@@ -312,11 +313,11 @@ def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,value
         if options.verbose >= 3:
             fprintf_(options.fout,'\n### sqplab_bfgs: null step s\n\n')
         return M,pc,info,values
-    ys=y.T * s
+    ys=y.T .dot(s)
     if options.verbose >= 4:
-        fprintf_(options.fout," y'*s/(s'*s) = %9.3e\n"%(ys / (s.T * s)))
-    Ms=M * s
-    sMs=s.T * Ms
+        fprintf_(options.fout," y'*s/(s'*s) = %9.3e\n"%(ys / (s.T.dot(s))))
+    Ms=M.dot(s)
+    sMs=s.T.dot(Ms)
     if sMs <= 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
@@ -328,9 +329,9 @@ def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,value
         if options.verbose >= 4:
             fprintf_(options.fout,"  Powell's corrector = %7.1e\n"%(pc))
         y=pc * y + (1 - pc) * Ms
-        ys=y.T * s
+        ys=y.T.dot(s)
         if options.verbose >= 4:
-            fprintf_(options.fout," (new y'*s/(s'*s) = %7.1e\n)"%(ys / (s.T * s)))
+            fprintf_(options.fout," (new y'*s/(s'*s) = %7.1e\n)"%(ys / (s.T.dot(s))))
         if ys <= 0:
             info.flag=values.fail_strange
             if options.verbose >= 4:
@@ -343,13 +344,13 @@ def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,value
             info.flag=values.fail_strange
             return M,pc,info,values
     if first:
-        ol=(y.T * y) / ys
+        ol=(y.T.dot( y)) / ys
         M=ol * eye_(n)
         if options.verbose >= 4:
             fprintf_(options.fout,'  OL coefficient = %g\n'%(ol))
-        Ms=ol * s
-        sMs=s.T * Ms
-    M=M - (Ms * Ms.T) / sMs + (y * y.T) / ys
+        Ms=ol*s
+        sMs=s.T .dot(Ms)
+    M=M - (Ms.dot(Ms.T)) / sMs + (y .dot(y.T)) / ys
     if options.verbose >= 6:
         eigM=sort_(eig_(M))
         fprintf_(options.fout,'  eig(M): min = %g, max = %g, cond = %g\n'%(min_(eigM),max_(eigM),max_(eigM) / min_(eigM)))

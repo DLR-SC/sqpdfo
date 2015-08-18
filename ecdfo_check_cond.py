@@ -20,7 +20,9 @@ Created on Thu Nov 06 11:53:16 2014
 from __future__ import division
 #try:
 from runtime import *
-from numpy import inf
+from numpy import inf,diag, isnan, isinf
+from copy import copy
+import numpy
 #except ImportError:
 #    from smop.runtime import *
 
@@ -28,22 +30,23 @@ def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 3-[A,cthreshold,options].count(None)+len(args)
 
-    A=copy_(A_)
+    A=copy(A_)
 
     badcond=0
     eps=1e-14
-    if (isempty_(find_(isnan_(A))) and isempty_(find_(isinf_(A)))):
+    if (isempty_(find_(isnan(A))) and isempty_(find_(isinf(A)))):
         condA=cond_(A)
         if (condA > cthreshold):
             badcond=1
     else:
         badcond=1
     if (badcond):
-        U,S,V=svd_(A,0,nargout=3)
-        Sdiag=diag_(S)
-        Sdiag[Sdiag < 1e-07]=1e-07
-        S=diag_(Sdiag)
-        A=(V * S * U.T).T
+        U,Sdiag,V=numpy.linalg.svd(A,0)
+        V=V.T
+        a=Sdiag < 1e-07
+        Sdiag[a]=1e-07
+        S=diag(Sdiag)
+        A=(V.dot(S.dot(U.T))).T
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
                 disp_('### ecdfo_check_cond: ',"matrix is non symmetric. Resetting A=(A+A')/2.")

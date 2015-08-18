@@ -13,8 +13,9 @@ import unittest
 from ecdfo_check_convex import *
 import helper
 import numpy as np
-from runtime import compare_matlabarray, matlabarray, eig_
+from runtime import compare_array, eig_
 from random import random
+from numpy import array
 
 class Test_ecdfo_check_convex(unittest.TestCase):
     """
@@ -31,43 +32,43 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         """
         With a convex matrix
         """
-        A = matlabarray([[ 2,  -1, 0], [ -1,  2,  -1], [ 0,  -1,  2]])
+        A = array([[ 2,  -1, 0], [ -1,  2,  -1], [ 0,  -1,  2]])
 
         res = ecdfo_check_convex_(A)
         #print "A", A
         #print "ecdfo  check cond", str(res)
 
-        self.assertTrue(compare_matlabarray(A, res, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(res, A, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(A, res, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(res, A, self.abs_tol, self.rel_tol))
 #
     def test_ecdfo_check_convex2(self): 
         """
         With a non convex matrix
         """
-        B =  matlabarray([[ 1,  2], [ 2,  1]])
+        B =  array([[ 1,  2], [ 2,  1]])
 
         res = ecdfo_check_convex_(B)
         #print "B", B
         #print "ecdfo  check cond", str(res)
-        self.assertFalse(compare_matlabarray(B, res, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(res, res.T, self.abs_tol, self.rel_tol))
+        self.assertFalse(compare_array(B, res, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
         
-        matlabres=matlabarray([[3.000000000000000,  0.000000001000000]])
-        self.assertTrue(compare_matlabarray(matlabres, eig_(res), 1e-09, 1e-09))
+        matlabres=array([[3.000000000000000,  0.000000001000000]])
+        self.assertTrue(compare_array(matlabres, eig_(res), 1e-09, 1e-09))
         
     def test_ecdfo_check_convex3(self):
         """
         With a non symmetric matrix non convex
         """
-        C = matlabarray([[1,2,3],[4,5,6],[7,8,9]])
+        C = array([[1,2,3],[4,5,6],[7,8,9]])
         
         res = ecdfo_check_convex_(C, helper.dummyOptions())
 
-        self.assertFalse(compare_matlabarray(C, res, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(res, res.T, self.abs_tol, self.rel_tol))
+        self.assertFalse(compare_array(C, res, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
 
-        matlabres=matlabarray([[  16.116843969881806, 0.000000000925233,  0.000000001000001]])        
-        self.assertTrue(compare_matlabarray(matlabres, eig_(res), 1e-8, 1e-8))
+        matlabres=array([[  16.116843969881806, 0.000000000925233,  0.000000001000001]])        
+        self.assertTrue(compare_array(matlabres, eig_(res), 1e-8, 1e-8))
         
         
 

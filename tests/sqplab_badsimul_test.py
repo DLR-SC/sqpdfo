@@ -30,7 +30,7 @@ class Test_sqplab_badsimul(unittest.TestCase):
         """
                Test when oudic=2
         """
-        self.dummyInfo = sqplab_badsimul_(outdic=2,info=self.dummyInfo,options=self.dummyOptions,values=self.dummyValues)
+        self.dummyInfo = sqplab_badsimul_(2,self.dummyInfo,self.dummyOptions,self.dummyValues)
         
 #        print self.dummyInfo.flag
         self.assertTrue(self.dummyInfo.flag==self.dummyValues.stop_on_simul)
@@ -39,7 +39,7 @@ class Test_sqplab_badsimul(unittest.TestCase):
         """
                Test when oudic>2
         """
-        self.dummyInfo = sqplab_badsimul_(outdic=3,info=self.dummyInfo,options=self.dummyOptions,values=self.dummyValues)
+        self.dummyInfo = sqplab_badsimul_(3,self.dummyInfo,self.dummyOptions,self.dummyValues)
         
         #print self.dummyInfo.flag
         self.assertTrue(self.dummyInfo.flag==self.dummyValues.fail_on_simul)

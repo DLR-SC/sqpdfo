@@ -79,21 +79,22 @@ import unittest
 from sqplab_checkoptions import *
 #import numpy as np
 import helper
+from numpy import array
 
 class dummyInfo():
     def __init__(self):
 
-        self.g = matlabarray([0, 1,   0]).T
-        self.ai = matlabarray([])
-        self.ae =      matlabarray([[1,     1,     1],[1,     2,     3]])
-        self.hl = matlabarray([])
+        self.g = array([0, 1,   0]).T
+        self.ai = array([])
+        self.ae =      array([[1,     1,     1],[1,     2,     3]])
+        self.hl = array([])
         self.niter = 0
         self.flag = 0
-        self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray( [])
-        self.ce =  matlabarray([2, 3]).T
+        self.nsimul = array([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array( [])
+        self.ce =  array([2, 3]).T
         self.f = 1.500000000000000
-        self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
+        self.glag = array([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
 
 class Test_sqplab_checkoptions(unittest.TestCase):
     """
