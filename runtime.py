@@ -385,10 +385,10 @@ def ones_(*args,**kwargs):
     if not args:
         return 1.0
     if len(args) == 1:
-        if numel_(args)==1:
+        if numel_(args[0])==1:
             args += args
         else:
-            return np.zeros(args[0],**kwargs)
+            return np.ones(args[0],**kwargs)
     return np.ones(args,**kwargs)
                 
 #------------------------------------------------------------------------------
