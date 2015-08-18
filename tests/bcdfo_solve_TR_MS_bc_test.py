@@ -8,7 +8,8 @@ import sys
 sys.path.append("../")
 import unittest
 from bcdfo_solve_TR_MS_bc import *
-from runtime import matlabarray, compare_matlabarray
+from runtime import compare_array
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -29,49 +30,49 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         """
             Tests initially written in the matlab code.  We compare the results from python with the results from matlab and verify that it is correct
         """
-        gx = matlabarray([[2.],[3.]])
-        H = matlabarray([[4., 6.], [6., 5.]])
-        lb = matlabarray([[-10.], [-10.]])
-        ub = matlabarray([[10.],[10.]])
+        gx = array([[2.],[3.]])
+        H = array([[4., 6.], [6., 5.]])
+        lb = array([[-10.], [-10.]])
+        ub = array([[10.],[10.]])
         Delta = 1.0
         eps_D = 0.001
         stratLam = 1
         
         s, lamb, norms, value, gplus, nfact, neigd, msg= bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
-        correctS = matlabarray( [0.515282741049029, -0.8575287994226390])
-        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
-        self.assertTrue(compare_matlabarray(correctS, s, self.abs_tol, self.rel_tol))
+        correctS = array( [0.515282741049029, -0.8575287994226390])
+        correctgplus=array( [0.9159581676602855, 4.804052449180984])
+        self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(lamb, 2.103780596518304, places=15)
         self.assertAlmostEqual(norms, 1.000435877536504, places=15)
         self.assertAlmostEqual(value, -1.823817946895660, places=15)
-        self.assertTrue(compare_matlabarray(correctgplus, gplus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,8)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
         
-        lb = matlabarray([[-0.1], [-0.1]])
+        lb = array([[-0.1], [-0.1]])
         s, lamb, norms, value, gplus, nfact, neigd, msg= bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
-        correctS = matlabarray( [-0.1, -0.1])
-        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
-        self.assertTrue(compare_matlabarray(correctS, s, self.abs_tol, self.rel_tol))
+        correctS = array( [-0.1, -0.1])
+        correctgplus=array( [0.9159581676602855, 4.804052449180984])
+        self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(lamb, 21.92900284196444, places=15)
         self.assertAlmostEqual(norms, 0.1414213562373095, places=15)
         self.assertAlmostEqual(value, -0.3950, places=15)
-        self.assertTrue(compare_matlabarray(correctgplus, gplus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,16)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), 'boundary solution')
         
-        lb = matlabarray([[-10], [-10]])
-        ub = matlabarray([[0], [0]])
+        lb = array([[-10], [-10]])
+        ub = array([[0], [0]])
         s, lamb, norms, value, gplus, nfact, neigd, msg= bcdfo_solve_TR_MS_bc_( gx, H, lb, ub, Delta, eps_D, stratLam )
-        correctS = matlabarray( [0, -0.6])
-        correctgplus=matlabarray( [0.9159581676602855, 4.804052449180984])
-        self.assertTrue(compare_matlabarray(correctS, s, self.abs_tol, self.rel_tol))
+        correctS = array( [0, -0.6])
+        correctgplus=array( [0.9159581676602855, 4.804052449180984])
+        self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(lamb, 0, places=15)
         self.assertAlmostEqual(norms, 0.6, places=15)
         self.assertAlmostEqual(value, -0.9, places=15)
-        self.assertTrue(compare_matlabarray(correctgplus, gplus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,9)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
@@ -80,25 +81,25 @@ class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
         """
             Test to debug bcdfo_solve_TR_MS_bc because it does not yield the same result as matlab for theses values. This error has been found while testing ecdfo_solve_TR_MS_bc
         """
-        g1=matlabarray([[ 5.], [ 8.], [11.]])
-        H1=matlabarray([[ 2., 3, 4.], [ 3., 5., 7.], [ 4., 7., 10.]])
-        lb_r=matlabarray([[ -1.], [ -1.], [-inf]])
-        ub_r=matlabarray([[ inf], [ inf], [ inf]])   
+        g1=array([[ 5.], [ 8.], [11.]])
+        H1=array([[ 2., 3, 4.], [ 3., 5., 7.], [ 4., 7., 10.]])
+        lb_r=array([[ -1.], [ -1.], [-inf]])
+        ub_r=array([[ inf], [ inf], [ inf]])   
         delta_r=1.0
         prec_r=1e-6
         stratLam=1
         s, lamb, norms, value, gplus, nfact, neigd, msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
-        correctS = matlabarray([-7.217986001584447e-01,-5.625108528130431e-01,-4.032231054676398e-01])
-        correctgplus=matlabarray( [5.255977819373422e+00, 8.199488197185971,1.114299857499852e+01])
+        correctS = array([-7.217986001584447e-01,-5.625108528130431e-01,-4.032231054676398e-01])
+        correctgplus=array( [5.255977819373422e+00, 8.199488197185971,1.114299857499852e+01])
         
         #The relatively low accuracy of the results, compared to matlab results, comes from a different result in the cholesky
 #        factorization during the call to bcdfo_solve_TR_MS. The last number of the matrix has its eigth digit different in python and matlab,
 #        therefore we loose so much in accuracy. But other than that, I believe that the test is correct.
-        self.assertTrue(compare_matlabarray(correctS, s, 1e-6, 1e-6))
+        self.assertTrue(compare_array(correctS, s, 1e-6, 1e-6))
         self.assertAlmostEqual(lamb, 3.546388415234277e-01, places=5)
         self.assertAlmostEqual(norms, 1.000000275753019, places=6)
         self.assertAlmostEqual(value, -6.449586510274759, places=6)
-        self.assertTrue(compare_matlabarray(correctgplus, gplus, 1e-6, 1e-6))
+        self.assertTrue(compare_array(correctgplus, gplus, 1e-6, 1e-6))
         self.assertEqual(nfact,7)
         self.assertEqual(neigd,0)
         self.assertEqual(str(msg), '(partly) interior solution')
