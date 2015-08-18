@@ -131,7 +131,7 @@ def find_(a,n=None,d=None,nargout=1):
     elif nargout == 1:
         i = np.flatnonzero(a).reshape(1,-1)
         if isempty_(i):
-            return np.array([])
+            return []
                                                 
         if n is not None:
             i = i.take(range(n))
@@ -182,7 +182,7 @@ def intersect_(a,b,nargout=1):
 
 
 def isempty_(a):
-    if a is None:
+    if a is None or a==[] :
         return True
     try:
         return 0 in a.shape
@@ -360,51 +360,35 @@ def sum_(a, dim=None):
     else:
         return np.asanyarray(a).sum(dim-1)
 
-def toupper_(a):
-    return char(str(a.data).upper())
-
 true = True
 
 def true_(*args):
     if len(args) == 1:
         args += args
-    return matlabarray(np.ones(args,dtype=bool,order="F"))
+    return np.ones(args,dtype=bool,order="F")
 
 
 def zeros_(*args,**kwargs):
-    """
-    This function is supposed to be similar to matlab. Here are examples :
-        zeros_(1,2)
-        zeros_(matlabarray([[1,2]])) #Careful, this has to be a line vector, not a column vector, like in matlab
-        zeros_(matlabarray([[1]]),2)
-        zeros_(2, matlabarray([[1]]))
-        zeros_(3)
-        zeros_(matlabarray([[3]]))
-    """
+
     if not args:
         return 0.0
     if len(args) == 1:
-        if numel_(args)==1:
+        if numel_(args[0])==1:
             args += args
-
+        else:
+            return np.zeros(args[0],**kwargs)
     return np.zeros(args,**kwargs)
 
 
 def ones_(*args,**kwargs):
-    """
-    This function is supposed to be similar to matlab. Here are examples :
-        ones_(1,2)
-        ones_(matlabarray([[1,2]])) #Careful, this has to be a line vector, not a column vector, like in matlab
-        ones_(matlabarray([[1]]),2)
-        ones_(2, matlabarray([[1]]))
-        ones_(3)
-        ones_(matlabarray([[3]]))
-    """
+
     if not args:
         return 1.0
     if len(args) == 1:
         if numel_(args)==1:
             args += args
+        else:
+            return np.zeros(args[0],**kwargs)
     return np.ones(args,**kwargs)
                 
 #------------------------------------------------------------------------------
@@ -506,13 +490,7 @@ def sign_(A):
     return np.sign(A)
     
 def setdiff_(a,b):
-    return matlabarray(np.setdiff1d(np.asarray(a),np.asarray(b)))
-
-def sort_(A):
-    return np.sort(A)
-    
-def argsort_(A):
-    return np.argsort(A)
+    return np.setdiff1d(a,b)
     
 def isfield_(obj, name):
     return obj.__dict__.has_key(str(name))
