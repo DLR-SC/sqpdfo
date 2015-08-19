@@ -218,7 +218,6 @@ class Test_sqplab_lsmult(unittest.TestCase):
         lm,info = sqplab_lsmult_(self.x,self.lb,self.ub,self.info,self.options,self.values)
     
         correctlm = array([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
-        print lm
         
         self.assertTrue(compare_array(correctlm, lm, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(info.g, self.info.g, self.abs_tol, self.rel_tol))
