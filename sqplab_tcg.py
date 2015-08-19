@@ -68,6 +68,7 @@ from __future__ import division
 #try:
 from runtime import *
 from ecdfo_global_variables import *
+from numpy import array
 #except ImportError:
 #from smop.runtime import *
 
@@ -88,10 +89,10 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
     x=zeros_(size_(b))
     cost=0
     g=- b
-    g2=g.T * g
-    tol2=tol * tol
+    g2=g.T.dot(g)
+    tol2=tol*tol
     delta2=delta * delta
-    dAd=matlabarray([])
+    dAd=array([])
     if plevel:
         fprintf_(fout,'    TCG solver; required tolerance %8.2e\n'%(tol))
         fprintf_(fout,'    iter       cost        |res|   curvature  stepsize   |step|\n')
@@ -105,51 +106,51 @@ def sqplab_tcg_(A=None,b=None,delta=None,max_iter=None,tol=None,plevel=None,fout
             info.flag=0
             break
         if get_iter() > max_iter:
-            set_iter(copy_(max_iter))
+            set_iter(copy(max_iter))
             info.flag=- 1
             break
         if get_iter() == 1:
             d=- g
         else:
             d=- g + (g2 / g2_) * d
-        Ad=A * d
-        dAd=d.T * Ad
+        Ad=A.dot(d)
+        dAd=d.T.dot(Ad)
         if plevel:
-            fprintf_(fout,'  %9.2e'%(dAd / (d.T * d)))
+            fprintf_(fout,'  %9.2e'%(dAd / (d.T.dot(d))))
         if dAd <= 0:
             x,alpha=dogleg_(x,x + d,delta,nargout=2)
             info.flag=2
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
-                cost=0.5 * (x.T * A * x) - b.T * x
+                cost=0.5 * (x.T.dot(A.dot(x))) - b.T.dot(x)
                 fprintf_(fout,'    %4i  %14.7e\n'%(get_iter() + 1,cost))
             break
-        alpha=- (g.T * d) / dAd
+        alpha=- (g.T.dot(d)) / dAd
         xx=x + alpha * d
         if plevel:
             fprintf_(fout,'  %8.2e'%(alpha))
-        if xx.T * xx > delta2:
+        if xx.T.dot(xx) > delta2:
             x,alpha=dogleg_(x,xx,delta,nargout=2)
             info.flag=1
             if plevel:
                 fprintf_(fout,'  %8.2e  %8.2e\n'%(alpha,norm_(x)))
-                cost=0.5 * (x.T * A * x) - b.T * x
+                cost=0.5 * (x.T.dot(A.dot(x))) - b.T.dot(x)
                 fprintf_(fout,'    %4i  %14.7ee\n'%(get_iter()+ 1,cost))
             break
         else:
-            x=copy_(xx)
+            x=copy(xx)
         if plevel:
             fprintf_(fout,'  %8.2e\n'%(norm_(x)))
         g=g + alpha * Ad
-        g2_=copy_(g2)
-        g2=g.T * g
+        g2_=copy(g2)
+        g2=g.T.dot(g)
         if plevel:
-            cost=0.5 * (x.T * (g - b))
+            cost=0.5 * (x.T.dot((g - b)))
 
     info.iter=get_iter()
     info.prec=sqrt_(g2)
     if not isempty_(dAd):
-        info.curv=dAd / (d.T * d)
+        info.curv=dAd / (d.T.dot(d))
     return x,info
 
 def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
@@ -157,19 +158,19 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
 #    nargin = 3-[dc,dn,delta].count(None)+len(args)
 
     dd=dn - dc
-    aa=dd.T * dd
+    aa=dd.T.dot(dd)
     if aa == 0:
-        dd=copy_(dc)
+        dd=copy(dc)
         t=0
         return dd,t
-    bb=dc.T * dd
-    cc=dc.T * dc - delta ** 2
+    bb=dc.T.dot(dd)
+    cc=dc.T.dot(dc) - delta ** 2
     if cc >= 0:
-        dd=copy_(dc)
+        dd=copy(dc)
         t=0
         return dd,t
     t=(sqrt_(bb ** 2 - aa * cc) - bb) / aa
-    dd=dc + t * dd
+    dd=dc + t.dot(dd)
     return dd,t
 
 #class tcgInfo():
@@ -193,7 +194,7 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
 #    g2=g.T * g
 #    tol2=tol * tol
 #    delta2=delta * delta
-#    dAd=matlabarray([])
+#    dAd=array([])
 #    if plevel:
 #        fprintf_(fout,char('    TCG solver; required tolerance %8.2e\\n'),tol)
 #        fprintf_(fout,char('    iter       cost        |res|   curvature  stepsize   |step|\\n'))
@@ -207,7 +208,7 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
 #            info.flag=0
 #            break
 #        if _iter > max_iter:
-#            _iter=copy_(max_iter)
+#            _iter=copy(max_iter)
 #            info.flag=- 1
 #            break
 #        if _iter == 1:
@@ -245,11 +246,11 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
 #                fprintf_(fout,char('    %4i  %14.7e  %7.1e\\n'),_iter + 1,cost)
 #            break
 #        else:
-#            x=copy_(xx)
+#            x=copy(xx)
 #        if plevel:
 #            fprintf_(fout,char('  %8.2e\\n'),norm_(x))
 #        g=g + alpha * Ad
-#        g2_=copy_(g2)
+#        g2_=copy(g2)
 #        g2=g.T * g
 #        if plevel:
 #            cost=0.5 * (x.T * (g - b))
@@ -303,13 +304,13 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
 #    dd=dn - dc
 #    aa=dd.T * dd
 #    if aa == 0:
-#        dd=copy_(dc)
+#        dd=copy(dc)
 #        t=0
 #        return dd,t
 #    bb=dc.T * dd
 #    cc=dc.T * dc - delta ** 2
 #    if cc >= 0:
-#        dd=copy_(dc)
+#        dd=copy(dc)
 #        t=0
 #        return dd,t
 #    t=(sqrt_(bb ** 2 - aa * cc) - bb) / aa

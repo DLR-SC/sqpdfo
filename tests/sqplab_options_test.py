@@ -91,16 +91,17 @@ sys.path.append("../")
 import unittest
 from sqplab_options import *
 from runtime import *
+from numpy import array
 #import numpy as np
 import helper
 
 class dummyInfo():
     def __init__(self):
 
-        self.g= matlabarray([])
-        self.ai= matlabarray([])
-        self. ae= matlabarray([])
-        self.hl= matlabarray([])
+        self.g= array([])
+        self.ai= array([])
+        self. ae= array([])
+        self.hl= array([])
         self.niter= 0
 
 class Test_sqplab_options(unittest.TestCase):

@@ -62,6 +62,7 @@ import sys
 sys.path.append("../")
 import unittest
 from sqplab_tcg import *
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -75,8 +76,8 @@ class Test_sqplab_tcg(unittest.TestCase):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
     
-        self.A = matlabarray([ 1])
-        self.b = matlabarray([ 0.816496580927725])
+        self.A = array([[ 1]])
+        self.b = array([[ 0.816496580927725]])
         self.delta =1
         self.max_iter = 20
         self.tol =1.000000000000000e-06
