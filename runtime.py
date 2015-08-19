@@ -356,9 +356,9 @@ def strrep_(a,b,c):
 
 def sum_(a, dim=None):
     if dim is None:
-        return np.asanyarray(a).sum(0)
+        return a.sum(0)
     else:
-        return np.asanyarray(a).sum(dim-1)
+        return a.sum(dim-1)
 
 true = True
 
@@ -551,7 +551,7 @@ def null_(A, eps=1e-15):
     padding = max(0,np.shape(A)[1]-np.shape(s)[0])
     null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
     null_space = scipy.compress(null_mask, vh, axis=0)
-    return matlabarray(scipy.transpose(null_space))        
+    return scipy.transpose(null_space)        
 #def null_(A, eps=1e-15):
 #    u, s, vh = scipy.linalg.svd(A)
 #    null_mask = (s <= eps)
