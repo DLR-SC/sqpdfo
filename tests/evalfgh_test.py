@@ -50,6 +50,7 @@ import unittest
 from evalfgh import *
 from ecdfo_func import *
 from ecdfo_global_variables import set_prob
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -60,7 +61,7 @@ class Test_evalfgh(unittest.TestCase):
     """ 
     def setUp(self):
         self.key = 2
-        self.xy = matlabarray([-2, 2, 2, 1, 1]).T
+        self.xy = array([[-2, 2, 2, 1, 1]]).T
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
         
@@ -77,14 +78,13 @@ class Test_evalfgh(unittest.TestCase):
         
         correctmsg = 0
         correctout2 = 3.354626279025119e-04
-        correctout3 =  matlabarray([])
-        correctout4 =    matlabarray([4, -1, 1]).T
+        correctout4 =    array([4, -1, 1])
         
         self.assertEqual(correctmsg, msg)
         self.assertAlmostEqual(correctout2, out2, places=15)
-        self.assertEqual(correctout3, out3)
+        self.assertTrue(isempty_(out3))
         
-        self.assertTrue(compare_matlabarray(correctout4, out4, 1e-15, 1e-15))
+        self.assertTrue(compare_array(correctout4, out4, 1e-15, 1e-15))
         
         #self.assertEqual(correctout4, out4)
 

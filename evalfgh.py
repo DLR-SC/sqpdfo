@@ -38,6 +38,7 @@ Created on Fri Nov 14 16:27:59 2014
 from runtime import *
 from ecdfo_func import *
 from ecdfo_global_variables import *
+from numpy import array
 #except ImportError:
 #    from smop.runtime import *
 
@@ -47,12 +48,17 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
     #varargin = cellarray(args)
     nargin = 3-[key,xy,lm].count(None)+len(args)
 
-    fileoutput = get_fileoutput()
+    #If somewhere we have done set_fileoutput (in the tests for instance), then
+    #we get this value, otherwise we take '1' by default.
+    try:
+        fileoutput = get_fileoutput()
+    except:
+        fileoutput=1  
     simul_not_initialized = get_simul_not_initialized()
-    msg=matlabarray([])
-    out2=matlabarray([])
-    out3=matlabarray([])
-    out4=matlabarray([])
+    msg=array([])
+    out2=array([])
+    out3=array([])
+    out4=array([])
 
     if simul_not_initialized:
         set_foutxy(fopen_('results.out','w'))
@@ -63,26 +69,24 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
             fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 1) with key = %0i\n\n'%(nargin,key))
             msg=- 2
             return msg,out2,out3,out4
+    elif key == 2:
+        if nargin < 2:
+            fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 2) with key = %0i\n\n'%(nargin,key))
+            msg=- 2
+            return msg,out2,out3,out4
+        msg,out2,out3,out4=ecdfo_func_(xy,nargout=4)
+    elif key == 5:
+        if nargin < 3:
+            fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 3) with key = %0i\n\n'%(nargin,key))
+            msg=- 2
+            return msg,out2,out3,out4
+        if nargout < 2:
+            fprintf_(fileoutput,'\n(simulopt) >>> not enough output arguments (%0i < 2) with key = %0i\n\n'%(nargout,key))
+            msg=- 2
+            return msg,out2,out3,out4
+        msg,out2=ecdfo_hessian_lagr_(xy,lm,nargout=2)
     else:
-        if key == 2:
-            if nargin < 2:
-                fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 2) with key = %0i\n\n'%(nargin,key))
-                msg=- 2
-                return msg,out2,out3,out4
-            msg,out2,out3,out4=ecdfo_func_(xy,nargout=4)
-        else:
-            if key == 5:
-                if nargin < 3:
-                    fprintf_(fileoutput,'\n(simulopt) >>> not enough input arguments (%0i < 3) with key = %0i\n\n'%(nargin,key))
-                    msg=- 2
-                    return msg,out2,out3,out4
-                if nargout < 2:
-                    fprintf_(fileoutput,'\n(simulopt) >>> not enough output arguments (%0i < 2) with key = %0i\n\n'%(nargout,key))
-                    msg=- 2
-                    return msg,out2,out3,out4
-                msg,out2=ecdfo_hessian_lagr_(xy,lm,nargout=2)
-            else:
-                fprintf_(fileoutput,'\n(simulopt) >>> unexpected value of key (=%i)\n\n'%(key))
-                msg=- 2
-                return msg,out2,out3,out4
+        fprintf_(fileoutput,'\n(simulopt) >>> unexpected value of key (=%i)\n\n'%(key))
+        msg=- 2
+        return msg,out2,out3,out4
     return msg,out2,out3,out4

@@ -34,6 +34,7 @@ from ecdfo_swap_in_Y import *
 from runtime import *
 
 from bcdfo_build_QR_of_Y import *
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -44,9 +45,9 @@ class Test_ecdfo_swap_in_Y(unittest.TestCase):
      factorization of Z(Y) accordingly.
     """ 
     def setUp(self):
-        self.Y = matlabarray([[ 0, 1, 0, 2, 1, 0], [0, 0, 1, 0, 0.01, 2 ]])
-        self.ind_Y = matlabarray([1, 2, 3, 4, 5, 6])
-        self.fY = matlabarray([2, 5, 1, 3, 2, 6])
+        self.Y = array([[ 0, 1, 0, 2, 1, 0], [0, 0, 1, 0, 0.01, 2 ]])
+        self.ind_Y = array([0, 1, 2, 3, 4, 5])
+        self.fY = array([2, 5, 1, 3, 2, 6])
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
 
@@ -58,27 +59,27 @@ class Test_ecdfo_swap_in_Y(unittest.TestCase):
             Matlab test
         """
         QZ,RZ,xbase,scale = bcdfo_build_QR_of_Y_( self.Y, 0, 0, 1, 1, 1e15 )
-        Z = QZ*RZ
+        Z = QZ.dot(RZ)
 #        
-        ceY = matlabarray([])
-        ciY = matlabarray([])
-        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 1, 3, QZ, RZ, self.Y, self.ind_Y,
+        ceY = array([])
+        ciY = array([])
+        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 0, 2, QZ, RZ, self.Y, self.ind_Y,
         self.fY, ciY, ceY, xbase, 0, scale, 0, 1, 1, 1e15 )
-        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 1, 3, QZ, RZ, Y, ind_Y,
+        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 0, 2, QZ, RZ, Y, ind_Y,
         fY, ciY, ceY, xbase, 0, scale, 0, 1, 1, 1e15 )
-        ret = norm_( Z - QZ*RZ)  
+        ret = norm_( Z - QZ.dot(RZ))  
         self.assertTrue(ret < 1e-15)
 #        
 #        #Scaled version :
         QZ,RZ,xbase,scale = bcdfo_build_QR_of_Y_( self.Y, 0, 1, 1, 1, 1e15 )
-        Z = QZ*RZ
-        ceY = matlabarray([])
-        ciY = matlabarray([])
-        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 1, 3, QZ, RZ, self.Y, self.ind_Y,
+        Z = QZ.dot(RZ)
+        ceY = array([])
+        ciY = array([])
+        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 0, 2, QZ, RZ, self.Y, self.ind_Y,
         self.fY, ciY, ceY, xbase, 0, scale, 1, 1, 1, 1e15 )
-        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 1, 3, QZ, RZ, Y, ind_Y,
+        QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale = ecdfo_swap_in_Y_( 0, 2, QZ, RZ, Y, ind_Y,
         fY, ciY, ceY, xbase, 0, scale, 1, 1, 1, 1e15 )
-        ret = norm_( Z - QZ*RZ)  
+        ret = norm_( Z - QZ.dot(RZ))  
         self.assertTrue(ret < 1e-15)
 
 if __name__ == '__main__':

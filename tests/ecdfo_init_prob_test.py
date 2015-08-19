@@ -92,6 +92,7 @@ import sys
 sys.path.append("../")
 import unittest
 from ecdfo_init_prob import *
+from numpy import array
 #import numpy as np
 #import helper
 
@@ -112,12 +113,10 @@ class Test_ecdfo_init_prob(unittest.TestCase):
         """
         x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info = ecdfo_init_prob_(5)
         
-        correctx0 = matlabarray([-2, 2, 2, 1, 1]).T
-        correctlx = matlabarray( [ -np.Inf, -np.Inf, -np.Inf, -np.Inf, -np.Inf]).T
-        correctux = matlabarray([ np.Inf, np.Inf, np.Inf, np.Inf, np.Inf]).T
+        correctx0 = array([[-2, 2, 2, 1, 1]]).T
+        correctlx = array( [[ -np.Inf, -np.Inf, -np.Inf, -np.Inf, -np.Inf]]).T
+        correctux = array([[ np.Inf, np.Inf, np.Inf, np.Inf, np.Inf]]).T
         correctdxmin =  1.0000e-06
-        correctli = matlabarray( [])
-        correctui = matlabarray( [])
         correctdcimin = 1.4901e-08
         correctinfb = 1.0000e+20
         correctn =  5
@@ -127,8 +126,8 @@ class Test_ecdfo_init_prob(unittest.TestCase):
         correctinfo = 0
         
         self.assertEqual(correctdxmin, dxmin)
-        self.assertEqual(correctli, li)
-        self.assertEqual(correctui, ui)
+        self.assertTrue(isempty_( li))
+        self.assertTrue(isempty_( ui))
         self.assertAlmostEqual(correctdcimin, dcimin, 4)
         self.assertEqual(correctinfb, infb)
         self.assertEqual(correctn, n)
@@ -137,14 +136,11 @@ class Test_ecdfo_init_prob(unittest.TestCase):
         self.assertEqual(correctme, me)
         self.assertEqual(correctinfo,info)
 
-        #print "thru onon vec"        
-        self.assertEqual(correctx0, x0)
-        self.assertEqual(correctux, ux)
-        self.assertEqual(correctlx, lx)
-        
-        
-
-
+        #print "thru onon vec"   
+        self.assertTrue(compare_array(correctx0, x0, 1e-15, 1e-15))
+        self.assertTrue(compare_array(correctux, ux, 1e-15, 1e-15))
+        self.assertTrue(compare_array(correctlx, lx, 1e-15, 1e-15))     
+          
 if __name__ == '__main__':
     unittest.main()
     

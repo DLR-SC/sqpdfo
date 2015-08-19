@@ -37,48 +37,50 @@ Created on Thu Nov 27 15:15:59 2014
 %               ( This version 13 IX 2010 
 
 """
-from runtime import isempty_, copy_
+from runtime import isempty_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from numpy import array
+from copy import copy
 
 def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase_=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 16-[i,j,QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
 
-    Y=copy_(Y_)
-    ind_Y=copy_(ind_Y_)
-    fY=copy_(fY_)
-    ciY=copy_(ciY_)
-    ceY=copy_(ceY_)
-    QZ=copy_(QZ_)
-    RZ=copy_(RZ_)
-    xbase=copy_(xbase_)
-    scale=copy_(scale_)
+    Y=copy(Y_)
+    ind_Y=copy(ind_Y_)
+    fY=copy(fY_)
+    ciY=copy(ciY_)
+    ceY=copy(ceY_)
+    QZ=copy(QZ_)
+    RZ=copy(RZ_)
+    xbase=copy(xbase_)
+    scale=copy(scale_)
 
     if (i > j):
-        ii=copy_(j)
-        jj=copy_(i)
+        ii=copy(j)
+        jj=copy(i)
     else:
         if (i < j):
-            ii=copy_(i)
-            jj=copy_(j)
+            ii=copy(i)
+            jj=copy(j)
         else:
             return QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale
-    y=Y[:,ii]
-    Y[:,ii]=Y[:,jj]
+    y=copy(Y[:,ii])
+    Y[:,ii]=copy(Y[:,jj])
     Y[:,jj]=y
-    ind=ind_Y[ii]
-    ind_Y[ii]=ind_Y[jj]
+    ind=copy(ind_Y[ii])
+    ind_Y[ii]=copy(ind_Y[jj])
     ind_Y[jj]=ind
     f=fY[ii]
-    fY[ii]=fY[jj]
+    fY[ii]=copy(fY[jj])
     fY[jj]=f
     if not isempty_(ciY):
-        ci=ciY[:,ii]
-        ciY[:,ii]=ciY[:,jj]
+        ci=copy(ciY[:,ii])
+        ciY[:,ii]=copy(ciY[:,jj])
         ciY[:,jj]=ci
     if not isempty_(ceY):
-        ce=ceY[:,ii]
-        ceY[:,ii]=ceY[:,jj]
+        ce=copy(ceY[:,ii])
+        ceY[:,ii]=copy(ceY[:,jj])
         ceY[:,jj]=ce
     QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     return QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale
