@@ -78,10 +78,10 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #    violated=None
     info_r=helper.dummyUnionStruct()
     
-    x=copy_(x_)
-    delta=copy_(delta_)
+    x=copy(x_)
+    delta=copy(delta_)
     info=copy(info_)
-    lm=copy_(lm_)
+    lm=copy(lm_)
 
     #If somewhere we have done set_check_condition (in the tests for instance we have set_check_condition(0)), then
     #we get this value, otherwise we take '1' by default.
@@ -94,13 +94,13 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     n=length_(x)
     I=eye_(n)
     xi=1.0
-    xnew=copy_(x)
+    xnew=copy(x)
     active_r=0
     active_t=0
     rpred=0
     norm_r=0
-    x_fix=matlabarray([])
-    glocal=copy_(gx)
+    x_fix=array([])
+    glocal=copy(gx)
     delta_min=1e-08
     plevel_r=0
     if options.verbose >= 5:
@@ -109,8 +109,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     if options.verbose >= 5:
         plevel_t=1
     if me + mi == 0:
-        lb_r=lb[1:n] - x
-        ub_r=ub[1:n] - x
+        lb_r=lb[0:n] - x
+        ub_r=ub[0:n] - x
         stratLam=1
         s,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(glocal,M,lb_r,ub_r,delta,1e-07,stratLam,nargout=8)
         xnew=x + s
@@ -126,29 +126,29 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     x_active=zeros_(size_(x))
     look_for_active_bounds=1
     if look_for_active_bounds == 1:
-        gradlag=copy_(glocal)
-        bounds=(abs_(lb - x) < 1e-05) + (abs_(ub - x) < 1e-05)
-        A=find_(bounds[1:n])
+        gradlag=copy(glocal)
+        bounds=(abs(lb - x) < 1e-05) + (abs(ub - x) < 1e-05)
+        A=find_(bounds[0:n])
         gradlag[A]=gradlag[A] + lm[A]
         if me > 0:
-            gradlag=gradlag + info.ae.T * lm[n + mi + 1:n + mi + me]
-        for i in arange_(1,n).reshape(-1):
-            if (x[i] - gradlag[i] <= lb[i]) and (abs_(x[i] - lb[i]) < 1e-05):
+            gradlag=gradlag + info.ae.T.dot(lm[n + mi:n + mi + me])
+        for i in range(0,n):
+            if (x[i] - gradlag[i] <= lb[i]) and (abs(x[i] - lb[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
                     disp_('lb ',num2str_(i),' is initially active')
-#                constraints=matlabarray([[constraints],[0]])
-#                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
-                constraints=concatenate_([constraints,matlabarray([[0]])])
-                gconstraints=concatenate_([gconstraints,I[i,:]])
-            if (x[i] - gradlag[i] >= ub[i]) and (abs_(x[i] - ub[i]) < 1e-05):
+#                constraints=array([[constraints],[0]])
+#                gconstraints=array([[gconstraints],[I[i,:]]])
+                constraints=concatenate_([constraints,array([[0]])])
+                gconstraints=concatenate_([gconstraints,I[[i],:]])
+            if (x[i] - gradlag[i] >= ub[i]) and (abs(x[i] - ub[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
                     disp_('ub ',num2str_(i),' is initially active')
-#                constraints=matlabarray([[constraints],[0]])
-#                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
-                constraints=concatenate_([constraints,matlabarray([[0]])])
-                gconstraints=concatenate_([gconstraints,I[i,:]])
+#                constraints=array([[constraints],[0]])
+#                gconstraints=array([[gconstraints],[I[i,:]]])
+                constraints=concatenate_([constraints,array([[0]])])
+                gconstraints=concatenate_([gconstraints,I[[i],:]])
         if options.verbose >= 3 and sum_(x_active) > 0:
             xactive=x_active.T
     finished=0
@@ -161,32 +161,31 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         if options.verbose >= 3:
             fprintf_(options.fout,'  Restoration step:\n')
         delta_r=xi * delta
-        sol=gconstraints.T * constraints
+        sol=gconstraints.T.dot(constraints)
         if iter_active == 1 and norm_(sol) > 1e-14:
-            g1=gconstraints.T * constraints
-            H1=gconstraints.T * gconstraints
+            g1=gconstraints.T.dot(constraints)
+            H1=gconstraints.T.dot(gconstraints)
             if check_condition:
                 cthreshold=1e+16
                 H1,badcond=ecdfo_check_cond_(H1,cthreshold,options,nargout=2)
             check_convex=1
             if check_convex:
                 H1=ecdfo_check_convex_(H1,options)
-            lb_r=lb[1:n] - x
-            ub_r=ub[1:n] - x
+            lb_r=lb[0:n] - x
+            ub_r=ub[0:n] - x
             stratLam=1
             r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
-            info_r.prec=sqrt_(gplus.T * gplus)
+            info_r.prec=sqrt_(gplus.T.dot(gplus))
             xr=x + r
-            norm2_r=r.T * r
+            norm2_r=r.T.dot(r)
             norm_r=sqrt_(norm2_r)
-            if strcmp_(msg[1:5],'error') or strcmp_(msg[1:5],'limit'):
+            if msg=='error' or msg=='limit':
                 info_r.flag=- 1
+            elif msg=='boundary' or (delta_r - norm_r < 1e-08):
+                info_r.flag=1
             else:
-                if strcmp_(msg[1:8],'boundary') or (delta_r - norm_r < 1e-08):
-                    info_r.flag=1
-                else:
-                    info_r.flag=0
-            rpred_m=norm_(constraints) - norm_(constraints + gconstraints * r)
+                info_r.flag=0
+            rpred_m=norm_(constraints) - norm_(constraints + gconstraints.dot(r))
             rpred=rpred + rpred_m
             if rpred < 0:
                 if options.verbose >= 3:
@@ -195,23 +194,20 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if options.verbose >= 5:
                 if - 1 == info_r.flag:
                     fprintf_(options.fout,'    max of %0i iterations reached\n'%(20 * me))
-                else:
-                    if 0 == info_r.flag:
-                        fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_r))
-                    else:
-                        if 1 == info_r.flag:
-                            fprintf_(options.fout,'    TR boundary is reached\n')
-                        else:
-                            if 2 == info_r.flag:
-                                fprintf_(options.fout,'    negative curvature direction encountered\n')
+                elif 0 == info_r.flag:
+                    fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_r))
+                elif 1 == info_r.flag:
+                    fprintf_(options.fout,'    TR boundary is reached\n')
+                elif 2 == info_r.flag:
+                    fprintf_(options.fout,'    negative curvature direction encountered\n')
                 fprintf_(options.fout,'    |r|   = %8.2e\n'%(norm_r))
                 fprintf_(options.fout,'    rpred = %8.2e\n'%(rpred))
         else:
             if options.verbose >= 5:
                 fprintf_(options.fout,'    unchanged\n')
             r=zeros_(size_(x))
-            active_r=copy_(false)
-            xr=copy_(x)
+            active_r=copy(false)
+            xr=copy(x)
             norm2_r=0.0
             norm_r=0.0
         if options.verbose == 3:
@@ -219,27 +215,24 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             disp_('delta_r = ',num2str_(delta_r),', norm_r = ',num2str_(norm_r))
         if options.verbose >= 3:
             fprintf_(options.fout,'  Tangent step:\n')
-        delta_t=copy_(delta)
+        delta_t=copy(delta)
         deg_freedom=n - length_(constraints)
         if deg_freedom > 0:
             Z_=null_(full_(gconstraints))
-            M_t=Z_.T * M * Z_
-            g_t=Z_.T * (glocal + M * r)
+            M_t=Z_.T.dot(M.dot( Z_))
+            g_t=Z_.T.dot((glocal + M.dot(r)))
             u,info_t=sqplab_tcg_(M_t,- g_t,delta_t,20 * (n - me),prec_t,plevel_t,options.fout,nargout=2)
-            t=Z_ * u
+            t=Z_.dot(u)
             active_t=(info_t.flag == 1) or (info_t.flag == 2)
             if options.verbose >= 5:
                 if - 1 == info_t.flag:
                     fprintf_(options.fout,'    max of %0i iterations reached\n'%(20 * (n - me)))
-                else:
-                    if 0 == info_t.flag:
-                        fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_t))
-                    else:
-                        if 1 == info_t.flag:
-                            fprintf_(options.fout,'    TR boundary is reached\n')
-                        else:
-                            if 2 == info_t.flag:
-                                fprintf_(options.fout,'    negative curvature direction encountered\n')
+                elif 0 == info_t.flag:
+                    fprintf_(options.fout,'    precision is less than required tolerance %8.2e\n'%(prec_t))
+                elif 1 == info_t.flag:
+                    fprintf_(options.fout,'    TR boundary is reached\n')
+                elif 2 == info_t.flag:
+                    fprintf_(options.fout,'    negative curvature direction encountered\n')
                 fprintf_(options.fout,'    |t| = %8.2e\n'%(norm_(t)))
         else:
             t=zeros_(1,n).T
@@ -251,42 +244,40 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         xnew=x + r + t
         x_active=zeros_(size_(xnew))
         x_viol=zeros_(size_(xnew))
-        for i in arange_(1,n).reshape(-1):
+        for i in range(0,n):
             if (xnew[i] - lb[i] < - threshold):
                 x_viol[i]=- i
-#                x_fix=matlabarray([x_fix,i])
-                x_fix=concatenate_([x_fix, matlabarray([[i]])], axis=1)
+#                x_fix=array([x_fix,i])
+                x_fix=concatenate_([x_fix, array([i])], axis=1)
                 if options.verbose >= 3:
                     disp_('lb ',int2str_(i),' is violated')
-#                constraints=matlabarray([[constraints],[0]])
-#                gconstraints=matlabarray([[gconstraints],[I[i,:]]])
-                constraints=concatenate_([constraints,matlabarray([[0]])])
-                gconstraints=concatenate_([gconstraints,I[i,:]])
+#                constraints=array([[constraints],[0]])
+#                gconstraints=array([[gconstraints],[I[i,:]]])
+                constraints=concatenate_([constraints,array([[0]])])
+                gconstraints=concatenate_([gconstraints,I[[i],:]])
                 violated=1
                 break
+            elif (abs(xnew[i] - lb[i]) < 1e-07):
+                x_active[i]=- i
+                if options.verbose >= 3:
+                    disp_('lb ',int2str_(i),' is active')
             else:
-                if (abs_(xnew[i] - lb[i]) < 1e-07):
-                    x_active[i]=- i
+                if (xnew[i] - ub[i] > threshold):
+                    x_viol[i]=i
+#                        x_fix=array([x_fix,i])
+                    x_fix=concatenate_([x_fix, array([i])], axis=1)
                     if options.verbose >= 3:
-                        disp_('lb ',int2str_(i),' is active')
-                else:
-                    if (xnew[i] - ub[i] > threshold):
-                        x_viol[i]=i
-#                        x_fix=matlabarray([x_fix,i])
-                        x_fix=concatenate_([x_fix, matlabarray([[i]])], axis=1)
-                        if options.verbose >= 3:
-                            disp_('ub ',int2str_(i),' is violated')
-#                        constraints=matlabarray([[constraints],[0]])
-#                        gconstraints=matlabarray([[gconstraints],[I[i,:]]])
-                        constraints=concatenate_([constraints,matlabarray([[0]])])
-                        gconstraints=concatenate_([gconstraints,I[i,:]])
-                        violated=1
-                        break
-                    else:
-                        if (abs_(xnew[i] - ub[i]) < 1e-07):
-                            x_active[i]=i
-                            if options.verbose >= 3:
-                                disp_('ub ',int2str_(i),' is active')
+                        disp_('ub ',int2str_(i),' is violated')
+#                   constraints=array([[constraints],[0]])
+#                   gconstraints=array([[gconstraints],[I[i,:]]])
+                    constraints=concatenate_([constraints,array([[0]])])
+                    gconstraints=concatenate_([gconstraints,I[[i],:]])
+                    violated=1
+                    break
+                elif (abs(xnew[i] - ub[i]) < 1e-07):
+                    x_active[i]=i
+                    if options.verbose >= 3:
+                        disp_('ub ',int2str_(i),' is active')
         if sum_(x_viol) == 0:
             violated=0
             if options.verbose >= 3:
@@ -301,8 +292,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
             lbounds=- inf * ones_(size_(x))
             ubounds=inf * ones_(size_(x))
-            ilb=abs_(lb - xnew) < 1e-05
-            iub=abs_(ub - xnew) < 1e-05
+            ilb=abs(lb - xnew) < 1e-05
+            iub=abs(ub - xnew) < 1e-05
             lbounds[ilb]=lb[ilb]
             ubounds[iub]=ub[iub]
             lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
@@ -312,38 +303,38 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if min_lm < 0:
                 if options.verbose >= 3:
                     disp_('Zero step but not converged - release one bound!!')
-                constraints=constraints[1:me]
-                gconstraints=gconstraints[1:me,:]
-                xa=find_(x_active < 0).T
+                constraints=constraints[0:me]
+                gconstraints=gconstraints[0:me,:]
+                xa=find_(x_active < 0).reshape(-1)
                 if length_(xa) == length_(x_fix):
                     if sort_(xa) == sort_(x_fix):
-                        for i in arange_(1,length_(x_fix)).reshape(-1):
+                        for i in range(0,length_(x_fix)):
                             if i != ind_min_lm:
-#                                constraints=matlabarray([[constraints],[0]])
-#                                gconstraints=matlabarray([[gconstraints],[I[x_fix[i],:]]])
-                                constraints=concatenate_([constraints,matlabarray([[0]])])
-                                gconstraints=concatenate_([gconstraints,I[x_fix[i],:]])
+#                                constraints=array([[constraints],[0]])
+#                                gconstraints=array([[gconstraints],[I[x_fix[i],:]]])
+                                constraints=concatenate_([constraints,array([[0]])])
+                                gconstraints=concatenate_([gconstraints,I[[x_fix[i]],:]])
 #                        x_fix[ind_min_lm]=[]
-                        x_fix = np.delete(x_fix, ind_min_lm-1) 
+                        x_fix = np.delete(x_fix, ind_min_lm) 
                         finished=1
                     else:
-                        x_fix=matlabarray([])
-                        for i in arange_(1,length_(find_(x_active < 0))).reshape(-1):
-#                            constraints=matlabarray([[constraints],[0]])
-#                            gconstraints=matlabarray([[gconstraints],[I[xa[i],:]]])
-                            constraints=concatenate_([constraints,matlabarray([[0]])])
-                            gconstraints=concatenate_([gconstraints,I[xa[i],:]])
-#                            x_fix=matlabarray([x_fix,xa[i]])
-                            x_fix=concatenate_([x_fix,xa[i]],axis=1)
+                        x_fix=array([])
+                        for i in range(0,length_(find_(x_active < 0))):
+#                            constraints=array([[constraints],[0]])
+#                            gconstraints=array([[gconstraints],[I[xa[i],:]]])
+                            constraints=concatenate_([constraints,array([[0]])])
+                            gconstraints=concatenate_([gconstraints,I[[xa[i]],:]])
+#                            x_fix=array([x_fix,xa[i]])
+                            x_fix=concatenate_([x_fix,[xa[i]]],axis=1)
                 else:
-                    x_fix=matlabarray([])
-                    for i in arange_(1,length_(find_(x_active < 0))).reshape(-1):
-#                        constraints=matlabarray([[constraints],[0]])
-#                        gconstraints=matlabarray([[gconstraints],[I[xa[i],:]]])
-                        constraints=concatenate_([constraints,matlabarray([[0]])])
-                        gconstraints=concatenate_([gconstraints,I[xa[i],:]])
-#                        x_fix=matlabarray([x_fix,xa[i]])
-                        x_fix=concatenate_([x_fix,xa[i]],axis=1)
+                    x_fix=array([])
+                    for i in range(0,length_(find_(x_active < 0))):
+#                        constraints=array([[constraints],[0]])
+#                        gconstraints=array([[gconstraints],[I[xa[i],:]]])
+                        constraints=concatenate_([constraints,array([[0]])])
+                        gconstraints=concatenate_([gconstraints,I[[xa[i]],:]])
+#                        x_fix=array([x_fix,xa[i]])
+                        x_fix=concatenate_([x_fix,[xa[i]]],axis=1)
                 if options.verbose >= 3:
                     x_fix
             else:
@@ -359,15 +350,15 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 if options.verbose >= 3:
                     disp_('non zero infeasible step - continue finding correct active set...')
         if violated == 1:
-            tstep=copy_(t)
+            tstep=copy(t)
             if options.verbose >= 3:
                 disp_('shorten tangential step')
-#            aT=matlabarray([[eye_(n)],[- eye_(n)]])
+#            aT=array([[eye_(n)],[- eye_(n)]])
             aT=concatenate_([eye_(n),- eye_(n)])
-            aTx=aT * xr
-#            alpha=matlabarray([[ub[1:n]],[- lb[1:n]]])
-            alpha=concatenate_([ub[1:n],- lb[1:n]])
-            divisor=aT * tstep
+            aTx=aT.dot(xr)
+#            alpha=array([[ub[1:n]],[- lb[1:n]]])
+            alpha=concatenate_([ub[0:n],- lb[0:n]])
+            divisor=aT.dot(tstep)
             ratio=(alpha - aTx) / divisor
             minratio=min_(ratio[divisor > 0])
             if (minratio < 0):
@@ -381,9 +372,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 disp_('t = (',num2str_(tstep.T),')')
                 disp_('delta_t = ',num2str_(delta_t),', norm_t = ',num2str_(norm_(tstep)))
                 disp_('delta ',num2str_(delta),', norm_s = ',num2str_(norm_(r + tstep)))
-            glocal=glocal + M * step
-            for i in arange_(1,me).reshape(-1):
-                gconstraints[i,:]=gconstraints[i,:] + (M * step).T
+            glocal=glocal + M .dot(step)
+            for i in range(0,me):
+                gconstraints[i,:]=gconstraints[[i],:] + (M .dot( step)).T
             delta=delta - norm_(step)
 
     return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
@@ -404,13 +395,13 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #    n=length_(x)
 #    I=eye_(n)
 #    xi=1.0
-#    xnew=copy_(x)
+#    xnew=copy(x)
 #    active_r=0
 #    active_t=0
 #    rpred=0
 #    norm_r=0
-#    x_fix=matlabarray([])
-#    glocal=copy_(gx)
+#    x_fix=array([])
+#    glocal=copy(gx)
 #    delta_min=1e-08
 #    plevel_r=0
 #    if options.verbose >= 5:
@@ -439,8 +430,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #    #sys.exit(0)                
 #    look_for_active_bounds=1
 #    if look_for_active_bounds == 1:
-#        gradlag=copy_(glocal)
-#        bounds=(abs_(lb - x) < 1e-05) + (abs_(ub - x) < 1e-05)
+#        gradlag=copy(glocal)
+#        bounds=(abs(lb - x) < 1e-05) + (abs(ub - x) < 1e-05)
 #        A=find_(bounds[1:n])
 #        gradlag[A]=gradlag[A] + lm[A]
 #        if me > 0:
@@ -448,23 +439,23 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #            #print "lm[n + mi + 1:n + mi + me]", lm[n + mi + 1:n + mi + me]                                            
 #            gradlag=gradlag + info.ae.T * lm[n + mi + 1:n + mi + me].T
 #        for i in arange_(1,n).reshape(-1):
-#            if (x[i] - gradlag[i] <= lb[i]) and (abs_(x[i] - lb[i]) < 1e-05):
+#            if (x[i] - gradlag[i] <= lb[i]) and (abs(x[i] - lb[i]) < 1e-05):
 #                x_active[i]=1
 #                if options.verbose >= 3:
 #                    disp_(['lb ',num2str_(i),' is initially active'])
-#                #constraints=matlabarray([[constraints],[0]])
-#                #gconstraints=matlabarray([[gconstraints],[I[i,:]]])
+#                #constraints=array([[constraints],[0]])
+#                #gconstraints=array([[gconstraints],[I[i,:]]])
 #                #print "CONCATENATING 1"                                                                                
-#                constraints=concatenate_([constraints,matlabarray([0])])
+#                constraints=concatenate_([constraints,array([0])])
 #                gconstraints=concatenate_([constraints,I[i,:].T], axis = 1)
-#            if (x[i] - gradlag[i] >= ub[i]) and (abs_(x[i] - ub[i]) < 1e-05):
+#            if (x[i] - gradlag[i] >= ub[i]) and (abs(x[i] - ub[i]) < 1e-05):
 #                x_active[i]=1
 #                if options.verbose >= 3:
 #                    disp_(['ub ',num2str_(i),' is initially active'])
-#                #constraints=matlabarray([[constraints],[0]])
-#                #gconstraints=matlabarray([[gconstraints],[I[i,:]]])
+#                #constraints=array([[constraints],[0]])
+#                #gconstraints=array([[gconstraints],[I[i,:]]])
 #                #print "CONCATENATING 2"                                                                                
-#                constraints=concatenate_([constraints,matlabarray([0])])
+#                constraints=concatenate_([constraints,array([0])])
 #                gconstraints=concatenate_([gconstraints,I[i,:]])
 #        if options.verbose >= 3 and sum_(x_active) > 0:
 #            xactive=x_active.T
@@ -534,8 +525,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #            if options.verbose >= 5:
 #                fprintf_(options.fout,'    unchanged\\n')
 #            r=zeros_(size_(x))
-#            active_r=copy_(false)
-#            xr=copy_(x)
+#            active_r=copy(false)
+#            xr=copy(x)
 #            norm2_r=0.0
 #            norm_r=0.0
 #        if options.verbose == 3:
@@ -543,7 +534,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #            disp_(['delta_r = ',num2str_(delta_r),', norm_r = ',num2str_(norm_r)])
 #        if options.verbose >= 3:
 #            fprintf_(options.fout,'  Tangent step:\\n')
-#        delta_t=copy_(delta)
+#        delta_t=copy(delta)
 #        deg_freedom=n - length_(constraints)
 #        if deg_freedom > 0:
 #            Z_=null_(full_(gconstraints))
@@ -597,37 +588,37 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #            #print "lb\n", lb                                                
 #            if (xnew[i] - lb[i] < - threshold):
 #                x_viol[i]=- i
-#                x_fix=concatenate_([x_fix, matlabarray([i])])#matlabarray([x_fix,i])
+#                x_fix=concatenate_([x_fix, array([i])])#array([x_fix,i])
 #                if options.verbose >= 3:
 #                    disp_(['lb ',int2str_(i),' is violated'])
-#                #constraints=matlabarray([[constraints],[0]])
-#                #gconstraints=matlabarray([[gconstraints],[I[i,:]]])
+#                #constraints=array([[constraints],[0]])
+#                #gconstraints=array([[gconstraints],[I[i,:]]])
 #                #print "CONCATENATING 3"                                                                                
-#                constraints=concatenate_([constraints,matlabarray([0])])
+#                constraints=concatenate_([constraints,array([0])])
 #                #print "I[i,:]", I[i,:]                                                                
 #                gconstraints=concatenate_([gconstraints,I[i,:]])
 #                violated=1
 #                break
-#            elif (abs_(xnew[i] - lb[i]) < 1e-07):
+#            elif (abs(xnew[i] - lb[i]) < 1e-07):
 #                x_active[i]=- i
 #                if options.verbose >= 3:
 #                    disp_(['lb ',int2str_(i),' is active'])
 #            elif (xnew[i] - ub[i] > threshold):
 #                x_viol[i]=i
-#                x_fix=concatenate_([x_fix, matlabarray(i)])#matlabarray([x_fix,i])
+#                x_fix=concatenate_([x_fix, array(i)])#array([x_fix,i])
 #                if options.verbose >= 3:
 #                    disp_(['ub ',int2str_(i),' is violated'])
 #                    #print "CONCATENATING 4"                                                                                                                
-#                    constraints=concatenate_([constraints,matlabarray([0])])
+#                    constraints=concatenate_([constraints,array([0])])
 #                    gconstraints=concatenate_([gconstraints,I[i,:]])
 #                    violated=1
 #                    break
-#            elif (abs_(xnew[i] - ub[i]) < 1e-07):
+#            elif (abs(xnew[i] - ub[i]) < 1e-07):
 #                x_active[i]=i
 #                if options.verbose >= 3:
 #                    disp_(['ub ',int2str_(i),' is active'])
 #       
-#        if sum_(x_viol) == matlabarray([0]):
+#        if sum_(x_viol) == array([0]):
 #            violated=0
 #            if options.verbose >= 3:
 #                disp_('no new bound violated')
@@ -640,8 +631,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #                return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
 #            lbounds=- inf * ones_(size_(x))
 #            ubounds=inf * ones_(size_(x))
-#            ilb=abs_(lb - xnew) < 1e-05
-#            iub=abs_(ub - xnew) < 1e-05
+#            ilb=abs(lb - xnew) < 1e-05
+#            iub=abs(ub - xnew) < 1e-05
 #            lbounds[ilb]=lb[ilb]
 #            ubounds[iub]=ub[iub]
 #            lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
@@ -665,23 +656,23 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #                        for i in arange_(1,length_(x_fix)).reshape(-1):
 #                            if i != ind_min_lm:
 #                                #print "CONCATENATING 5"
-#                                constraints=concatenate_([constraints,matlabarray([0])]) #axis = 1 (?)
+#                                constraints=concatenate_([constraints,array([0])]) #axis = 1 (?)
 #                                gconstraints=concatenate_([gconstraints,I[x_fix[i],:]])
 #                        #x_fix[ind_min_lm]=[]
 #                        x_fix = np.delete(x_fix, ind_min_lm)                                                                                                                                
 #                        finished=1
 #                    else:
-#                        x_fix=matlabarray([])
+#                        x_fix=array([])
 #                        for i in arange_(1,length_(find_(x_active < 0))).reshape(-1):
 #                            #print "CONCATENATING 6"                                                                                                    
-#                            constraints=concatenate_([constraints,matlabarray([0])])
+#                            constraints=concatenate_([constraints,array([0])])
 #                            gconstraints=concatenate_([gconstraints,I[xa[i],:]])
 #                            x_fix=concatenate_([x_fix,xa[i]])
 #                else:
-#                    x_fix=matlabarray([])
+#                    x_fix=array([])
 #                    for i in arange_(1,length_(find_(x_active < 0))).reshape(-1):
 #                        #print "CONCATENATING 7"                                                                                    
-#                        constraints=concatenate_([constraints,matlabarray([0])])
+#                        constraints=concatenate_([constraints,array([0])])
 #                        gconstraints=concatenate_([gconstraints,I[xa[i],:]])
 #                        x_fix=concatenate_([x_fix,xa[i]])
 #                if options.verbose >= 3:
@@ -699,7 +690,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #                if options.verbose >= 3:
 #                    disp_('non zero infeasible step - continue finding correct active set...')
 #        if violated == 1:
-#            tstep=copy_(t)
+#            tstep=copy(t)
 #            if options.verbose >= 3:
 #                disp_('shorten tangential step')
 #            aT=concatenate_([eye_(n),- eye_(n)])
@@ -714,7 +705,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #            ratio[ind_div,:]=Inf
 #            minratio=min_(ratio)
 #            if (minratio < 0):
-#                minratio=matlabarray([0.0])
+#                minratio=array([0.0])
 #            tstep=minratio.dot(tstep)
 #            x=xr + tstep
 #            step=r + tstep

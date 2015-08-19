@@ -36,13 +36,15 @@ import unittest
 from ecdfo_augmX_evalf import *
 #import numpy as np
 import helper
-from runtime import matlabarray
+from numpy import array
+from copy import copy
+from runtime import compare_array
 
 class dummyInfo():
     def __init__(self):
-        self.nsimul = matlabarray([0,0,0])
-        self.ci = matlabarray([])
-        self.ce = matlabarray([])
+        self.nsimul = array([0,0,0])
+        self.ci = array([])
+        self.ce = array([])
 
 class Test_ecdfo_augmX_evalf(unittest.TestCase):
     """
@@ -50,21 +52,23 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
           This class is a test for ecdfo_augmX_evalf which adds a new points y to the set of all points X.
     """
     def setUp(self):
-        self.X = matlabarray([[ 0, 1, 0],[0, 0, 1] ])
-        self.fX = matlabarray([ 1, 100, 101 ])
-        self.y = matlabarray([ 2, 4 ]).T
+        self.X = array([[ 0, 1, 0],[0, 0, 1] ])
+        self.fX = array([ 1, 100, 101 ])
+        self.y = array([[ 2, 4 ]]).T
         
-        self.ciX = copy_(self.X)
-        self.ceX = copy_(self.X)
+        self.ciX = copy(self.X)
+        self.ceX = copy(self.X)
         
         self.info = dummyInfo()
         self.options = helper.dummyOptions()
         self.values = helper.dummyValues()
+        self.abs_tol=1e-15
+        self.rel_tol=1e-15
     #def banana(self, x, y):
 #        #return outdic,fvalue,info.ci,info.c 
 #        print "x", x
 #        print "y", y
-#        return None,100 * ( y[2] - y[1]^2 ) ^2 + (1-y[1])^2,matlabarray([]),matlabarray([])
+#        return None,100 * ( y[2] - y[1]^2 ) ^2 + (1-y[1])^2,array([]),array([])
         
     def banana(self, somenumber, x):
 
@@ -74,15 +78,15 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
         #print "banana x", x
         #print "summand 1:", 100 * ( x[2] - x[1]**2 )**2
         #print "summand 2:", (1-x[1])**2
-        #print "[[0]] + [[-3]]", matlabarray([0]) + matlabarray([-3])
-        #print "[[-3]]^2 = ", matlabarray([-3])**2
-        fx = 100 * ( x[2] - x[1]**2 )**2 + (1-x[1])**2
+        #print "[[0]] + [[-3]]", array([0]) + array([-3])
+        #print "[[-3]]^2 = ", array([-3])**2
+        fx = 100 * ( x[1] - x[0]**2 )**2 + (1-x[0])**2
         #print "banana fx", fx
     #outdic = 0
      #fvalue = fx
      #infoci = fx
      #infoce = fx
-        return 0,fx,matlabarray([[1.0],[0.0]]), matlabarray([[0.0],[1.0]])#fx,fx
+        return 0,fx,array([[1.0],[0.0]]), array([[0.0],[1.0]])#fx,fx
 
 
     #@unittest.expectedFailure
@@ -96,32 +100,26 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
         #returns X, fX, neval, xstatus, sstatus, dstatus
     
         X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic = ecdfo_augmX_evalf_(
-        self.banana,self.y, 4,self.X,
-        self.fX,self.ciX, self.ceX, 0, matlabarray([[0],[0]]), matlabarray([]), matlabarray([1, 2, 3]), 
-        1e25, 3, matlabarray([1, 1, 1]), 1,
-        matlabarray([1, 1, 1]), matlabarray([ 0, 0, 0]), 0, 
-        matlabarray([ 1, 1]), self.info,self.options, self.values)
+        self.banana,self.y, 3,self.X,
+        self.fX,self.ciX, self.ceX, 0, array([[0],[0]]), array([]), array([[0, 1, 2]]), 
+        1e25, 3, array([1, 1, 1]), 1,
+        array([1, 1, 1]), array([[ 0, 0, 0]]), 0, 
+        array([[ 1, 1]]), self.info,self.options, self.values)
         
-        #sstatus=1, dstatus=matlabarray([1, 1, 1]), scaleX=matlabarray([ 0, 0, 0]), scalefacX=0, 
-        #info=matlabarray([ 1, 1]))
-        correctX = matlabarray([[0,     1,     0,     2],[0,     0,     1,     4]])  
-        correctfX = matlabarray([1,     100,     101,   1])
+        #sstatus=1, dstatus=array([1, 1, 1]), scaleX=array([ 0, 0, 0]), scalefacX=0, 
+        #info=array([ 1, 1]))
+        correctX = array([[0,     1,     0,     2],[0,     0,     1,     4]])  
+        correctfX = array([1,     100,     101,   1])
         correctneval = 4
-        correctxstatus =matlabarray([ 1,     1,     1,     1])
-        correctsstatus =matlabarray([ 1,     1,     1,     1])
-        correctdstatus = matlabarray([0,     0,     0,     0])
+        correctxstatus =array([ 1,     1,     1,     1])
+        correctsstatus =array([ 1,     1,     1,     1])
+        correctdstatus = array([0,     0,     0,     0])
         
-        #print "type correctX", type(correctX)
-        #print "type X", type(X)
-        self.assertEqual(X, correctX)
-        self.assertEqual(sstatus, correctsstatus)
-        self.assertEqual(dstatus, correctdstatus)
-        
-        #print "Warning: Specified Test does not match function"
-        #return unittest.skip("Thespecified Test does not match function...")
-        self.assertEqual(xstatus, correctxstatus)
-        #print "fX", fX
-        self.assertEqual(fX, correctfX)
+        self.assertTrue(compare_array(X, correctX,self.abs_tol,self.rel_tol))
+        self.assertTrue(compare_array(sstatus, correctsstatus,self.abs_tol,self.rel_tol))
+        self.assertTrue(compare_array(dstatus, correctdstatus,self.abs_tol,self.rel_tol))
+        self.assertTrue(compare_array(xstatus, correctxstatus,self.abs_tol,self.rel_tol))
+        self.assertTrue(compare_array(fX, correctfX,self.abs_tol,self.rel_tol))
         self.assertEqual(neval, correctneval)
 
 if __name__ == '__main__':

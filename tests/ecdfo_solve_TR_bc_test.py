@@ -319,20 +319,21 @@ from evalfgh import evalfgh_
 #import numpy as np
 import helper
 from ecdfo_global_variables import set_threshold
+from numpy import array
 
 class dummyInfo():
     def __init__(self):
-        self.g =  matlabarray([0, 1, 0]).T
-        self.ai = matlabarray([])
-        self.ae = matlabarray([[1,     1,     1], [1,     2,     3]])
-        self.hl = matlabarray([])
+        self.g =  array([[0, 1, 0]]).T
+        self.ai = array([])
+        self.ae = array([[1,     1,     1], [1,     2,     3]])
+        self.hl = array([])
         self.niter = 1
         self.flag = 0
-        self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci=  matlabarray([])
-        self.ce = matlabarray([2,3]).T
+        self.nsimul = array( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci=  array([])
+        self.ce = array([[2,3]]).T
         self.f = 1.500000000000000
-        self.glag = matlabarray([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
+        self.glag = array([[-0.333333333013890, 0.666666666736111, -0.333333333513889]]).T
         self.glagn = 0.666666666736111
         self.feasn = 3
         self.compl = 0
@@ -346,13 +347,13 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
     def setUp(self):
 
         self.simul = evalfgh_
-        self.x = matlabarray([0.500000000000000, 1.000000000000000, 0.500000000000000]).T
-        self.lb = matlabarray([ -0.500000000000000, 0, -np.Inf]).T
-        self.ub = matlabarray([np.Inf, np.Inf, np.Inf]).T
+        self.x = array([[0.500000000000000, 1.000000000000000, 0.500000000000000]]).T
+        self.lb = array([[ -0.500000000000000, 0, -np.Inf]]).T
+        self.ub = array([[np.Inf, np.Inf, np.Inf]]).T
         self.delta =  1
         self.mi =  0
         self.me =  2
-        self.M = matlabarray([[1,     0,     0], [0,     1,     0], [0,     0,     1]])
+        self.M = array([[1,     0,     0], [0,     1,     0], [0,     0,     1]])
         self.prec_r = 1.000000000000000e-06
         self.prec_t = 1.000000000000000e-06
         
@@ -361,10 +362,10 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.values = helper.dummyValues()
     
         self.radius_has_been_rejected = 0
-        self.lm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
-        self.ceY = matlabarray([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
-        self.ciY = matlabarray([])
-        self.gx =matlabarray([ 0, 1, 0]).T
+        self.lm = array([[0, 0, 0, -0.333333332763891, -0.000000000249999]]).T
+        self.ceY = array([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
+        self.ciY = array([])
+        self.gx =array([[ 0, 1, 0]]).T
         
         self.abs_tol=1e-9
         self.rel_tol=1e-9
@@ -382,25 +383,25 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.ceY,self.ciY,self.gx)
         
         
-        correctxnew =matlabarray([  -3.054026564966283e-03, 0, 3.155214681258386e-01]).T
+        correctxnew =array([[  -3.054026564966283e-03, 0, 3.155214681258386e-01]]).T
         correctdelta = -1.345023941648038e-01
         correctrpred =  3.288018632338156e+00
         correctactive_r =  0
         correctactive_t =  0
         correctlm_computed = 0
-        correctlm = matlabarray([0, 0, 0,   -0.333333332763891,  -0.000000000249999]).T
+        correctlm = array([[0, 0, 0,   -0.333333332763891,  -0.000000000249999]]).T
         
         #print "THRU"
         #print xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
 #        print xnew
 
-        self.assertTrue(compare_matlabarray(correctxnew, xnew, 1e-6, 1e-3))
+        self.assertTrue(compare_array(correctxnew, xnew, 1e-6, 1e-3))
         self.assertAlmostEqual(correctdelta, delta, places=6)
         self.assertAlmostEqual(correctrpred, rpred, places=6)
         self.assertEqual(correctactive_r, active_r)
         self.assertEqual(correctactive_t, active_t)
         self.assertEqual(correctlm_computed, lm_computed)
-        self.assertTrue(compare_matlabarray(correctlm,lm, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctlm,lm, self.abs_tol, self.rel_tol))
 
 if __name__ == '__main__':
 #<<<<<<< HEAD

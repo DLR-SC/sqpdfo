@@ -87,43 +87,49 @@ from runtime import *
 #except ImportError:
     #from smop.runtime import *
 from copy import copy
+from numpy import append, array, isnan, isinf
 
 def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval_=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
 
-    X=copy_(X_)
-    fX=copy_(fX_)
-    ciX=copy_(ciX_)
-    ceX=copy_(ceX_)
+    X=copy(X_)
+    fX=copy(fX_)
+    ciX=copy(ciX_)
+    ceX=copy(ceX_)
     neval=copy(neval_)
-    xstatus=copy_(xstatus_)
-    xstatus=copy_(xstatus_)
-    sstatus=copy_(sstatus_)
-    dstatus=copy_(dstatus_)
+    xstatus=copy(xstatus_)
+    xstatus=copy(xstatus_)
+    sstatus=copy(sstatus_)
+    dstatus=copy(dstatus_)
     info=copy(info_)
     
     
 
     full_n=length_(xfix)
     I=eye_(full_n)
-    xstatus[m]=xstatus_val
-    sstatus[m]=1
-    dstatus[m]=0
+    try:
+        xstatus[m]=xstatus_val
+        sstatus[m]=1
+        dstatus[m]=0
+    except IndexError:
+        xstatus=append(xstatus, xstatus_val)
+        sstatus=append(sstatus, 1)
+        dstatus=append(dstatus, 0)
     if (nfix > 0):
         yfull=I[:,indfix] * xfix[indfix] + I[:,indfree] * y
         X[:,m]=yfull
         if (scaleX):
             yfull=yfull / scalefacX
-        info.nsimul[2]=info.nsimul(2) + 1
+        info.nsimul[1]=info.nsimul[1] + 1
         outdic,fvalue,info.ci,info.ce=f(2,yfull)
         info.f=fvalue
     else:
-        if isempty_(X):
-            X=copy_(y)
-        else:
+        try:
             X[:,m]=y
-        info.nsimul[2]=info.nsimul[2] + 1
+        except IndexError:
+            X=concatenate_([X,y],axis=1)
+        info.nsimul[1]=info.nsimul[1] + 1
         outdic,fvalue,info.ci,info.ce=f(2,y)
         info.f=fvalue
     if outdic == 1:
@@ -131,16 +137,16 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
             fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    if isnan_(fvalue):
+    if isnan(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
-            x=copy_(y)
+            x=copy(y)
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    if isinf_(fvalue):
+    if isinf(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
-            x=copy_(y)
+            x=copy(y)
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if outdic:
@@ -156,19 +162,22 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
             fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ce must be a column vector\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    fX[m]=min_(fxmax,real_(fvalue))
+    try:
+        fX[m]=min_(fxmax,real_(fvalue))
+    except IndexError:
+        fX=append(fX, min_(fxmax,real_(fvalue)))
     if not isempty_(info.ci):
-        if isempty_(ciX):
-            ciX=real_(info.ci)							
-        else:
+        try:
             ciX[:,m]=real_(info.ci)
+        except IndexError:
+            ciX=concatenate_([ciX, real_(info.ci)],axis=1)
 #        ciX[:,m]=real_(info.ci.T)
     if not isempty_(info.ce):
 #        ceX[:,m]=real_(info.ce.T)
-        if isempty_(ceX):
-            ceX=real_(info.ce)						
-        else:
+        try:
             ceX[:,m]=real_(info.ce)
+        except IndexError:
+            ceX=concatenate_([ceX, real_(info.ce)],axis=1)
 
     neval=neval + 1
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
@@ -222,13 +231,13 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
 #    if isnan_(fvalue):
 #        if options.verbose:
 #            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is NaN at the point x\\n\\n'))
-#            x=copy_(y)
+#            x=copy(y)
 #        info.flag=values.fail_on_simul
 #        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
 #    if isinf_(fvalue):
 #        if options.verbose:
 #            fprintf_(options.fout,char('### ecdfo_augmX_evalf: f is Inf at the point x\\n\\n'))
-#            x=copy_(y)
+#            x=copy(y)
 #        info.flag=values.fail_on_simul
 #        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
 #    if outdic:
