@@ -341,20 +341,21 @@ from ecdfo_computeHessian import *
 from evalfgh import *
 #import numpy as np
 import helper
+from numpy import array
 
 class dummyInfo():
     def __init__(self):
-        self.g  = matlabarray([ 0, 1, 0]).T
-        self.ai = matlabarray( [])
-        self.ae = matlabarray([[1,     1,     1],[1,     2,     3]])
-        self.hl = matlabarray( [])
+        self.g  = array([[ 0, 1, 0]]).T
+        self.ai = array( [])
+        self.ae = array([[1,     1,     1],[1,     2,     3]])
+        self.hl = array( [])
         self.niter = 1
         self.flag = 0
-        self.nsimul = matlabarray( [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray( [])
-        self.ce = matlabarray([0.312467441560872, -0.056489622187450]).T
+        self.nsimul = array( [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array( [])
+        self.ce = array([[0.312467441560872, -0.056489622187450]]).T
         self.f = 0.099563123926544
-        self.glag = matlabarray([-0.333333333013890, 0.666666666736111,-0.333333333513889]).T
+        self.glag = array([[-0.333333333013890, 0.666666666736111,-0.333333333513889]]).T
         self.glagn =  0.666666666736111
         self.feasn = 3
         self.compl = 0
@@ -366,56 +367,56 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
     """ 
     def setUp(self):
         self.simul = evalfgh_
-        self.x = matlabarray([-0.003054026564966, 0, 0.315521468125839]).T
+        self.x = array([[-0.003054026564966, 0, 0.315521468125839]]).T
         self.null_step = 0
         self.constrained_pbl = 2
-        self.lm = matlabarray([0, -0.999999999499998, 0,-0.000000000375002, 0.000000000083334]).T
-        self.M = matlabarray([[1,     0,     0],[0,     1,     0],[0,     0,     1]])
+        self.lm = array([[0, -0.999999999499998, 0,-0.000000000375002, 0.000000000083334]]).T
+        self.M = array([[1,     0,     0],[0,     1,     0],[0,     0,     1]])
         self.n = 3
         self.me = 2
         self.mi =0
-        self.s =matlabarray([  -0.503054026564966,-1.000000000000000,-0.184478531874161]).T
-        self.gx = matlabarray([-0.009783923878659, 1.000000000000000, 0]).T
-        self.gci =matlabarray( [])
-        self.gce = matlabarray([[1.000000000000000,   0.999999999999999,   1.000000000000000], [1.000000000000000 ,  1.999999999999999,   3.000000000000000]])
+        self.s =array([ [ -0.503054026564966,-1.000000000000000,-0.184478531874161]]).T
+        self.gx = array([[-0.009783923878659, 1.000000000000000, 0]]).T
+        self.gci =array( [])
+        self.gce = array([[1.000000000000000,   0.999999999999999,   1.000000000000000], [1.000000000000000 ,  1.999999999999999,   3.000000000000000]])
 
         self.info = dummyInfo()
         self.options = helper.dummyOptions()
         self.values = helper.dummyValues()
         
-        self.fcmodel = matlabarray([[0.099563123926544,  -0.013550429460611,   1.384968815034240,  0,   6.144976749236061],
+        self.fcmodel = array([[0.099563123926544,  -0.013550429460611,   1.384968815034240,  0,   6.144976749236061],
                         [0.312467441560872,   1.384968815034241,   1.384968815034240,   1.384968815034241,   0.000000000000006],
                           [-0.056489622187450,   1.384968815034241,   2.769937630068480 ,  4.154906445102721,   0.000000000000014]])
 
 
-        self.Y = matlabarray([
+        self.Y = array([
             [  -0.003054026564966,  -0.500000000000000,   0.500000000000000,   0.500000000000000,   0.500000000000000],
             [               0,   1.000000000000000,                   0,   1.000000000000000,   1.000000000000000],
            [0.315521468125839,   0.500000000000000,   0.500000000000000,  -0.500000000000000,   0.500000000000000]])
-        self.fY = matlabarray([   0.099563123926544,   1.500000000000000,   0.500000000000000,   1.500000000000000,   1.500000000000000])
-        self.ciY = matlabarray(  [])
-        self.ceY = matlabarray([ 
+        self.fY = array([   0.099563123926544,   1.500000000000000,   0.500000000000000,   1.500000000000000,   1.500000000000000])
+        self.ciY = array(  [])
+        self.ceY = array([ 
         [  0.312467441560872,   1.000000000000000 ,  1.000000000000000,   1.000000000000000 ,  2.000000000000000],
         [  -0.056489622187450,   2.000000000000000,   1.000000000000000,                   0,   3.000000000000000]])
-        self.sigma = matlabarray([1])
-        self.scale = matlabarray([   1.000000000000000, 0.722037918214987, 0.722037918214987, 0.722037918214987, 0.521338755340232]).T
+        self.sigma = 1
+        self.scale = array([[   1.000000000000000, 0.722037918214987, 0.722037918214987, 0.722037918214987, 0.521338755340232]]).T
         self.shift_Y = 1
-        self.QZ = matlabarray([
+        self.QZ = array([
                [1.000000000000000,                   0,                   0,                   0,                   0],
                 [               0,  -0.437717028004984,  -0.826365739060244,   0.329535025867438,  -0.130115853870500],
                 [               0,   0.880814115424577,  -0.315023389192614,   0.329471408091712,  -0.127966204837389],
                 [              0 ,  0.162491294867564 , -0.418566952172131 , -0.884320607054428 , -0.127966204837389],
                 [               0,   0.078529462977709,  -0.206595343893201,  -0.028849989870035,   0.974843149132506]])
-        self.RZ = matlabarray([
+        self.RZ = array([
                [1.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
                    [               0,   0.819739267991799,  -0.132165180682231,   0.386491133279071,   0.503816009553305],
                 [               0,                   0,  -0.369537503265736,  -0.294775124607443,  -0.596996335387400],
                 [               0,                   0,                   0,   0.876403859762092,   0.237890849609900],
                 [               0,                   0,                   0,                   0,  -0.092396452142661]])
         self.whichmodel = 0
-        self.ind_Y = matlabarray([  5,     2,     3,     4,     1])
-        self.i_xbest = 5
-        self.m = 5
+        self.ind_Y = array([  4,     1,     2,     3,     0])
+        self.i_xbest = 4
+        self.m = 4
         
         self.abs_tol=1e-14
         self.rel_tol=1e-14
@@ -432,7 +433,7 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
             
         #print "M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g
             
-        correctM = matlabarray([
+        correctM = array([
 
 [   2.620301230585867,                   0,                   0],
  [                  0,                   0,                   0],
@@ -440,14 +441,14 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
 
 
         correctpc = 1
-        correctinfog = matlabarray([
+        correctinfog = array([
   [-0.009783923878659],
   [ 1.000000000000000],
                    [0]])
         
         self.assertEqual(pc, correctpc)
-        self.assertTrue(compare_matlabarray(M, correctM, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctinfog, info.g, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(M, correctM, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctinfog, info.g, self.abs_tol, self.rel_tol))
         
 
 

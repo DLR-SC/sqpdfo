@@ -22,6 +22,7 @@ from runtime import *
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_hessP import bcdfo_hessP_
 from copy import copy
+from numpy import zeros
 #except ImportError:
     #from smop.runtime import *
 
@@ -30,22 +31,22 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 #    nargin = 30-[simul,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m].count(None)+len(args)
 
 
-    M=copy_(M_)
+    M=copy(M_)
     info=copy(info_)
     values=copy(values_)
 
-    norm_ceY=zeros_(1,size_(Y,2))
+    norm_ceY=zeros(size_(Y,2))
 
     
 
     pc=1.0
     if options.algo_method == values.newton:
-        info.nsimul[3]=info.nsimul(3) + 1
+        info.nsimul[2]=info.nsimul[2] + 1
         outdic,tmp,tmp,tmp,tmp,info.g,info.ai,info.ae=simul[3,x]
         if outdic:
             info=sqplab_badsimul_(outdic,info,options,values)
             return M,pc,info
-        info.nsimul[5]=info.nsimul(5) + 1
+        info.nsimul[4]=info.nsimul[4] + 1
         outdic,M=simul[5,x,lm]
         if outdic:
             info=sqplab_badsimul_(outdic,info,options,values)
@@ -60,14 +61,14 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                         fprintf_(options.fout,'\nBFGS inverse update:\n')
                 y=- info.g
                 if me:
-                    y=y - info.ae.T * lm[n + mi + 1:n + mi + me]
+                    y=y - info.ae.T.dot(lm[n + mi:n + mi + me])
                 info.g=gx
                 info.ai=gci
                 info.ae=gce
                 y=y + info.g
                 if me:
-                    y=y + info.ae.T * lm[n + mi + 1:n + mi + me]
-                if options.bfgs_restart > 0 and mod_(info.nsimul(2),options.bfgs_restart) == 0:
+                    y=y + info.ae.T.dot(lm[n + mi:n + mi + me])
+                if options.bfgs_restart > 0 and mod_(info.nsimul[1],options.bfgs_restart) == 0:
                     M=eye_(size_(M))
                     pc=2.0
                 else:
@@ -88,15 +89,15 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                     cur_degree=size_(Y,2)
                     if me + mi > 0:
                         if length_(ceY) > 0:
-                            for i in arange_(1,cur_degree).reshape(-1):
+                            for i in range(0,cur_degree):
                                 norm_ceY[i]=norm_(ceY[:,i])
                         else:
-                            norm_ceY=zeros_(1,cur_degree)
-                        meritfY=fY + sigma.dot(norm_ceY)
-                        model=bcdfo_computeP_(QZ,RZ,Y,meritfY,whichmodel,fcmodel[1,:],ind_Y,i_xbest,m,gx,scale,shift_Y)
+                            norm_ceY=zeros(cur_degree)
+                        meritfY=fY + sigma *norm_ceY
+                        model=bcdfo_computeP_(QZ,RZ,Y,meritfY.reshape(1,-1),whichmodel,fcmodel[[0],:],ind_Y,i_xbest,m,gx,scale,shift_Y)
                         M=bcdfo_hessP_(model,x,x,scale,shift_Y)
                     else:
-                        M=bcdfo_hessP_(fcmodel[1,:],x,x,scale,shift_Y)
+                        M=bcdfo_hessP_(fcmodel[[0],:],x,x,scale,shift_Y)
                 else:
                     if options.verbose:
                         fprintf_(options.fout,'\n### ecdfo: options.hess_approx not recognized\n\n')

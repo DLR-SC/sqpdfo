@@ -57,6 +57,7 @@ from __future__ import division
 from runtime import *
 from copy import copy
 from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
+from numpy import array
 #except ImportError:
 #from smop.runtime import *
 def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,ind_Y_=None,i_xbest_=None,cur_degree=None,indfree=None,x_=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
@@ -65,43 +66,41 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
 
 
     info=copy(info_)
-    QZ=copy_(QZ_)
-    RZ=copy_(RZ_)
-    Y=copy_(Y_)
-    fY=copy_(fY_)
-    ciY=copy_(ciY_)
-    ceY=copy_(ceY_)
-    x=copy_(x_)
-    scale=copy_(scale_)
-    ind_Y=copy_(ind_Y_)
-    i_xbest=copy_(i_xbest_)
+    QZ=copy(QZ_)
+    RZ=copy(RZ_)
+    Y=copy(Y_)
+    fY=copy(fY_)
+    ciY=copy(ciY_)
+    ceY=copy(ceY_)
+    x=copy(x_)
+    scale=copy(scale_)
+    ind_Y=copy(ind_Y_)
+    i_xbest=copy(i_xbest_)
 
-    norm_ceY = zeros_(1,cur_degree)
+    norm_ceY = zeros_(1,cur_degree).reshape(-1)
     dummy_set=find_(dstatus == c.dummy)
-    ind_insideBounds=matlabarray([])
-    for i in arange_(1,cur_degree).reshape(-1):
+    ind_insideBounds=array([])
+    for i in range(0,cur_degree):
         if((isempty_(find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
-            ind_insideBounds[i]=i
+            ind_insideBounds=concatenate_([ind_insideBounds,[i]],axis=1)
         else:
-            ind_insideBounds[i]=1
+            ind_insideBounds=concatenate_([ind_insideBounds,[1]],axis=1)
     if length_(ceY) > 0:
-        for i in arange_(1,cur_degree).reshape(-1):
+        for i in range(0,cur_degree):
             norm_ceY[i]=norm_(ceY[:,i])
-    else:
-        norm_ceY=zeros_(1,cur_degree)
     meritY=fY + sigma *norm_ceY
     fmin,imin=min_(meritY[ind_insideBounds],nargout=2)
-    if (imin != 1 and fmin < meritY[1]):
-        QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
-        fx=fY[1]
-        i_xbest=ind_Y[1]
+    if (imin != 1 and fmin < meritY[0]):
+        QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(0,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
+        fx=copy(fY[0])
+        i_xbest=copy(ind_Y[0])
         if (not shift_Y):
-            x=Y[:,1]
-    info.f=fY[1]
+            x=copy(Y[:,0])
+    info.f=copy(fY[0])
     if length_(ceY) > 0:
-        info.ce=ceY[:,1]
+        info.ce=copy(ceY[:,0])
     if length_(ciY) > 0:
-        info.ci=ciY[:,1]
+        info.ci=copy(ciY[:,0])
     return x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info
 #def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
 #    #varargin = cellarray(args)
@@ -110,7 +109,7 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
 #    norm_ceY = zeros_(1,cur_degree)
 #				
 #    dummy_set=find_(dstatus == c.dummy)
-#    ind_insideBounds=matlabarray([])
+#    ind_insideBounds=array([])
 #    for i in arange_(1,cur_degree).reshape(-1):
 #        #print "Y[:,i]", Y[:,i]			
 #        #print "xl[indfree]", xl[indfree]
