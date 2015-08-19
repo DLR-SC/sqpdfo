@@ -10,7 +10,7 @@ try:
 except ImportError:
     from smop.runtime import *
 from copy import copy    
-from numpy import diag    
+from numpy import diag, zeros 
     
 def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -32,7 +32,7 @@ def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
     P=P.reshape(-1)
     if (nquad > 0):
         ndiag=min_(nquad,n)
-        H=diag(concatenate_([P[n + 1:n + 1 + ndiag],zeros_(1,n - ndiag)],axis=1))
+        H=diag(concatenate_([P[n + 1:n + 1 + ndiag],zeros(n - ndiag)],axis=1))
         nquad=nquad - ndiag
         if (nquad > 0):
             k=2 * n + 1
