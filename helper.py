@@ -200,7 +200,7 @@ class dummyOptions():
 		self.hess_approx = 131
 		self.bfgs_restart = 0
 		self.algo_descent = 120
-		self.tol = matlabarray( [1.0e-05, 1.0e-05, 1.0e-05])
+		self.tol = np.array( [1.0e-05, 1.0e-05, 1.0e-05])
 		self.dxmin = 1.0e-06
 		self.miter = 500
 		self.msimul = 500
