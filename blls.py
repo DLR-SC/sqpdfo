@@ -48,6 +48,7 @@ Created on Fri Nov 07 11:45:31 2014
 from __future__ import division
 #try:
 from runtime import *
+from numpy import arange
 #except ImportError:
     #from smop.runtime import *
 def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
@@ -64,20 +65,20 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     armijob=0.5
     armijor=0.01
     maxback=15
-    inds=arange_(1,n)
+    inds=arange(0,n)
     nit=0
     nuns=0
     ssub=zeros_(n,1)
     exitc=0
-    s=min_(max_(pinv_(A) * b,lb),ub)
-    res=A * s - b
+    s=min_(max_(pinv_(A).dot(b),lb),ub)
+    res=A .dot(s) - b
     resn=norm_(res)
-    g=A.T * res
+    g=A.T.dot(res)
     stry=min_(max_(s - g,lb),ub) - s
     opt=norm_(stry)
     free=find_(stry).T
-    atlb=find_(abs_(max_(s - g,lb) - s) <= epsfeas).T
-    atub=find_(abs_(min_(s - g,ub) - s) <= epsfeas).T
+    atlb=find_(abs(max_(s - g,lb) - s) <= epsfeas)
+    atub=find_(abs(min_(s - g,ub) - s) <= epsfeas)
     latlb=length_(atlb)
     latub=length_(atub)
     lfree=length_(free)
@@ -97,7 +98,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
         disp_('     The problem has ',int2str_(n),' variables and ',int2str_(m),' rows.')
         disp_(' ')
         if (verbose > 2):
-            problem_matrix=copy_(A)
+            problem_matrix=copy(A)
             right_hand_side=b.T
             lower_bounds=lb.T
             upper_bounds=ub.T
@@ -114,8 +115,8 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     if (opt <= epsconv or resn <= epsres):
         maxit=0
     else:
-        maxit=copy_(maxiter)
-    for i in arange_(1,maxit).reshape(-1):
+        maxit=copy(maxiter)
+    for i in arange(1,maxit+1):
         nit=nit + 1
         if (verbose > 1):
             disp_('   Iteration ',int2str_(i))
@@ -124,13 +125,13 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             fprintf_('       k     ||r||     stepsize')
             fprintf_('                  nfr nlow nupp\n')
             fprintf_('   %5d  %.4e                            %4d %4d %4d'%(0,resn,lfree,latlb,latub))
-        g=A.T * res
-        alpha=(norm_(g) / norm_(A * g)) ** 2
-        for kc in arange_(1,maxback).reshape(-1):
-            stry=min_(max_(s - alpha * g,lb),ub)
+        g=A.T.dot(res)
+        alpha=(norm_(g) / norm_(A.dot( g))) ** 2
+        for kc in arange(1,maxback+1):
+            stry=min_(max_(s - alpha*g,lb),ub)
             dtry=stry - s
-            ltry=g.T * dtry
-            qtry=ltry + 0.5 * norm_(A * dtry) ** 2
+            ltry=g.T.dot(dtry)
+            qtry=ltry + 0.5 * norm_(A .dot(dtry)) ** 2
             if (verbose > 1):
                 fprintf_('\n   %5d  %.4e  %.4e'&(kc,norm_(A * stry - b),alpha))
             if (qtry <= armijor * ltry):
@@ -140,26 +141,26 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
         if (kc >= maxback):
             exitc=- 1
             break
-        atlb=inds[find_(abs_(stry - lb) <= epsfeas)]
-        atub=inds[find_(abs_(stry - ub) <= epsfeas)]
-        atb=concatenate_([atlb,atub], axis=1)
+        atlb=inds[find_(abs(stry - lb) <= epsfeas)].reshape(-1)
+        atub=inds[find_(abs(stry - ub) <= epsfeas)].reshape(-1)
+        atb=concatenate_([atlb,atub],axis=1)
         latlb=length_(atlb)
         latub=length_(atub)
-        free=copy_(inds)
-        free = np.delete(free, atb - 1)
+        free=copy(inds)
+        free = np.delete(free, atb)
         lfree=length_(free)
         s[atlb]=lb[atlb]
         s[atub]=ub[atub]
         s[free]=stry[free]
-        res=A * s - b
+        res=A.dot(s) - b
         resn=norm_(res)
         if (verbose > 1):
             fprintf_('                %4d %4d %4d\n'%(lfree,latlb,latub))
             if (verbose > 2):
                 Cauchy_point=s.T
-                indices_of_free_variables=copy_(free)
-                indices_of_variables_at_their_lower_bound=copy_(atlb)
-                indices_of_variables_at_their_upper_bound=copy_(atub)
+                indices_of_free_variables=copy(free)
+                indices_of_variables_at_their_lower_bound=copy(atlb)
+                indices_of_variables_at_their_upper_bound=copy(atub)
         if (lfree == 0 or resn <= epsres):
             if (verbose > 1):
                 fprintf_('   No nested subspace search\n')
@@ -170,21 +171,21 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                 fprintf_('       k     ||r||     stepsize      ||r*||')
                 fprintf_('      nfr nlow nupp\n')
                 fprintf_('   %5d  %.4e                            %4d %4d %4d\n'&(0,resn,lfree,latlb,latub))
-            for k in arange_(1,n).reshape(-1):
+            for k in arange(0,n):
                 if (verbose > 2):
                     disp_('    > Solving in subspace ',int2str_(k))
-                    indices_of_free_variables=copy_(free)
-                    indices_of_variables_at_their_lower_bound=copy_(atlb)
-                    indices_of_variables_at_their_upper_bound=copy_(atub)
-                rhs=copy_(b)
+                    indices_of_free_variables=copy(free)
+                    indices_of_variables_at_their_lower_bound=copy(atlb)
+                    indices_of_variables_at_their_upper_bound=copy(atub)
+                rhs=copy(b)
                 if not isempty_(atlb):
-                    rhs=rhs - A[1:m,atlb] * lb[atlb]
+                    rhs=rhs - A[0:m,atlb].dot(lb[atlb])
                 if not isempty_(atub):
-                    rhs=rhs - A[1:m,atub] * ub[atub]
-                ssub[free]=pinv_(A[1:m,free]) * rhs
+                    rhs=rhs - A[0:m,atub].dot(ub[atub])
+                ssub[free]=pinv_(A[0:m,free]).dot(rhs)
                 ssub[atlb]=lb[atlb]
                 ssub[atub]=ub[atub]
-                rsubo=A * ssub - b
+                rsubo=A .dot(ssub) - b
                 rsubon=norm_(rsubo)
                 natlb=find_(ssub[free] < lb[free])
                 natub=find_(ssub[free] > ub[free])
@@ -195,21 +196,21 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     rred=rsubon - resn
                     found=0
                     nback=4 * (1 - nuns)
-                    for kb in arange_(1,nback).reshape(-1):
-                        stry=(1 - alpha) * s + alpha * ssub
+                    for kb in arange(1,nback+1):
+                        stry=(1 - alpha).dot(s) + alpha.dot(ssub)
                         natlbt=free[find_(stry[free] < lb[free])]
                         natubt=free[find_(stry[free] > ub[free])]
                         lnatbt=length_(natlbt) + length_(natubt)
                         stry=min_(max_(stry,lb),ub)
                         if (verbose >= 1):
-                            rtry=A * stry - b
+                            rtry=A.dot(stry) - b
                             rtryn=norm_(rtry)
                             atlb=concatenate_([atlb,natlbt], axis=1)
                             atub=concatenate_([atub,natubt],axis=1)
                             atb=concatenate_([atlbt,atubt],axis=1)
-                            freet=copy_(inds)
+                            freet=copy(inds)
 #                            freet[atbt]=[]
-                            freet = np.delete(free, atbt - 1)
+                            freet = np.delete(free, atbt)
                             latlbt=length_(atlbt)
                             latubt=length_(atubt)
                             lfreet=length_(freet)
@@ -217,29 +218,29 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         if (lnatbt == 0):
                             break
                         if (verbose == 0):
-                            rtry=A * stry - b
+                            rtry=A.dot(stry) - b
                             rtryn=norm_(rtry)
                         if (rtryn <= resn - armijor * alpha * rred):
-                            s=copy_(stry)
-                            res=copy_(rtry)
-                            resn=copy_(rtryn)
+                            s=copy(stry)
+                            res=copy(rtry)
+                            resn=copy(rtryn)
                             if (verbose == 0):
                                 atlb=concatenate_([atlb,natlbt], axis=1)
                                 atub=concatenate_([atub,natubt],axis=1)
                                 atb=concatenate_([atlb,atub],axis=1)
-                                free=copy_(inds)
+                                free=copy(inds)
 #                                free[atb]=[]
-                                free = np.delete(free, atb - 1)
+                                free = np.delete(free, atb)
                                 latlb=length_(atlb)
                                 latub=length_(atub)
                                 lfree=length_(free)
                             else:
-                                atlb=copy_(atlbt)
-                                atub=copy_(atubt)
-                                free=copy_(freet)
-                                latlb=copy_(latlbt)
-                                latub=copy_(latubt)
-                                lfree=copy_(lfreet)
+                                atlb=copy(atlbt)
+                                atub=copy(atubt)
+                                free=copy(freet)
+                                latlb=copy(latlbt)
+                                latub=copy(latubt)
+                                lfree=copy(lfreet)
                             found=1
                             break
                         alpha=armijob * alpha
@@ -249,7 +250,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         if (kb >= nback):
                             nuns=nuns + 1
                         alpha=1
-                        for kf in arange_(1,length_(free)).reshape(-1):
+                        for kf in arange(0,length_(free)):
                             kk=free[kf]
                             if (dtry[kk] >= epsdzer):
                                 alpha=min_(alpha,(ub[kk] - s[kk]) / dtry[kk])
@@ -261,38 +262,38 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         rsubn=norm_(rsub)
                         if (verbose > 1):
                             fprintf_('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,rsubn,alpha,rsubon,lfree,latlb,latub))
-                        natlb=free[find_(abs_(ssub[free] - lb[free]) <= epsfeas)]
-                        natub=free[find_(abs_(ssub[free] - ub[free]) <= epsfeas)]
+                        natlb=free[find_(abs(ssub[free] - lb[free]) <= epsfeas)]
+                        natub=free[find_(abs(ssub[free] - ub[free]) <= epsfeas)]
                         atlb=concatenate_([atlb,natlbt], axis=1)
                         atub=concatenate_([atub,natubt],axis=1)
                         atb=concatenate_([atlb,atub],axis=1)
-                        free=copy_(inds)
+                        free=copy(inds)
 #                        free[atb]=[]
-                        free = np.delete(free, atb - 1)
+                        free = np.delete(free, atb)
                         latlb=length_(atlb)
                         latub=length_(atub)
                         lfree=length_(free)
                         if (verbose > 2):
                             current_subspace_solution=ssub.T
-                            indices_of_free_variables=copy_(free)
-                            indices_of_variables_at_their_lower_bound=copy_(atlb)
-                            indices_of_variables_at_their_upper_bound=copy_(atub)
-                        s=copy_(ssub)
-                        res=copy_(rsub)
-                        resn=copy_(rsubn)
+                            indices_of_free_variables=copy(free)
+                            indices_of_variables_at_their_lower_bound=copy(atlb)
+                            indices_of_variables_at_their_upper_bound=copy(atub)
+                        s=copy(ssub)
+                        res=copy(rsub)
+                        resn=copy(rsubn)
                 else:
-                    s=copy_(ssub)
-                    res=copy_(rsubo)
-                    resn=copy_(rsubon)
+                    s=copy(ssub)
+                    res=copy(rsubo)
+                    resn=copy(rsubon)
                     if (verbose > 1):
                         fprintf_('   %5df %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,resn,1,resn,lfree,latlb,latub))
                         if (verbose > 2):
                             current_subspace_solution=ssub.T
-                            indices_of_variables_at_their_lower_bound=copy_(atlb)
-                            indices_of_variables_at_their_upper_bound=copy_(atub)
+                            indices_of_variables_at_their_lower_bound=copy(atlb)
+                            indices_of_variables_at_their_upper_bound=copy(atub)
                             free
                     break
-            opt=norm_(min_(max_(s - A.T * res,lb),ub) - s)
+            opt=norm_(min_(max_(s - A.T.dot(res),lb),ub) - s)
         if (verbose == 1):
             fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n'%(nit,resn,opt,lfree,latlb,latub))
         else:
@@ -303,9 +304,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                 fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n'%(nit,resn,opt,lfree,latlb,latub))
                 if (verbose > 2):
                     current_solution=s.T
-                    indices_of_free_variables=copy_(free)
-                    indices_of_variables_at_their_lower_bound=copy_(atlb)
-                    indices_of_variables_at_their_upper_bound=copy_(atub)
+                    indices_of_free_variables=copy(free)
+                    indices_of_variables_at_their_lower_bound=copy(atlb)
+                    indices_of_variables_at_their_upper_bound=copy(atub)
                 disp_('   --------------------------------------------------------------')
                 disp_(' ')
         if (opt <= epsconv or resn <= epsres):
@@ -315,9 +316,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     if (verbose > 0):
         disp_(' ')
         if (verbose > 2):
-            indices_of_free_variables=copy_(free)
-            indices_of_variables_at_their_lower_bound=copy_(atlb)
-            indices_of_variables_at_their_upper_bound=copy_(atub)
+            indices_of_free_variables=copy(free)
+            indices_of_variables_at_their_lower_bound=copy(atlb)
+            indices_of_variables_at_their_upper_bound=copy(atub)
             final_solution=s.T
             final_residual=res.T
         if (exitc == 1):
@@ -360,8 +361,8 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #    stry=min_(max_(s - g,lb),ub) - s
 #    opt=norm_(stry)
 #    free=find_(stry).T
-#    atlb=find_(abs_(max_(s - g,lb) - s) <= epsfeas).T
-#    atub=find_(abs_(min_(s - g,ub) - s) <= epsfeas).T
+#    atlb=find_(abs(max_(s - g,lb) - s) <= epsfeas).T
+#    atub=find_(abs(min_(s - g,ub) - s) <= epsfeas).T
 #    latlb=length_(atlb)
 #    latub=length_(atub)
 #    lfree=length_(free)
@@ -381,7 +382,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #        disp_([char('     The problem has '),int2str_(n),char(' variables and '),int2str_(m),char(' rows.')])
 #        disp_(char(' '))
 #        if (verbose > 2):
-#            problem_matrix=copy_(A)
+#            problem_matrix=copy(A)
 #            right_hand_side=b.T
 #            lower_bounds=lb.T
 #            upper_bounds=ub.T
@@ -398,7 +399,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #    if (opt <= epsconv or resn <= epsres):
 #        maxit=0
 #    else:
-#        maxit=copy_(maxiter)
+#        maxit=copy(maxiter)
 #    for i in arange_(1,maxit).reshape(-1):
 #        nit=nit + 1
 #        if (verbose > 1):
@@ -424,12 +425,12 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #        if (kc >= maxback):
 #            exitc=- 1
 #            break
-#        atlb=inds[find_(abs_(stry - lb) <= epsfeas)]
-#        atub=inds[find_(abs_(stry - ub) <= epsfeas)]
+#        atlb=inds[find_(abs(stry - lb) <= epsfeas)]
+#        atub=inds[find_(abs(stry - ub) <= epsfeas)]
 #        atb=concatenate_([atlb,atub], axis=1)#matlabarray([atlb,atub])
 #        latlb=length_(atlb)
 #        latub=length_(atub)
-#        free=copy_(inds)
+#        free=copy(inds)
 #        free = np.delete(np.asarray(free), np.asarray(atb) - 1) #free[atb]=[]
 #        lfree=length_(free)
 #        s[atlb]=lb[atlb]
@@ -441,9 +442,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #            fprintf_(char('                %4d %4d %4d\\n'),lfree,latlb,latub)
 #            if (verbose > 2):
 #                Cauchy_point=s.T
-#                indices_of_free_variables=copy_(free)
-#                indices_of_variables_at_their_lower_bound=copy_(atlb)
-#                indices_of_variables_at_their_upper_bound=copy_(atub)
+#                indices_of_free_variables=copy(free)
+#                indices_of_variables_at_their_lower_bound=copy(atlb)
+#                indices_of_variables_at_their_upper_bound=copy(atub)
 #        if (lfree == 0 or resn <= epsres):
 #            if (verbose > 1):
 #                fprintf_(char('   No nested subspace search\\n'))
@@ -457,10 +458,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #            for k in arange_(1,n).reshape(-1):
 #                if (verbose > 2):
 #                    disp_([char('    > Solving in subspace '),int2str_(k)])
-#                    indices_of_free_variables=copy_(free)
-#                    indices_of_variables_at_their_lower_bound=copy_(atlb)
-#                    indices_of_variables_at_their_upper_bound=copy_(atub)
-#                rhs=copy_(b)
+#                    indices_of_free_variables=copy(free)
+#                    indices_of_variables_at_their_lower_bound=copy(atlb)
+#                    indices_of_variables_at_their_upper_bound=copy(atub)
+#                rhs=copy(b)
 #                if not isempty_(atlb):
 #                    rhs=rhs - A[1:m,atlb] * lb[atlb].T
 #                if not isempty_(atub):
@@ -491,7 +492,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #                            atlbt=matlabarray([atlb,natlbt])
 #                            atubt=matlabarray([atub,natubt])
 #                            atbt=matlabarray([atlbt,atubt])
-#                            freet=copy_(inds)
+#                            freet=copy(inds)
 #                            freet[atbt]=[]
 #                            latlbt=length_(atlbt)
 #                            latubt=length_(atubt)
@@ -503,25 +504,25 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #                            rtry=A * stry - b
 #                            rtryn=norm_(rtry)
 #                        if (rtryn <= resn - armijor * alpha * rred):
-#                            s=copy_(stry)
-#                            res=copy_(rtry)
-#                            resn=copy_(rtryn)
+#                            s=copy(stry)
+#                            res=copy(rtry)
+#                            resn=copy(rtryn)
 #                            if (verbose == 0):
 #                                atlb=matlabarray([atlb,natlbt])
 #                                atub=matlabarray([atub,natubt])
 #                                atb=matlabarray([atlb,atub])
-#                                free=copy_(inds)
+#                                free=copy(inds)
 #                                free[atb]=[]
 #                                latlb=length_(atlb)
 #                                latub=length_(atub)
 #                                lfree=length_(free)
 #                            else:
-#                                atlb=copy_(atlbt)
-#                                atub=copy_(atubt)
-#                                free=copy_(freet)
-#                                latlb=copy_(latlbt)
-#                                latub=copy_(latubt)
-#                                lfree=copy_(lfreet)
+#                                atlb=copy(atlbt)
+#                                atub=copy(atubt)
+#                                free=copy(freet)
+#                                latlb=copy(latlbt)
+#                                latub=copy(latubt)
+#                                lfree=copy(lfreet)
 #                            found=1
 #                            break
 #                        alpha=armijob * alpha
@@ -543,34 +544,34 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #                        rsubn=norm_(rsub)
 #                        if (verbose > 1):
 #                            fprintf_(char('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\\n'),k,rsubn,alpha,rsubon,lfree,latlb,latub)
-#                        natlb=free[find_(abs_(ssub[free] - lb[free]) <= epsfeas)]
-#                        natub=free[find_(abs_(ssub[free] - ub[free]) <= epsfeas)]
+#                        natlb=free[find_(abs(ssub[free] - lb[free]) <= epsfeas)]
+#                        natub=free[find_(abs(ssub[free] - ub[free]) <= epsfeas)]
 #                        atlb=matlabarray([atlb,natlb])
 #                        atub=matlabarray([atub,natub])
 #                        atb=matlabarray([atlb,atub])
-#                        free=copy_(inds)
+#                        free=copy(inds)
 #                        free[atb]=[]
 #                        latlb=length_(atlb)
 #                        latub=length_(atub)
 #                        lfree=length_(free)
 #                        if (verbose > 2):
 #                            current_subspace_solution=ssub.T
-#                            indices_of_free_variables=copy_(free)
-#                            indices_of_variables_at_their_lower_bound=copy_(atlb)
-#                            indices_of_variables_at_their_upper_bound=copy_(atub)
-#                        s=copy_(ssub)
-#                        res=copy_(rsub)
-#                        resn=copy_(rsubn)
+#                            indices_of_free_variables=copy(free)
+#                            indices_of_variables_at_their_lower_bound=copy(atlb)
+#                            indices_of_variables_at_their_upper_bound=copy(atub)
+#                        s=copy(ssub)
+#                        res=copy(rsub)
+#                        resn=copy(rsubn)
 #                else:
-#                    s=copy_(ssub)
-#                    res=copy_(rsubo)
-#                    resn=copy_(rsubon)
+#                    s=copy(ssub)
+#                    res=copy(rsubo)
+#                    resn=copy(rsubon)
 #                    if (verbose > 1):
 #                        fprintf_(char('   %5df %.4e  %.4e   %.4e   %4d %4d %4d\\n'),k,resn,1,resn,lfree,latlb,latub)
 #                        if (verbose > 2):
 #                            current_subspace_solution=ssub.T
-#                            indices_of_variables_at_their_lower_bound=copy_(atlb)
-#                            indices_of_variables_at_their_upper_bound=copy_(atub)
+#                            indices_of_variables_at_their_lower_bound=copy(atlb)
+#                            indices_of_variables_at_their_upper_bound=copy(atub)
 #                            free
 #                    break
 #            opt=norm_(min_(max_(s - A.T * res,lb),ub) - s)
@@ -584,9 +585,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #                fprintf_(char('   %5d  %.4e  %.4e                %4d %4d %4d\\n'),nit,resn,opt,lfree,latlb,latub)
 #                if (verbose > 2):
 #                    current_solution=s.T
-#                    indices_of_free_variables=copy_(free)
-#                    indices_of_variables_at_their_lower_bound=copy_(atlb)
-#                    indices_of_variables_at_their_upper_bound=copy_(atub)
+#                    indices_of_free_variables=copy(free)
+#                    indices_of_variables_at_their_lower_bound=copy(atlb)
+#                    indices_of_variables_at_their_upper_bound=copy(atub)
 #                disp_(char('   --------------------------------------------------------------'))
 #                disp_(char(' '))
 #        if (opt <= epsconv or resn <= epsres):
@@ -596,9 +597,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 #    if (verbose > 0):
 #        disp_(char(' '))
 #        if (verbose > 2):
-#            indices_of_free_variables=copy_(free)
-#            indices_of_variables_at_their_lower_bound=copy_(atlb)
-#            indices_of_variables_at_their_upper_bound=copy_(atub)
+#            indices_of_free_variables=copy(free)
+#            indices_of_variables_at_their_lower_bound=copy(atlb)
+#            indices_of_variables_at_their_upper_bound=copy(atub)
 #            final_solution=s.T
 #            final_residual=res.T
 #        if (exitc == 1):

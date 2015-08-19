@@ -9,6 +9,7 @@ sys.path.append("../")
 
 import unittest
 from blls import *
+from numpy import array
 #import helper
 
 class Test_blls(unittest.TestCase):
@@ -24,20 +25,20 @@ class Test_blls(unittest.TestCase):
         """
               test with  some random data. Results have been compared with matlab results : it is OK
         """
-        self.A = matlabarray([[6,     0,     4],
+        self.A = array([[6,     0,     4],
                 [1,     5,     7],
                  [0,     2,     2],
                  [3,     7,     0]])
 
-        self.b = matlabarray([1, 5, 4, 3]).T
+        self.b = array([[1, 5, 4, 3]]).T
 
-        self.lb = matlabarray([-1, -1, -1]).T
+        self.lb = array([[-1, -1, -1]]).T
         self.ub = -self.lb
         
         s, resn, opt, exitc = blls_(self.A,self.b, self.lb, self.ub)
 
-        correctS =matlabarray([ -0.171259842519685, 0.516235951275322, 0.466316710411199]).T
-        self.assertTrue(compare_matlabarray(correctS, s, self.abs_tol, self.rel_tol))
+        correctS =array([ -0.171259842519685, 0.516235951275322, 0.466316710411199]).T
+        self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(resn,2.152108290072786, places=10)
         self.assertAlmostEqual(opt,3.631770138003687e-14, places=10)
         self.assertEqual(exitc, 0)

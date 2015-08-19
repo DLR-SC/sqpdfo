@@ -174,21 +174,22 @@ from sqplab_lsmult import *
 from ecdfo_global_variables import set_check_condition
 import numpy as np
 import helper
+from numpy import array
 
 class dummyInfo():
     def __init__(self):
         #g: [3x1 double]
-        self.g = matlabarray([0, 1, 0]).T
-        self.ai = matlabarray([])
+        self.g = array([[0, 1, 0]]).T
+        self.ai = array([])
         #ae : [2x3 double]
-        self.ae = matlabarray([[1,     1,     1],    [ 1 ,    2,     3]])
-        self.hl = matlabarray([])
+        self.ae = array([[1,     1,     1],    [ 1 ,    2,     3]])
+        self.hl = array([])
         self.niter = 0
         self.flag = 0
-        self.nsimul = matlabarray([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray([])
+        self.nsimul = array([0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array([])
         #ce: [2x1 double]
-        self.ce = matlabarray([2, 3]).T
+        self.ce = array([[2, 3]]).T
         self.f = 1.5
                                                                                                 
 class Test_sqplab_lsmult(unittest.TestCase):
@@ -201,9 +202,9 @@ class Test_sqplab_lsmult(unittest.TestCase):
     """ 
     def setUp(self):
         set_check_condition(0)                
-        self.x = matlabarray([0.5, 1.0, 0.5])
-        self.lb = matlabarray([])
-        self.ub = matlabarray([])
+        self.x = array([[0.5, 1.0, 0.5]]).T
+        self.lb = array([])
+        self.ub = array([])
         self.values = helper.dummyValues()
         self.options = helper.dummyOptions()
         self.info = dummyInfo()
@@ -216,11 +217,13 @@ class Test_sqplab_lsmult(unittest.TestCase):
         """
         lm,info = sqplab_lsmult_(self.x,self.lb,self.ub,self.info,self.options,self.values)
     
-        correctlm = matlabarray([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
-        self.assertTrue(compare_matlabarray(correctlm, lm, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(info.g, self.info.g, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(info.ae, self.info.ae, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(info.ce, self.info.ce, self.abs_tol, self.rel_tol))
+        correctlm = array([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
+        print lm
+        
+        self.assertTrue(compare_array(correctlm, lm, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(info.g, self.info.g, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(info.ae, self.info.ae, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(info.ce, self.info.ce, self.abs_tol, self.rel_tol))
 
         
         #print "lm", lm

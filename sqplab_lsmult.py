@@ -72,15 +72,15 @@ from ecdfo_check_cond import *
 from blls import *
 from copy import copy
 from ecdfo_global_variables import get_check_condition
-
+from numpy import array
 #except ImportError:
 #    from smop.runtime import *
 
 def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,*args,**kwargs):
 #    varargin = cellarray(args)
     info=copy(info_)
-    lb=copy_(lb_)
-    ub=copy_(ub_)
+    lb=copy(lb_)
+    ub=copy(ub_)
 
     nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
     
@@ -90,7 +90,7 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
         check_condition=get_check_condition()
     except:
         check_condition=1    
-    lm=matlabarray([])
+    lm=array([])
     info.flag=values.success
     badcond=0
     n=length_(info.g)
@@ -116,48 +116,48 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
     A=concatenate_([eye_(n),info.ae])
     lo=- inf * ones_(n + me,1)
     up=inf * ones_(n + me,1)
-    for i in arange_(1,n).reshape(-1):
+    for i in arange(0,n):
         if (lb[i] <= - options.inf):
             lo[i]=0
         if (ub[i] >= options.inf):
             up[i]=0
-        if (lb[i] > - options.inf) and (abs_(x[i] - lb[i]) < options.dxmin):
+        if (lb[i] > - options.inf) and (abs(x[i] - lb[i]) < options.dxmin):
             up[i]=0
-        if (ub[i] < options.inf) and (abs_(x[i] - ub[i]) < options.dxmin):
+        if (ub[i] < options.inf) and (abs(x[i] - ub[i]) < options.dxmin):
             lo[i]=0
-    AA=A * A.T
+    AA=A.dot(A.T)
     if check_condition:
         cthreshold=1e+17
         AA,badcond=ecdfo_check_cond_(AA,cthreshold,options,nargout=2)
     check_convex=1
     if check_convex:
         AA=ecdfo_check_convex_(AA,options)
-    Ag=A * info.g
-    AAn=copy_(AA)
-    Agn=copy_(Ag)
-    lon=copy_(lo)
-    upn=copy_(up)
+    Ag=A.dot(info.g)
+    AAn=copy(AA)
+    Agn=copy(Ag)
+    lon=copy(lo)
+    upn=copy(up)
     ifree=ones_(size_(lo))
-    k=1
-    for i in arange_(1,length_(lo)).reshape(-1):
+    k=0
+    for i in arange(0,length_(lo)):
         if lo[i] == up[i]:
 #            AAn[k,:]=[]
 #            AAn[:,k]=[]
 #            Agn[k]=[]
 #            lon[k]=[]
 #            upn[k]=[]
-            AAn=np.delete(AAn, k-1, 0)
-            AAn=np.delete(AAn, k-1, 1)
-            Agn=np.delete(Agn, k-1, 0)
-            lon=np.delete(lon, k-1, 0)
-            upn=np.delete(upn, k-1, 0)
+            AAn=np.delete(AAn, k, 0)
+            AAn=np.delete(AAn, k, 1)
+            Agn=np.delete(Agn, k, 0)
+            lon=np.delete(lon, k, 0)
+            upn=np.delete(upn, k, 0)
             ifree[i]=0
         else:
             k=k + 1
     if not isempty_(ifree[ifree > 0]):
         sn,rn,op,exitc=blls_(AAn,- Agn,lon,upn,nargout=4)
         I=eye_(length_(lo))
-        lm=np.delete(I, find_(ifree<=0)-1, 1)*sn
+        lm=np.delete(I, find_(ifree<=0), 1).dot(sn)
     else:
         lm=zeros_(size_(lo))
     return lm,info
@@ -166,7 +166,7 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
 #    #varargin = cellarray(args)
 #    nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
 #
-#    lm=matlabarray([])
+#    lm=array([])
 #    info.flag=values.success
 #    badcond=0
 #    n=length_(info.g)
@@ -189,7 +189,7 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
 #            fprintf_(char('\\n### sqplab_lsmult: incorrect size of ub\\n\\n'))
 #            info.flag=values.fail_strange
 #            return lm,info
-#    A=concatenate_((eye_(n),info.ae))#matlabarray([[eye_(n)],[info.ae]])
+#    A=concatenate_((eye_(n),info.ae))#array([[eye_(n)],[info.ae]])
 #    lo=- inf * ones_(n + me,1)
 #    up=inf * ones_(n + me,1)
 #    for i in arange_(1,n).reshape(-1):
@@ -199,9 +199,9 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
 #            lo[i]=0
 #        if (ub[i] >= options.inf):
 #            up[i]=0
-#        if (lb[i] > - options.inf) and (abs_(x[i] - lb[i]) < options.dxmin):
+#        if (lb[i] > - options.inf) and (abs(x[i] - lb[i]) < options.dxmin):
 #            up[i]=0
-#        if (ub[i] < options.inf) and (abs_(x[i] - ub[i]) < options.dxmin):
+#        if (ub[i] < options.inf) and (abs(x[i] - ub[i]) < options.dxmin):
 #            lo[i]=0
 #    #print A	
 #    #print A.T											
@@ -214,10 +214,10 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
 #    if check_convex:
 #        AA=ecdfo_check_convex_(AA,options)
 #    Ag=A * info.g
-#    AAn=copy_(AA)
-#    Agn=copy_(Ag)
-#    lon=copy_(lo)
-#    upn=copy_(up)
+#    AAn=copy(AA)
+#    Agn=copy(Ag)
+#    lon=copy(lo)
+#    upn=copy(up)
 #    #print "size lo", size_(lo)#.obj
 #    #ifree=ones_(size_(lo))
 #    #print "[ gnlph list expression]", [gnlph for gnlph in size_(lo)]
