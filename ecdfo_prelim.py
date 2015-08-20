@@ -62,6 +62,7 @@ from sqplab_checkoptions import sqplab_checkoptions_
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
 from copy import copy
+from numpy import array, arange
 
 def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,whichmodel_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
 #    varargin = cellarray(args)
@@ -69,39 +70,39 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     
 
     func=copy(func_)
-    x0=copy_(x0_)
-    lm0=copy_(lm0_)
-    Delta0=copy_(Delta0_)
-    lb=copy_(lb_)
-    ub=copy_(ub_)
-    scaleX=copy_(scaleX_)
-    scalefacX=copy_(scalefacX_)
-    cur_degree=copy_(cur_degree_)
-    rep_degree=copy_(rep_degree_)
-    plin=copy_(plin_)
-    pdiag=copy_(pdiag_)
-    pquad=copy_(pquad_)
+    x0=copy(x0_)
+    lm0=copy(lm0_)
+    Delta0=copy(Delta0_)
+    lb=copy(lb_)
+    ub=copy(ub_)
+    scaleX=copy(scaleX_)
+    scalefacX=copy(scalefacX_)
+    cur_degree=copy(cur_degree_)
+    rep_degree=copy(rep_degree_)
+    plin=copy(plin_)
+    pdiag=copy(pdiag_)
+    pquad=copy(pquad_)
     c=copy(c_)
     initial_Y=copy(initial_Y_)
-    kappa_ill=copy_(kappa_ill_)
-    whichmodel=copy_(whichmodel_)
-    factor_FPR=copy_(factor_FPR_)
-    Lambda_FP=copy_(Lambda_FP_)
-    Lambda_CP=copy_(Lambda_CP_)
-    eps_L=copy_(eps_L_)
-    lSolver=copy_(lSolver_)
-    hardcons=copy_(hardcons_)
-    stratLam=copy_(stratLam_)
-    xstatus=copy_(xstatus_)
-    sstatus=copy_(sstatus_)
-    dstatus=copy_(dstatus_)
+    kappa_ill=copy(kappa_ill_)
+    whichmodel=copy(whichmodel_)
+    factor_FPR=copy(factor_FPR_)
+    Lambda_FP=copy(Lambda_FP_)
+    Lambda_CP=copy(Lambda_CP_)
+    eps_L=copy(eps_L_)
+    lSolver=copy(lSolver_)
+    hardcons=copy(hardcons_)
+    stratLam=copy(stratLam_)
+    xstatus=copy(xstatus_)
+    sstatus=copy(sstatus_)
+    dstatus=copy(dstatus_)
     options=copy(options_)
     
     info = helper.dummyUnionStruct()
-    info.nsimul = matlabarray([])
+    info.nsimul = array([])
     
     
-    Y = matlabarray([])
+    Y = array([])
     gamma1 = 0.010000000000000
     eps =  2.220446049250313e-16
     stallfact=10 * eps
@@ -137,23 +138,23 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     nb=0
     mi=0
     me=0
-    lm=matlabarray([])
+    lm=array([])
     info.g=[]
     info.ai=[]
     info.ae=[]
     info.hl=[]
     info.niter=0
     shift_Y=1
-    x=copy_(np.NaN)
-    fx=copy_(np.NaN)
-    gx=copy_(np.NaN)
+    x=copy(np.NaN)
+    fx=copy(np.NaN)
+    gx=copy(np.NaN)
     checkoptions=1
     if isempty_(options):
         checkoptions=0
     info,options,values=sqplab_options_(info,options,nargout=3)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
-    info.nsimul[1:values.nsimultype]=0
+    info.nsimul=np.zeros(values.nsimultype)
     n=size_(x0,1)
     if size_(x0,2) != 1:
         if options.verbose:
@@ -169,16 +170,16 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         lb=- options.inf * ones_(n + mi,1)
     if isempty_(ub):
         ub=options.inf * ones_(n + mi,1)
-    nb_lo=sum_(lb[1:n] > - options.inf)
-    nb_up=sum_(ub[1:n] < options.inf)
-    nb=sum_(min_((lb[1:n] > - options.inf) + (ub[1:n] < options.inf),1))
+    nb_lo=sum_(lb[0:n] > - options.inf)
+    nb_up=sum_(ub[0:n] < options.inf)
+    nb=sum_(min_((lb[0:n] > - options.inf) + (ub[0:n] < options.inf),1))
     zero=0.0
     nfix=0
-    indfix=matlabarray([])
+    indfix=array([])
     xfix=zeros_(n,1)
     vstatus=zeros_(n,1)
     temp=zeros_(n,1)
-    for j in arange_(1,n).reshape(-1):
+    for j in range(0,n):
         if (lb[j] > ub[j]):
             disp_('Error: Lower bound of component ',int2str_(j),' exceeds upper bound !!')
             info.flag=2
@@ -187,7 +188,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         if (temp[j] < Delta0 + Delta0):
             if (temp[j] == zero):
                 nfix=nfix + 1
-                indfix=matlabarray([indfix,j])
+                indfix=concatenate_([indfix,j],axis=1)
                 vstatus[j]=c.alwaysfixed
                 xfix[j]=lb[j]
                 continue
@@ -202,7 +203,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             if (tempu <= Delta0):
                 x0[j]=ub[j] - Delta0
     if (scaleX):
-        for i in arange_(1,n).reshape(-1):
+        for i in range(0,n):
             if (scalefacX[i] > 0):
                 x0[i]=x0[i] * scalefacX[i]
                 lb[i]=lb[i] * scalefacX[i]
@@ -215,7 +216,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             disp_('No free variables. Please, enlarge search space!')
             info.flag=2
             return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
-        indfree=setdiff_(arange_(1,n),indfix)
+        indfree=setdiff_(arange(0,n),indfix)
         x0=x0[indfree]
         if (cur_degree == plin):
             cur_degree=nfree + 1
@@ -236,23 +237,23 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         plin=nfree + 1
         pdiag=2 * nfree + 1
         pquad=((nfree + 1) * (nfree + 2)) / 2
-        n=copy_(nfree)
+        n=copy(nfree)
     else:
-        indfree=arange_(1,n)
-    x=copy_(x0)
+        indfree=arange(0,n)
+    x=copy(x0)
     getfY=1
     while (getfY):
 
         if (options.verbose > 2):
             disp_(' Degree of the initial  model = ',int2str_(cur_degree))
-        if (strcmp_(initial_Y,'random')):
-            Y[:,1]=x0
+        if initial_Y=='random':
+            Y[:,0]=x0
             ill_init=1
             while (ill_init):
 
-                Y[:,2:cur_degree]=- ones_(n,cur_degree - 1) + 2 * rand_(n,cur_degree - 1)
-                for j in arange_(2,cur_degree).reshape(-1):
-                    Y[:,j]=Y[:,1] + Y[:,j] * (Delta0 / norm_(Y[:,j]))
+                Y[:,1:cur_degree]=- ones_(n,cur_degree - 1) + 2 * rand_(n,cur_degree - 1)
+                for j in range(1,cur_degree):
+                    Y[:,j]=Y[:,0] + Y[:,j]*(Delta0 / norm_(Y[:,j]))
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
                 if (cond_(RZ) < kappa_ill):
                     ill_init=0
@@ -260,75 +261,64 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,Delta0,factor_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,1,kappa_ill,nargout=8)
             poisedness_known=1
         else:
-            if (strcmp_(initial_Y,'simplx')):
+            if initial_Y=='simplx':
                 I=eye_(n)
-                if isempty_(Y):								
-                    Y = copy_(x0)								
-                else:
-                    Y[:,1]=x0
+                Y=zeros_(n,n+1)
+                Y[:,0]=x0.reshape(-1)
 #                    Y[:,1]=x0.T
-                for j in arange_(1,n).reshape(-1):
+                for j in range(0,n):
                     step1=- Delta0
-                    if isempty_(Y):
-                        Y=x0 + step1 * I[:,j]
-                    else:
-                        Y[:,j + 1]=x0 + step1 * I[:,j]
+                    Y[:,j + 1]=x0.reshape(-1) + step1 * I[:,j]
                     if (cur_degree >= pdiag):
-                        step2=copy_(Delta0)
-                        if isempty_(Y):
-                            Y=x0 + step2 * I[:,j]
-                        else:
-                            Y[:,j + 1 + n]=x0 + step2 * I[:,j]
+                        step2=copy(Delta0)
+                        Y[:,j + 1 + n]=x0.reshape(-1) + step2 * I[:,j]
                 if (cur_degree == pquad):
                     k=2 * n + 2
-                    for j in arange_(1,n).reshape(-1):
-                        for jj in arange_(j + 1,n).reshape(-1):
-                            if isempty_(Y):
-                                Y=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
-                            else:
-                                Y[:,k]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
+                    for j in range(0,n):
+                        for jj in range(j + 1,n+1):
+                            Y[:,k-1]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
                             k=k + 1
                 QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
                 poisedness_known=1
         poised_model=1
-        X=matlabarray([])
-        fX=matlabarray([])
-        ciX=matlabarray([])
-        ceX=matlabarray([])
-        ind_Y=matlabarray([])
-        for i in arange_(1,cur_degree).reshape(-1):
-            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
+        X=array([])
+        fX=array([])
+        ciX=array([])
+        ceX=array([])
+        ind_Y=array([])
+        for i in range(0,cur_degree):
+            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,[i]],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[1],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
-            if (abs_(fX[i]) > 1e+25):
+            if (abs(fX[i]) > 1e+25):
                 break
-            if (i == cur_degree):
+            if (i == cur_degree-1):
                 getfY=0
-            ind_Y=concatenate_([ind_Y,matlabarray([i])],axis=1)
-        fY=copy_(fX)
-        ciY=copy_(ciX)
-        ceY=copy_(ceX)
+            ind_Y=concatenate_([ind_Y,array([i])],axis=1)
+        fY=copy(fX)
+        ciY=copy(ciX)
+        ceY=copy(ceX)
         xstatus=xstatus.T
         dstatus=dstatus.T
         if (getfY):
             Delta0=gamma1 * Delta0
             if (Delta0 < stallfact * norm_(x0)):
-                disp_('Error: cannot find enough finite objective function values','in the neighbourhood of the starting point! Terminating.')
+                disp_('Error: cannot find enough finite objective function values',' in the neighbourhood of the starting point! Terminating.')
                 if (nfix > 0):
                     I=eye_(n + nfix)
-                    x=I[:,indfix] * xl_(indfix) + I[:,indfree] * x
-                    gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree] * gx
+                    x=I[:,indfix] * xl_(indfix) + I[:,indfree].dot( x )
+                    gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree].dot( gx )
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
 
-    fx0=fY[1]
+    fx0=copy(fY[0])
     info.f=fx0
-    m=copy_(cur_degree)
-    i_xbest=1
+    m=copy(cur_degree)
+    i_xbest=0
     initmodel=zeros_(1,pquad)
-    rhsY=concatenate_([fY,ciY,ceY], axis=0)
+    rhsY=concatenate_([fY.reshape(1,-1),ciY,ceY], axis=0)
     fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
-    gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+    gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
     normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
     if any_(size_(gx) != [n,1]):
         if options.verbose:
@@ -338,24 +328,24 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     info.g=gx
     mi=size_(ciY,1)
     if mi > 0:
-        info.ci=ciY[:,1]
+        info.ci=copy(ciY[:,[0]])
         gci=zeros_(mi,n)
-        for i in arange_(1,mi).reshape(-1):
-            gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
-        info.ai=gci
+        for i in range(0,mi):
+            gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
+        info.ai=copy(gci)
     else:
-        info.ci=matlabarray([])
-        info.ai=matlabarray([])
+        info.ci=array([])
+        info.ai=array([])
     me=size_(ceY,1)
     if me > 0:
-        info.ce=ceY[:,1]
+        info.ce=copy(ceY[:,[0]])
         gce=zeros_(me,n)
-        for i in arange_(1,me).reshape(-1):
-            gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
+        for i in range(0,me):
+            gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
         info.ae=gce
     else:
-        info.ce=[]
-        info.ae=[]
+        info.ce=array([])
+        info.ae=array([])
     fprintf_('\n')
     fprintf_('**************************************************************************************\n')
     fprintf_('*                                                                                    *\n')
@@ -389,7 +379,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         if isinstance(func, types.FunctionType):
             func_name=str(func)
         else:
-            func_name=copy_(func)
+            func_name=copy(func)
         fprintf_(options.fout,'  name: "%s"\n'%(func_name))
         fprintf_(options.fout,'  dimensions:\n')
         fprintf_(options.fout,'  . variables (n):               %4i\n'%(n))
@@ -401,12 +391,12 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             fprintf_(options.fout,'  . equality constraints (me):   %4i\n'%(me))
         fprintf_(options.fout,'  required tolerances for optimality:\n')
         if nb + mi + me > 0:
-            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol[1]))
-            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol[2]))
+            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol[0]))
+            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol[1]))
             if nb + mi > 0:
-                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol[3]))
+                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol[2]))
         else:
-            fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol[1]))
+            fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol[0]))
         fprintf_(options.fout,'  counters:\n')
         fprintf_(options.fout,'  . max iterations                  %4i\n'%(options.miter))
         fprintf_(options.fout,'  . max function evaluations        %4i\n'%(options.msimul))
@@ -453,7 +443,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             if options.verbose >= 4:
                 fprintf_(options.fout,'  . |lm|_2                          %8.2e (default: least-squares value)\n'%(norm_(lm)))
         else:
-            lm=copy_(lm0)
+            lm=copy(lm0)
             if options.verbose >= 4:
                 fprintf_(options.fout,'  . |lm|_2                          %8.2e\n'%(norm_(lm)))
     feas,compl,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
@@ -464,11 +454,11 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         if nb + mi + me > 0:
             fprintf_(options.fout,'  . |glag|_inf                      %8.2e\n'%(norm_(info.glag,inf)))
         if nb:
-            fprintf_(options.fout,'  . |x^#|_inf                       %8.2e\n'%(norm_(feas[1:n],inf)))
+            fprintf_(options.fout,'  . |x^#|_inf                       %8.2e\n'%(norm_(feas[0:n],inf)))
         if mi:
-            fprintf_(options.fout,'  . |ci^#|_inf                      %8.2e\n'%(norm_(feas[n + 1:n + mi],inf)))
+            fprintf_(options.fout,'  . |ci^#|_inf                      %8.2e\n'%(norm_(feas[n:n + mi],inf)))
         if me:
-            fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'%(norm_(feas[n + mi + 1:n + mi + me],inf)))
+            fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'%(norm_(feas[n + mi:n + mi + me],inf)))
         if nb + mi > 0:
             fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'%(norm_(compl,inf)))
         fprintf_(options.fout,'  tunings:\n')
@@ -482,8 +472,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    #nargin = 28-[func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options].count(None)+len(args)
 #
 #    info = helper.dummyUnionStruct()
-#    info.nsimul = matlabarray([])
-#    Y = matlabarray([])
+#    info.nsimul = array([])
+#    Y = array([])
 #    gamma1 = 0.010000000000000
 #    eps =  2.220446049250313e-16
 #    stallfact=10 * eps
@@ -519,7 +509,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    nb=0
 #    mi=0
 #    me=0
-#    lm=matlabarray([])
+#    lm=array([])
 #    
 #    info.g=[]
 #    info.ai=[]
@@ -527,9 +517,9 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    info.hl=[]
 #    info.niter=0
 #    shift_Y=1
-#    x=copy_(np.NaN)
-#    fx=copy_(np.NaN)
-#    gx=copy_(np.NaN)
+#    x=copy(np.NaN)
+#    fx=copy(np.NaN)
+#    gx=copy(np.NaN)
 #    checkoptions=1
 #    if isempty_(options):
 #        checkoptions=0
@@ -538,7 +528,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #        return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
 #    info.nsimul[1:values.nsimultype]=0
 #    n=size_(x0,1)
-#    #Y = zeros_(matlabarray([n, n+1]))								
+#    #Y = zeros_(array([n, n+1]))								
 #    #print "n", n	
 #    #print "Y initialized:\n", Y				
 #    if size_(x0,2) != 1:
@@ -560,7 +550,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    nb=sum_(min_((lb[1:n] > - options.inf) + (ub[1:n] < options.inf),1))
 #    zero=0.0
 #    nfix=0
-#    indfix=matlabarray([])
+#    indfix=array([])
 #    xfix=zeros_(n,1)
 #    vstatus=zeros_(n,1)
 #    temp=zeros_(n,1)
@@ -573,7 +563,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #        if (temp[j] < Delta0 + Delta0):
 #            if (temp[j] == zero):
 #                nfix=nfix + 1
-#                indfix=matlabarray([indfix,j])
+#                indfix=array([indfix,j])
 #                vstatus[j]=c.alwaysfixed
 #                xfix[j]=lb[j]
 #                continue
@@ -622,10 +612,10 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #        plin=nfree + 1
 #        pdiag=2 * nfree + 1
 #        pquad=((nfree + 1) * (nfree + 2)) / 2
-#        n=copy_(nfree)
+#        n=copy(nfree)
 #    else:
 #        indfree=arange_(1,n)
-#    x=copy_(x0)
+#    x=copy(x0)
 #    getfY=1
 #    while (getfY):
 #
@@ -659,7 +649,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #                    #print "Y concatenation"																				
 #                else:
 #                    Y[:,1]=x0.T
-#                #Y = copy_(x0)#concatenate_([Y,x0], axis=1)																
+#                #Y = copy(x0)#concatenate_([Y,x0], axis=1)																
 #                #print "Y after\n", Y																
 #                for j in arange_(1,n).reshape(-1):
 #                    step1=- Delta0
@@ -697,7 +687,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #                    #print "Y after", Y																				
 #																								
 #                    if (cur_degree >= pdiag):
-#                        step2=copy_(Delta0)
+#                        step2=copy(Delta0)
 #                        Y[:,j + 1 + n]=x0 + step2 * I[:,j]
 #                if (cur_degree == pquad):
 #                    k=2 * n + 2
@@ -712,24 +702,24 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #                poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,1,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
 #                poisedness_known=1
 #        poised_model=1
-#        X=matlabarray([])
-#        fX=matlabarray([])
-#        ciX=matlabarray([])
-#        ceX=matlabarray([])
-#        ind_Y=matlabarray([])
+#        X=array([])
+#        fX=array([])
+#        ciX=array([])
+#        ceX=array([])
+#        ind_Y=array([])
 #        for i in arange_(1,cur_degree).reshape(-1):
 #            #print "Y[:,i]", Y[:,i]									
 #            X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,i].T,i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[2],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
 #            if info.flag:
 #                return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
-#            if (abs_(fX[i]) > 1e+25):
+#            if (abs(fX[i]) > 1e+25):
 #                break
 #            if (i == cur_degree):
 #                getfY=0
-#            ind_Y=concatenate_([ind_Y,matlabarray([i])])#matlabarray([ind_Y,i]) #concatenade here!!!
-#        fY=copy_(fX)
-#        ciY=copy_(ciX)
-#        ceY=copy_(ceX)
+#            ind_Y=concatenate_([ind_Y,array([i])])#array([ind_Y,i]) #concatenade here!!!
+#        fY=copy(fX)
+#        ciY=copy(ciX)
+#        ceY=copy(ceX)
 #        xstatus=xstatus.T
 #        dstatus=dstatus.T
 #        if (getfY):
@@ -744,7 +734,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #
 #    fx0=fY[1]
 #    info.f=fx0
-#    m=copy_(cur_degree)
+#    m=copy(cur_degree)
 #    i_xbest=1
 #    initmodel=zeros_(1,pquad)
 #    #print "fy:\n", fY
@@ -752,7 +742,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #    #print "ceY:\n", ceY
 #    #skibbe = concatenate_([fY,ciY,ceY], axis=1)
 #    #print "concatenate:", skibbe
-#    rhsY=concatenate_([fY,ciY,ceY], axis=0)#matlabarray([[fY],[ciY],[ceY]])
+#    rhsY=concatenate_([fY,ciY,ceY], axis=0)#array([[fY],[ciY],[ceY]])
 #    fcmodel=bcdfo_computeP_(QZ,RZ,Y,rhsY,whichmodel,initmodel,ind_Y,0,0,gx,scale,shift_Y,Delta0)
 #    gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
 #    #print "lb", lb
@@ -776,8 +766,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #            gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
 #        info.ai=gci
 #    else:
-#        info.ci=matlabarray([])
-#        info.ai=matlabarray([])
+#        info.ci=array([])
+#        info.ai=array([])
 #    #print "size_(ceY,1)", size_(ceY,1)
 #    me=size_(ceY,1)
 #    if me > 0:
@@ -826,7 +816,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #        if isa_(func,char('function_handle')):
 #            func_name=func2str_(func)
 #        else:
-#            func_name=copy_(func)
+#            func_name=copy(func)
 #        fprintf_(options.fout,char('  name: "%s"\\n'),func_name)
 #        fprintf_(options.fout,char('  dimensions:\\n'))
 #        fprintf_(options.fout,char('  . variables (n):               %4i\\n'),n)
@@ -893,7 +883,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 #            if options.verbose >= 4:
 #                fprintf_(options.fout,char('  . |lm|_2                          %8.2e (default: least-squares value)\\n'),norm_(lm))
 #        else:
-#            lm=copy_(lm0)
+#            lm=copy(lm0)
 #            if options.verbose >= 4:
 #                fprintf_(options.fout,char('  . |lm|_2                          %8.2e\\n'),norm_(lm))
 #    #print "lb", lb[indfree]
