@@ -343,17 +343,6 @@ def size_(a, b=0, nargout=1):
     except IndexError:
         return 1
 
-def strread_(s, format="", nargout=1):
-    if format == "":
-        a = [float(x) for x in s.split()]
-        return tuple(a) if nargout > 1 else np.asanyarray([a])
-    raise NotImplementedError
-
-def strrep_(a,b,c):
-    if isinstance(a,str):
-        return a.replace(b,c)
-    raise NotImplementedError # cell arrays
-
 def sum_(a, dim=None):
     if dim is None:
         return a.sum(0)
@@ -495,27 +484,6 @@ def setdiff_(a,b):
 def isfield_(obj, name):
     return obj.__dict__.has_key(str(name))
     
-def lower___(strng):
-    #print "Warning: Lower just returns the string as it is"
-    return strng
-    
-def lower__(strng):
-    return lower___(strng)
-    
-def regexprep___(string1, string2, string3):
-    #print "Warning: regexprep__ just returns the string(1) as it is"
-    return string1
-    
-def regexprep__(string1, string2, string3):
-    return regexprep___(string1, string2, string3)
-
-def strtrim___(strng):
-    #print "Warning: strtrim___ just returns the string as it is"
-    return strng
-
-def strtrim__(strng):
-    return strtrim___(strng)
-    
 def any_(A):
     return A.any()
     
@@ -536,15 +504,6 @@ def exp_(x):
     
 def num2str_(num):
     return str(num)
-
-def strcmp_(s1, s2):    
-    #print "compare strings:"
-    #print "s1", s1
-    #print "s2", s2
-    if s1 == s2:
-        return 1
-    else:
-        return 0        
 
 def null_(A, eps=1e-15):
     u, s, vh = scipy.linalg.svd(A)
@@ -598,7 +557,7 @@ def strcat_(*args):
         ret = ret + str(arg)
         
     #print "strcat_:", ret
-    return char(ret)
+    return ret
     
     
 def randn_(msg, number):
