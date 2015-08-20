@@ -129,7 +129,7 @@ def find_(a,n=None,d=None,nargout=1):
         raise NotImplementedError
 
     elif nargout == 1:
-        i = np.flatnonzero(a).reshape(1,-1)
+        i = np.flatnonzero(a).reshape(-1,1)
         if isempty_(i):
             return []
                                                 
@@ -142,7 +142,7 @@ def find_(a,n=None,d=None,nargout=1):
             i = i.take(n)
             j = j.take(n)
 
-        return np.array(i).reshape(1,-1), np.array(j).reshape(1,-1)
+        return np.array(i).reshape(-1,1), np.array(j).reshape(-1,1)
     
     else:
         raise NotImplementedError

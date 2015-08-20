@@ -35,10 +35,10 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     crit_val=0
     pos=0
     for i in range(0,lc):
-        j=choice[0,i]
+        j=choice[i]
         if (criterion == 'weighted'):
             if (succ == 1):
-                cv=norm_(Y[:,j].reshape(-1,1) - x) ** 2 * abs(Lvals[j])
+                cv=norm_(Y[:,j] - x) ** 2 * abs(Lvals[j])
             else:
                 cv=norm_(Y[:,j] - Y[:,0]) ** 2 * abs(Lvals[j])
         else:
@@ -47,7 +47,7 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
             else:
                 if (criterion == 'distance'):
                     if (succ == 1):
-                        cv=norm_(Y[:,j].reshape(-1,1) - x)
+                        cv=norm_(Y[:,j] - x)
                     else:
                         cv=norm_(Y[:,j] - Y[:,0])
         if (cv > crit_val):
@@ -55,5 +55,5 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
             crit_val=copy(cv)
     if (pos == 0):
         return QZ,RZ,Y,pos,xbase,scale
-    QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,x,Y,pos,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
+    QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,x,Y,int(pos),xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
     return QZ,RZ,Y,pos,xbase,scale
