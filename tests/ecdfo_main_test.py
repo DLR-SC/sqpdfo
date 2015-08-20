@@ -848,35 +848,35 @@ import sys
 sys.path.append("../")
 import unittest
 from evalfgh import evalfgh_
-from runtime import matlabarray
 from ecdfo_main import *
 from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 import helper
+from numpy import array
 
 
 
 class dummyInfo():
     def __init__(self):        
-        self.g = matlabarray([
+        self.g = array([
      [0.0],
      [1.0],
      [0.0]])
 
-        self.ai = matlabarray([])
-        self.ae = matlabarray([
+        self.ai = array([])
+        self.ae = array([
          [1.0,     1.0,     1.0],
         [1.0 ,    2.0,     3.0]])
-        self.hl = matlabarray( [])
+        self.hl = array( [])
         self.niter = 0
         self.flag = 0
-        self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray( [])
-        self.ce =  matlabarray([
+        self.nsimul = array( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array( [])
+        self.ce =  array([
          [2],
         [3]])
         self.f = 1.500000000000000
-        self.glag =  matlabarray([
+        self.glag =  array([
 [-0.333333333013890],
 [   0.666666666736111],
 [  -0.333333333513889]])
@@ -884,18 +884,18 @@ class dummyInfo():
 class correctInfo():
     def __init__(self):
 
-        self.g = matlabarray([-1.000001597463464, 0.000000267687146, 0.999990706694728]).T
-        self.ai = matlabarray( [])
-        self.ae = matlabarray([[1.000000000001365,   1.000000000001130,   0.999999999995923],
+        self.g = array([[-1.000001597463464, 0.000000267687146, 0.999990706694728]]).T
+        self.ai = array( [])
+        self.ae = array([[1.000000000001365,   1.000000000001130,   0.999999999995923],
    [0.999999999985469,   1.999999999999835,   2.999999999990382]])
-        self.hl = matlabarray( [])
+        self.hl = array( [])
         self.niter = 4
         self.flag = 0
-        self.nsimul = matlabarray([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray( [])
-        self.ce =  1.0e-15 * matlabarray([ 0.222044604925031, -0.111022302462516]).T
+        self.nsimul = array([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array( [])
+        self.ce =  1.0e-15 * array([[ 0.222044604925031, -0.111022302462516]]).T
         self.f = 0.500000000000000
-        self.glag =    1.0e-15 * matlabarray([0.666133814775094, 0.661787688722732, -0.555111512312578]).T
+        self.glag =    1.0e-15 * array([[0.666133814775094, 0.661787688722732, -0.555111512312578]]).T
         self.glagn = 6.661338147750939e-16
         self.feasn = 2.220446049250313e-16
         self.compl = 0
@@ -918,7 +918,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.nb = 2
         self.mi = 0
         self.me = 2
-        self.lm = matlabarray([ 
+        self.lm = array([ 
 [                  0.0],
 [                   0.0],
 [                   0.0],
@@ -926,34 +926,34 @@ class Test_ecdfo_main(unittest.TestCase):
 [  -0.000000000249999]])
         self.nitold = 0
         self.nit = 0
-        self.i_xbest = 1
-        self.lb = matlabarray([
+        self.i_xbest = 0
+        self.lb = array([
   [-0.500000000000000],
    [                0.0],
     [            -np.Inf]])
-        self.ub = matlabarray([
+        self.ub = array([
    [np.Inf],
    [np.Inf],
    [np.Inf]])
-        self.m = 4
-        self.X = matlabarray([
+        self.m = 3
+        self.X = array([
    [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
    [1.000000000000000,   1.000000000000000,                   0.0,   1.000000000000000],
    [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
-        self.fX = matlabarray([1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
-        self.ciX = matlabarray([])
-        self.ceX = matlabarray([
+        self.fX = array([1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
+        self.ciX = array([])
+        self.ceX = array([
      [2.0,     1.0,     1.0,     1.0],
      [3.0,     2.0,     1.0,     0.0]])
-        self.ind_Y = matlabarray([1,     2,     3,     4])
-        self.QZ = matlabarray([
+        self.ind_Y = array([0,     1,     2,     3])
+        self.QZ = array([
      [1.0,     0.0,     0.0,     0.0],
      [0.0,     1.0,     0.0,     0.0],
      [0.0,     0.0,     1.0,     0.0],
      [0.0,     0.0,     0.0,     1.0]])
 
 
-        self.RZ = matlabarray([
+        self.RZ = array([
      [1.0,     1.0,     1.0,     1.0],
      [0.0,    -1.0,     0.0,     0.0],
      [0.0 ,    0.0,    -1.0,     0.0],
@@ -963,11 +963,11 @@ class Test_ecdfo_main(unittest.TestCase):
         self.neval = 0
         self.maxeval = 600
         self.maxit = 600
-        self.fcmodel = matlabarray([
+        self.fcmodel = array([
    [1.500000000000000,                   0.0,   1.000000000000000,                   0.0],
    [2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
    [3.000000000000000,   1.000000000000000,   2.000000000000000,   3.000000000000000]])
-        self.gx = matlabarray([
+        self.gx = array([
      [0.0],
      [1.0],
      [0.0]])
@@ -1004,35 +1004,35 @@ class Test_ecdfo_main(unittest.TestCase):
         self.lSolver = 1
         self.stratLam = 1
         self.eps_current = 1.000000000000000e-05
-        self.vstatus = matlabarray([
+        self.vstatus = array([
      [0],
      [0],
      [0]])
-        self.xstatus = matlabarray([
+        self.xstatus = array([
      [1],
      [1],
      [1],
      [1]])
-        self.sstatus = matlabarray([
+        self.sstatus = array([
      [1],
      [1],
      [1],
      [1]])
-        self.dstatus = matlabarray([
+        self.dstatus = array([
      [0],
      [0],
      [0],
      [0]])
         self.ndummyY = 0
-        self.sspace_save = matlabarray([])
-        self.xspace_save = matlabarray([])
-        self.xfix = matlabarray([
+        self.sspace_save = array([])
+        self.xspace_save = array([])
+        self.xfix = array([
      [0],
      [0],
      [0]])
         self.fxmax = 1.000000000000000e+25
         self.poised_model = 1
-        self.M = matlabarray([
+        self.M = array([
      [1.0,     0.0,     0.0],
      [0.0,     1.0,     0.0],
      [0.0,     0.0,     1.0]])
@@ -1056,10 +1056,10 @@ class Test_ecdfo_main(unittest.TestCase):
         self.hardcons = 0
         self.noisy = 0
         self.scaleX = 0
-        self.scalefacX = matlabarray([ 1,     1,     1])
+        self.scalefacX = array([ 1,     1,     1])
         self.CNTsin = 0
         self.shrink_Delta = 1
-        self.scale = matlabarray([
+        self.scale = array([
      [1],
      [1],
      [1],
@@ -1084,78 +1084,77 @@ class Test_ecdfo_main(unittest.TestCase):
         
         
         correctnit = 0
-        correcti_xbest = 6
-        correctx = matlabarray([  -0.500000000000000, 0,  0.500000000000000]).T
-        correctfx = matlabarray([0.500000000000000])
-        correctm = 11
-        correctX = matlabarray([
+        correcti_xbest = 5
+        correctx = array([  -0.500000000000000, 0,  0.500000000000000]).T
+        correctfx = array([0.500000000000000])
+        correctm = 10
+        correctX = array([
    [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.003054026564966,  -0.500000000000000, -0.500002253056410,  -0.500000286192314,  -0.500009741475754,  -0.499999900588771,    -0.499990015903692],
    [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000,                   0,                   0, 0.000000442034118 , -0.000009988577082 ,  0.000000127297985 ,  0.000009999638990,    -0.000000045756443],
    [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000,   0.315521468125839,   0.500000000000000, 0.499990267148911 ,  0.499999612175087 ,  0.500002260696260 ,  0.500000134714239,     0.499999438103251]])
-        correctfX = matlabarray([   1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000,   0.099563123926544,   0.500000000000000, 0.499992520305321,   0.499999898467405,   0.500000035403030,   0.500012002272037,   0.499989454106944])
-        correctciX = matlabarray( [])
-        correctceX = matlabarray([
+        correctfX = array([   1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000,   0.099563123926544,   0.500000000000000, 0.499992520305321,   0.499999898467405,   0.500000035403030,   0.500012002272037,   0.499989454106944])
+        correctciX = array( [])
+        correctceX = array([
   [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   -0.000007353481509, 0.000010233764458,     0.000009376443116],
   [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,  -0.000002704791005,  0.000020502831926 ,    0.000008206893176]])
-        correctind_Y = matlabarray([   6,     9, 10,     7,     8,    11])
+        correctind_Y = array([   6,     9, 10,     7,     8,    11])
         correctDelta = 5.672511970824019
         correcteps_current =  1.000000000000000e-05
         correctcur_degree =  6
-        correctfcmodel = matlabarray([
+        correctfcmodel = array([
    [0.500000000000000,  -0.000010001181020,   0.000000000002677,   0.000010001072100,   0.000000000222233,   0.000000000197548],
    [0.000000000000000,   0.000010001165044,   0.000010001165044,   0.000010001165044,   0.000000000000000,  -0.000000000000000],
   [-0.000000000000000,   0.000010001165043,   0.000020002330087,   0.000030003495131,   0.000000000000000,   0.000000000000000]])
-        correctgx = matlabarray([ -1.000001597463464, 0.000000267687146, 0.999990706694728]).T
+        correctgx = array([ -1.000001597463464, 0.000000267687146, 0.999990706694728]).T
         correctnormgx = 1.000001597463464
-        correctvstatus = matlabarray([  0,  0,  0]).T
-        correctxstatus = matlabarray([ 0,  0, 0, 0, 0, 1, 1, 1, 1,  1, 1]).T
-        correctsstatus = matlabarray([ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]).T
-        correctdstatus = matlabarray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).T
-        correctM =   1.0e+05 * matlabarray([
+        correctvstatus = array([  0,  0,  0]).T
+        correctxstatus = array([ 0,  0, 0, 0, 0, 1, 1, 1, 1,  1, 1]).T
+        correctsstatus = array([ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]).T
+        correctdstatus = array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).T
+        correctM =   1.0e+05 * array([
    [3.981667193893546,                   0,                   0],
    [                0,   6.903934759857267,                   0],
    [                0,                  0 ,                  0]])
 
         correctndummyY =  0
-        correctsspace_save = matlabarray(  [])
-        correctxspace_save = matlabarray(  [])
+        correctsspace_save = array(  [])
+        correctxspace_save = array(  [])
         correctmsg = "Convergence in 7 evaluations of the objective function."
         correctCNTsin =  0
         correctneval = 7
-        correctlm = matlabarray([0, -0.000005713064576, 0, 1.999997749517402, -0.999996152071198]).T
+        correctlm = array([0, -0.000005713064576, 0, 1.999997749517402, -0.999996152071198]).T
         
         correctinfo = correctInfo()
         
         self.assertEqual(nit, correctnit)
-        self.assertTrue(compare_matlabarray(correctx, x, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctfx, fx, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctx, x, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctfx, fx, self.abs_tol, self.rel_tol))
         
         self.assertEqual(correcti_xbest, i_xbest)
-        
         #Difference due to different convergence paths in auskommentierten Zeilen
-        self.assertTrue(compare_matlabarray(correctm, m, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctX, X, self.abs_tol, 1e-3))
+        self.assertEqual(correctm,m)
+        self.assertTrue(compare_array(correctX, X, self.abs_tol, 1e-3))
         self.assertEqual(correctciX, ciX)
-        self.assertTrue(compare_matlabarray(correctceX, ceX, 1e-4, 1e-3))
-        self.assertTrue(compare_matlabarray(correctind_Y, ind_Y, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctDelta, Delta, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctceX, ceX, 1e-4, 1e-3))
+        self.assertTrue(compare_array(correctind_Y, ind_Y, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctDelta, Delta, self.abs_tol, self.rel_tol))
         self.assertEqual(correcteps_current, eps_current)
         self.assertEqual(correctcur_degree, cur_degree)
-        self.assertTrue(compare_matlabarray(correctfcmodel,fcmodel, self.abs_tol, 1e-4))
-        self.assertTrue(compare_matlabarray(correctgx, gx, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctnormgx, normgx, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctvstatus, vstatus, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctxstatus, xstatus, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctdstatus, dstatus, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctsstatus, sstatus, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctM, M, 2000, 1e-2))
-        self.assertTrue(compare_matlabarray(correctndummyY, ndummyY, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctsspace_save, sspace_save, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctxspace_save, xspace_save, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctfcmodel,fcmodel, self.abs_tol, 1e-4))
+        self.assertTrue(compare_array(correctgx, gx, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctnormgx, normgx, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctvstatus, vstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctxstatus, xstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctdstatus, dstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctsstatus, sstatus, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctM, M, 2000, 1e-2))
+        self.assertTrue(compare_array(correctndummyY, ndummyY, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctsspace_save, sspace_save, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctxspace_save, xspace_save, self.abs_tol, self.rel_tol))
         self.assertEqual(str(correctmsg),str(msg))
-        self.assertTrue(compare_matlabarray(correctCNTsin, CNTsin, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctneval, neval, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_matlabarray(correctlm, lm, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctCNTsin, CNTsin, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctneval, neval, self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(correctlm, lm, self.abs_tol, self.rel_tol))
 
         
         

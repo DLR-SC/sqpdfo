@@ -54,6 +54,7 @@ from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
+from numpy import array
 #except ImportError:
     #from smop.runtime import *
 
@@ -63,110 +64,114 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
     func=copy(func_)
     n=copy(n_)
-    nb=copy_(nb_)
+    nb=copy(nb_)
     mi=copy(mi_)
     me=copy(me_)
-    lm=copy_(lm_)
-    nitold=copy_(nitold_)
-    nit=copy_(nit_)
-    i_xbest=copy_(i_xbest_)
-    lb=copy_(lb_)
-    ub=copy_(ub_)
-    m=copy_(m_)
-    X=copy_(X_)
-    fX=copy_(fX_)
-    ciX=copy_(ciX_)
-    ceX=copy_(ceX_)
-    ind_Y=copy_(ind_Y_)
-    QZ=copy_(QZ_)
-    RZ=copy_(RZ_)
-    delta=copy_(delta_)
-    cur_degree=copy_(cur_degree_)
+    lm=copy(lm_)
+    nitold=copy(nitold_)
+    nit=copy(nit_)
+    i_xbest=copy(i_xbest_)
+    lb=copy(lb_)
+    ub=copy(ub_)
+    m=copy(m_)
+    X=copy(X_)
+    fX=copy(fX_)
+    ciX=copy(ciX_)
+    ceX=copy(ceX_)
+    ind_Y=copy(ind_Y_)
+    QZ=copy(QZ_)
+    RZ=copy(RZ_)
+    delta=copy(delta_)
+    cur_degree=copy(cur_degree_)
     neval=copy(neval_)
-    maxeval=copy_(maxeval_)
-    maxit=copy_(maxit_)
-    fcmodel=copy_(fcmodel_)
-    gx=copy_(gx_)
-    normgx=copy_(normgx_)
-    show_errg=copy_(show_errg_)
-    pquad=copy_(pquad_)
-    pdiag=copy_(pdiag_)
-    plin=copy_(plin_)
-    stallfact=copy_(stallfact_)
-    eps_rho=copy_(eps_rho_)
-    Deltamax=copy_(Deltamax_)
-    rep_degree=copy_(rep_degree_)
-    epsilon=copy_(epsilon_)
+    maxeval=copy(maxeval_)
+    maxit=copy(maxit_)
+    fcmodel=copy(fcmodel_)
+    gx=copy(gx_)
+    normgx=copy(normgx_)
+    show_errg=copy(show_errg_)
+    pquad=copy(pquad_)
+    pdiag=copy(pdiag_)
+    plin=copy(plin_)
+    stallfact=copy(stallfact_)
+    eps_rho=copy(eps_rho_)
+    Deltamax=copy(Deltamax_)
+    rep_degree=copy(rep_degree_)
+    epsilon=copy(epsilon_)
     verbose=copy(verbose_)
-    eta1=copy_(eta1_)
-    eta2=copy_(eta2_)
-    gamma1=copy_(gamma1_)
-    gamma2=copy_(gamma2_)
-    gamma3=copy_(gamma3_)
-    interpol_TR=copy_(interpol_TR_)
-    factor_CV=copy_(factor_CV_)
-    Lambda_XN=copy_(Lambda_XN_)
-    Lambda_CP=copy_(Lambda_CP_)
-    factor_FPU=copy_(factor_FPU_)
-    factor_FPR=copy_(factor_FPR_)
-    Lambda_FP=copy_(Lambda_FP_)
+    eta1=copy(eta1_)
+    eta2=copy(eta2_)
+    gamma1=copy(gamma1_)
+    gamma2=copy(gamma2_)
+    gamma3=copy(gamma3_)
+    interpol_TR=copy(interpol_TR_)
+    factor_CV=copy(factor_CV_)
+    Lambda_XN=copy(Lambda_XN_)
+    Lambda_CP=copy(Lambda_CP_)
+    factor_FPU=copy(factor_FPU_)
+    factor_FPR=copy(factor_FPR_)
+    Lambda_FP=copy(Lambda_FP_)
     criterion_S=copy(criterion_S_)
     criterion_FP=copy(criterion_FP_)
     criterion_CP=copy(criterion_CP_)
-    mu=copy_(mu_)
-    theta=copy_(theta_)
-    eps_TR=copy_(eps_TR_)
-    eps_L=copy_(eps_L_)
-    lSolver=copy_(lSolver_)
-    stratLam=copy_(stratLam_)
-    eps_current=copy_(eps_current_)
-    vstatus=copy_(vstatus_)
-    xstatus=copy_(xstatus_)
-    sstatus=copy_(sstatus_)
-    dstatus=copy_(dstatus_)
-    ndummyY=copy_(ndummyY_)
-    sspace_save=copy_(sspace_save_)
-    xspace_save=copy_(xspace_save_)
-    xfix=copy_(xfix_)
-    fxmax=copy_(fxmax_)
-    poised_model=copy_(poised_model_)
-    M=copy_(M_)
-    kappa_ill=copy_(kappa_ill_)
-    kappa_th=copy_(kappa_th_)
-    eps_bnd=copy_(eps_bnd_)
-    poised=copy_(poised_)
-    Y_radius=copy_(Y_radius_)
+    mu=copy(mu_)
+    theta=copy(theta_)
+    eps_TR=copy(eps_TR_)
+    eps_L=copy(eps_L_)
+    lSolver=copy(lSolver_)
+    stratLam=copy(stratLam_)
+    eps_current=copy(eps_current_)
+    vstatus=copy(vstatus_)
+    xstatus=copy(xstatus_)
+    sstatus=copy(sstatus_)
+    dstatus=copy(dstatus_)
+    ndummyY=copy(ndummyY_)
+    sspace_save=copy(sspace_save_)
+    xspace_save=copy(xspace_save_)
+    xfix=copy(xfix_)
+    fxmax=copy(fxmax_)
+    poised_model=copy(poised_model_)
+    M=copy(M_)
+    kappa_ill=copy(kappa_ill_)
+    kappa_th=copy(kappa_th_)
+    eps_bnd=copy(eps_bnd_)
+    poised=copy(poised_)
+    Y_radius=copy(Y_radius_)
     c=copy(c_)
     level=copy(level_)
-    whichmodel=copy_(whichmodel_)
-    hardcons=copy_(hardcons_)
-    noisy=copy_(noisy_)
-    scaleX=copy_(scaleX_)
-    scalefacX=copy_(scalefacX_)
-    CNTsin=copy_(CNTsin_)
-    shrink_Delta=copy_(shrink_Delta_)
-    scale=copy_(scale_)
-    shift_Y=copy_(shift_Y_)
+    whichmodel=copy(whichmodel_)
+    hardcons=copy(hardcons_)
+    noisy=copy(noisy_)
+    scaleX=copy(scaleX_)
+    scalefacX=copy(scalefacX_)
+    CNTsin=copy(CNTsin_)
+    shrink_Delta=copy(shrink_Delta_)
+    scale=copy(scale_)
+    shift_Y=copy(shift_Y_)
     info=copy(info_)
     options=copy(options_)
     values=copy(values_)
 
-    old_delta=copy_(delta)
-    sigma=matlabarray([[1]])
+    old_delta=copy(delta)
+    sigma=1
     rho_factor=0.3
-    tau1=copy_(gamma2)
-    tau2=copy_(gamma3)
+    tau1=copy(gamma2)
+    tau2=copy(gamma3)
     tau3=5
-    constrained_pbl=copy_(me)
+    constrained_pbl=copy(me)
     null_step=0
     merit=info.f + sigma * norm_(info.ce)
     msg='Unexpected message from ecdfo_main'
-    m=size_(X,2)
+    m=size_(X,2)-1
     indfree=find_(vstatus == c.free)
     indfix=find_(vstatus >= c.fixed)
     nfix=length_(indfix)
     Y=X[indfree,ind_Y]
     x=X[indfree,i_xbest]
+    if not isempty_(indfree):
+        indfree=indfree.reshape(-1)
+    if not isempty_(indfix):
+        indfix=indfix.reshape(-1)
     n=size_(Y,1)
     fY=fX[ind_Y]
     fx=fX[i_xbest]
@@ -175,31 +180,31 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     norms=0
     pred=0
     if mi > 0:
-        ciY=ciX[:,ind_Y]
+        ciY=copy(ciX[:,ind_Y])
     else:
-        ciY=matlabarray([])
-        gci=matlabarray([])
+        ciY=array([])
+        gci=array([])
     if me > 0:
-        ceY=ceX[:,ind_Y]
+        ceY=copy(ceX[:,ind_Y])
     else:
-        ceY=matlabarray([])
-        gce=matlabarray([])
-    radius_has_been_rejected=copy_(false)
+        ceY=array([])
+        gce=array([])
+    radius_has_been_rejected=copy(false)
     while 1:
 
         if info.niter >= options.miter:
             info.flag=values.stop_on_max_iter
             ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-        if info.nsimul[2] >= options.msimul:
+        if info.nsimul[1] >= options.msimul:
             info.flag=values.stop_on_max_simul
             ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-        xk=copy_(x)
+        xk=copy(x)
         lbounds=- inf * ones_(size_(x))
         ubounds=inf * ones_(size_(x))
-        ilb=abs_(lb[indfree] - x) < 1e-05
-        iub=abs_(ub[indfree] - x) < 1e-05
+        ilb=(abs(lb[indfree] - x) < 1e-05).reshape(-1)
+        iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
         lbounds[ilb]=lb[indfree[ilb]]
         ubounds[iub]=ub[indfree[iub]]
         lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -216,7 +221,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 fprintf_(options.fout,'  feasibility     = %12.5e\n'%(info.feasn))
             else:
                 fprintf_(options.fout,' |grad f| = %12.5e\n'%(info.glagn))
-        if ((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3])) or delta <= epsilon * 1e-05 or (pred == - 1.0):
+        if ((info.glagn <= options.tol[0]) and (info.feasn <= options.tol[1]) and (info.compl <= options.tol[2])) or delta <= epsilon * 1e-05 or (pred == - 1.0):
             augment=rep_degree - cur_degree
             if (augment <= 0):
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
@@ -224,7 +229,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
                     disp_('error on gradient before set improvement = ',num2str_(errg))
-                if ((((info.glagn <= options.tol[1]) and (info.feasn <= options.tol[2]) and (info.compl <= options.tol[3]) and errg <= epsilon) or delta <= epsilon * 1e-05) and strcmp_(level,'toplevel')):
+                if (((info.glagn <= options.tol[0]) and (info.feasn <= options.tol[1]) and (info.compl <= options.tol[2]) and errg <= epsilon) or delta <= epsilon * 1e-05) and level=='toplevel':
                     info.niter=info.niter + 1
                     itype='conv'
                     ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -242,7 +247,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             if (normgx <= epsilon):
                 effective_FPR=1
             else:
-                effective_FPR=copy_(factor_FPR)
+                effective_FPR=copy(factor_FPR)
             if (augment > 0):
                 itype='augm'
                 if (info.glagn <= epsilon):
@@ -250,17 +255,17 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         delta=epsilon / sqrt_(n)
                         eps_current=epsilon / sqrt_(n)
                     else:
-                        delta=copy_(epsilon)
-                        eps_current=copy_(epsilon)
+                        delta=copy(epsilon)
+                        eps_current=copy(epsilon)
                 ynew=- delta * ones_(n,1) + 2 * delta * rand_(n,1)
-                cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(ynew,Y[:,1:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
-                ind_Y[cur_degree]=cur_degree
+                cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(ynew,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
+                ind_Y[cur_degree-1]=cur_degree-1
                 if (hardcons):
                     ynew,improvement=bcdfo_find_new_yj_bc_(QZ,RZ,Y,cur_degree,delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
                 else:
                     ynew,improvement=bcdfo_find_new_yj_(QZ,RZ,Y,cur_degree,delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
                 QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ynew,Y,cur_degree,xbase,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=5)
-                replaced=matlabarray([cur_degree])
+                replaced=array([cur_degree-1])
             else:
                 if (info.glagn <= factor_CV * epsilon):
                     if (lSolver == 2):
@@ -276,41 +281,44 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
                 disp_(' poisedness(Y) = ',num2str_(poised))
             poised_model=1
-            for i in arange_(1,length_(replaced)).reshape(-1):
+            for i in range(0,length_(replaced)):
                 j=replaced[i]
                 m=m + 1
                 xstatus[ind_Y[j]]=c.unused
                 ind_Y[j]=m
-                xstatus[m]=c.inY
-                X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,j],m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
+                try:
+                    xstatus[m]=c.inY
+                except IndexError:
+                    concatenate_([xstatus,[m]])
+                X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,[j]],m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
                 fY[j]=fX[m]
                 if mi > 0:
-                    ciY[:,j]=info.ci.T
+                    ciY[:,j]=copy(info.ci.T)
                 if me > 0:
-                    ceY[:,j]=info.ce.T
+                    ceY[:,j]=copy(info.ce.T)
                 poised_model=0
-                if (strcmp_(msg,'Error')):
-                    if (strcmp_(level,'toplevel')):
+                if msg=='Error':
+                    if level=='toplevel':
                         disp_(msg)
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-            i_xold=copy_(i_xbest)
+            i_xold=copy(i_xbest)
             x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info=ecdfo_find_smallf_(c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,lb,ub,fx,dstatus,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,sigma,info,nargout=12)
-            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
-            gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+            gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
             normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
             if mi > 0:
                 gci=zeros_(mi,n)
-                for i in arange_(1,mi).reshape(-1):
-                    gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
+                for i in range(0,mi):
+                    gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
             if me > 0:
                 gce=zeros_(me,n)
-                for i in arange_(1,me).reshape(-1):
-                    gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
+                for i in range(0,me):
+                    gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
             M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
             lbounds=- inf * ones_(size_(x))
             ubounds=inf * ones_(size_(x))
-            ilb=abs_(lb[indfree] - x) < 1e-05
-            iub=abs_(ub[indfree] - x) < 1e-05
+            ilb=(abs(lb[indfree] - x) < 1e-05).reshape(-1)
+            iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
             lbounds[ilb]=lb[indfree[ilb]]
             ubounds[iub]=ub[indfree[iub]]
             lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -330,7 +338,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
                 disp_('error on gradient after set improvement = ',num2str_(errg))
-            if ((info.glagn / factor_CV <= options.tol[1]) and (info.feasn / factor_CV <= options.tol[2]) and (info.compl / factor_CV <= options.tol[3]) and errg <= epsilon and cur_degree >= rep_degree and strcmp_(level,'toplevel')):
+            if (info.glagn / factor_CV <= options.tol[0]) and (info.feasn / factor_CV <= options.tol[1]) and (info.compl / factor_CV <= options.tol[1]) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
                 info.niter=info.niter + 1
                 itype='conv'
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -338,14 +346,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             if options.verbose >= 3:
                 disp_('not converged after improvement of interpolation set')
-            delta=copy_(radius)
-        if radius_has_been_rejected == matlabarray([false]):
+            delta=copy(radius)
+        if not(radius_has_been_rejected):
             f0=info.f
             ce0=info.ce
             ce0n=norm_(ce0)
             merit0=f0 + sigma * ce0n
-            prec_r=options.tol[2] / 10
-            prec_t=options.tol[1] / 10
+            prec_r=options.tol[1] / 10
+            prec_t=options.tol[0] / 10
             if options.verbose >= 5:
                 fprintf_(options.fout,'\nStep computation: merit = %12.5e\n'%(merit0))
             if options.verbose == 4:
@@ -354,18 +362,18 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
         if options.verbose >= 5:
             fprintf_(options.fout,'  Trust radius = %8.2e\n'%(delta))
-        old_delta=copy_(delta)
+        old_delta=copy(delta)
         xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info=ecdfo_solve_TR_bc_(func,x,lb[indfree],ub[indfree],delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx,nargout=8)
         if info.flag == values.fail_strange:
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
         s=xnew - xk
-        x=copy_(xk)
+        x=copy(xk)
         norms=norm_(s)
         if options.verbose >= 3:
             fprintf_(options.fout,'  Full step:\n    |s| = %8.2e\n'%(norms))
-        qcost=info.g.T * s + 0.5 * (s.T * M * s)
+        qcost=info.g.T.dot(s) + 0.5 * (s.T.dot(M.dot(s)))
         if rpred == 0:
-            sigmab=matlabarray([0.0])
+            sigmab=0.0
         else:
             sigmab=qcost / ((1 - rho_factor) * rpred)
         if sigma < sigmab:
@@ -374,14 +382,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         if options.verbose >= 4:
             fprintf_(options.fout,'  Penalty parameter = %8.2e (threshold %8.2e)\n'%(sigma,sigmab))
         if (interpol_TR == 1):
-            gTs=gx.T * s
+            gTs=gx.T.dot(s)
         xplus=x + s
         m=m + 1
         X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,xplus,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,0,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
         if (info.flag):
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
         else:
-            fxplus=fX[m]
+            fxplus=copy(fX[m])
         if outdic:
             if outdic == 1:
                 if options.verbose >= 5:
@@ -398,7 +406,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     info.flag=values.fail_on_simul
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             itype='xfail'
-            radius_has_been_rejected=copy_(true)
+            radius_has_been_rejected=copy(true)
             if options.verbose >= 5:
                 fprintf_(options.fout,'  rho = %8.2e \n'%(rho))
             info.ce=ce0
@@ -430,8 +438,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             if options.verbose == 4:   
                 fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %9.2e\n'%(delta,norms,sigma,rho))
 #                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\n'%(delta,norm_r,norm_(t),norms,sigma,rho))
-            i_xold=copy_(i_xbest)
-            pos=0
+            i_xold=copy(i_xbest)
+            pos=-1
             if (rho >= eta1):
                 if options.verbose >= 5:
                     fprintf_(options.fout,'  Step accepted (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
@@ -439,41 +447,51 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     info.flag=values.fail_on_non_decrease
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 if (cur_degree < pquad or (whichmodel == 3 and cur_degree < pquad + pquad)):
-                    cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,1:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
-                    pos=copy_(cur_degree)
+                    cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
+                    pos=copy(cur_degree)-1
                 else:
-                    QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,arange_(1,cur_degree),Lambda_XN,criterion_S,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
-                    if (pos > 0):
+                    QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,arange(0,cur_degree),Lambda_XN,criterion_S,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
+                    if (pos >= 0):
                         xstatus[ind_Y[pos]]=c.unused
-                if (pos > 0):
+                if (pos >= 0):
                     itype='succ'
                     if (options.verbose >= 3):
                         disp_(' replacing/including interpolation point ',int2str_(pos),' (successful)')
                     xstatus[m]=c.inY
-                    ind_Y[pos]=m
-                    fY[pos]=fxplus
+                    try:
+                        ind_Y[pos]=m
+                        fY[pos]=copy(fxplus)
+                    except IndexError:
+                        ind_Y=concatenate_([ind_Y,[m]],axis=1)
+                        fY=concatenate_([fY, [fxplus]],axis=1)
                     if mi > 0:
-                        ciY[:,pos]=info.ci.T
+                        try:
+                            ciY[:,pos]=copy(info.ci.T)
+                        except IndexError:
+                            ciY=concatenate_([ciY, info.ci],axis=1)
                     if me > 0:
-                        ceY[:,pos]=info.ce.T
+                        try:
+                            ceY[:,pos]=copy(info.ce.T)
+                        except IndexError:
+                            ceY=concatenate_([ceY, info.ce],axis=1)
 
-                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
-                    fx=copy_(fxplus)
-                    i_xbest=copy_(m)
+                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+                    fx=copy(fxplus)
+                    i_xbest=copy(m)
                     if (not shift_Y):
-                        x=Y[:,1]
+                        x=Y[:,[0]]
                     poised_model=0
-                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel[1,:],ind_Y,i_xold,m,gx,scale,shift_Y)
-                    gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel[[0],:],ind_Y,i_xold,m,gx,scale,shift_Y)
+                    gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
                     normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                     if mi > 0:
                         gci=zeros_(mi,n)
-                        for i in arange_(1,mi).reshape(-1):
-                            gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
+                        for i in range(0,mi):
+                            gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                     if me > 0:
                         gce=zeros_(me,n)
-                        for i in arange_(1,me).reshape(-1):
-                            gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
+                        for i in range(0,me):
+                            gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
                     if rho >= eta2:
                         if (active_r or active_t):
                             delta=delta * tau3
@@ -485,74 +503,84 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 delta=delta * tau2
                             else:
                                 delta=min_(max_(tau2 * norms,delta),Deltamax)
-                    radius_has_been_rejected=copy_(false)
+                    radius_has_been_rejected=copy(false)
                     if lm_computed == 0:
                         lbounds=- inf * ones_(size_(x))
                         ubounds=inf * ones_(size_(x))
-                        ilb=abs_(lb[indfree] - x) < 1e-05
-                        iub=abs_(ub[indfree] - x) < 1e-05
+                        ilb=(abs(lb[indfree] - x) < 1e-05).reshape(-1)
+                        iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
                         lbounds[ilb]=lb[indfree[ilb]]
                         ubounds[iub]=ub[indfree[iub]]
                         lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
                     M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
             if pred == - 1.0:
-                pos=1
+                pos=0
                 rho=1
-            if (rho < eta1) or (pos == 0):
+            if (rho < eta1) or (pos == -1):
                 itype='repD,repF,repC,redD'
                 itype='unsuc'
-                radius_has_been_rejected=copy_(true)
+                radius_has_been_rejected=copy(true)
                 if options.verbose == 3 or options.verbose >= 5:
                     fprintf_(options.fout,'  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
                 if (((cur_degree < pquad) or (whichmodel == 3 and cur_degree < pquad + pquad)) and (rho < eta1)):
-                    cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,1:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
+                    cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
                     if (options.verbose >= 3):
-                        disp_(' including interpolation point ',int2str_(cur_degree),' (augm)')
+                        disp_(' including interpolation point ',int2str_(cur_degree-1),' (augm)')
                     xstatus[m]=c.inY
-                    ind_Y[cur_degree]=m
-                    fY[cur_degree]=fxplus
+                    try:
+                        ind_Y[cur_degree-1]=m
+                        fY[cur_degree-1]=copy(fxplus)
+                    except IndexError:
+                        ind_Y=concatenate_([ind_Y,[m]],axis=1)
+                        fY=concatenate_([fY, [fxplus]],axis=1)
                     if mi > 0:
-                        ciY[:,cur_degree]=info.ci.T
+                        try:
+                            ciY[:,cur_degree-1]=copy(info.ci.T)
+                        except IndexError:
+                            ciY=concatenate_([ciY, info.ci],axis=1)
                     if me > 0:
-                        ceY[:,cur_degree]=info.ce.T
+                        try:
+                            ceY[:,cur_degree-1]=copy(info.ce.T)
+                        except IndexError:
+                            ceY=concatenate_([ceY, info.ce],axis=1)    
                     poised_model=0
-                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
-                    gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                    gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
                     normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                     if mi > 0:
                         gci=zeros_(mi,n)
-                        for i in arange_(1,mi).reshape(-1):
-                            gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
+                        for i in range(0,mi):
+                            gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                     if me > 0:
                         gce=zeros_(me,n)
-                        for i in arange_(1,me).reshape(-1):
-                            gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
+                        for i in range(0,me):
+                            gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
                     itype='augm'
-                    pos=copy_(m)
+                    pos=copy(m)
                     if (shrink_Delta == 1 and delta > epsilon):
                         delta=gamma2 * delta
-                if (cur_degree >= pquad or pos == 0):
-                    if ((pos == 0) and (poised_model == 0 or delta <= eps_current)):
+                if (cur_degree >= pquad or pos == -1):
+                    if ((pos == -1) and (poised_model == 0 or delta <= eps_current)):
                         d=zeros_(1,cur_degree)
                         if (rho >= eta1):
-                            for j in arange_(1,cur_degree).reshape(-1):
+                            for j in range(0,cur_degree):
                                 if (lSolver == 1):
-                                    d[j]=norm_(Y[:,j] - xplus)
+                                    d[j]=norm_(Y[:,[j]] - xplus)
                                 else:
-                                    d[j]=norm_(Y[:,j] - xplus,inf)
+                                    d[j]=norm_(Y[:,[j]] - xplus,inf)
                         else:
-                            for j in arange_(2,cur_degree).reshape(-1):
+                            for j in range(1,cur_degree): #was a range(2,cur_degree) in matlab
                                 if (lSolver == 1):
-                                    d[j]=norm_(Y[:,j] - x)
+                                    d[j]=norm_(Y[:,[j]] - x)
                                 else:
-                                    d[j]=norm_(Y[:,j] - x,inf)
+                                    d[j]=norm_(Y[:,[j]] - x,inf)
                         FPlength=factor_FPU * (1 + eps_TR) * delta
                         if (rho >= eta1):
                             criterion_FPn='weighted'
                         else:
                             criterion_FPn=copy(criterion_FP)
                         QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,find_(d > FPlength),Lambda_FP,criterion_FPn,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
-                        if (pos > 0):
+                        if (pos >= 0):
                             itype='repF'
                             if (options.verbose >= 3):
                                 disp_(' replacing interpolation point ',int2str_(pos),' (far)')
@@ -565,16 +593,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             if me > 0:
                                 ceY[:,pos]=info.ce.T
                             if (rho >= eta1):
-                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
-                                fx=copy_(fxplus)
+                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+                                fx=copy(fxplus)
                                 info.f=fx
                                 if mi > 0:
-                                    info.ci=ciY[:,1]
+                                    info.ci=copy(ciY[:,[0]])
                                 if me > 0:
-                                    info.ce=ceY[:,1]
-                                i_xbest=copy_(m)
+                                    info.ce=copy(ceY[:,[0]])
+                                i_xbest=copy(m)
                                 if (not shift_Y):
-                                    x=Y[:,1]
+                                    x=Y[:,[0]]
                                 poised_model=0
                                 if (options.verbose >= 3):
                                     disp_(' swapped point to position 1')
@@ -583,18 +611,18 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             else:
                                 if (shrink_Delta == 1 and delta > epsilon):
                                     delta=gamma2 * delta
-                            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
-                            gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+                            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                            gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
                             normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                             if mi > 0:
                                 gci=zeros_(mi,n)
-                                for i in arange_(1,mi).reshape(-1):
-                                    gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
+                                for i in range(0,mi):
+                                    gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                             if me > 0:
                                 gce=zeros_(me,n)
-                                for i in arange_(1,me).reshape(-1):
-                                    gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
-                        if (pos == 0):
+                                for i in range(1,me):
+                                    gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                        if (pos == -1):
                             if (rho >= eta1):
                                 criterion_CPn='standard'
                             else:
@@ -602,15 +630,15 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             if (rho >= eta1):
                                 Lambda_CPn=1e-15
                             else:
-                                Lambda_CPn=copy_(Lambda_CP)
-                                d[1]=2 * FPlength
+                                Lambda_CPn=copy(Lambda_CP)
+                                d[0]=2 * FPlength
                             QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,find_(d <= FPlength),Lambda_CPn,criterion_CPn,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
-                            if (pos > 0):
+                            if (pos >= 0):
                                 itype='repC'
-                                if (pos == 1):
-                                    i_xold=ind_Y[2]
+                                if (pos == 0):
+                                    i_xold=ind_Y[1] #was a Y[2] in matlab
                                 if (options.verbose >= 3):
-                                    disp_(' replacing interpolation point ',int2str_(pos),' (close)')
+                                    disp_(' replacing interpolation point ',int2str_(pos-1),' (close)')
                                 xstatus[ind_Y[pos]]=c.unused
                                 xstatus[m]=c.inY
                                 ind_Y[pos]=m
@@ -620,16 +648,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 if me > 0:
                                     ceY[:,pos]=info.ce.T
                                 if (rho >= eta1):
-                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
-                                    fx=copy_(fxplus)
+                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
+                                    fx=copy(fxplus)
                                     info.f=fx
                                     if mi > 0:
-                                        info.ci=ciY[:,1]
+                                        info.ci=ciY[:,[0]]
                                     if me > 0:
-                                        info.ce=ceY[:,1]
-                                    i_xbest=copy_(m)
+                                        info.ce=ceY[:,[0]]
+                                    i_xbest=copy(m)
                                     if (not shift_Y):
-                                        x=Y[:,1]
+                                        x=copy(Y[:,[0]])
                                     poised_model=0
                                     if (options.verbose >= 3):
                                         disp_(' swapped point to position 1')
@@ -638,18 +666,18 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 else:
                                     if (shrink_Delta == 1 and delta > epsilon):
                                         delta=gamma2 * delta
-                                fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
-                                gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
+                                fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
+                                gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
                                 normgx,_=bcdfo_projgrad_(n,x,gx,lb[indfree],ub[indfree])
                                 if mi > 0:
                                     gci=zeros_(mi,n)
-                                    for i in arange_(1,mi).reshape(-1):
-                                        gci[i,:]=bcdfo_gradP_(fcmodel[1 + i,:],x,x,scale,shift_Y).T
+                                    for i in range(0,mi):
+                                        gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                                 if me > 0:
                                     gce=zeros_(me,n)
-                                    for i in arange_(1,me).reshape(-1):
-                                        gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
-                    if (pos == 0):
+                                    for i in range(0,me):
+                                        gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                    if (pos == -1):
                         if (options.verbose >= 3):
                             disp_(' decreasing the TR radius')
                         xstatus[m]=c.unused
@@ -661,7 +689,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             delta=gamma2 * norms
                         itype='redD'
                         if (delta < stallfact * norm_(x) or delta < epsilon * 1e-05):
-                            if (options.verbose >= 2 and strcmp_(level,'toplevel')):
+                            if options.verbose >= 2 and level=='toplevel':
                                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
                                 if (show_errg):
                                     disp_('************************************* Trust-region',' radius small *********************************')
@@ -674,8 +702,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 info.f=f0
                 lbounds=- inf * ones_(size_(x))
                 ubounds=inf * ones_(size_(x))
-                ilb=abs_(lb[indfree] - x) < 1e-05
-                iub=abs_(ub[indfree] - x) < 1e-05
+                ilb=(abs(lb[indfree] - x) < 1e-05).reshape(-1)
+                iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
                 lbounds[ilb]=lb[indfree[ilb]]
                 ubounds[iub]=ub[indfree[iub]]
                 lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -687,13 +715,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #    #varargin = cellarray(args)
 #    #nargin = 89-[func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,level,whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values].count(None)+len(args)
 #
-#    old_delta=copy_(delta)
-#    sigma=matlabarray([1.0])
+#    old_delta=copy(delta)
+#    sigma=array([1.0])
 #    rho_factor=0.3
-#    tau1=copy_(gamma2)
-#    tau2=copy_(gamma3)
+#    tau1=copy(gamma2)
+#    tau2=copy(gamma3)
 #    tau3=5
-#    constrained_pbl=copy_(me)
+#    constrained_pbl=copy(me)
 #    null_step=0
 #    merit=info.f + sigma * norm_(info.ce)
 #    msg=char('Unexpected message from ecdfo_main')
@@ -719,14 +747,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #    if mi > 0:
 #        ciY=ciX[:,ind_Y]
 #    else:
-#        ciY=matlabarray([])
-#        gci=matlabarray([])
+#        ciY=array([])
+#        gci=array([])
 #    if me > 0:
 #        ceY=ceX[:,ind_Y]
 #    else:
-#        ceY=matlabarray([])
-#        gce=matlabarray([])
-#    radius_has_been_rejected=copy_(false)
+#        ceY=array([])
+#        gce=array([])
+#    radius_has_been_rejected=copy(false)
 #    while 1:
 #
 #        if info.niter >= options.miter:
@@ -737,11 +765,11 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #            info.flag=values.stop_on_max_simul
 #            ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
 #            return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-#        xk=copy_(x)
+#        xk=copy(x)
 #        lbounds=- inf * ones_(size_(x))
 #        ubounds=inf * ones_(size_(x))
-#        ilb=abs_(lb[indfree] - x) < 1e-05
-#        iub=abs_(ub[indfree] - x) < 1e-05
+#        ilb=abs(lb[indfree] - x) < 1e-05
+#        iub=abs(ub[indfree] - x) < 1e-05
 #        lbounds[ilb]=lb[indfree[ilb]]
 #        ubounds[iub]=ub[indfree[iub]]
 #        lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -773,7 +801,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                    itype=char('conv')
 #                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
 #                    info.flag=values.success
-#                    msg=matlabarray([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
+#                    msg=array([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
 #                    return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #                else:
 #                    info.niter=info.niter + 1
@@ -786,7 +814,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #            if (normgx <= epsilon):
 #                effective_FPR=1
 #            else:
-#                effective_FPR=copy_(factor_FPR)
+#                effective_FPR=copy(factor_FPR)
 #            if (augment > 0):
 #                itype=char('augm')
 #                if (info.glagn <= epsilon):
@@ -794,8 +822,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                        delta=epsilon / sqrt_(n)
 #                        eps_current=epsilon / sqrt_(n)
 #                    else:
-#                        delta=copy_(epsilon)
-#                        eps_current=copy_(epsilon)
+#                        delta=copy(epsilon)
+#                        eps_current=copy(epsilon)
 #                ynew=- delta * ones_(n,1) + 2 * delta * rand_(n,1)
 #                cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(ynew,Y[:,1:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
 #                ind_Y[cur_degree]=cur_degree
@@ -804,7 +832,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                else:
 #                    ynew,improvement=bcdfo_find_new_yj_(QZ,RZ,Y,cur_degree,delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
 #                QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ynew,Y,cur_degree,xbase,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=5)
-#                replaced=matlabarray([cur_degree])
+#                replaced=array([cur_degree])
 #            else:
 #                if (info.glagn <= factor_CV * epsilon):
 #                    if (lSolver == 2):
@@ -838,7 +866,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                    if (strcmp_(level,char('toplevel'))):
 #                        disp_(msg)
 #                    return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
-#            i_xold=copy_(i_xbest)
+#            i_xold=copy(i_xbest)
 #            x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info=ecdfo_find_smallf_(c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,indfree,x,lb,ub,fx,dstatus,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,sigma,info,nargout=12)
 #            fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY,ciY,ceY]),whichmodel,fcmodel,ind_Y,i_xold,m,gx,scale,shift_Y)
 #            gx=bcdfo_gradP_(fcmodel[1,:],x,x,scale,shift_Y)
@@ -854,8 +882,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #            M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
 #            lbounds=- inf * ones_(size_(x))
 #            ubounds=inf * ones_(size_(x))
-#            ilb=abs_(lb[indfree] - x) < 1e-05
-#            iub=abs_(ub[indfree] - x) < 1e-05
+#            ilb=abs(lb[indfree] - x) < 1e-05
+#            iub=abs(ub[indfree] - x) < 1e-05
 #            lbounds[ilb]=lb[indfree[ilb]]
 #            ubounds[iub]=ub[indfree[iub]]
 #            lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -879,13 +907,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                info.niter=info.niter + 1
 #                itype=char('conv')
 #                ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
-#                msg=matlabarray([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
+#                msg=array([char(' Convergence in '),int2str_(neval),char(' evaluations of the objective function.')])
 #                return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #            if options.verbose >= 3:
 #                disp_(char('not converged after improvement of interpolation set'))
-#            delta=copy_(radius)
+#            delta=copy(radius)
 #        #print "type(radisu has been rejected)", type(radius_has_been_rejected)												
-#        if radius_has_been_rejected == matlabarray([false]):
+#        if radius_has_been_rejected == array([false]):
 #            f0=info.f
 #            ce0=info.ce
 #            ce0n=norm_(ce0)
@@ -900,20 +928,20 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #        ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
 #        if options.verbose >= 5:
 #            fprintf_(options.fout,char('  Trust radius = %8.2e\\n'),delta)
-#        old_delta=copy_(delta)
+#        old_delta=copy(delta)
 #        xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info=ecdfo_solve_TR_bc_(func,x,lb[indfree],ub[indfree],delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx,nargout=8)
 #        if info.flag == values.fail_strange:
 #            return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #        s=xnew - xk
-#        x=copy_(xk)
+#        x=copy(xk)
 #        norms=norm_(s)
 #        if options.verbose >= 3:
 #            fprintf_(options.fout,char('  Full step:\\n    |s| = %8.2e\\n'),norms)
 #        qcost=info.g.T * s + 0.5 * (s.T * M * s)
 #        if rpred == 0:
-#            sigmab=matlabarray([0.0])
+#            sigmab=array([0.0])
 #        else:
-#            sigmab=matlabarray([float(qcost / ((1.0 - rho_factor) * rpred))])
+#            sigmab=array([float(qcost / ((1.0 - rho_factor) * rpred))])
 #        if sigma < sigmab:
 #            sigma=max_(sigmab,1.5 * sigma)
 #            merit0=f0 + sigma * ce0n
@@ -945,7 +973,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                    info.flag=values.fail_on_simul
 #                    return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #            itype=char('xfail')
-#            radius_has_been_rejected=copy_(true)
+#            radius_has_been_rejected=copy(true)
 #            if options.verbose >= 5:
 #                fprintf_(options.fout,char('  rho = %8.2e \\n'),rho)
 #            info.ce=ce0
@@ -976,7 +1004,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                succ=0
 #            if options.verbose == 4:
 #                fprintf_(options.fout,char('  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\\n'),delta,norm_r,norm_(t),norms,sigma,rho)
-#            i_xold=copy_(i_xbest)
+#            i_xold=copy(i_xbest)
 #            pos=0
 #            if (rho >= eta1):
 #                if options.verbose >= 5:
@@ -986,7 +1014,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                    return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #                if (cur_degree < pquad or (whichmodel == 3 and cur_degree < pquad + pquad)):
 #                    cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,1:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
-#                    pos=copy_(cur_degree)
+#                    pos=copy(cur_degree)
 #                else:
 #                    QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,arange_(1,cur_degree),Lambda_XN,criterion_S,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
 #                    if (pos > 0):
@@ -1009,8 +1037,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
 #                    #print "ceY after swap in Y\n", ceY
 #                    #sys.exit(1)
-#                    fx=copy_(fxplus)
-#                    i_xbest=copy_(m)
+#                    fx=copy(fxplus)
+#                    i_xbest=copy(m)
 #                    if (not shift_Y):
 #                        x=Y[:,1]
 #                    poised_model=0
@@ -1042,12 +1070,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                                delta=delta * tau2
 #                            else:
 #                                delta=min_(max_(tau2 * norms,delta),Deltamax)
-#                    radius_has_been_rejected=copy_(false)
+#                    radius_has_been_rejected=copy(false)
 #                    if lm_computed == 0:
 #                        lbounds=- inf * ones_(size_(x))
 #                        ubounds=inf * ones_(size_(x))
-#                        ilb=abs_(lb[indfree] - x) < 1e-05
-#                        iub=abs_(ub[indfree] - x) < 1e-05
+#                        ilb=abs(lb[indfree] - x) < 1e-05
+#                        iub=abs(ub[indfree] - x) < 1e-05
 #                        lbounds[ilb]=lb[indfree[ilb]]
 #                        ubounds[iub]=ub[indfree[iub]]
 #                        lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
@@ -1058,7 +1086,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #            if (rho < eta1) or (pos == 0):
 #                itype=char('repD,repF,repC,redD')
 #                itype=char('unsuc')
-#                radius_has_been_rejected=copy_(true)
+#                radius_has_been_rejected=copy(true)
 #                if options.verbose == 3 or options.verbose >= 5:
 #                    fprintf_(options.fout,char('  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\\n'),rho,ared,pred)
 #                if (((cur_degree < pquad) or (whichmodel == 3 and cur_degree < pquad + pquad)) and (rho < eta1)):
@@ -1085,7 +1113,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                        for i in arange_(1,me).reshape(-1):
 #                            gce[i,:]=bcdfo_gradP_(fcmodel[1 + mi + i,:],x,x,scale,shift_Y).T
 #                    itype=char('augm')
-#                    pos=copy_(m)
+#                    pos=copy(m)
 #                    if (shrink_Delta == 1 and delta > epsilon):
 #                        delta=gamma2 * delta
 #                if (cur_degree >= pquad or pos == 0):
@@ -1107,7 +1135,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                        if (rho >= eta1):
 #                            criterion_FPn=char('weighted')
 #                        else:
-#                            criterion_FPn=copy_(criterion_FP)
+#                            criterion_FPn=copy(criterion_FP)
 #                        QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,find_(d > FPlength),Lambda_FP,criterion_FPn,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
 #                        if (pos > 0):
 #                            itype=char('repF')
@@ -1123,13 +1151,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                                ceY[:,pos]=info.ce.T
 #                            if (rho >= eta1):
 #                                QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
-#                                fx=copy_(fxplus)
+#                                fx=copy(fxplus)
 #                                info.f=fx
 #                                if mi > 0:
 #                                    info.ci=ciY[:,1]
 #                                if me > 0:
 #                                    info.ce=ceY[:,1]
-#                                i_xbest=copy_(m)
+#                                i_xbest=copy(m)
 #                                if (not shift_Y):
 #                                    x=Y[:,1]
 #                                poised_model=0
@@ -1155,11 +1183,11 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                            if (rho >= eta1):
 #                                criterion_CPn=char('standard')
 #                            else:
-#                                criterion_CPn=copy_(criterion_CP)
+#                                criterion_CPn=copy(criterion_CP)
 #                            if (rho >= eta1):
 #                                Lambda_CPn=1e-15
 #                            else:
-#                                Lambda_CPn=copy_(Lambda_CP)
+#                                Lambda_CPn=copy(Lambda_CP)
 #                                d[1]=2 * FPlength
 #                            QZ,RZ,Y,pos,x,scale=bcdfo_include_in_Y_(xplus,QZ,RZ,Y,find_(d <= FPlength),Lambda_CPn,criterion_CPn,x,whichmodel,succ,scale,shift_Y,delta,normgx,kappa_ill,nargout=6)
 #                            if (pos > 0):
@@ -1178,13 +1206,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                                    ceY[:,pos]=info.ce.T
 #                                if (rho >= eta1):
 #                                    QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(1,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
-#                                    fx=copy_(fxplus)
+#                                    fx=copy(fxplus)
 #                                    info.f=fx
 #                                    if mi > 0:
 #                                        info.ci=ciY[:,1]
 #                                    if me > 0:
 #                                        info.ce=ceY[:,1]
-#                                    i_xbest=copy_(m)
+#                                    i_xbest=copy(m)
 #                                    if (not shift_Y):
 #                                        x=Y[:,1]
 #                                    poised_model=0
@@ -1224,15 +1252,15 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 #                                    disp_([char('************************************* Trust-region'),char(' radius small *********************************')])
 #                                else:
 #                                    disp_([char('******************************** Trust-region'),char(' radius small ****************************')])
-#                            msg=matlabarray([char('Algorithm stopped after '),int2str_(neval),char(' evaluations of the objective function because Delta small.')])
+#                            msg=array([char('Algorithm stopped after '),int2str_(neval),char(' evaluations of the objective function because Delta small.')])
 #                            info.flag=values.stop_on_small_trust_region
 #                            return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
 #                info.ce=ce0
 #                info.f=f0
 #                lbounds=- inf * ones_(size_(x))
 #                ubounds=inf * ones_(size_(x))
-#                ilb=abs_(lb[indfree] - x) < 1e-05
-#                iub=abs_(ub[indfree] - x) < 1e-05
+#                ilb=abs(lb[indfree] - x) < 1e-05
+#                iub=abs(ub[indfree] - x) < 1e-05
 #                lbounds[ilb]=lb[indfree[ilb]]
 #                ubounds[iub]=ub[indfree[iub]]
 #                lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
