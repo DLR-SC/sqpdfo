@@ -56,4 +56,4 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     if (pos == 0):
         return QZ,RZ,Y,pos,xbase,scale
     QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,x,Y,int(pos),xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
-    return QZ,RZ,Y,pos,xbase,scale
+    return QZ,RZ,Y,int(pos),xbase,scale
