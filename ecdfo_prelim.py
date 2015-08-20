@@ -313,7 +313,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 
     fx0=copy(fY[0])
     info.f=fx0
-    m=copy(cur_degree)
+    m=copy(cur_degree)-1
     i_xbest=0
     initmodel=zeros_(1,pquad)
     rhsY=concatenate_([fY.reshape(1,-1),ciY,ceY], axis=0)

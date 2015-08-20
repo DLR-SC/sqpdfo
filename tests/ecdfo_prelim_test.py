@@ -682,7 +682,7 @@ class Test_ecdfo_prelim(unittest.TestCase):
                          [2,     1,     1,     1],
                          [3,     2,     1 ,    0]])
         correctpoisedness_known =  1
-        correctm = 4
+        correctm = 3
         correctgx = array([  0,  1,  0]).T
         correctnormgx =  1
         correctfcmodel = array([
