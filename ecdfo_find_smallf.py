@@ -84,11 +84,11 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
         if((isempty_(find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))) and (isempty_(find_(dummy_set == ind_Y[i],1)))):
             ind_insideBounds=concatenate_([ind_insideBounds,[i]],axis=1)
         else:
-            ind_insideBounds=concatenate_([ind_insideBounds,[1]],axis=1)
+            ind_insideBounds=concatenate_([ind_insideBounds,[0]],axis=1)
     if length_(ceY) > 0:
         for i in range(0,cur_degree):
             norm_ceY[i]=norm_(ceY[:,i])
-    meritY=fY + sigma *norm_ceY
+    meritY=fY + int(sigma) *norm_ceY
     fmin,imin=min_(meritY[ind_insideBounds],nargout=2)
     if (imin != 1 and fmin < meritY[0]):
         QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=ecdfo_swap_in_Y_(0,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
@@ -98,9 +98,9 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
             x=copy(Y[:,0])
     info.f=copy(fY[0])
     if length_(ceY) > 0:
-        info.ce=copy(ceY[:,0])
+        info.ce=copy(ceY[:,[0]])
     if length_(ciY) > 0:
-        info.ci=copy(ciY[:,0])
+        info.ci=copy(ciY[:,[0]])
     return x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info
 #def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info=None,*args,**kwargs):
 #    #varargin = cellarray(args)

@@ -99,7 +99,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     active_t=0
     rpred=0
     norm_r=0
-    x_fix=array([])
+    x_fix= []
     glocal=copy(gx)
     delta_min=1e-08
     plevel_r=0
@@ -307,7 +307,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 gconstraints=gconstraints[0:me,:]
                 xa=find_(x_active < 0).reshape(-1)
                 if length_(xa) == length_(x_fix):
-                    if sort_(xa) == sort_(x_fix):
+                    if np.sort(xa) == np.sort(x_fix):
                         for i in range(0,length_(x_fix)):
                             if i != ind_min_lm:
 #                                constraints=array([[constraints],[0]])

@@ -48,7 +48,7 @@ Created on Fri Nov 07 11:45:31 2014
 from __future__ import division
 #try:
 from runtime import *
-from numpy import arange
+from numpy import arange,append
 #except ImportError:
     #from smop.runtime import *
 def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
@@ -143,7 +143,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
             break
         atlb=inds[find_(abs(stry - lb) <= epsfeas)].reshape(-1)
         atub=inds[find_(abs(stry - ub) <= epsfeas)].reshape(-1)
-        atb=concatenate_([atlb,atub],axis=1)
+        atb=append(atlb,atub)
         latlb=length_(atlb)
         latub=length_(atub)
         free=copy(inds)
@@ -197,7 +197,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     found=0
                     nback=4 * (1 - nuns)
                     for kb in arange(1,nback+1):
-                        stry=(1 - alpha).dot(s) + alpha.dot(ssub)
+                        stry=(1 - alpha) * s+ alpha * ssub
                         natlbt=free[find_(stry[free] < lb[free])]
                         natubt=free[find_(stry[free] > ub[free])]
                         lnatbt=length_(natlbt) + length_(natubt)
@@ -205,9 +205,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         if (verbose >= 1):
                             rtry=A.dot(stry) - b
                             rtryn=norm_(rtry)
-                            atlb=concatenate_([atlb,natlbt], axis=1)
-                            atub=concatenate_([atub,natubt],axis=1)
-                            atb=concatenate_([atlbt,atubt],axis=1)
+                            atlb=append(atlb,natlbt)
+                            atub=append(atub,natubt)
+                            atb=append(atlbt,atubt)
                             freet=copy(inds)
 #                            freet[atbt]=[]
                             freet = np.delete(free, atbt)
@@ -225,9 +225,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             res=copy(rtry)
                             resn=copy(rtryn)
                             if (verbose == 0):
-                                atlb=concatenate_([atlb,natlbt], axis=1)
-                                atub=concatenate_([atub,natubt],axis=1)
-                                atb=concatenate_([atlb,atub],axis=1)
+                                atlb=append(atlb,natlbt)
+                                atub=append(atub,natubt)
+                                atb=append(atlb,atub)
                                 free=copy(inds)
 #                                free[atb]=[]
                                 free = np.delete(free, atb)
@@ -262,11 +262,11 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         rsubn=norm_(rsub)
                         if (verbose > 1):
                             fprintf_('   %5ds %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,rsubn,alpha,rsubon,lfree,latlb,latub))
-                        natlb=free[find_(abs(ssub[free] - lb[free]) <= epsfeas)]
-                        natub=free[find_(abs(ssub[free] - ub[free]) <= epsfeas)]
-                        atlb=concatenate_([atlb,natlbt], axis=1)
-                        atub=concatenate_([atub,natubt],axis=1)
-                        atb=concatenate_([atlb,atub],axis=1)
+                        natlb=free[find_(abs(ssub[free] - lb[free]) <= epsfeas)].reshape(-1)
+                        natub=free[find_(abs(ssub[free] - ub[free]) <= epsfeas)].reshape(-1)
+                        atlb=append(atlb,natlbt)
+                        atub=append(atub,natubt)
+                        atb=append(atlb,atub)
                         free=copy(inds)
 #                        free[atb]=[]
                         free = np.delete(free, atb)
