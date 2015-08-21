@@ -36,7 +36,7 @@ from __future__ import division
 #try:
 import sys
 from runtime import *
-from numpy import inf
+from numpy import inf, arange
 from copy import copy
 
 from sqplab_lsmult import sqplab_lsmult_
@@ -54,7 +54,7 @@ from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
-from numpy import array
+from numpy import array, zeros
 #except ImportError:
     #from smop.runtime import *
 
@@ -479,7 +479,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     fx=copy(fxplus)
                     i_xbest=copy(m)
                     if (not shift_Y):
-                        x=Y[:,[0]]
+                        x=copy(Y[:,[0]])
                     poised_model=0
                     fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel[[0],:],ind_Y,i_xold,m,gx,scale,shift_Y)
                     gx=bcdfo_gradP_(fcmodel[[0],:],x,x,scale,shift_Y)
@@ -561,7 +561,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         delta=gamma2 * delta
                 if (cur_degree >= pquad or pos == -1):
                     if ((pos == -1) and (poised_model == 0 or delta <= eps_current)):
-                        d=zeros_(1,cur_degree)
+                        d=zeros(cur_degree)
                         if (rho >= eta1):
                             for j in range(0,cur_degree):
                                 if (lSolver == 1):
