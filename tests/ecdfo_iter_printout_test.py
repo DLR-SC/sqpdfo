@@ -153,22 +153,22 @@ import sys
 sys.path.append("../")
 import unittest
 from ecdfo_iter_printout import *
-#import numpy as np
+from numpy import array
 import helper
 
 class dummyInfo():
     def __init__(self):
-        self.g = matlabarray([0,1,0]).T
-        self.ai = matlabarray([])
+        self.g = array([[0,1,0]]).T
+        self.ai = array([])
         self.ae = ([[1,     1,     1],[ 1,     2,     3]])
-        self.hl = matlabarray([])
+        self.hl = array([])
         self.niter = 1
         self.flag = 0
-        self.nsimul = matlabarray( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ci = matlabarray([])
-        self.ce = matlabarray([2, 3]).T
+        self.nsimul = array( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.ci = array([])
+        self.ce = array([[2, 3]]).T
         self.f = 1.500000000000000
-        self.glag = matlabarray([  -0.333333333013890,  0.666666666736111,  -0.333333333513889]).T
+        self.glag = array([[  -0.333333333013890,  0.666666666736111,  -0.333333333513889]]).T
         self.glagn = 0.666666666736111
         self.feasn = 3
         self.compl = 0

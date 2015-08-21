@@ -93,8 +93,8 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
             fprintf_(options.fout,'  Gradient of the cost function (inf norm)  %11.5e\n'%(info.glagn))
         fprintf_(options.fout,'  Counters:\n')
         fprintf_(options.fout,'  . nbr of iterations                   %4i\n'%(info.niter))
-        fprintf_(options.fout,'  . nbr of function evaluations         %4i\n'%(info.nsimul[2] + info.nsimul[4]))
-        fprintf_(options.fout,'  . nbr of gradient evaluations         %4i\n'%(info.nsimul[3] + info.nsimul[4]))
+        fprintf_(options.fout,'  . nbr of function evaluations         %4i\n'%(info.nsimul[1] + info.nsimul[3]))
+        fprintf_(options.fout,'  . nbr of gradient evaluations         %4i\n'%(info.nsimul[2] + info.nsimul[3]))
     fprintf_(options.fout,'%s\n'%(values.sline))
     return
 #def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):

@@ -20,7 +20,7 @@ try:
 except ImportError:
     from smop.runtime import *
 from copy import copy
-
+from numpy import array
 
 
 
@@ -28,10 +28,10 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #    varargin = cellarray(args)
 
     func=copy(func_)
-    x0=copy_(x0_)
-    lm0=copy_(lm0_)
-    lb=copy_(lb_)
-    ub=copy_(ub_)
+    x0=copy(x0_)
+    lm0=copy(lm0_)
+    lb=copy(lb_)
+    ub=copy(ub_)
     options=copy(options_)
 
     nargin = 6-[func,x0,lm0,lb,ub,options].count(None)+len(args)
@@ -49,20 +49,20 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
     c.inY=1
     c.dummy=1
     c.nodummy=0
-    x=copy_(np.NaN)
-    fx=copy_(np.NaN)
-    gx=copy_(np.NaN)
+    x=copy(np.NaN)
+    fx=copy(np.NaN)
+    gx=copy(np.NaN)
     nit=0
     nitold=0
     neval=0
-    errg=copy_(np.Inf)
-    X=matlabarray([])
-    fX=matlabarray([])
-    xstatus=matlabarray([])
-    sstatus=matlabarray([])
-    dstatus=matlabarray([])
-    sspace_save=matlabarray([])
-    xspace_save=matlabarray([])
+    errg=copy(np.Inf)
+    X=array([])
+    fX=array([])
+    xstatus=array([])
+    sstatus=array([])
+    dstatus=array([])
+    sspace_save=array([])
+    xspace_save=array([])
     ndummyY=0
     info.flag=0
 #    rand_('seed',np.pi / sqrt_(2))
@@ -81,11 +81,11 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
     factor_fmax=1e+20
     CNTsin=0
     Delta0=1
-    cur_degree=copy_(plin)
-    rep_degree=copy_(plin)
+    cur_degree=copy(plin)
+    rep_degree=copy(plin)
     epsilon=1e-05
     maxeval=200 * n
-    maxit=copy_(maxeval)
+    maxit=copy(maxeval)
     verbose=options.verbose
     show_errg=0
     initial_Y='simplx'
@@ -124,20 +124,20 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
     Deltamax=factor_Dmax * Delta0
     if nargin < 2:
         fprintf_('\n### EC-DFO: the first 2 arguments are required\n\n')
-        x=matlabarray([])
-        lm=matlabarray([])
+        x=array([])
+        lm=array([])
         info.flag=1
         return x,lm,info
     if nargin < 3:
-        lm0=matlabarray([])
+        lm0=array([])
     else:
         lm0=lm0[:]
     if nargin < 4:
-        lb=matlabarray([])
+        lb=array([])
     else:
         lb=lb[:]
     if nargin < 5:
-        ub=matlabarray([])
+        ub=array([])
     else:
         ub=ub[:]
     if nargin < 6:
@@ -148,13 +148,13 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
         epsilon=0.001
         if exist_('fvalues_ecdfo_karmanogive.dat','file') == 2: #Those 2 lines (exist_ and delete_) have not been dealt with, but only concerns prob==100
             delete_('fvalues_ecdfo_karmanogive.dat')
-    x0
+    print 'x0 = ',x0
     n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
     if info.flag:
         return x,lm,info
-    x0=copy_(x)
+    x0=copy(x)
     eps_current=max_(mu0 * normgx,epsilon)
-    fxmax=min_(1e+25,factor_fmax * abs_(fx))
+    fxmax=min_(1e+25,factor_fmax * abs(fx))
     M=eye_(n)
     if (verbose):
         fid=fopen_('convhist.m','w')
@@ -168,10 +168,10 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
         fclose_(fid)
     if (nfix > 0):
         I=eye_(n + nfix)
-        x=I[:,indfix] * xfix[indfix] + I[:,indfree] * x
-        gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree] * gx
+        x=I[:,indfix] * xfix[indfix] + I[:,indfree].dot(x)
+        gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree].dot(gx)
         Ilm=eye_(n + nfix + me + mi)
-        indfree_lm=setdiff_(arange_(1,n + nfix + me + mi),indfix)
+        indfree_lm=setdiff_(arange(0,n + nfix + me + mi),indfix)
         lm=Ilm[:,indfix] * zeros_(nfix,1) + Ilm[:,indfree_lm] * lm
         n=n + nfix
     if (scaleX):
@@ -184,7 +184,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
         if nb:
             fprintf_(options.fout,'VARIABLES:\n')
             fprintf_(options.fout,'i     lower bound          x            upper bound       multiplier\n')
-            for i in arange_(1,min_(n,40)).reshape(-1):
+            for i in range(0,min_(n,40)):
                 fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\n'%(i,lb[i],x[i],ub[i],lm[i]))
             if (n > 40):
                 fprintf_(options.fout,'.....\n')
@@ -192,7 +192,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
                 fprintf_(options.fout,'\n')
         else:
             fprintf_(options.fout,'VARIABLES:\n')
-            fprintf_(options.fout,'\n',x[1:min_(n,40)])
+            fprintf_(options.fout,'\n',x[0:min_(n,40)])
             if (n > 40):
                 fprintf_(options.fout,'.....\n')
             else:
@@ -200,7 +200,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
         if mi:
             fprintf_(options.fout,'INEQUALITY CONSTRAINTS:\n')
             fprintf_(options.fout,'i     lower bound          ci           upper bound       multiplier\n')
-            for i in arange_(1,min_(mi,40)).reshape(-1):
+            for i in range(0,min_(mi,40)):
                 fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\n'%(i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i]))
             if (mi > 40):
                 fprintf_(options.fout,'\n.....')
@@ -209,7 +209,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
         if me:
             fprintf_(options.fout,'EQUALITY CONSTRAINTS:\n')
             fprintf_(options.fout,'i         ce            multiplier\n')
-            for i in arange_(1,min_(me,40)).reshape(-1):
+            for i in range(0,min_(me,40)):
                 fprintf_(options.fout,'%0i %+16.6e %+16.6e\n'%(i,ceX[i,i_xbest],lm[n + mi + i]))
             if (me > 40):
                 fprintf_(options.fout,'.....\n')
@@ -241,20 +241,20 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #    c.inY=1
 #    c.dummy=1
 #    c.nodummy=0
-#    x=copy_(np.NaN)
-#    fx=copy_(np.NaN)
-#    gx=copy_(np.NaN)
+#    x=copy(np.NaN)
+#    fx=copy(np.NaN)
+#    gx=copy(np.NaN)
 #    nit=0
 #    nitold=0
 #    neval=0
-#    errg=copy_(np.Inf)
-#    X=matlabarray([])
-#    fX=matlabarray([])
-#    xstatus=matlabarray([])
-#    sstatus=matlabarray([])
-#    dstatus=matlabarray([])
-#    sspace_save=matlabarray([])
-#    xspace_save=matlabarray([])
+#    errg=copy(np.Inf)
+#    X=array([])
+#    fX=array([])
+#    xstatus=array([])
+#    sstatus=array([])
+#    dstatus=array([])
+#    sspace_save=array([])
+#    xspace_save=array([])
 #    ndummyY=0
 #    info.flag=0
 #    rand_(char('seed'),np.pi / sqrt_(2))
@@ -273,11 +273,11 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #    factor_fmax=1e+20
 #    CNTsin=0
 #    Delta0=1
-#    cur_degree=copy_(plin)
-#    rep_degree=copy_(plin)
+#    cur_degree=copy(plin)
+#    rep_degree=copy(plin)
 #    epsilon=1e-05
 #    maxeval=200 * n
-#    maxit=copy_(maxeval)
+#    maxit=copy(maxeval)
 #    verbose=1
 #    show_errg=0
 #    initial_Y=char('simplx')
@@ -316,20 +316,20 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #    Deltamax=factor_Dmax * Delta0
 #    if nargin < 2:
 #        fprintf_(char('\\n### EC-DFO: the first 2 arguments are required\\n\\n'))
-#        x=matlabarray([])
-#        lm=matlabarray([])
+#        x=array([])
+#        lm=array([])
 #        info.flag=1
 #        return x,lm,info
 #    if nargin < 3:
-#        lm0=matlabarray([])
+#        lm0=array([])
 #    else:
 #        lm0=lm0[:]
 #    if nargin < 4:
-#        lb=matlabarray([])
+#        lb=array([])
 #    else:
 #        lb=lb[:]
 #    if nargin < 5:
-#        ub=matlabarray([])
+#        ub=array([])
 #    else:
 #        ub=ub[:]
 #    if nargin < 6:
@@ -344,9 +344,9 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #    n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
 #    if info.flag:
 #        return x,lm,info
-#    x0=copy_(x)
+#    x0=copy(x)
 #    eps_current=max_(mu0 * normgx,epsilon)
-#    fxmax=min_(1e+25,factor_fmax * abs_(fx))
+#    fxmax=min_(1e+25,factor_fmax * abs(fx))
 #    M=eye_(n)
 #    if (verbose):
 #        fid=fopen_(char('convhist.m'),char('w'))
@@ -368,7 +368,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 #        n=n + nfix
 #    if (scaleX):
 #        x=x / scalefacX
-#    info_best=copy_(info)
+#    info_best=copy(info)
 #    info_best.f=fx
 #    x=X[:,i_xbest]
 #    ecdfo_finish_(nb,mi,me,info_best,options,values)

@@ -129,7 +129,7 @@ import sys
 sys.path.append("../")
 import unittest
 from ecdfo_finish import *
-#import numpy as np
+from numpy import array
 import helper
 
 class dummyInfo():
@@ -141,7 +141,7 @@ class dummyInfo():
         self.feasn = 2.220446049250313e-16
         self.compl = 0
         self.niter=  4
-        self.nsimul = matlabarray([0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.nsimul = array([[0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
 class Test_ecdfo_finish(unittest.TestCase):
     """

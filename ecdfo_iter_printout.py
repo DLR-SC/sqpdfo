@@ -22,7 +22,7 @@ def ecdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,
 #    nargin = 11-[info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit].count(None)+len(args)
 
     if options.verbose < 4:
-        fprintf_(options.fout,'%4i  %4i'%(info.niter,info.nsimul[2] + info.nsimul[4]))
+        fprintf_(options.fout,'%4i  %4i'%(info.niter,info.nsimul[1] + info.nsimul[3]))
         fprintf_(options.fout,'  %+14.8e  %+14.8e  '%(info.f,merit))
         if constrained_pbl:
             fprintf_(options.fout,'%10.4e  %14.8e'%(info.glagn,info.feasn))
