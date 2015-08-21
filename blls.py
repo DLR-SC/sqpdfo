@@ -76,7 +76,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     g=A.T.dot(res)
     stry=min_(max_(s - g,lb),ub) - s
     opt=norm_(stry)
-    free=find_(stry).T
+    free=find_(stry)
     atlb=find_(abs(max_(s - g,lb) - s) <= epsfeas)
     atub=find_(abs(min_(s - g,ub) - s) <= epsfeas)
     latlb=length_(atlb)
