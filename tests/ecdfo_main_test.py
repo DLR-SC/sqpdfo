@@ -1131,7 +1131,6 @@ class Test_ecdfo_main(unittest.TestCase):
         self.assertTrue(compare_array(correctfx, fx, self.abs_tol, self.rel_tol))
         
         self.assertEqual(correcti_xbest, i_xbest)
-        #Difference due to different convergence paths in auskommentierten Zeilen
         self.assertEqual(correctm,m)
         self.assertTrue(compare_array(correctX, X, self.abs_tol, 1e-3))
         self.assertTrue(isempty_(ciX))
@@ -1155,7 +1154,6 @@ class Test_ecdfo_main(unittest.TestCase):
         self.assertEqual(correctCNTsin, CNTsin)
         self.assertEqual(correctneval, neval)
         self.assertTrue(compare_array(correctlm, lm, self.abs_tol, self.rel_tol))
-
         
         
 
