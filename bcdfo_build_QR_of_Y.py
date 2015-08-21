@@ -86,6 +86,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                 badcond=1
             if (badcond):
                 U,Sdiag,V=linalg.svd(F)
+                V=V.T
                 indices=find_(Sdiag < _del)
                 Sdiag[indices]=_del
                 S=diag(Sdiag)
@@ -104,6 +105,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                     badcond=1
                 if (badcond):
                     U,Sdiag,V=linalg.svd(Z)
+                    V=V.T
                     indices=find_(Sdiag < _del)
                     Sdiag[indices]=_del
                     S=diag(Sdiag)
@@ -122,6 +124,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                         badcond=1
                     if (badcond):
                         U,Sdiag,V=linalg.svd(Z)
+                        V=V.T
                         indices=find_(Sdiag < _del)
                         Sdiag[indices]=_del
                         S=diag(Sdiag)

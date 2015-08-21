@@ -42,6 +42,7 @@ def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
         badcond=1
     if (badcond):
         U,Sdiag,V=numpy.linalg.svd(A)
+        V=V.T
         a=Sdiag < 1e-07
         Sdiag[a]=1e-07
         S=diag(Sdiag)
