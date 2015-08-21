@@ -12,6 +12,7 @@ except ImportError:
 from bcdfo_evalL import bcdfo_evalL_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy
+from numpy import arange
 
 def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase_=None,whichmodel=None,succ=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 #    varargin = cellarray(args)
