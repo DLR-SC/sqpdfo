@@ -25,7 +25,8 @@ def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whic
     else:
         Y=Y_
         xbase=xbase_        
-        
+    
+    choice_set=choice_set.reshape(-1)
     n,p1=size_(Y,nargout=2)
     I=eye_(p1)
     lc=length_(choice_set)
