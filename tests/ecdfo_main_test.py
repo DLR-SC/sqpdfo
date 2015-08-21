@@ -1097,7 +1097,7 @@ class Test_ecdfo_main(unittest.TestCase):
         correctceX = array([
   [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   -0.000007353481509, 0.000010233764458,     0.000009376443116],
   [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,  -0.000002704791005,  0.000020502831926 ,    0.000008206893176]])
-        correctind_Y = array([   6,     9, 10,     7,     8,    11])
+        correctind_Y = array([   5,     8, 9,     6,     7,    10])
         correctDelta = 5.672511970824019
         correcteps_current =  1.000000000000000e-05
         correctcur_degree =  6
@@ -1134,26 +1134,26 @@ class Test_ecdfo_main(unittest.TestCase):
         #Difference due to different convergence paths in auskommentierten Zeilen
         self.assertEqual(correctm,m)
         self.assertTrue(compare_array(correctX, X, self.abs_tol, 1e-3))
-        self.assertEqual(correctciX, ciX)
+        self.assertTrue(isempty_(ciX))
         self.assertTrue(compare_array(correctceX, ceX, 1e-4, 1e-3))
         self.assertTrue(compare_array(correctind_Y, ind_Y, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_array(correctDelta, Delta, self.abs_tol, self.rel_tol))
+        self.assertAlmostEqual(correctDelta,Delta,places=5)
         self.assertEqual(correcteps_current, eps_current)
         self.assertEqual(correctcur_degree, cur_degree)
         self.assertTrue(compare_array(correctfcmodel,fcmodel, self.abs_tol, 1e-4))
         self.assertTrue(compare_array(correctgx, gx, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_array(correctnormgx, normgx, self.abs_tol, self.rel_tol))
+        self.assertAlmostEqual(correctnormgx, normgx,places=11)
         self.assertTrue(compare_array(correctvstatus, vstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctxstatus, xstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctdstatus, dstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctsstatus, sstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctM, M, 2000, 1e-2))
-        self.assertTrue(compare_array(correctndummyY, ndummyY, self.abs_tol, self.rel_tol))
+        self.assertEqual(correctndummyY, ndummyY)
         self.assertTrue(compare_array(correctsspace_save, sspace_save, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctxspace_save, xspace_save, self.abs_tol, self.rel_tol))
         self.assertEqual(str(correctmsg),str(msg))
-        self.assertTrue(compare_array(correctCNTsin, CNTsin, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_array(correctneval, neval, self.abs_tol, self.rel_tol))
+        self.assertEqual(correctCNTsin, CNTsin)
+        self.assertEqual(correctneval, neval)
         self.assertTrue(compare_array(correctlm, lm, self.abs_tol, self.rel_tol))
 
         

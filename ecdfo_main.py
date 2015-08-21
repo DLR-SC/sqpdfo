@@ -152,6 +152,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     options=copy(options_)
     values=copy(values_)
 
+    info.niter=1
     old_delta=copy(delta)
     sigma=1
     rho_factor=0.3
@@ -338,7 +339,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
                 disp_('error on gradient after set improvement = ',num2str_(errg))
-            if (info.glagn / factor_CV <= options.tol[0]) and (info.feasn / factor_CV <= options.tol[1]) and (info.compl / factor_CV <= options.tol[1]) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
+            if (info.glagn / factor_CV <= options.tol[0]) and (info.feasn / factor_CV <= options.tol[1]) and (info.compl / factor_CV <= options.tol[2]) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
                 info.niter=info.niter + 1
                 itype='conv'
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
