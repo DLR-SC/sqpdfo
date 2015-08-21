@@ -11,8 +11,7 @@ try:
     from runtime import *
 except ImportError:
     from smop.runtime import *
-    
-from numpy import asarray
+
 
 def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
 ###############################################################################
