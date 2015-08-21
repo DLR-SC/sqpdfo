@@ -27,9 +27,10 @@ Created on Tue Dec 02 17:30:25 2014
 import helper
 from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
-from ecdfo_global_variables import set_prob, set_threshold,get_prob
+from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
+from numpy import array, zeros, arange
 #except ImportError:
 #from smop.runtime import *
 
@@ -41,19 +42,20 @@ tic = time.clock()
 #_format(char('long'))
 #global n,nb,mi,me,prob,threshold
 
-set_prob(5) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_prob(3) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_check_condition(0)
 prob=get_prob()
 options = helper.dummyUnionStruct()
-options.tol=matlabarray([])
+options.tol=zeros(3)
 
 x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
-lb=zeros_(1,n)
-ub=zeros_(1,n)
-lb[arange_(1,n)]=lx
-ub[arange_(1,n)]=ux
+lb=zeros_(n,1)
+ub=zeros_(n,1)
+lb[arange(0,n)]=lx
+ub[arange(0,n)]=ux
 if mi:
-    lb[arange_(n + 1,n + mi)]=li
-    ub[arange_(n + 1,n + mi)]=ui
+    lb[arange(n,n + mi)]=li
+    ub[arange(n ,n + mi)]=ui
 set_threshold(1e-08)
 options.algo_method='quasi-Newton'
 options.algo_globalization='trust regions'
@@ -62,14 +64,14 @@ options.bfgs_restart=0
 options.algo_descent='Powell'
 if nb + mi + me == 0:
     options.algo_descent='Wolfe'
+options.tol[0]=1e-05
 options.tol[1]=1e-05
 options.tol[2]=1e-05
-options.tol[3]=1e-05
 options.dxmin=dxmin
 options.miter=500
 options.msimul=500
 options.verbose=2
-lm=matlabarray([])
+lm=array([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
 print x
 
