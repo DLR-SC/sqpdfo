@@ -246,9 +246,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         x_viol=zeros_(size_(xnew))
         for i in range(0,n):
             if (xnew[i] - lb[i] < - threshold):
-                x_viol[i]=- i
+                x_viol[i]=-(i+1) #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
 #                x_fix=array([x_fix,i])
-                x_fix=concatenate_([x_fix, array([i])], axis=1)
+                x_fix=concatenate_([x_fix, array([i])], axis=1)   #here we do not have to increment i because x_fix is an index array
                 if options.verbose >= 3:
                     disp_('lb ',int2str_(i),' is violated')
 #                constraints=array([[constraints],[0]])
@@ -258,14 +258,14 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 violated=1
                 break
             elif (abs(xnew[i] - lb[i]) < 1e-07):
-                x_active[i]=- i
+                x_active[i]=-(i+1)#we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
                 if options.verbose >= 3:
                     disp_('lb ',int2str_(i),' is active')
             else:
                 if (xnew[i] - ub[i] > threshold):
-                    x_viol[i]=i
+                    x_viol[i]=i+1 #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
 #                        x_fix=array([x_fix,i])
-                    x_fix=concatenate_([x_fix, array([i])], axis=1)
+                    x_fix=concatenate_([x_fix, array([i])], axis=1) #here we do not have to increment i because x_fix is an index array
                     if options.verbose >= 3:
                         disp_('ub ',int2str_(i),' is violated')
 #                   constraints=array([[constraints],[0]])
@@ -275,7 +275,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                     violated=1
                     break
                 elif (abs(xnew[i] - ub[i]) < 1e-07):
-                    x_active[i]=i
+                    x_active[i]=i+1 #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
                     if options.verbose >= 3:
                         disp_('ub ',int2str_(i),' is active')
         if sum_(x_viol) == 0:
@@ -307,7 +307,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 gconstraints=gconstraints[0:me,:]
                 xa=find_(x_active < 0).reshape(-1)
                 if length_(xa) == length_(x_fix):
-                    if np.sort(xa) == np.sort(x_fix):
+                    if (np.sort(xa) == np.sort(x_fix)).all():
                         for i in range(0,length_(x_fix)):
                             if i != ind_min_lm:
 #                                constraints=array([[constraints],[0]])
