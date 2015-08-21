@@ -95,7 +95,7 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
         fx=copy(fY[0])
         i_xbest=copy(ind_Y[0])
         if (not shift_Y):
-            x=copy(Y[:,0])
+            x=copy(Y[:,[0]])
     info.f=copy(fY[0])
     if length_(ceY) > 0:
         info.ce=copy(ceY[:,[0]])

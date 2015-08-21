@@ -47,8 +47,8 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta * scale[1],eps_L,nargout=9)
         mstep=mstep / scale[1]
     else:
-        g=bcdfo_gradP_(Lj,Y[:,0],xbase,scale,0)
-        H=bcdfo_hessP_(Lj,Y[:,0],xbase,scale,0)
+        g=bcdfo_gradP_(Lj,Y[:,[0]],xbase,scale,0)
+        H=bcdfo_hessP_(Lj,Y[:,[0]],xbase,scale,0)
         pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta,eps_L,nargout=9)
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta,eps_L,nargout=9)
     if (verbose):

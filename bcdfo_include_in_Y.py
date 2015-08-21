@@ -35,12 +35,12 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     crit_val=0
     pos=0
     for i in range(0,lc):
-        j=choice[i]
+        j=choice[i] # since choice is a vector column, choice[i] will return something like array([a]), and dimensions below are correct
         if (criterion == 'weighted'):
             if (succ == 1):
                 cv=norm_(Y[:,j] - x) ** 2 * abs(Lvals[j])
             else:
-                cv=norm_(Y[:,j] - Y[:,0]) ** 2 * abs(Lvals[j])
+                cv=norm_(Y[:,j] - Y[:,[0]]) ** 2 * abs(Lvals[j])
         else:
             if (criterion == 'standard'):
                 cv=abs_(Lvals[j])
@@ -49,11 +49,11 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
                     if (succ == 1):
                         cv=norm_(Y[:,j] - x)
                     else:
-                        cv=norm_(Y[:,j] - Y[:,0])
+                        cv=norm_(Y[:,j] - Y[:,[0]])
         if (cv > crit_val):
             pos=copy(j)
             crit_val=copy(cv)
-    if (pos == 0):
-        return QZ,RZ,Y,pos,xbase,scale
+    if (int(pos) == 0):
+        return QZ,RZ,Y,int(pos),xbase,scale
     QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,x,Y,int(pos),xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
     return QZ,RZ,Y,int(pos),xbase,scale

@@ -32,7 +32,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         disp_('--- enter bcdfo_repair_Y  for Delta = ',num2str_(Delta),' ---')
     n,p1=size_(Y,nargout=2)
     d=zeros_(p1,1)
-    for j in range(1,p1):
+    for j in range(1,p1): #it was initially in matlab range(2,p1)
         d[j]=norm_(Y[:,j] - Y[:,0])
 #    dsorted,jsorted=sort_(d,'descend',nargout=2)
     dsorted=np.sort(d.reshape(-1))[::-1]
@@ -56,7 +56,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,y,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
 #            replaced=matlabarray([replaced,jmax])
             replaced  = np.append( replaced, jmax )
-            d[jmax]=norm_(y - Y[:,0])
+            d[jmax]=norm_(y - Y[:,[0]])
         else:
             Y_radius=dsorted[j]
             break
@@ -95,7 +95,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         if (verbose):
             disp_('maximprove= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
         QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ymax,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
-        d[jmax]=norm_(ymax - Y[:,0])
+        d[jmax]=norm_(ymax - Y[:,[0]])
         if (length_(find_(replaced == jmax)) == 0):
             replaced  = np.append( replaced, jmax )
     Y_radius=max_(d)
