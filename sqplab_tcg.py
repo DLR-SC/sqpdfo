@@ -170,7 +170,7 @@ def dogleg_(dc=None,dn=None,delta=None,*args,**kwargs):
         t=0
         return dd,t
     t=(sqrt_(bb ** 2 - aa * cc) - bb) / aa
-    dd=dc + t.dot(dd)
+    dd=dc + t*(dd)
     return dd,t
 
 #class tcgInfo():
