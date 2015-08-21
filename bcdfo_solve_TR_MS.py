@@ -183,9 +183,9 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     maxdiag=max_(diag(D))
     ii=find_(abs(diag(D)) < 1e-10 * maxdiag)
     if (length_(ii) < n and  not(isempty_(ii))):
-        D[ii,ii]=0.5 * maxdiag * eye_(length_(ii))
+        D[ii,ii.T]=0.5 * maxdiag * eye_(length_(ii))
         Dinv=inv_(D)
-        Dinv[ii,ii]=0
+        Dinv[ii,ii.T]=0
         scri=- V .dot( Dinv.dot( V.T .dot(g)))
         nscri=norm_(scri)
     else:
