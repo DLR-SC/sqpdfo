@@ -420,13 +420,20 @@ def norm_(A, order=2, axis=None):
     if isempty_(A):
         return 0
         
-#for some reason, python does not give exactly (so precision differs
+#for some reason, python does not give exactly (precision differs
 #after the 10nth variable or so, but still this makes differences...) the same 2-norm
-#when it does it calcultes the norm of an array([a b c...]) and array([[a b c...]]).
-#And it is closer to matlab when it is like array([[a b c..]]). Hence those 2 lines
+#when it does it from the norm of an array such as array([a b c...]) or such as array([[a b c...]])/array([[a] [b] [c]...])
+#And it is closer to matlab when it is like array([[a b c..]]).
+#Also, python will compute a different 'inf' norm for a vector such as  array([[a] [b] [c]...])/array([a,b,c]) or such as array([[a b c...]])
+#and it is array([[a] [b] [c]...])/array([a,b,c]) which corresponds to the normal vector-inf norm we are looking for generally.
+#Hence the following modifications :
     if isvector_or_scalar_(A):
-        #A=A.reshape(-1,1) <- this also works
-        A=A.reshape(1,-1)        
+        if order==2:
+            #A=A.reshape(-1,1)# <- this also works
+            A=A.reshape(1,-1)  
+        if order==np.inf:
+            A=A.reshape(-1,1)# <- this also works
+#            A=A.reshape(-1)
         
     if axis==None:
         return np.linalg.norm(A, order,axis)
