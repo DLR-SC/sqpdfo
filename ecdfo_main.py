@@ -152,7 +152,6 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     options=copy(options_)
     values=copy(values_)
 
-    info.niter=1
     old_delta=copy(delta)
     sigma=1
     rho_factor=0.3
