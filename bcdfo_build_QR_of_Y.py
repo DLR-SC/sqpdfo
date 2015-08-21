@@ -65,7 +65,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
             S=diag(Sdiag)
-            M=(V * S * U.T).T
+            M=(V.dot(S.dot(U.T))).T
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
@@ -86,11 +86,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                 badcond=1
             if (badcond):
                 U,Sdiag,V=linalg.svd(F)
-                V=V.T
                 indices=find_(Sdiag < _del)
                 Sdiag[indices]=_del
                 S=diag(Sdiag)
-                M=(V * S.T * U.T).T
+                M=(V.dot(S.dot(U.T))).T
                 QZ,RZ=qr_(M,nargout=2)
             else:
                 QZ,RZ=qr_(F,nargout=2)
@@ -105,11 +104,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                     badcond=1
                 if (badcond):
                     U,Sdiag,V=linalg.svd(Z)
-                    V=V.T
                     indices=find_(Sdiag < _del)
                     Sdiag[indices]=_del
                     S=diag(Sdiag)
-                    M=(V * S.T * U.T).T
+                    M=(V.dot(S.dot(U.T))).T
                     QZ,RZ=qr_(M,nargout=2)
                 else:
                     QZ,RZ=qr_(Z,nargout=2)
@@ -124,11 +122,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
                         badcond=1
                     if (badcond):
                         U,Sdiag,V=linalg.svd(Z)
-                        V=V.T
                         indices=find_(Sdiag < _del)
                         Sdiag[indices]=_del
                         S=diag(Sdiag)
-                        M=(V * S * U.T).T
+                        M=(V.dot(S.dot(U.T))).T
                         QZ,RZ=qr_(M,nargout=2)
                     else:
                         QZ,RZ=qr_(Z,nargout=2)
