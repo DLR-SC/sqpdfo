@@ -44,7 +44,7 @@ def ecdfo_func_(x=None,*args,**kwargs):
     elif prob == 4:
         f=x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3]
         ce=zeros(3)
-        ce[0]=x[1] + x[2] + x[3]
+        ce[0]=x[0] + x[1] + x[2]
         ce[1]=x[0] + 2 * x[1] + 3 * x[2] - 1
         ce[2]=x[3] ** 3 - 1
         ce=ce.reshape(-1,1)
