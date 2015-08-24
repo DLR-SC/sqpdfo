@@ -14,7 +14,7 @@ from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_c
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
 import unittest
-from numpy import array, zeros, arrange
+from numpy import array, zeros, arange
 #from run_ecdfo import *
 #import numpy as np
 #import helper
@@ -36,10 +36,10 @@ class Test_run_ecdfo(unittest.TestCase):
         options.tol=zeros(3)
 
         x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
-        lb=zeros_(1,n)
-        ub=zeros_(1,n)
-        lb[arange_(0,n)]=lx
-        ub[arange_(0,n)]=ux
+        lb=zeros_(n,1)
+        ub=zeros_(n,1)
+        lb[arange(0,n)]=lx
+        ub[arange(0,n)]=ux
         if mi:
             lb[arange(n,n + mi)]=li
             ub[arange(n,n + mi)]=ui
@@ -64,8 +64,7 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(x, array([[1.950000000000000,0.262499999999991]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[-0.637499999995624,0,  0.737500000002291]]), self.abs_tol, self.rel_tol))
 
-        #Relative big difference for info.g[1] between matlab and python : python gives something around -0.7375 and matlab -0.1
-#        self.assertTrue(compare_array(info.g, array([[  -0.100000000005919, -2.950000000008655]]), self.abs_tol, self.rel_tol))
+        self.assertTrue(compare_array(info.g, array([[  -0.100000000005919, -2.950000000008655]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(info.ae, array([[ 0.999999999998983, 3.999999999999313]]), self.abs_tol, self.rel_tol))
         self.assertEqual(info.niter,4)
         self.assertAlmostEqual(info.ce, -3.819167204710539e-14,places=10)
@@ -82,8 +81,8 @@ class Test_run_ecdfo(unittest.TestCase):
         options.tol=zeros(3)
 
         x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
-        lb=zeros_(1,n)
-        ub=zeros_(1,n)
+        lb=zeros_(n,1)
+        ub=zeros_(n,1)
         lb[arange(0,n)]=lx
         ub[arange(0,n)]=ux
         if mi:
@@ -127,8 +126,8 @@ class Test_run_ecdfo(unittest.TestCase):
         options.tol=zeros(3)
 
         x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
-        lb=zeros_(1,n)
-        ub=zeros_(1,n)
+        lb=zeros_(n,1)
+        ub=zeros_(n,1)
         lb[arange(0,n)]=lx
         ub[arange(0,n)]=ux
         if mi:

@@ -36,7 +36,7 @@ from __future__ import division
 #try:
 from runtime import *
 from copy import copy
-from numpy import array
+from numpy import array,arange
 #except ImportError:
     #from smop.runtime import *
 def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
@@ -47,7 +47,7 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
     n=length_(info.g)
     mi=length_(info.ci)
     me=length_(info.ce)
-    info.glag=info.g
+    info.glag=copy(info.g)
     gradlag=info.g
     bounds=(abs(lb - x) < 1e-05) + (abs(ub - x) < 1e-05)
     if options.verbose >= 4:
@@ -60,7 +60,7 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
     gradlag=info.glag
     if mi > 0:
         I=find_(bounds[n:n + mi])
-        info.glag=info.glag + info.ai(I,arange_()).T.dot(lm[n + I])
+        info.glag=info.glag + info.ai(I,arange()).T.dot(lm[n + I])
     if me > 0:
         derivequcons=info.ae
         equmult=lm[n + mi:n + mi + me]
