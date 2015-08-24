@@ -72,6 +72,8 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.nsimul, array([[0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 ]]), self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(info.f,-3.909687499999972,places=10)
         self.assertEqual(info.compl,0)
+        self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
+        self.assertTrue(compare_array(info.glag, 1e-10*array([0.76387451919401,-0.381947806715743]), self.abs_tol, self.rel_tol))
         
     def test_run_ecdfo_prob2(self):
         set_prob(2) 
@@ -117,6 +119,8 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.nsimul, array([[0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 ]]), self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(info.f, 0.666647846741449,places=10)
         self.assertEqual(info.compl,0)
+        self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
+        self.assertTrue(compare_array(info.glag, 1e-05*array([  -0.560839309260430,0.560883753109032]), self.abs_tol, self.rel_tol))
 #        
     def test_run_ecdfo_prob3(self):
         set_check_condition(0)
@@ -162,6 +166,8 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.nsimul, array([[0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 ]]), self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(info.f,   0.500000000000000,places=10)
         self.assertEqual(info.compl,0)
+        self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
+        self.assertTrue(compare_array(info.glag, 1e-07*array([0.062859997207454,  0.188580686583393,-0.188580611126810]), self.abs_tol, self.rel_tol))
 
 if __name__ == '__main__':
     unittest.main()
