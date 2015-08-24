@@ -68,7 +68,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
     ind_g_crit=find_(logical_or(logical_and(g>0, abs(lb) <= 1e-10), logical_and(g < 0, ub <= 1e-10)))
 
     if (not isempty_(ind_g_crit)):
-        ind_active=ind_free[ind_g_crit]
+        ind_active=ind_free[ind_g_crit].T
         ind_free=setdiff_(ind_free,ind_active)
         nfree=length_(ind_free)
     j=0
@@ -93,7 +93,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             ind_l_crit=find_(logical_and(s_after_reduced_ms[ind_free] - lb[ind_free] <= eps_bound, lb[ind_free] >= -1e-10))
             if (length_(ind_u_crit) + length_(ind_l_crit) != 0):
 #                ind_active=matlabarray([ind_active,ind_free[ind_u_crit],ind_free[ind_l_crit]])
-                ind_active=concatenate_([ind_active,ind_free[ind_u_crit],ind_free[ind_l_crit]],axis=1)
+                ind_active=concatenate_([ind_active,ind_free[ind_u_crit].T,ind_free[ind_l_crit].T],axis=1)
                 ind_free=setdiff_(range(0,n),ind_active)
                 nfree=length_(ind_free)
                 if (verbose):
@@ -355,7 +355,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
             ind_g_crit=find_(logical_or(logical_and(abs(lb[ind_free]) <= 1e-10, g[ind_free] > 0), logical_and(ub[ind_free] <= 1e-10, g[ind_free] < 0)))
             if (length_(ind_g_crit) != 0):
 #                ind_active=matlabarray([ind_active,ind_free[ind_g_crit]])
-                ind_active=concatenate_([ind_active,ind_free[ind_g_crit]],axis=1)
+                ind_active=concatenate_([ind_active,ind_free[ind_g_crit].T],axis=1)
                 ind_free=setdiff_(ind_free,ind_active)
                 nfree=length_(ind_free)
 
