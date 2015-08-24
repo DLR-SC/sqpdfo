@@ -620,7 +620,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                     gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                             if me > 0:
                                 gce=zeros_(me,n)
-                                for i in range(1,me):
+                                for i in range(0,me):
                                     gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
                         if (pos == -1):
                             if (rho >= eta1):
