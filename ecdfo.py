@@ -38,7 +38,7 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
 
     c = helper.dummyUnionStruct()
     info = helper.dummyUnionStruct()
-    eps = 2.2204e-16
+    eps = 2.220446049250313e-16
     prob=get_prob
     c.free=0
     c.fixed=1
