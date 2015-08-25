@@ -109,6 +109,9 @@ def isvector_(a):
         return False
 
 def disp_(*args):
+    """
+    function printing out arguments
+    """
     out = ""
     for arg in args:
         try:
@@ -116,15 +119,22 @@ def disp_(*args):
         except Exception as e:
             print "Display Error:", e.message()
     print out#(args)
-
-false = False
-
+    
 def false_(*args):
+    """
+    function creating an array of false
+    """
     if len(args) == 1:
         args += args
     return np.zeros(args,dtype=bool,order="F")
 
 def find_(a,n=None,d=None,nargout=1):
+    """
+    function which returns a column vector or a tuple of column vectors (depending on the value of
+    nargout) containing indices where a[indices] are true in the vector/matrix 'a'
+    Argument 'n' tells us how many of those indices we want
+    """
+    
     if d:
         raise NotImplementedError
 
@@ -137,7 +147,7 @@ def find_(a,n=None,d=None,nargout=1):
             i = i.take(range(n))
         return np.array(i)
     elif nargout == 2:
-        i,j = np.nonzero(np.asarray(a))
+        i,j = np.nonzero(a)
         if n is not None:
             i = i.take(n)
             j = j.take(n)
@@ -148,9 +158,15 @@ def find_(a,n=None,d=None,nargout=1):
         raise NotImplementedError
 
 def floor_(a):
-    return np.floor_(np.asanyarray(a))
+    """
+    function floor
+    """
+    return np.floor(a)
 
 def fopen_(*args):
+    """
+    function which opens a file
+    """
     try:
         fp = open(*args)
         assert fp != -1
@@ -159,55 +175,51 @@ def fopen_(*args):
         return -1
                                 
 def fclose_(*args):
+    """
+    function which closes a file
+    """
     if args[0] == -1:
         print "No file to close, continue..."
     else:
         args[0].close()
 
-def fullfile_(*args):
-    return os.path.join(*args)
-
-def intersect_(a,b,nargout=1):
-    if nargout == 1:
-        c = sorted(set(a) & set(b))
-        if isinstance(a,str):
-            return "".join(c)
-        elif isinstance(a,list):
-            return c
-        else:
-            # FIXME: the result is a column vector if
-            # both args are column vectors; otherwise row vector
-            return np.array(c)
-    raise NotImplementedError
+#Unused functions
+#def fullfile_(*args):
+#    return os.path.join(*args)
+#
+#def intersect_(a,b,nargout=1):
+#    if nargout == 1:
+#        c = sorted(set(a) & set(b))
+#        if isinstance(a,str):
+#            return "".join(c)
+#        elif isinstance(a,list):
+#            return c
+#        else:
+#            # FIXME: the result is a column vector if
+#            # both args are column vectors; otherwise row vector
+#            return np.array(c)
+#    raise NotImplementedError
 
 
 def isempty_(a):
-    if a is None or a==[] :
+    """
+    function which returns true if the argument 'a' is an empty array (array([])) or an empty list []
+    """
+    if a==[] :
         return True
     try:
         return 0 in a.shape
     except AttributeError:
         return False
 
-def isequal_(a,b):
-    return np.array_equal(np.asanyarray(a),
-                          np.asanyarray(b))
 
-#def isvectorRow_(a):
-#    if a.ndim==1:
-#        return True
-#    elif ndims_(a)==2:
-#        if a.shape[0]==1 and a.shape[1]>=1:
-#            return True
-#            
-#    return False
-#    
-#def isvectorColumn_(a):
-#    if ndims_(a)==2:
-#        if a.shape[0]>=1 and a.shape[1]==1:
-#            return True
-#            
-#    return False
+def isequal_(a,b):
+    """
+    function which tests if 2 arrays have the same values
+    """
+    return np.array_equal(a,
+                          b)
+
                           
 def isscalar_(a):
     """np.isscalar returns True if a.__class__ is a scalar
@@ -219,16 +231,17 @@ def isscalar_(a):
         return np.isscalar(a)
 
 def length_(a):
-    try:
-        return max(np.asarray(a).shape)
-    except ValueError:
-        return 1
+    """
+    function which returns the length of an array according to matlab definition
+    """
+    return max(np.asarray(a).shape)
 
-try:
-    def load_(a):
-        return loadmat(a) # FIXME
-except:
-    pass
+#Not sure what this it for
+#try:
+#    def load_(a):
+#        return loadmat(a) # FIXME
+#except:
+#    pass
 
 def max_(a, d=None, nargout=None):
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
@@ -272,7 +285,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     """
     
     
-    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
+    #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings or to worry about them.
 #    warnings.simplefilter('ignore', RuntimeWarning)
     if isempty_(a):
         ret = np.array([])                    
@@ -291,19 +304,31 @@ def min_(a, d=None, nargout=None):#, nargout=0):
 #        warnings.simplefilter('default', RuntimeWarning)
         return ret                                
 
-    warnings.simplefilter()
 def mod_(a,b):
+    """
+    function which returns a modulo b
+    """
     try:
         return a % b
     except ZeroDivisionError:
         return a
+        
 def ndims_(a):
+    """
+    function which returns the number of dimension of a
+    """
     return a.ndim
 
 def numel_(a):
+    """
+    function which returns the number of elements of a
+    """
     return a.size
 
 def rand_(*args,**kwargs):
+    """
+    function which returns a matrix of random numbers, according to matlab definition
+    """
     if not args:
         return np.random.rand()
     if len(args) == 1:
@@ -313,22 +338,22 @@ def rand_(*args,**kwargs):
     except:
         pass
 
-def ravel_(a):
-    return np.asanyarray(a).reshape(-1,1)
-
-def round_(a):
-    return np.round(np.asanyarray(a))
-
-def rows_(a):
-    return np.asarray(a).shape[0]
-
-def columns_(a):
-    return np.asarray(a).shape[1]
+#Unused functions
+#def ravel_(a):
+#    return a.reshape(-1,1)
+#
+#def round_(a):
+#    return np.round(a)
+#
+#def rows_(a):
+#    return a.shape[0]
+#
+#def columns_(a):
+#    return a.shape[1]
 
 def size_(a, b=0, nargout=1):
     """
-    >>> size_(zeros_(3,3)) + 1
-    matlabarray([[4, 4]])
+    function which returns the size of the matrix a, according to matlab defintion
     """
     s = a.shape
     #not sure what the 2 following lines are for
@@ -344,21 +369,27 @@ def size_(a, b=0, nargout=1):
         return 1
 
 def sum_(a, dim=None):
+    """
+    function which sums the elements of a in the corresponding dimension
+    """
     if dim is None:
         return a.sum(0)
     else:
         return a.sum(dim-1)
 
-true = True
-
 def true_(*args):
+    """
+    function which creates an array of True
+    """
     if len(args) == 1:
         args += args
     return np.ones(args,dtype=bool,order="F")
 
 
 def zeros_(*args,**kwargs):
-
+    """
+    function which creates an array of zeros
+    """
     if not args:
         return 0.0
     if len(args) == 1:
@@ -370,7 +401,9 @@ def zeros_(*args,**kwargs):
 
 
 def ones_(*args,**kwargs):
-
+    """
+    function which creates an array of ones
+    """
     if not args:
         return 1.0
     if len(args) == 1:
@@ -383,25 +416,37 @@ def ones_(*args,**kwargs):
 #------------------------------------------------------------------------------
 #                Added Functions Start here.
 #------------------------------------------------------------------------------
-# -> matrices given as arguments  are matlabarray. Otherwise these functions may not do their job. We are doing our best here so that
-#    the linear algebra functions return the arguments like in matlab. Therefore we do modifications on the outputs of classical python functions.
-# -> normally all the functions below return matlabarrays when given matlabarrays as inputs
+# The linear algebra functions return the arguments like in matlab. Therefore we do modifications on the outputs of classical python functions.
+
 
 def eig_(A, nargout=1):
+    """
+    function returning the eigenvalues (and eigenvectors if nargout=2) of A
+    """
     if nargout == 1:
         return np.linalg.eigvals(A)
     else:
-        D,V = np.linalg.eig(A) #when A is a matlabarray, linalg.eig(A) returns D as a python array and V as a matlabarray
+        D,V = np.linalg.eig(A) 
         return V,np.diag(D)
             
 def cond_(A):
+    """
+    function returning the condition number of A
+    """
     return np.linalg.cond(A)
     
 def svd_(A, full_matrices=1, *args,**kwargs):
+    """
+    function returning the SVD decomposition of A,
+    such that U*S*V.T = A
+    """
     u,s,v= np.linalg.svd(A, full_matrices)
     return u, np.diag(s), v.T
     
 def chol_(A,nargout=2):
+    """
+    function returning the cholesky factorization of A
+    """
     try: #there is in python a exception when the matrix is not positive definite, which does not occur on matlab
         R = np.linalg.cholesky(A).T
         p = 0
@@ -411,12 +456,21 @@ def chol_(A,nargout=2):
     return R,p   
     
 def qr_(A,nargout=2):
+    """
+    function returning the qr factorization of A
+    """
     return np.linalg.qr(A)
     
 def inv_(A):
+    """
+    function returning the inverse of A
+    """
     return np.linalg.inv(A)
      
 def norm_(A, order=2, axis=None):
+    """
+    function returning the norm of the matrix or vector A
+    """
     if isempty_(A):
         return 0
         
@@ -442,9 +496,15 @@ def norm_(A, order=2, axis=None):
 
     
 def pinv_(A):
+    """
+    function returning the pseudo inverse of A
+    """
     return np.linalg.pinv(A)
     
 def solve_(A,b):
+    """
+    Returns x in problem A.dot(x)=b
+    """
     return np.linalg.solve(A,b)
 
 def fprintf_(fid,*args, **kwargs):
@@ -466,13 +526,21 @@ def fprintf_(fid,*args, **kwargs):
         print fid+out,
         
 def poly1d_(A, r=0):
-    #Careful : A.r which gives then the roots of the polynom is an array instead of a matlab array
+    """
+    A one dimension polynomial class
+    """
     return np.poly1d(A,r) 
     
 def eye_(n):
+    """
+    Returns the identity matrix
+    """
     return np.eye(n)
     
 def concatenate_(arrs, axis=0):
+    """
+    Concatenate the arrays horizontally if axis=0, vertically if axis=1
+    """
     copy_arrs=copy(arrs)
     for arr in arrs:
         if isempty_(arr):
@@ -483,89 +551,99 @@ def concatenate_(arrs, axis=0):
         return np.concatenate(copy_arrs, axis)
     
 def sign_(A):
+    """
+    Returns a matrix of the same shape of A, with values -1 if the sign is negative, 0 if null, 1 if positive
+    """
     return np.sign(A)
     
 def setdiff_(a,b):
+    """
+    Returns the sorted, unique values in a that are not in b
+    """
     return np.setdiff1d(a,b)
     
 def isfield_(obj, name):
+    """
+    Returns true if 'name' is a key for obj
+    """
     return obj.__dict__.has_key(str(name))
     
 def any_(A):
+    """
+    Returns true if there is any boolean True in A
+    """
     return A.any()
     
 def sqrt_(x):
+    """
+    Returns the square root of x
+    """
     return np.sqrt(x)
 
 def real_(x):
+    """
+    Returns the real part of x
+    """
     ret = np.real(x)
     #print "type np real ret", type(ret)
     return ret
 
 def imag_(x):
+    """
+    Returns the imaginary part of x
+    """
     ret = np.imag(x)
     return ret
 
 def exp_(x):
+    """
+    Returns the exponential of x
+    """
     return np.exp(x)
     
-def num2str_(num):
-    return str(num)
-
 def null_(A, eps=1e-15):
+    """
+    Returns the null space of A
+    """
     u, s, vh = scipy.linalg.svd(A)
     padding = max(0,np.shape(A)[1]-np.shape(s)[0])
     null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
     null_space = scipy.compress(null_mask, vh, axis=0)
     return scipy.transpose(null_space)        
-#def null_(A, eps=1e-15):
-#    u, s, vh = scipy.linalg.svd(A)
-#    null_mask = (s <= eps)
-#    null_space = scipy.compress(null_mask, vh, axis=0)
-#    return scipy.transpose(null_space)        
-#def null_(A, eps=1e-3):
-    #u,s,vh = np.linalg.svd(A,full_matrices=1,compute_uv=1)
-    #print "u", u
-    #print "s", s
-    #print "vh", vh
-    #null_space = np.compress(s <= eps, vh, axis=0)
-    #return null_space.T
 
-def int2str_(val):
-    return str(val)
-    
-def full_(A):
-    #print "full_ just returns A"
-    return A
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-
-def tf_mapper(x):
-    #print "x", x
-    if x:
-        return 1
-    else:
-        return 0
+#Unused function
+#def tf_mapper(x):
+#    #print "x", x
+#    if x:
+#        return 1
+#    else:
+#        return 0
                 
 def logical_or_(a,b):
+    """
+    Returns an array corresponding to element-wise operation 'or' between a and b
+    """
 #    vtf_mapper = np.vectorize (tf_mapper)
 #    ret = np.logical_or(a,b)                
 #    return vtf_mapper(ret)
     return np.logical_or(a,b)
     
 def logical_and_(a,b):
+    """
+    Returns an array corresponding to element-wise operation 'and' between a and b
+    """
     return np.logical_and(a,b)
     
 def strcat_(*args):
+    """
+    Concatenates some arguments
+    """
     ret = ""
     for arg in args:
         ret = ret + str(arg)
         
     #print "strcat_:", ret
     return ret
-    
     
 def randn_(msg, number):
     print "Warning: randn does not do anything, because it's discouraged syntax"
@@ -596,3 +674,9 @@ def compare_array(x, y, abs_tol, rel_tol):
     rel_error[indices] = 0
 
     return (abs(error) < abs_tol).all() and (abs(rel_error) < rel_tol).all()
+    
+    
+    
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

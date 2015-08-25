@@ -206,7 +206,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if options.verbose >= 5:
                 fprintf_(options.fout,'    unchanged\n')
             r=zeros_(size_(x))
-            active_r=copy(false)
+            active_r=copy(False)
             xr=copy(x)
             norm2_r=0.0
             norm_r=0.0
@@ -218,7 +218,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         delta_t=copy(delta)
         deg_freedom=n - length_(constraints)
         if deg_freedom > 0:
-            Z_=null_(full_(gconstraints))
+            Z_=null_(gconstraints)
             M_t=Z_.T.dot(M.dot( Z_))
             g_t=Z_.T.dot((glocal + M.dot(r)))
             u,info_t=sqplab_tcg_(M_t,- g_t,delta_t,20 * (n - me),prec_t,plevel_t,options.fout,nargout=2)

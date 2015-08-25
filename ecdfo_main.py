@@ -189,7 +189,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     else:
         ceY=array([])
         gce=array([])
-    radius_has_been_rejected=copy(false)
+    radius_has_been_rejected=copy(False)
     while 1:
 
         if info.niter >= options.miter:
@@ -234,7 +234,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     itype='conv'
                     ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
                     info.flag=values.success
-                    msg='Convergence in '+int2str_(neval)+' evaluations of the objective function.'
+                    msg='Convergence in '+str(neval)+' evaluations of the objective function.'
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 else:
                     info.niter=info.niter + 1
@@ -342,7 +342,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 info.niter=info.niter + 1
                 itype='conv'
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
-                msg='Convergence in '+int2str_(neval)+' evaluations of the objective function.'
+                msg='Convergence in '+str(neval)+' evaluations of the objective function.'
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             if options.verbose >= 3:
                 disp_('not converged after improvement of interpolation set')
@@ -406,7 +406,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     info.flag=values.fail_on_simul
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             itype='xfail'
-            radius_has_been_rejected=copy(true)
+            radius_has_been_rejected=copy(True)
             if options.verbose >= 5:
                 fprintf_(options.fout,'  rho = %8.2e \n'%(rho))
             info.ce=ce0
@@ -456,7 +456,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 if (pos >= 0):
                     itype='succ'
                     if (options.verbose >= 3):
-                        disp_(' replacing/including interpolation point ',int2str_(pos),' (successful)')
+                        disp_(' replacing/including interpolation point ',str(pos),' (successful)')
                     xstatus[m]=c.inY
                     try:
                         ind_Y[pos]=m
@@ -503,7 +503,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 delta=delta * tau2
                             else:
                                 delta=min_(max_(tau2 * norms,delta),Deltamax)
-                    radius_has_been_rejected=copy(false)
+                    radius_has_been_rejected=copy(False)
                     if lm_computed == 0:
                         lbounds=- inf * ones_(size_(x))
                         ubounds=inf * ones_(size_(x))
@@ -519,13 +519,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             if (rho < eta1) or (pos == -1):
                 itype='repD,repF,repC,redD'
                 itype='unsuc'
-                radius_has_been_rejected=copy(true)
+                radius_has_been_rejected=copy(True)
                 if options.verbose == 3 or options.verbose >= 5:
                     fprintf_(options.fout,'  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
                 if (((cur_degree < pquad) or (whichmodel == 3 and cur_degree < pquad + pquad)) and (rho < eta1)):
                     cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
                     if (options.verbose >= 3):
-                        disp_(' including interpolation point ',int2str_(cur_degree-1),' (augm)')
+                        disp_(' including interpolation point ',str(cur_degree-1),' (augm)')
                     xstatus[m]=c.inY
                     try:
                         ind_Y[cur_degree-1]=m
@@ -583,7 +583,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         if (pos >= 0):
                             itype='repF'
                             if (options.verbose >= 3):
-                                disp_(' replacing interpolation point ',int2str_(pos),' (far)')
+                                disp_(' replacing interpolation point ',pos,' (far)')
                             xstatus[ind_Y[pos]]=c.unused
                             xstatus[m]=c.inY
                             ind_Y[pos]=m
@@ -638,7 +638,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 if (pos == 0):
                                     i_xold=ind_Y[1] #was a Y[2] in matlab
                                 if (options.verbose >= 3):
-                                    disp_(' replacing interpolation point ',int2str_(pos-1),' (close)')
+                                    disp_(' replacing interpolation point ',str(pos-1),' (close)')
                                 xstatus[ind_Y[pos]]=c.unused
                                 xstatus[m]=c.inY
                                 ind_Y[pos]=m
@@ -695,7 +695,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                     disp_('************************************* Trust-region',' radius small *********************************')
                                 else:
                                     disp_('******************************** Trust-region',' radius small ****************************')
-                            msg='Algorithm stopped after '+int2str_(neval)+' evaluations of the objective function because Delta small.'
+                            msg='Algorithm stopped after '+str(neval)+' evaluations of the objective function because Delta small.'
                             info.flag=values.stop_on_small_trust_region
                             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 info.ce=ce0
