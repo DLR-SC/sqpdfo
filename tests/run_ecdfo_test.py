@@ -252,7 +252,7 @@ class Test_run_ecdfo(unittest.TestCase):
         lm=array([])
         x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
         
-        self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1, 1e-4))
+        self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1e-3, 1e-4))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]), 1e-3, 1e-4))
         self.assertTrue(compare_array(info.g, array([[ 0.091732656086263,  -0.098713648653029,  -0.086204099493362,     -0.206254630841206,  -0.206286791111375]]), 1e-4, 1e-4))
         self.assertTrue(compare_array(info.ae, array([[-3.43427074714240,	3.19140039544429,	3.65452199155318,	1.52740705050108	,1.52716892687853],
