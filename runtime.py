@@ -1,72 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 06 11:28:36 2014
-
-@author: jaco_da
-"""
-
-# SMOP compiler runtime support library
-# Copyright 2014 Victor Leikehman
-
-# MIT license
 
 """
-Main differences between Matlab matrices and numpy arrays
-=========================================================
 
-#. Array indices start with one, not with zero.  Accordingly, the last
-   element of an N-element array is N, not N-1 as in C.
-
-#. Matrix elements are ordered column-first, aka "Fortran" order.
-
-#. Arrays auto-expand on out-of-bound lhs indexing.
-
-#. In matlab, arrays can be updated before they are created::
-
-      clear a
-      a(17) = 42
-
-   is legal in matlab, but not in numpy
-
-#. Array data is not shared by copying or slice indexing. Instead there
-   is copy-on-write.
-
-#. There are no zero or one-dimensional arrays. Scalars are
-   two-dimensional rather than zero-dimensional as in numpy.
-
-#. Single subscript implies ravel.
-
-#. Boadcasting rules are different
-
-Coexistence of matlab matrices and numpy arrays
-===============================================
-
-#. Empty vector::
-
-        []                  matlabarray()
-
-#. Scalars are 1x1 matrices::
-
-        17                  [[ 17 ]]
-
-#. Rectangular char arrays::
-
-        'hello world'       char('hello world')
-
-#. Row vector::
-
-        [1 2 3]             [[1, 2, 3]]
-
-#. Column vector::
- 
-        [1;2;3]             [[1], [2], [3]]
-
-#. Cell strings::
-
-        cellstr('abc','hello',[97 98 99])       
-
-
-(*) Such expressions _are_ legal in Octave.  TBD
+This file contains functions which serve mostly 2 purposes :
+    -simply providing a shortcut for matlab functions, for instance real(A) in matlab becomes real_(A) in python, and
+    real_(A) actually calls np.real(A)
+    -imitating at best the output of matlab functions. For instance, U,S,V=svd function in matlab and python does not give exactly
+    outputs with the same shapes : S is a vector in python and a diagonal matrix in matlab, and V.transpose in python = V in matlab.
 
 """
 import warnings

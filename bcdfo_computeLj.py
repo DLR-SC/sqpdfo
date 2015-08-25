@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 21 09:14:30 2015
-
-@author: lien_ol
-"""
-
 from __future__ import division
 try:
     from runtime import *
@@ -15,6 +9,40 @@ from copy import copy
 from numpy import array
 
 def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+    """
+#
+#  Computes the coefficients of the j-th Lagrange polynomial.
+#
+#  INPUTS:
+#
+#  QZ, RZ      : the QR factors of the (possibly shifted) matrix Z containing
+#                the polynomial expansion of the interpolation points
+#  j           : the index of the interpolation point one wishes to compute
+#                the associated Lagrange polynomial
+#  Y           : current interpolation set Y
+#  whichmodel  : the method to compute the polynomial
+#  scale       : scaling factor of the interpolation matrix
+#  shift_Y     : 0 if no shift in interpolation points, 1 otherwise
+#
+#  OUTPUT:
+#
+#  Lj          : a row vector containing the coefficients of the polynomial
+#
+#  DEPENDENCIES: -
+#
+#  PROGRAMMING: A. Troeltzsch, September 2010.
+#
+#  TEST:
+#  Y = [ 0 1 0 2 0 ; 0 0 1 0 2 ];  whichmodel = 0;
+#  [ QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y(  Y, whichmodel, 1 );
+#  Lj = bcdfo_computeLj( QZ, RZ, 1, Y, whichmodel, scale, 1 )
+#  should give:
+#  Lj =
+#   1.0000  -3.0000  -3.0000   4.0000   4.0000
+#
+#  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+#
+    """
 #    varargin = cellarray(args)
 #    nargin = 7-[QZ,RZ,j,Y,whichmodel,scale,shift_Y].count(None)+len(args)
 

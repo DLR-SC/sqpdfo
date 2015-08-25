@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 21 16:25:42 2015
-
-@author: lien_ol
-"""
-
 from __future__ import division
 try:
     from runtime import *
@@ -13,6 +7,25 @@ except ImportError:
 from numpy import array
     
 def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
+    """
+#  This function computes the projected gradient and its
+#  infinity norm.
+#
+#  INPUTS:
+#
+#  n     : dimension
+#  x     : current iterate
+#  g     : gradient at x
+#  bl    : lower bounds
+#  bu    : upper bounds
+#
+#  OUTPUTS:
+#
+#  gnorm : infinity norm of the projected gradient
+#  gn    : projected gradient vector
+#
+    """
+    
 #    varargin = cellarray(args)
 #    nargin = 5-[n,x,g,bl,bu].count(None)+len(args)
     gn=zeros_(n,1)

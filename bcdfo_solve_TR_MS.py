@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jul 16 12:41:45 2015
-
-@author: lien_ol
-"""
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#from __future__ import division
+from runtime import *
+from numpy import *
+from copy import copy
+#from numpy import inf
+def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
+    """
 #
 #%  A simple implementation of exact trust-region minimization based on the
 #%  MorÃ©-Sorensen algorithm.
@@ -46,14 +46,8 @@ Created on Thu Jul 16 12:41:45 2015
 #
 #%  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    """
 
-#from __future__ import division
-from runtime import *
-from numpy import *
-from copy import copy
-#from numpy import inf
-def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 4-[g,H,Delta,eps_D].count(None)+len(args)
 

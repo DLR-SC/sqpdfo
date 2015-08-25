@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 20 13:04:32 2015
-
-@author: lien_ol
-"""
 from __future__ import division
 try:
     from runtime import *
@@ -15,6 +10,42 @@ import numpy
 from copy import copy
     
 def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+    """
+#
+#  Computes the values of the Lagrange polynomials at x.
+#
+#  INPUTS:
+#
+#  QZ, RZ      : the QR factors of the (possibly shifted) matrix Z containing
+#                the polynomial expansion of the interpolation points
+#  Y           : current interpolation set Y
+#  choice_set  : the indices (of Y's columns) for which to calculate the 
+#                Lagrange polynomial values
+#  x           : the point at which the model must be evaluated
+#  xbase       : the current base point
+#  whichmodel  : kind of model/Lagrange polynomial to compute
+#  scale       : the current model scaling
+#  shift_Y     : 0 if no shift in interpolation points, 1 otherwise
+#
+#  OUTPUT:
+#
+#  values      : the values of the Lagrange polynomials at x.
+#
+#  PROGRAMMING: A. Troeltzsch, September 2010. 
+#
+#  DEPENDENCIES: bcdfo_evalP
+#
+#  TEST:
+#  Y = [ 0 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; 
+#  [ QZ, RZ, xbase, scale] = bcdfo_build_QR_of_Y( Y, 0, 1 );
+#  values = bcdfo_evalL( QZ, RZ, Y, [2:6], [-1;1], xbase, 0, scale, 1 )
+#  should give 
+#     values =
+#         0   97.0000    2.9900    1.0000 -100.0000   -0.4950 
+#
+#  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+#
+    """
 #    varargin = cellarray(args)
 #    nargin = 9-[QZ,RZ,Y,choice_set,x,xbase,whichmodel,scale,shift_Y].count(None)+len(args)
 

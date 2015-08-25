@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 20 13:09:54 2015
-
-@author: lien_ol
-"""
 from __future__ import division
 try:
     from runtime import *
@@ -14,6 +9,45 @@ from copy import copy
 from numpy import *
     
 def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+    
+    """
+#
+#  Computes the QR factorization of the (possibly shifted) matrix containing
+#  the polynomial expansion of the interpolation points. If shifting is
+#  required, (i.e. if shift_Y is true) the matrix being factorized has columns
+#  containing (Y(:,j)-Y(:,1))/ scale, where scale is the max( norm(Y(:,j)-Y(:,1)).
+#
+#  INPUT:
+#
+#  Y           : a matrix whose columns contain the current interpolation points
+#  whichmodel  : kind of model to build
+#  shift_Y     : 0 if no shift in interpolation points, 1 otherwise
+#  Delta       : trust-region radius
+#  normgx      : infinity norm of the projected gradient
+#  kappa_ill   : threshold to declare a system matrix as ill-conditioned
+#
+#  OUTPUT:
+#
+#  QZ, RZ      : the QR factors of the (possibly shifted) matrix containing
+#                the polynomial expansion of the interpolation points,
+#  xbase       : the base point,
+#  scale       : the model diagonal scaling.
+#
+#  PROGRAMMING: A. Troeltzsch, Ph. Toint, S. Gratton, 2009-2011.
+#               (This version 14 I 2011)
+#
+#  DEPENDENCIES: bcdfo_evalZ
+#
+#  TEST:
+#  Y = [ 1 2 1 3 3 1 ; 1 2 2 1 1.01 3 ];
+#  [QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y, 0, 1, 1, 1, 1e15 );
+#  model = ( QZ * ( RZ' \ [1 2 3 4 5 6 ]' ) )';
+#  model * bcdfo_evalZ( ([1;3]-xbase)*scale(2),6)
+#  should give 6.0
+#
+#  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+#
+    """
 #    varargin = cellarray(args)
 #    nargin = 6-[Y,whichmodel,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
 

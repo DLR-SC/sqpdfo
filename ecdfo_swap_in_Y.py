@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 27 15:15:59 2014
+from runtime import isempty_
+from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from copy import copy
 
-@author: jaco_da
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase_=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+    """
 %
 %  Swaps the position of interpolation points i and j in Y, and updates the
 %  factorization of Z(Y) accordingly.
@@ -34,15 +34,37 @@ Created on Thu Nov 27 15:15:59 2014
 %  scale       : the interpolation set scaling after the exchange
 %
 %  PROGRAMMING: Ph. Toint and A. Troeltzsch, January 2009. 
-%               ( This version 13 IX 2010 
+%               ( This version 13 IX 2010  )
+%
+%  DEPENDENCIES: bcdfo_build_QR_of_Y
+%
+%  TEST:
 
-"""
-from runtime import isempty_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from numpy import array
-from copy import copy
-
-def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase_=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+%  Y = [ 0 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; ind_Y = [1 2 3 4 5 6];
+%  fY = [2 5 1 3 2 6];
+%  [QZ,RZ,xbase,scale] = bcdfo_build_QR_of_Y( Y, 0, 0, 1, 1, 1e15 );
+%  Z = QZ*RZ;
+%  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
+%     fY, [],[],xbase, 0, scale, 0, 1, 1, 1e15 )
+%  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
+%     fY, [],[],xbase, 0, scale, 0, 1, 1, 1e15 )
+%  norm( Z - QZ*RZ)
+%  should give something very small.
+%
+%  The same holds for the scaled version:
+%  Y = [ 0 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; ind_Y = [1 2 3 4 5 6];
+%  fY = [2 5 1 3 2 6];
+%  [QZ,RZ,xbase,scale] = bcdfo_build_QR_of_Y( Y, 0, 1, 1, 1, 1e15 );
+%  Z = QZ*RZ;
+%  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
+%     fY, [], [], xbase, 0, scale, 1, 1, 1, 1e15 )
+%  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
+%     fY, [],[],xbase, 0, scale, 1, 1, 1, 1e15 )
+%  norm( Z - QZ*RZ)
+%
+%  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+%
+    """
 #    varargin = cellarray(args)
 #    nargin = 16-[i,j,QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
 
@@ -84,43 +106,3 @@ def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=Non
         ceY[:,jj]=ce
     QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     return QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale
-
-
-#def ecdfo_swap_in_Y_(i,j,QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill, nargout=None):
-#	if (i > j):
-#		ii=j
-#		jj=i
-#	elif (i < j):
-#            ii=i
-#            jj=j
-#	else:
-#            return QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale
-#		
-#	y=Y[:,ii]
-#	Y[:,ii]=Y[:,jj]
-#	Y[:,jj]=y												
-#	
-#	ind=ind_Y[ii]
-#	ind_Y[ii]=ind_Y[jj]
-#	ind_Y[jj]=ind
-#	
-#	f=fY[ii]
-#	fY[ii]=fY[jj]
-#	fY[jj]=f
-#	
-#	if not isempty_(ciY):
-#		ci=ciY[:,ii]
-#		#print "ciY", ciY								
-#		#print "type ciY", type(ciY)								
-#		#print "jj", jj								
-#		ciY[:,ii]=ciY[:,jj]
-#		ciY[:,jj]=ci
-#		
-#	if not isempty_(ceY):
-#		ce=ceY[:,ii]
-#		ceY[:,ii]=ceY[:,jj]
-#		ceY[:,jj]=ce
-#		
-#
-#	QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
-#	return QZ,RZ,Y,ind_Y,fY,ciY,ceY,xbase,scale		

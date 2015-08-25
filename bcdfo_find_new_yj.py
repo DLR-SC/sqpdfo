@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 21 13:23:34 2015
-
-@author: lien_ol
-"""
-
 from __future__ import division
 try:
     from runtime import *
@@ -19,6 +13,66 @@ from numpy import *
 
 
 def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+    """
+#
+#  Computes a point which is best to replace yj, the j-th (j>1) column of Y (the
+#  base for the j-th polynomial) in a ball of radius Delta centered at the
+#  first column of Y.  This is achieved by maximizing the absolute value of
+#  the j-th Lagrange polynomial in that ball.
+#
+#  For conventions on how polynomals are represented, see the documentation of
+#  evalZ.
+#
+#  INPUT:
+#
+#  QZ          : the Q matrix of the QR decomposition of Z(Y)
+#  RZ          : the R matrix of the QR decomposition of Z(Y)
+#  Y           : a matrix whose columns contain the current interpolation points
+#  j           : the index of the interpolation point one wishes to replace (j > 1)
+#  Delta       : the radius of the ball centered at Y(:,1) in which the
+#                replacement point must be found
+#  eps_L       : the relative accuracy on the trust-region constraint for
+#                maximization of the Lagrange polynomials
+#  xbase       : the current base point
+#  lSolver     : linear solver used for the minimization of the model
+#  whichmodel  : kind of model/Lagrange polynomial to compute
+#  scale       : the current interpolation set scaling
+#  shift_Y     : 0 if no shift in interpolation points, 1 otherwise
+#
+#  OUTPUT:
+#
+#  ynew        : the best replacement for Y(:,j)
+#  improvement : the improvement in poisedness obtained by the update, which
+#                is equal to |L_j(new y)|. If this value is smaller than the
+#                threshold input parameter, L and X are unchanged by the
+#                procedure.
+#
+#  PROGRAMMING: Ph. Toint, February 2009. (This version 22 VI 2009)
+#
+#  USES: bcdfo_gradP, bcdfo_hessP, bcdfo_solve_TR_MS
+#
+#  TEST:
+#  Y = [ 3 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; whichmodel = 0;
+#  [ QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y , whichmodel, 0 );
+#  [ ynew, improvement ] = bcdfo_find_new_yj( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, ...
+#       whichmodel, scale, 0 )
+#  should give
+#  ynew =
+#
+#    3.2808
+#   -0.9598
+#
+#  improvement =
+#
+#  314.8825
+#
+#  the same must be obtained by the shifted and scaled version:
+#  Y = [ 3 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; whichmodel = 0;
+#  [ QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y , whichmodel, 1 );
+#  [ ynew, improvement ] = bcdfo_find_new_yj( QZ, RZ, Y, 5, 1.0, 0.001, xbase, 1, ...
+#       whichmodel, scale, 1 )
+#
+    """
 #    varargin = cellarray(args)
 #    nargin = 11-[QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y].count(None)+len(args)
 

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 21 13:40:58 2015
-
-@author: lien_ol
-"""
 from __future__ import division
 try:
     from runtime import *
@@ -12,6 +7,58 @@ except ImportError:
 from copy import copy    
     
 def bcdfo_gradP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
+    """
+#  Computes the gradient of the polynomial P at x, where P is represented by
+#  the row vector containing its coefficients for the successive monomials.
+#  More specifically, these values are:
+#  P(1)        : constant coefficient,
+#  P(2:n+1)    : coefficients for the linear terms in x(1)... x(n),
+#  P(n+2:2n+2) : coefficients for the squared terms in x(1)^2 ... x(n)^2
+#  P(2n+3,3n+2): coefficients for the quadratic terms of the first subdiagonal:
+#                in x(1)*x(2) ... x(n-1)*x(n)
+#  (3n+3,4n+1): coefficients for the quadratic terms of the second subdiagonal:
+#                in x(1)*x(3) ... x(n-2)*x(n)
+#  etc.
+#
+#  INPUT:
+#
+#  P       : a row vector contains the coefficients of the polynomial
+#  x       : the point at which the gradient must be evaluated
+#  xbase   : the current base point
+#  scale   : the current interpolation set scaling
+#  shift_Y : 0 if no shift in interpolation points, 1 otherwise
+#
+#  OUTPUT:
+#
+#  g : the gradient of P at x
+#
+#  PROGRAMMING: Ph. Toint, S. Gratton and A. Troeltzsch, April 2009.
+#               (This version 30 IV 2009)
+#
+#  DEPENDENCIES: -
+#
+#  TEST:
+#
+#  Y = [ 1 2 1 3 3 1 ; 1 2 2 1 2 3 ];
+#  [QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y, 0, 0 );
+#  model = ( QZ * ( RZ' \ [1 2 3 4 5 6 ]' ) )';
+#  bcdfo_gradP( model, [0;0], xbase, scale, 0 )
+#
+#  ans =
+#
+#   -6.0000
+#    1.0000
+#
+#  the same result is obtained by
+#
+#  Y = [ 1 2 1 3 3 1 ; 1 2 2 1 2 3 ];
+#  [QZ, RZ, xbase, scale ] = bcdfo_build_QR_of_Y( Y, 0, 1 );
+#  model = ( QZ * ( RZ' \ [1 2 3 4 5 6 ]' ) )';
+#  bcdfo_gradP( model, [0;0], xbase, scale, 1 )
+
+#  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+
+    """
 #    varargin = cellarray(args)
 #    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 #

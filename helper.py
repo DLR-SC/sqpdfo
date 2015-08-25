@@ -1,26 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 06 14:50:24 2014
-
-@author: jaco_da
-"""
 from runtime import *
 import numpy as np
-
-#class dummyOptions:
-#	def __init__(self):
-#		self.verbose = 4
-#		self.fout = 42
-
-#so far for bad sqplab_badsimul Unittest
-#class dummyInfo():
-#	def __init__(self):
-#		self.flag = False
-		
-#class dummyValues():
-	#def __inite__(self):
-	#	self.stop_on_simul = False
-	#	self.fail_on_simul = False
 	
 class dummyUnionStruct():
 	pass

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jul 16 12:36:05 2015
-
-@author: lien_ol
-"""
 from __future__ import division
 try:
     from runtime import *
@@ -15,6 +10,59 @@ from numpy import *
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
 def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,stratLam=None,*args,**kwargs):
+    """
+#
+#  An implementation of exact trust-region minimization based on the
+#  More-Sorensen algorithm subject to bound constraints.
+#
+#  INPUT:
+#
+#  g        : the model's gradient
+#  H        : the model's Hessian
+#  lb       : lower bounds on the step
+#  ub       : upper bounds on the step
+#  Delta    : the trust-region's radius
+#  eps_D    : the accuracy required on the equation ||s|| = Delta for a
+#             boundary solution
+#  stratLam : the strategy to adjust lamb to find an active bound
+#             (1 - Newtons method, 0 - bisection method)
+#
+#  OUTPUT:
+#
+#  s        : the trust-region step
+#  lamb   : the Lagrange multiplier corresponding to the trust-region constraint
+#  norms    : the norm of s
+#  value    : the value of the model at the optimal solution
+#  gplus    : the value of the model's gradient at the optimal solution
+#  nfact    : the number of Cholesky factorization required
+#  neigd    : the number of eifenvalue decompositions required
+#  msg      : an information message
+#
+#  DEPENDENCIES: bcdfo_solve_TR_MS
+#
+#  PROGRAMMING: A. Troeltzsch, S. Gratton, July 2009.
+#              ( This version 14 I 2010 )
+#
+#  TEST:
+#
+#  bcdfo_solve_TR_MS_bc( [2; 3], [4 6; 6 5], [-10; -10], [10; 10], 1.0, 0.001, 1 )
+#  should give
+#    0.5153
+#   -0.8575
+#
+#  bcdfo_solve_TR_MS_bc( [2; 3], [4 6; 6 5], [-0.1; -0.1], [10; 10], 1.0, 0.001, 1 )
+#  should give
+#   -0.1
+#   -0.1
+#
+#  bcdfo_solve_TR_MS_bc( [2; 3], [4 6; 6 5], [-10; -10], [0; 0], 1.0, 0.001, 1 )
+#  should give
+#    0
+#   -0.6
+#
+#  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
+#
+    """    
 #    varargin = cellarray(args)
 #    nargin = 7-[g,H,lb,ub,Delta,eps_D,stratLam].count(None)+len(args)
 

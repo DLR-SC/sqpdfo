@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 20 09:21:55 2015
-
-@author: lien_ol
-"""
-
 #! /usr/bin/env python
 from __future__ import division
 try:
@@ -14,7 +8,7 @@ except ImportError:
 
 
 def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
-###############################################################################
+    """
 #
 #  Compute the matrix Z(X), where X is a matrix whose columns contains points
 #  of the underlying space.  The vector Z(x) is, for a vector x, given by the
@@ -58,7 +52,7 @@ def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
 #
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #
-###############################################################################
+    """
 
 #    varargin = cellarray(args)
 #    nargin = 2-[X,q].count(None)+len(args)

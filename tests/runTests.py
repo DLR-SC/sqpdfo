@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 11 14:31:47 2014
-
-@author: jaco_da
-"""
 import unittest
 import sys
 import warnings
