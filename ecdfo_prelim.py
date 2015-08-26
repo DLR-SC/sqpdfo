@@ -172,7 +172,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     temp=zeros_(n,1)
     for j in range(0,n):
         if (lb[j] > ub[j]):
-            disp_('Error: Lower bound of component ',int2str_(j),' exceeds upper bound !!')
+            disp_('Error: Lower bound of component ',str(j),' exceeds upper bound !!')
             info.flag=2
             return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
         temp[j]=ub[j] - lb[j]
@@ -185,7 +185,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
                 continue
             else:
                 Delta0=0.5 * temp[j]
-                disp_(' Diff. between lower and upper bound of component ',int2str_(j),' is less than 2*Delta0 !! New Delta0=',num2str_(Delta0))
+                disp_(' Diff. between lower and upper bound of component ',str(j),' is less than 2*Delta0 !! New Delta0=',str(Delta0))
         templ=lb[j] - x0[j]
         tempu=ub[j] - x0[j]
         if (templ >= - Delta0):
@@ -236,7 +236,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     while (getfY):
 
         if (options.verbose > 2):
-            disp_(' Degree of the initial  model = ',int2str_(cur_degree))
+            disp_(' Degree of the initial  model = ',str(cur_degree))
         if initial_Y=='random':
             Y[:,0]=x0
             ill_init=1
