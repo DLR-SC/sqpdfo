@@ -91,7 +91,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if (x[i] - gradlag[i] <= lb[i]) and (abs(x[i] - lb[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
-                    disp_('lb ',num2str_(i),' is initially active')
+                    disp_('lb ',str(i),' is initially active')
 #                constraints=array([[constraints],[0]])
 #                gconstraints=array([[gconstraints],[I[i,:]]])
                 constraints=concatenate_([constraints,array([[0]])])
@@ -99,7 +99,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             if (x[i] - gradlag[i] >= ub[i]) and (abs(x[i] - ub[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
-                    disp_('ub ',num2str_(i),' is initially active')
+                    disp_('ub ',str(i),' is initially active')
 #                constraints=array([[constraints],[0]])
 #                gconstraints=array([[gconstraints],[I[i,:]]])
                 constraints=concatenate_([constraints,array([[0]])])
@@ -112,7 +112,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 
         iter_active=iter_active + 1
         if options.verbose >= 3:
-            disp_('********* Loop over active set ********* iteration ',num2str_(iter_active),' *********')
+            disp_('********* Loop over active set ********* iteration ',str(iter_active),' *********')
         if options.verbose >= 3:
             fprintf_(options.fout,'  Restoration step:\n')
         delta_r=xi * delta
@@ -166,8 +166,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             norm2_r=0.0
             norm_r=0.0
         if options.verbose == 3:
-            disp_('r = (',num2str_(r.T),')')
-            disp_('delta_r = ',num2str_(delta_r),', norm_r = ',num2str_(norm_r))
+            disp_('r = (',str(r.T),')')
+            disp_('delta_r = ',str(delta_r),', norm_r = ',str(norm_r))
         if options.verbose >= 3:
             fprintf_(options.fout,'  Tangent step:\n')
         delta_t=copy(delta)
@@ -193,9 +193,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             t=zeros_(1,n).T
             active_t=0
         if options.verbose == 3:
-            disp_('t = (',num2str_(t.T),')')
-            disp_('delta_t = ',num2str_(delta_t),', norm_t = ',num2str_(norm_(t)))
-            disp_('delta ',num2str_(delta),', norm_s = ',num2str_(norm_(r + t)))
+            disp_('t = (',str(t.T),')')
+            disp_('delta_t = ',str(delta_t),', norm_t = ',str(norm_(t)))
+            disp_('delta ',str(delta),', norm_s = ',str(norm_(r + t)))
         xnew=x + r + t
         x_active=zeros_(size_(xnew))
         x_viol=zeros_(size_(xnew))
@@ -254,7 +254,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
             min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
             if options.verbose >= 3:
-                disp_('smallest Lagrange multiplier (for the bounds) = ',num2str_(min_lm))
+                disp_('smallest Lagrange multiplier (for the bounds) = ',str(min_lm))
             if min_lm < 0:
                 if options.verbose >= 3:
                     disp_('Zero step but not converged - release one bound!!')
@@ -324,9 +324,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             x=xr + tstep
             step=r + tstep
             if options.verbose == 3:
-                disp_('t = (',num2str_(tstep.T),')')
-                disp_('delta_t = ',num2str_(delta_t),', norm_t = ',num2str_(norm_(tstep)))
-                disp_('delta ',num2str_(delta),', norm_s = ',num2str_(norm_(r + tstep)))
+                disp_('t = (',str(tstep.T),')')
+                disp_('delta_t = ',str(delta_t),', norm_t = ',str(norm_(tstep)))
+                disp_('delta ',str(delta),', norm_s = ',str(norm_(r + tstep)))
             glocal=glocal + M .dot(step)
             for i in range(0,me):
                 gconstraints[i,:]=gconstraints[[i],:] + (M .dot( step)).T

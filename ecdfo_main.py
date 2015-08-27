@@ -143,6 +143,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     options=copy(options_)
     values=copy(values_)
 
+    s=0
     old_delta=copy(delta)
     sigma=1
     rho_factor=0.3
@@ -219,7 +220,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 poisedness_known=1
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
-                    disp_('error on gradient before set improvement = ',num2str_(errg))
+                    disp_('error on gradient before set improvement = ',str(errg))
                 if (((info.glagn <= options.tol[0]) and (info.feasn <= options.tol[1]) and (info.compl <= options.tol[2]) and errg <= epsilon) or delta <= epsilon * 1e-05) and level=='toplevel':
                     info.niter=info.niter + 1
                     itype='conv'
@@ -267,10 +268,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     radius=max_(delta,eps_current)
                 QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,radius,effective_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,normgx,kappa_ill,nargout=8)
                 if options.verbose >= 3:
-                    disp_('improve interpolation set (in radius = ',num2str_(radius),') : replaced = ',num2str_(replaced),', poised = ',num2str_(poised),', Y_radius = ',num2str_(Y_radius))
+                    disp_('improve interpolation set (in radius = ',str(radius),') : replaced = ',str(replaced),', poised = ',str(poised),', Y_radius = ',str(Y_radius))
             if (options.verbose >= 4):
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
-                disp_(' poisedness(Y) = ',num2str_(poised))
+                disp_(' poisedness(Y) = ',str(poised))
             poised_model=1
             for i in range(0,length_(replaced)):
                 j=replaced[i]
@@ -328,7 +329,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     fprintf_(options.fout,' |grad f| = %12.5e\n'%(info.glagn))
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
-                disp_('error on gradient after set improvement = ',num2str_(errg))
+                disp_('error on gradient after set improvement = ',str(errg))
             if (info.glagn / factor_CV <= options.tol[0]) and (info.feasn / factor_CV <= options.tol[1]) and (info.compl / factor_CV <= options.tol[2]) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
                 info.niter=info.niter + 1
                 itype='conv'
