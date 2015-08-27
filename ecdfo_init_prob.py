@@ -45,7 +45,7 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         lx=- inf * ones_(n,1)
         ux=inf * ones_(n,1)
     elif prob == 3:
-        nb=0
+        nb=2
         mi=0
         me=2
         x0=array([[0.0],[0.0],[0.5]]).T
@@ -78,7 +78,7 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         ux=array([0.8]).reshape(-1,1)
     elif prob==7: #alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
         n=15
-        nb=15
+        nb=14
         me=8
         mi=0
         x0=array([[-0.9,1.745,1.2,1.1,3.048,1.974,0.893,0.928,8,3.6,1.50,1,1,1,1]]).T
