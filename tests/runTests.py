@@ -65,10 +65,6 @@ loader = unittest.TestLoader()
 
 #NB: tests are added in the suite in a logical order, such that one test is added only after all of its dependencies.
 
-#Runtime test : this checks in particular if matrix indexing is working correctly. This does not give any guarantee,
-#but if there is an error (after modification in the runtime) then it might help finding the issue.
-#suite = loader.loadTestsFromTestCase(runtime_test.Test_runtime)
-
 #BCDFO Tests
 suite = loader.loadTestsFromTestCase(bcdfo_evalZ_test.Test_bcdfo_evalZ)
 suite.addTests(loader.loadTestsFromTestCase(bcdfo_build_QR_of_Y_test.Test_bcdfo_build_QR_of_Y))
