@@ -79,10 +79,12 @@ def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
         P=P*scale.T
         x=x - xbase
     P=P.reshape(-1)
+#     diagonal
     if (nquad > 0):
         ndiag=min_(nquad,n)
         H=diag(concatenate_([P[n + 1:n + 1 + ndiag],zeros(n - ndiag)],axis=1))
         nquad=nquad - ndiag
+#        subdiagonals
         if (nquad > 0):
             k=2 * n + 1
             for i in range(0,n - 1):

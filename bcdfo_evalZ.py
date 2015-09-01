@@ -57,28 +57,27 @@ def bcdfo_evalZ_(X=None,q=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 2-[X,q].count(None)+len(args)
 
-    n,m=size_(X,nargout=2)
-    nlin=min_(n + 1,q)
-    nquad=max_(0,q - nlin)
-    nlin=nlin - 1
+    n,m=size_(X,nargout=2) # [ dimension of the space, number of points in X ]
+    nlin=min_(n + 1,q) #  number of constant and linear terms
+    nquad=max_(0,q - nlin) # number of quadratic terms
+    nlin=nlin - 1 # number of linear terms
     Z=zeros_(q,m) 
     if (q == 1):
-        Z=ones_(1,m)
+        Z=ones_(1,m) # constant terms
+    elif (q <= n + 1):
+        Z=concatenate_((ones_(1,m),X[0:nlin,0:m]),axis=0) #   constant and linear
     else:
-        if (q <= n + 1):
-            Z=concatenate_((ones_(1,m),X[0:nlin,0:m]),axis=0)
-        else:
-            ndiag=min_(n,nquad)
-            Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0)
-            nquad=nquad - ndiag
-            if (nquad > 0):
-                for k in range(1,n):
-                    nsd=min_(n - k,nquad)
-                    if (nsd > 0):
-                        Z=concatenate_((Z,X[k:k + nsd,0:m]*(X[0:nsd,0:m])),axis=0)
-                        nquad=nquad - nsd
-                    if (nquad == 0):
-                        break
+        ndiag=min_(n,nquad)
+        Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0) # same + diagonal
+        nquad=nquad - ndiag
+        if (nquad > 0):
+            for k in range(1,n):                          # the (i+1)-th subdiagonal
+                nsd=min_(n - k,nquad)
+                if (nsd > 0):
+                    Z=concatenate_((Z,X[k:k + nsd,0:m]*(X[0:nsd,0:m])),axis=0)
+                    nquad=nquad - nsd
+                if (nquad == 0):
+                    break
     return Z
 
 

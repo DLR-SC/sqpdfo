@@ -72,14 +72,18 @@ def bcdfo_gradP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
         x=x - xbase
     P=P.reshape(-1)
     x=x.reshape(-1)
+#  First-order terms in the polynomial
     ng=min_(n,p1 - 1)
     g=zeros_(n,1).reshape(-1)
     g[0:ng]=P[1:ng + 1]
+#  Second-order terms
     nquad=p1 - n - 1
     if (nquad > 0):
+#     diagonal
         ndiag=min_(nquad,n)
         g[0:ndiag]=g[0:ndiag] + P[n + 1:n + 1 + ndiag] *(x[0:ndiag])
         nquad=nquad - ndiag
+#         subdiagonals
         if (nquad > 0):
             k=2 * n + 1
             for i in range(0,n - 1):

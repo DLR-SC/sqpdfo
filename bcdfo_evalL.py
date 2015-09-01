@@ -64,35 +64,42 @@ def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whic
     q=((n + 1) * (n + 2)) / 2
     values=zeros_(p1,1)
     if (whichmodel == 3 and p1 < q):
+#     for underdetermined regression model use min l2-norm model
         whichmodel=2
     if (whichmodel == 0):
+#    evaluate (sub-basis) Lagrange polynomial (p1 = q)
         values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot( (numpy.linalg.solve(RZ,QZ.T))),x,xbase,scale,shift_Y)
-    else:
-        if (whichmodel == 1):
-            if (p1 == n + 1 or p1 == q):
-                values[choice_set]=bcdfo_evalP_(I[choice_set,:] .dot( (QZ / RZ.T)),x,xbase,scale,shift_Y)
-            else:
-                if (shift_Y):
-                    xbase=copy(Y[:,0])
-                    scaleY=0
-                    for i in range(0,p1):
-                        Y[:,i]=Y[:,i] - xbase
-                        scaleY=max_(scaleY,norm_(Y[:,i]))
-                    Y=Y / scaleY
-                M=bcdfo_evalZ_(Y,q).T
-                MQ=M[:,n + 1:q]
-                if (shift_Y):
-                    phi=bcdfo_evalZ_((x - xbase) * scale[1],q)
-                else:
-                    phi=bcdfo_evalZ_(x,q)
-                values[choice_set]=concatenate_([  I[choice_set,:],  zeros_(lc,n + 1).dot(QZ .dot(numpy.linalg.solve(RZ.T,concatenate_([MQ.dot(phi[n + 1:q]),phi[0:n + 1]]))))],axis=1)
+    elif (whichmodel == 1):
+        if (p1 == n + 1 or p1 == q):
+#        evaluate Minimum L2 norm Lagrange polynomial (p1 == n+1 or p1 == q)
+
+            values[choice_set]=bcdfo_evalP_(I[choice_set,:] .dot( (QZ / RZ.T)),x,xbase,scale,shift_Y)
         else:
-            if (whichmodel == 2):
-                if (p1 < q):
-                    values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot( (pinv_(RZ).dot(QZ.T))),x,xbase,scale,shift_Y)
-                else:
-                    values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot( (numpy.linalg.solve(RZ,QZ.T))),x,xbase,scale,shift_Y)
+#       evaluate Minimum Frobenius norm Lagrange polynomial (p1 <= q)
+#
+#        If shifting is active, the matrix of the interpoaltion points is first
+#        shifted and scaled (to compute M correctly).
+            if (shift_Y):
+                xbase=copy(Y[:,0])
+                scaleY=0
+                for i in range(0,p1):
+                    Y[:,i]=Y[:,i] - xbase
+                    scaleY=max_(scaleY,norm_(Y[:,i]))
+                Y=Y / scaleY
+            M=bcdfo_evalZ_(Y,q).T
+            MQ=M[:,n + 1:q]
+            if (shift_Y):
+                phi=bcdfo_evalZ_((x - xbase) * scale[1],q)
             else:
-                if (whichmodel == 3):
-                    values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot((QZ .dot(pinv_(RZ.T)))),x,xbase,scale,shift_Y)
+                phi=bcdfo_evalZ_(x,q)
+            values[choice_set]=concatenate_([  I[choice_set,:],  zeros_(lc,n + 1).dot(QZ .dot(numpy.linalg.solve(RZ.T,concatenate_([MQ.dot(phi[n + 1:q]),phi[0:n + 1]]))))],axis=1)
+    elif (whichmodel == 2):
+#    evaluate Minimum L2 norm Lagrange polynomial (p1 <= q)
+        if (p1 < q):
+            values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot( (pinv_(RZ).dot(QZ.T))),x,xbase,scale,shift_Y)
+        else:
+            values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot( (numpy.linalg.solve(RZ,QZ.T))),x,xbase,scale,shift_Y)
+    elif (whichmodel == 3):
+#    evaluate Regression Lagrange polynomial (p1 >= q)
+        values[choice_set]=bcdfo_evalP_(I[choice_set,:].dot((QZ .dot(pinv_(RZ.T)))),x,xbase,scale,shift_Y)
     return values

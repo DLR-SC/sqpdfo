@@ -187,15 +187,17 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
     scale=copy(scale_)
 
     replaced=np.array([])
-    verbose=0
-    max_improve_loops=20
+    verbose=0 # 1 for debug
+    max_improve_loops=20 # the max number of times every close point is 
+                             # considered for improvement
     if (verbose):
         disp_('--- enter bcdfo_repair_Y  for Delta = ',num2str_(Delta),' ---')
     n,p1=size_(Y,nargout=2)
+#  Compute the distance of the current interpolation points to the base point.
+
     d=zeros_(p1,1)
     for j in range(1,p1): #it was initially in matlab range(2,p1)
         d[j]=norm_(Y[:,j] - Y[:,0])
-#    dsorted,jsorted=sort_(d,'descend',nargout=2)
     dsorted=np.sort(d.reshape(-1))[::-1]
     jsorted=np.argsort(d.reshape(-1))[::-1]
     if (verbose):
@@ -205,6 +207,9 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
       print dsorted
       print 'jsorted='
       print jsorted
+
+#  First replace the distant points.      
+     
     for j in range(0,p1):
         if (dsorted[j] > farfact * (1 + eps_L) * Delta):
             jmax=jsorted[j]
@@ -214,8 +219,8 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
                 y,improvement,msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose):
                 disp_('lambda = ',num2str_(improvement),' at j=',num2str_(jmax))
+                #     if ( improvement > farthr )
             QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,y,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
-#            replaced=matlabarray([replaced,jmax])
             replaced  = np.append( replaced, jmax )
             d[jmax]=norm_(y - Y[:,[0]])
         else:
@@ -226,13 +231,21 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         print replaced
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
         disp_('after distant replace: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
+#  Perform a loop over possible optimal improvements.
+
+  #mids = length(find( d > 1.01 * Delta ));
+
     for k in range(1,max_improve_loops+1):
         maximprove=0
-        for j in range(1,p1):
+       #  Loop on all the possible replacements to find the best one.
+
+        for j in range(1,p1): #it is indexed 2:p1 in matlab
             if (hardcons == 1):
                 y,improvement, msgTR=bcdfo_find_new_yj_bc_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
             else:
                 y,improvement, msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
+      #  Remember the current polynomial value, index and replacement point is
+      #  this is the best so far         
             if (verbose > 1):
                 disp_(' ==> j = ',int2str_(j),' improve = ',num2str_(improvement))
                 print 'y='
@@ -241,8 +254,10 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
                 maximprove=copy(improvement)
                 jmax=copy(j)
                 ymax=copy(y)
+   #  If no significant improvement was found, return after updating the 
+   #  interpolation radius.
         if (maximprove < closethr or jmax == 0):
-            Y_radius=max_(d)
+            Y_radius=max_(d)  # recompute Y_radius after the exchanges
             if (verbose):
                 print 'replaced='
                 print replaced
@@ -253,13 +268,14 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             if (isempty_(replaced)):
                 maximprove=0
             return QZ,RZ,Y,replaced,maximprove,Y_radius,xbase,scale
+   #  Perform the best replacement.
         if (verbose):
             disp_('maximprove= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
         QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ymax,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
         d[jmax]=norm_(ymax - Y[:,[0]])
         if (length_(find_(replaced == jmax)) == 0):
             replaced  = np.append( replaced, jmax )
-    Y_radius=max_(d)
+    Y_radius=max_(d) # recompute Y_radius after the exchanges
     if (verbose):
         print 'replaced='
         print replaced

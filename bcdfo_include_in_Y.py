@@ -117,16 +117,20 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     RZ=copy(RZ_)
     xbase=copy(xbase_)
     scale=copy(scale_)
-
+#  Compute the choice set combining the two requests.
     if (length_(choice_set) == 0):
         pos=-1
         return QZ,RZ,Y,pos,xbase,scale
+#  Evaluate the values of the Lagrange polynomials in the choice set at x.
     Lvals=bcdfo_evalL_(QZ,RZ,Y,choice_set,x,xbase,whichmodel,scale,shift_Y)
+#  Compute the combined choice set.
     choice=find_(abs(Lvals) > poisedness_threshold)
     lc=length_(choice)
+#  No suitable point found: return without any action.
     if (lc == 0):
         pos=-1
         return QZ,RZ,Y,pos,xbase,scale
+#  Suitable replacement points exist: maximize the criterion.
     crit_val=0
     pos=-1
     for i in range(0,lc):
@@ -136,19 +140,18 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
                 cv=norm_(Y[:,j] - x) ** 2 * abs(Lvals[j])
             else:
                 cv=norm_(Y[:,j] - Y[:,[0]]) ** 2 * abs(Lvals[j])
-        else:
-            if (criterion == 'standard'):
-                cv=abs(Lvals[j])
-            else:
-                if (criterion == 'distance'):
-                    if (succ == 1):
-                        cv=norm_(Y[:,j] - x)
-                    else:
-                        cv=norm_(Y[:,j] - Y[:,[0]])
+        elif (criterion == 'standard'):
+            cv=abs(Lvals[j])
+        elif (criterion == 'distance'):
+                if (succ == 1):
+                    cv=norm_(Y[:,j] - x)
+                else:
+                    cv=norm_(Y[:,j] - Y[:,[0]])
         if (cv > crit_val):
             pos=copy(j)
             crit_val=copy(cv)
     if (int(pos) == -1):
         return QZ,RZ,Y,int(pos),xbase,scale
+#  Replace Y(:,pos) by x.
     QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,x,Y,int(pos),xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
     return QZ,RZ,Y,int(pos),xbase,scale

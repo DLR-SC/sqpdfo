@@ -151,7 +151,6 @@ def bcdfo_augment_Y_(Ynew=None,Y_=None,whichmodel=None,shift_Y=None,Delta=None,n
         QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     else:
         Y=concatenate_([Y, Ynew], axis=1)
-#        Y=matlabarray([Y,Ynew])
         p1=p1 + size_(Ynew,2)
         QZ,RZ,xbase,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta,normgx,kappa_ill,nargout=4)
     return p1,QZ,RZ,Y,xbase,scale

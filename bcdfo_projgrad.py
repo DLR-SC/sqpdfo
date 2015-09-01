@@ -36,5 +36,6 @@ def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
             gn[i,0]=- min_(abs(bu[i,0] - x[i,0]),- gi)
         else:
             gn[i,0]=min_(abs(bl[i,0] - x[i,0]),gi)
+        # infinity-norm
         gnorm=max_(gnorm,abs(gn[i,0]))
     return gnorm, gn

@@ -59,6 +59,10 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         
     n,p1=size_(Y,nargout=2)
     badcond=0
+
+#  Compute and check the size of the tolerance.
+    
+    
     if (normgx == 0.0):
         _del=Delta ** 2 / 1e-12
     else:
@@ -67,13 +71,19 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         _del=0.1
     if (_del < 1e-10):
         _del=1e-10
+
+#  Define the size of the polynomial        
+    
     if (whichmodel == 0):
         q=copy(p1)
     else:
         q=((n + 1) * (n + 2)) / 2
     if (whichmodel == 3 and p1 < q):
+#         for underdetermined regression model use min l2-norm model
+
         whichmodel=2
-            
+#  If shifting is active, the matrix of the interpoaltion points is first
+#  shifted and scaled, and the base point and scaling factors defined.
     if (shift_Y and (p1 > 1)):
         xbase=copy(Y[:,0])
         scaleY=0
@@ -82,11 +92,22 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             scaleY=max_(scaleY,norm_(Y[:,i]))
         scale=concatenate_([array([[1]]),scaleY ** - 1 * ones_(1,min_(n,q - 1)),scaleY ** - 2 * ones_(1,q - n - 1)], axis=1).T
         Y=Y / scaleY
+    #  Otherwise, the base point and scaling factors are trivial.
     else:
         scale=ones_(q,1)
         xbase=zeros_(size_(Y,1),1)
+        
+
+#  Perform factorization of the Z matrix corresponding to the (possibly
+#  shifted and scaled) interpolation matrix.
     if (whichmodel == 0):
+#         QR of (sub-basis) interpolation matrix (p1 = q) or
+#         (factorize matrix Z = M')
+        
         Z=bcdfo_evalZ_(Y,q)
+        
+#         Check condition of Z and cure if ill-conditioned
+
         if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
             condZ=cond_(Z)
             if (condZ > kappa_ill):
@@ -103,67 +124,75 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
-    else:
-        if (whichmodel == 1):
-            if (p1 == n + 1 or p1 == q):
-                F=bcdfo_evalZ_(Y,p1).T
-            else:
-                M=bcdfo_evalZ_(Y,q).T
-                ML=M[:,0:n + 1]
-                MQ=M[:,n + 1:q]
-                F=concatenate([MQ.dot(MQ.T),ML,ML.T,zeros_(n + 1,n + 1)], axis=1)
-            if (length_(find_(isnan(F))) == 0 and length_(find_(isinf(F))) == 0):
-                condZ=cond_(F)
-                if (condZ > kappa_ill):
-                    badcond=1
-            else:
-                badcond=1
-            if (badcond):
-                U,Sdiag,V=linalg.svd(F)
-                V=V.T
-                indices=find_(Sdiag < _del)
-                Sdiag[indices]=_del
-                S=diag(Sdiag)
-                M=(V.dot(S.dot(U.T))).T
-                QZ,RZ=qr_(M,nargout=2)
-            else:
-                QZ,RZ=qr_(F,nargout=2)
+    elif (whichmodel == 1):
+#           Mixed model: minimum Frobenius-norm model (when underdetermined) and 
+#           minimum l2-norm model (at linear and quadratic degree)
+        if (p1 == n + 1 or p1 == q):
+            F=bcdfo_evalZ_(Y,p1).T
         else:
-            if (whichmodel == 2):
-                Z=bcdfo_evalZ_(Y,q)
-                if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
-                    condZ=cond_(Z)
-                    if (condZ > kappa_ill):
-                        badcond=1
-                else:
-                    badcond=1
-                if (badcond):
-                    U,Sdiag,V=linalg.svd(Z)
-                    V=V.T
-                    indices=find_(Sdiag < _del)
-                    Sdiag[indices]=_del
-                    S=diag(Sdiag)
-                    M=(V.dot(S.dot(U.T))).T
-                    QZ,RZ=qr_(M,nargout=2)
-                else:
-                    QZ,RZ=qr_(Z,nargout=2)
-            else:
-                if (whichmodel == 3):
-                    Z=bcdfo_evalZ_(Y,q).T
-                    if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
-                        condZ=cond_(Z)
-                        if (condZ > kappa_ill):
-                            badcond=1
-                    else:
-                        badcond=1
-                    if (badcond):
-                        U,Sdiag,V=linalg.svd(Z)
-                        V=V.T
-                        indices=find_(Sdiag < _del)
-                        Sdiag[indices]=_del
-                        S=diag(Sdiag)
-                        M=(V.dot(S.dot(U.T))).T
-                        QZ,RZ=qr_(M,nargout=2)
-                    else:
-                        QZ,RZ=qr_(Z,nargout=2)
+#       QR of Minimum Frobenius norm interpolation matrix (p1 <= q)
+#       (factorize matrix F = [MQMQ' ML; ML' 0])            
+            M=bcdfo_evalZ_(Y,q).T
+            ML=M[:,0:n + 1]
+            MQ=M[:,n + 1:q]
+            F=concatenate([MQ.dot(MQ.T),ML,ML.T,zeros_(n + 1,n + 1)], axis=1)
+#       Check condition of Z and cure if ill-conditioned
+        if (length_(find_(isnan(F))) == 0 and length_(find_(isinf(F))) == 0):
+            condZ=cond_(F)
+            if (condZ > kappa_ill):
+                badcond=1
+        else:
+            badcond=1
+        if (badcond):
+            U,Sdiag,V=linalg.svd(F)
+            V=V.T
+            indices=find_(Sdiag < _del)
+            Sdiag[indices]=_del
+            S=diag(Sdiag)
+            M=(V.dot(S.dot(U.T))).T
+            QZ,RZ=qr_(M,nargout=2)
+        else:
+            QZ,RZ=qr_(F,nargout=2)
+    elif (whichmodel == 2):
+#    QR of Minimum L2 norm interpolation matrix (p1 < q)
+#    (factorize matrix Z = M')
+        Z=bcdfo_evalZ_(Y,q)
+#     Check condition of Z and cure if ill-conditioned
+        if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
+            condZ=cond_(Z)
+            if (condZ > kappa_ill):
+                badcond=1
+        else:
+            badcond=1
+        if (badcond):
+            U,Sdiag,V=linalg.svd(Z)
+            V=V.T
+            indices=find_(Sdiag < _del)
+            Sdiag[indices]=_del
+            S=diag(Sdiag)
+            M=(V.dot(S.dot(U.T))).T
+            QZ,RZ=qr_(M,nargout=2)
+        else:
+            QZ,RZ=qr_(Z,nargout=2)
+    elif (whichmodel == 3):
+#    QR of Regression interpolation matrix (p1 >= q)
+#    (factorize matrix Z = M)
+        Z=bcdfo_evalZ_(Y,q).T
+#     Check condition of Z and cure if ill-conditioned
+        if (length_(find_(isnan(Z))) == 0 and length_(find_(isinf(Z))) == 0):
+            condZ=cond_(Z)
+            if (condZ > kappa_ill):
+                badcond=1
+        else:
+            badcond=1
+        if (badcond):
+            U,Sdiag,V=linalg.svd(Z)
+            V=V.T
+            indices=find_(Sdiag < _del)
+            Sdiag[indices]=_del
+            S=diag(Sdiag)
+            M=(V.dot(S.dot(U.T))).T
+            QZ,RZ=qr_(M,nargout=2)
+        else:
+            QZ,RZ=qr_(Z,nargout=2)
     return QZ,RZ,xbase.reshape(-1,1),scale

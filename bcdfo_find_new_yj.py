@@ -76,40 +76,51 @@ def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase
 #    varargin = cellarray(args)
 #    nargin = 11-[QZ,RZ,Y,j,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y].count(None)+len(args)
 
-    verbose=0
+    verbose=0 # 1 for debug
     n=size_(Y,1)
     ynew=zeros_(1,n)
     improvement=0
     msgTR=''
     if (verbose):
         disp_('--------- enter find_new_yj ')
-    if (j < 1):
+    if (j < 1): # never attempt to replace the current iterate.
         return ynew,improvement,msgTR
+    #  Get the j-th Lagrange polynomial 
     Lj=bcdfo_computeLj_(QZ,RZ,j,Y,whichmodel,scale,shift_Y)
     if (length_(find_(isnan(Lj))) != 0 or length_(find_(~ isreal(Lj))) != 0 or length_(find_(isinf(Lj))) != 0):
         msgTR='Error0: Lagrange polynomial contains NaN or Inf or nonreal components!!'
         if (verbose):
             disp_(msgTR)
         return ynew,improvement,msgTR
+#  Maximize Lj in a larger 2-norm TR if using infty-norm in the local solver (CG)
     if (lSolver == 2):
         Delta=sqrt_(n) * Delta
+#  Get the polynomial's gradient and Hessian at the current iterate.
     if (shift_Y):
+
+
+#     When shifted, the origin in the scaled variables corresponds 
+#     to Y(:,0) in the unscaled space
         g=bcdfo_gradP_(Lj,zeros_(n,1),xbase,scale,0)
         H=bcdfo_hessP_(Lj,zeros_(n,1),xbase,scale,0)
+#     Minimize this polynomial and its opposite.
         pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta * scale[1],eps_L,nargout=9)
         pstep=pstep / scale[1]
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta * scale[1],eps_L,nargout=9)
         mstep=mstep / scale[1]
     else:
+#     When no shift occurs, the current iterate is Y(:,1)
         g=bcdfo_gradP_(Lj,Y[:,[0]],xbase,scale,0)
         H=bcdfo_hessP_(Lj,Y[:,[0]],xbase,scale,0)
+#     Minimize this polynomial and its opposite.
         pstep,_lambda,norms,pvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(g,H,Delta,eps_L,nargout=9)
         mstep,_lambda,norms,mvalue,gplus,nfact,neigd,msgTR,hardcase=bcdfo_solve_TR_MS_(- g,- H,Delta,eps_L,nargout=9)
     if (verbose):
-        disp_(' === find_new_yj: j = ',int2str_(j),' positive value = ',num2str_(pvalue),' step:')
+        disp_(' === find_new_yj: j = ',str(j),' positive value = ',str(pvalue),' step:')
         pstep.T
-        disp_(' === find_new_yj: j = ',int2str_(j),' negative value = ',num2str_(mvalue),' step:')
+        disp_(' === find_new_yj: j = ',str(j),' negative value = ',str(mvalue),' step:')
         mstep.T
+#  Select the maximum in absolute value.
     if (mvalue < pvalue):
         improvement=abs(mvalue)
         ynew=Y[:,0].reshape(-1,1) + mstep
