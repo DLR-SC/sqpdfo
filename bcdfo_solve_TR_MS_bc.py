@@ -70,8 +70,8 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
     g=copy(g_)
 
     lambda_save = []
-#    norms_b_save = []
-    verbose    = 2;                # 2 for debug
+    norms_b_save = []
+    verbose    = 0;                # 2 for debug
     theta      = 1.0e-13;          # accuracy of the interval on lambda
     eps_bound  = 1.0e-5;           # the max distance | bound - x | < eps_bound for 
                                # a boundary solution
@@ -322,7 +322,7 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
                         lambda_save.append(_lambda)
                         norms_b_save.append(norms_b)
                         if (outside == 0):
-                            fprintf_('#s%d%s %12.8e %s %12.8e %s\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b,'   s < bounds'))
+                            fprintf_('%s%d%s %12.8e %s %12.8e %s\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b,'   s < bounds'))
                         else:
                             fprintf_('%s%d%s %12.8e %s %12.8e\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b))
                     #  Test if step inside bounds +/- eps_bound
