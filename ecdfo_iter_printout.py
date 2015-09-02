@@ -7,10 +7,9 @@ from runtime import *
 
 def ecdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,values=None,nb=None,mi=None,options=None,constrained_pbl=None,merit=None,*args,**kwargs):
     """
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  iteration printout
-%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#  iteration printout
+#
+    
     """
 
 #    varargin = cellarray(args)

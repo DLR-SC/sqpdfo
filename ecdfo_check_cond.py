@@ -10,15 +10,14 @@ import numpy
 
 def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
     """
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% checks the condition of matrix A and if a threshold for the condition
-% number is exceeded, matrix is perturbed by exchanging very small singular
-% values
-%
-% programming: A. Troeltzsch, 2014
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+#
+# checks the condition of matrix A and if a threshold for the condition
+# number is exceeded, matrix is perturbed by exchanging very small singular
+# values
+#
+# programming: A. Troeltzsch, 2014
+#
     """
 #    varargin = cellarray(args)
 #    nargin = 3-[A,cthreshold,options].count(None)+len(args)
@@ -40,6 +39,8 @@ def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
         Sdiag[a]=1e-07
         S=diag(Sdiag)
         A=(V.dot(S.dot(U.T))).T
+      # Make sure it is symmetric
+        
         if norm_(A - A.T,inf) > eps:
             if options.verbose >= 3:
                 disp_('### ecdfo_check_cond: ',"matrix is non symmetric. Resetting A=(A+A')/2.")

@@ -8,23 +8,29 @@ from ecdfo_global_variables import *
     #from smop.runtime import *
 def ecdfo_init_prob_(prob=None,*args,**kwargs):
     """
-    % This function returns the dimensions of the problem:
-% . n  = number of variables,
-% . nb = number of variables with bounds,
-% . mi = number of inequality constraints,
-% . me = number of equality constraints.
+    # This function returns the dimensions of the problem:
+# . n  = number of variables,
+# . nb = number of variables with bounds,
+# . mi = number of inequality constraints,
+# . me = number of equality constraints.
     """
 #    varargin = cellarray(args)
 #    nargin = 1-[prob].count(None)+len(args)
 
     eps = 2.220446049250313e-16
+# Set output variables
+   
     x0=array([])
     lx=array([])
     ux=array([])
     li=array([])
     ui=array([])
+# fid of the output file
+
     set_fileoutput(1)
     set_simul_not_initialized(1)
+    #dxmin = sqrt(eps);
+
     dxmin=1e-06
     dcimin=sqrt_(eps)
     infb=1e+20

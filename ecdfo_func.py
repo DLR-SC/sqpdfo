@@ -9,13 +9,13 @@ from numpy import array, zeros
 
 def ecdfo_func_(x=None,*args,**kwargs):
     """
-    %-----------------------------------------------------------------------
-    % Computation of f, ci, ce
-    %-----------------------------------------------------------------------
+    #-----------------------------------------------------------------------
+    # Computation of f, ci, ce
+    #-----------------------------------------------------------------------
     """
 #    varargin = cellarray(args)
 #    nargin = 1-[x].count(None)+len(args)
-
+    # Initialization
     prob=get_prob()
     ci=array([])
     if prob == 1:
@@ -42,6 +42,9 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce[2]=x[3] ** 3 - 1
         ce=ce.reshape(-1,1)
     elif prob == 5:
+        #  Powells function from solnp - manual
+        #  x* = (-1.717, 1.5957, 1.8272, -0.7636, -0.7636)
+   
         f=exp_(x[0] * x[1] * x[2] * x[3] * x[4])
         ce=zeros(3)
         ce[0]=x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2 + x[4] ** 2 - 10

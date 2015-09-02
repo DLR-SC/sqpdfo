@@ -6,37 +6,37 @@ from runtime import *
     #from smop.runtime import *
 def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
     """
-    %
-% Prints output status
-%
-%-----------------------------------------------------------------------
+    #
+# Prints output status
+#
+#-----------------------------------------------------------------------
 
-% Authors: Jean Charles Gilbert, INRIA.
-%      and Anke Troeltzsch, DLR.
-%
-% Copyright 2008, 2009, INRIA. 2013, DLR.
-%
-% ecdfo is distributed under the terms of the Q Public License version
-% 1.0.
-%
-% This program is distributed in the hope that it will be useful, but
-% WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
-% License version 1.0 for more details.
-%
-% You should have received a copy of the Q Public License version 1.0
-% along with this program.  If not, see
-% <http://doc.trolltech.com/3.0/license.html>.
-%
-%-----------------------------------------------------------------------
-
-%===============================================================================
+# Authors: Jean Charles Gilbert, INRIA.
+#      and Anke Troeltzsch, DLR.
+#
+# Copyright 2008, 2009, INRIA. 2013, DLR.
+#
+# ecdfo is distributed under the terms of the Q Public License version
+# 1.0.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
+# License version 1.0 for more details.
+#
+# You should have received a copy of the Q Public License version 1.0
+# along with this program.  If not, see
+# <http://doc.trolltech.com/3.0/license.html>.
+#
+#-----------------------------------------------------------------------
     """
 #    varargin = cellarray(args)
 #    nargin = 6-[nb,mi,me,info,options,values].count(None)+len(args)
 
     if options.verbose >= 2:
         fprintf_(options.fout,'%s\n'%(values.dline))
+   #    fprintf_(options.fout,'\necdfo optimization solver (exit point)');
+
         fprintf_(options.fout,'  Exit code %i: '%(info.flag))
         if values.success == info.flag:
             fprintf_(options.fout,'converged')
