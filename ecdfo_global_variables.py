@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jul 31 07:57:18 2015
-
-@author: lien_ol
-
-
 This file is used to set and get the global variables used in the ECDFO algorithm.
 
 List of variables :
@@ -24,6 +19,14 @@ def set_prob(value):
 	global prob
 	prob = value
 
+def set_prob_cuter(prob_cuter):
+    global cproblem
+    #Warning : here the CUTEr interface from this website has to be installed in order to use CUTEr problems :
+    #http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html. Thanks to Prof. Dr. Árpád Bűrmen
+    from pycutermgr import clearCache, prepareProblem, importProblem
+    clearCache(prob)
+    prepareProblem(prob)
+    cproblem=importProblem(prob)
 
 def set_threshold(value):
 	global threshold
@@ -54,6 +57,9 @@ def set_check_condition(value):
     
 def get_prob():
     return prob
+
+def get_prob_cuter():
+    return cproblem
  
 def get_threshold():
     return threshold

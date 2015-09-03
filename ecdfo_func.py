@@ -4,7 +4,7 @@ from __future__ import division
 from runtime import *
 #except ImportError:
 #    from smop.runtime import *
-from ecdfo_global_variables import get_prob
+from ecdfo_global_variables import get_prob,get_prob_cuter
 from numpy import array, zeros
 
 def ecdfo_func_(x=None,*args,**kwargs):
@@ -66,6 +66,12 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce[6]=x[9]*x[13]+22.2*x[10]-35.82
         ce[7]=x[10]*x[14]-3*x[7]+1.33
         ce=ce.reshape(-1,1)
+    else:
+        cproblem=get_prob_cuter()
+            
+        (f, c)=cproblem.objcons(x.reshape(-1))
+        f=int(f)
+        ce=c.reshape(-1,1)
     msg=0
     return msg,f,ci,ce
    

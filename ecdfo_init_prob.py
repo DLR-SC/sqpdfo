@@ -90,5 +90,20 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         x0=array([[-0.9,1.745,1.2,1.1,3.048,1.974,0.893,0.928,8,3.6,1.50,1,1,1,1]]).T
         lx=array([-inf,0,0,0,0,0,0.85,0.9,3,1.2,1.45,0.99,0.99,0.9,0.99]).reshape(-1,1)
         ux=array([inf,2,1.6,1.2,5,2,0.93,0.95,12,4,1.62,1.01010101010101,1.01010101010101,1.11111111111111,1.01010101010101]).reshape(-1,1)
+
+    else:
+        #Warning : here the CUTEr interface from this website has to be installed in order to use CUTEr problems :
+        #http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html Thanks to Prof. Dr. Árpád Bűrmen
+        set_prob_cuter(prob)
+        
+        cproblem=get_prob_cuter()
+        info=cproblem.getinfo()
+        n=info['n']
+        mi=0
+        me=info['m']
+        x0=info['x'].reshape(-1,1)
+        lx=info['bl'].reshape(-1,1)
+        ux=info['bu'].reshape(-1,1)
+        nb=sum_(min_((lx[0:n]>-inf)+(inf > ux[0:n]),1))
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info
