@@ -54,7 +54,7 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
         model = ( QZ.dot(np.linalg.solve( RZ.T , array([[1, 2, 3, 4, 5, 6 ]]).T ) )).T
         res =  model.dot(bcdfo_evalZ_( (array([[1],[3]])-xbase)*scale[1],6))
         self.assertTrue(compare_array(scale, array([1,0.499993750117185,0.499993750117185,0.249993750156246,0.249993750156246,0.249993750156246]), self.abs_tol, self.rel_tol))
-        self.assertAlmostEqual(float(res), 6,places=13)
+        self.assertAlmostEqual(float(res), 6,places=12)
         
     def test_bcdfo_build_QR_of_Y_2(self):
         """
@@ -65,7 +65,7 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
         for i in range(0,100):
             model = ( QZ .dot(np.linalg.solve( RZ.T , array([[random(),random(),random(),random(),random(), 6 ]]).T )) ).T
             res = np.dot(model, bcdfo_evalZ_( (array([[1],[3]])-xbase)*scale[1],6))
-            self.assertAlmostEqual(float(res), 6,places=13)
+            self.assertAlmostEqual(float(res), 6,places=12)
         array([1,3])
     def test_bcdfo_build_QR_of_Y_3(self):       
         """

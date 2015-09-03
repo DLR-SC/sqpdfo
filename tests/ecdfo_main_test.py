@@ -1141,7 +1141,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.assertEqual(correctcur_degree, cur_degree)
         self.assertTrue(compare_array(correctfcmodel,fcmodel, self.abs_tol, 1e-4))
         self.assertTrue(compare_array(correctgx, gx, self.abs_tol, self.rel_tol))
-        self.assertAlmostEqual(correctnormgx, normgx,places=11)
+        self.assertAlmostEqual(correctnormgx, normgx,places=10)
         self.assertTrue(compare_array(correctvstatus, vstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctxstatus, xstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctdstatus, dstatus, self.abs_tol, self.rel_tol))

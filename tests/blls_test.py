@@ -18,8 +18,8 @@ class Test_blls(unittest.TestCase):
       This class is a test for blls which is a solver for bound-counstrained linear least-squares problems.
     """ 
     def setUp(self):
-        self.abs_tol=1e-15;
-        self.rel_tol=1e-15;
+        self.abs_tol=1e-14;
+        self.rel_tol=1e-14;
 
     def test_blls_1(self):
         """
