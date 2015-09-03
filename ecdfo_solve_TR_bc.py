@@ -18,14 +18,14 @@ from ecdfo_global_variables import get_threshold, get_check_condition
 
 def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me=None,M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,radius_has_been_rejected=None,lm_=None,ceY=None,ciY=None,gx=None,*args,**kwargs):
     """
-%  function to compute the new SQP-trust-region step inside delta and subject
-%  to simple bounds
-%
-%  inputs:
-%
-% 
-%  outputs:
-%
+#  function to compute the new SQP-trust-region step inside delta and subject
+#  to simple bounds
+#
+#  inputs:
+#
+# 
+#  outputs:
+#
     """
 #    varargin = cellarray(args)
 #    nargin = 18-[simul,x,lb,ub,delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx].count(None)+len(args)
@@ -48,7 +48,7 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     lm_computed=0
     n=length_(x)
     I=eye_(n)
-    xi=1.0
+    xi=1.0  # trust radius contrictor (must be in (0,1))
     xnew=copy(x)
     active_r=0
     active_t=0
@@ -57,12 +57,19 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     x_fix= []
     glocal=copy(gx)
     delta_min=1e-08
-    plevel_r=0
-    if options.verbose >= 5:
-        plevel_r=1
-    plevel_t=0
+    plevel_r=0 # printing level for the restoration step (0; nothing, >0: something)
+    if options.verbose >= 5: 
+        plevel_r=1 
+    plevel_t=0  # printing level for the tangent step (0; nothing, >0: something)
     if options.verbose >= 5:
         plevel_t=1
+
+#####################################################################
+
+# in the unconstrained case (only simple bounds)
+
+#####################################################################
+
     if me + mi == 0:
         lb_r=lb[0:n] - x
         ub_r=ub[0:n] - x
@@ -76,8 +83,21 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         else:
             active_t=1
         return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+
+
+######################################################################
+
+
+# in the constrained case
+
+#####################################################################
+
+
+
     constraints=info.ce
     gconstraints=info.ae
+# Compute initial active bounds
+
     x_active=zeros_(size_(x))
     look_for_active_bounds=1
     if look_for_active_bounds == 1:
@@ -92,16 +112,16 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 x_active[i]=1
                 if options.verbose >= 3:
                     disp_('lb ',str(i),' is initially active')
-#                constraints=array([[constraints],[0]])
-#                gconstraints=array([[gconstraints],[I[i,:]]])
+                # append active bound to the equality constraints
+
                 constraints=concatenate_([constraints,array([[0]])])
                 gconstraints=concatenate_([gconstraints,I[[i],:]])
             if (x[i] - gradlag[i] >= ub[i]) and (abs(x[i] - ub[i]) < 1e-05):
                 x_active[i]=1
                 if options.verbose >= 3:
                     disp_('ub ',str(i),' is initially active')
-#                constraints=array([[constraints],[0]])
-#                gconstraints=array([[gconstraints],[I[i,:]]])
+                # append active bound to the equality constraints
+
                 constraints=concatenate_([constraints,array([[0]])])
                 gconstraints=concatenate_([gconstraints,I[[i],:]])
         if options.verbose >= 3 and sum_(x_active) > 0:
@@ -109,6 +129,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
     finished=0
     iter_active=0
     while finished == 0:
+   #----------------------------------------------------------
+   # Restoration step computation 
+   #----------------------------------------------------------
 
         iter_active=iter_active + 1
         if options.verbose >= 3:
@@ -117,15 +140,25 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             fprintf_(options.fout,'  Restoration step:\n')
         delta_r=xi * delta
         sol=gconstraints.T.dot(constraints)
-        if iter_active == 1 and norm_(sol) > 1e-14:
+#        if iter_active == 1 and info.feasn > 1e-7: # no need to recompute the restoration step otherwise
+
+        if iter_active == 1 and norm_(sol) > 1e-14: # no need to recompute the restoration step otherwise
+        # form the linear least squares system 
+
             g1=gconstraints.T.dot(constraints)
             H1=gconstraints.T.dot(gconstraints)
+        # check condition of matrix H1
+
             if check_condition:
                 cthreshold=1e+16
                 H1,badcond=ecdfo_check_cond_(H1,cthreshold,options,nargout=2)
             check_convex=1
+      #  check that matrix H1 is convex (otherwise convexify)
+
             if check_convex:
                 H1=ecdfo_check_convex_(H1,options)
+      # solve the LLS problem inside the variables bounds
+
             lb_r=lb[0:n] - x
             ub_r=ub[0:n] - x
             stratLam=1
@@ -140,6 +173,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 info_r.flag=1
             else:
                 info_r.flag=0
+    #        rpred_m = norm_(info.ce)-norm_(info.ce+info.ae.dot(r)) 
+
             rpred_m=norm_(constraints) - norm_(constraints + gconstraints.dot(r))
             rpred=rpred + rpred_m
             if rpred < 0:
@@ -168,14 +203,22 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         if options.verbose == 3:
             disp_('r = (',str(r.T),')')
             disp_('delta_r = ',str(delta_r),', norm_r = ',str(norm_r))
+   #-------------------------------------------------------------
+   # Tangent step computation
+   #-------------------------------------------------------------
+
         if options.verbose >= 3:
             fprintf_(options.fout,'  Tangent step:\n')
         delta_t=copy(delta)
         deg_freedom=n - length_(constraints)
         if deg_freedom > 0:
+         # compute nullspace of the Jacobian and project M and g
+
             Z_=null_(gconstraints)
             M_t=Z_.T.dot(M.dot( Z_))
             g_t=Z_.T.dot((glocal + M.dot(r)))
+         #  Compute minimizer of the model in the tangent space
+
             u,info_t=sqplab_tcg_(M_t,- g_t,delta_t,20 * (n - me),prec_t,plevel_t,options.fout,nargout=2)
             t=Z_.dot(u)
             active_t=(info_t.flag == 1) or (info_t.flag == 2)
@@ -196,43 +239,40 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             disp_('t = (',str(t.T),')')
             disp_('delta_t = ',str(delta_t),', norm_t = ',str(norm_(t)))
             disp_('delta ',str(delta),', norm_s = ',str(norm_(r + t)))
+   #-----------------------------------------------------------------------
+   # Compute violated bounds and append these to the equality constraints.
+   #-----------------------------------------------------------------------
+
         xnew=x + r + t
         x_active=zeros_(size_(xnew))
         x_viol=zeros_(size_(xnew))
         for i in range(0,n):
             if (xnew[i] - lb[i] < - threshold):
-                x_viol[i]=-(i+1) #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
-#                x_fix=array([x_fix,i])
-                x_fix=concatenate_([x_fix, array([i])], axis=1)   #here we do not have to increment i because x_fix is an index array
+                x_viol[i]=-(i+1) 
+                x_fix=concatenate_([x_fix, array([i])], axis=1)  
                 if options.verbose >= 3:
-                    disp_('lb ',int2str_(i),' is violated')
-#                constraints=array([[constraints],[0]])
-#                gconstraints=array([[gconstraints],[I[i,:]]])
+                    disp_('lb ',str(i),' is violated')
                 constraints=concatenate_([constraints,array([[0]])])
                 gconstraints=concatenate_([gconstraints,I[[i],:]])
                 violated=1
                 break
             elif (abs(xnew[i] - lb[i]) < 1e-07):
-                x_active[i]=-(i+1)#we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
+                x_active[i]=-(i+1)
                 if options.verbose >= 3:
-                    disp_('lb ',int2str_(i),' is active')
-            else:
-                if (xnew[i] - ub[i] > threshold):
-                    x_viol[i]=i+1 #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
-#                        x_fix=array([x_fix,i])
-                    x_fix=concatenate_([x_fix, array([i])], axis=1) #here we do not have to increment i because x_fix is an index array
-                    if options.verbose >= 3:
-                        disp_('ub ',int2str_(i),' is violated')
-#                   constraints=array([[constraints],[0]])
-#                   gconstraints=array([[gconstraints],[I[i,:]]])
-                    constraints=concatenate_([constraints,array([[0]])])
-                    gconstraints=concatenate_([gconstraints,I[[i],:]])
-                    violated=1
-                    break
-                elif (abs(xnew[i] - ub[i]) < 1e-07):
-                    x_active[i]=i+1 #we have to be careful there because we have (i+1) in python which equals i in matlab ! It is tricky to use it both as assignment value and index.
-                    if options.verbose >= 3:
-                        disp_('ub ',int2str_(i),' is active')
+                    disp_('lb ',str(i),' is active')
+            elif (xnew[i] - ub[i] > threshold):
+                x_viol[i]=i+1
+                x_fix=concatenate_([x_fix, array([i])], axis=1) 
+                if options.verbose >= 3:
+                    disp_('ub ',str(i),' is violated')
+                constraints=concatenate_([constraints,array([[0]])])
+                gconstraints=concatenate_([gconstraints,I[[i],:]])
+                violated=1
+                break
+            elif (abs(xnew[i] - ub[i]) < 1e-07):
+                x_active[i]=i+1 
+                if options.verbose >= 3:
+                    disp_('ub ',str(i),' is active')
         if sum_(x_viol) == 0:
             violated=0
             if options.verbose >= 3:
@@ -240,11 +280,17 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
         else:
             if options.verbose >= 3:
                 disp_(x_fix)
+   #-----------------------------------------------------------------------
+   # Check optimality of x (if step is zero)
+   #-----------------------------------------------------------------------
+
         if norm_(r + t) <= 1e-16:
             if (iter_active >= 10 * n or delta < delta_min):
                 if options.verbose >= 3:
                     disp_('### ecdfo_solve_TR_bc: active-set iteration limit exceeded ###')
                 return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
+            # compute new Lagrange multipliers
+
             lbounds=- inf * ones_(size_(x))
             ubounds=inf * ones_(size_(x))
             ilb=abs(lb - xnew) < 1e-05
@@ -252,6 +298,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             lbounds[ilb]=lb[ilb]
             ubounds[iub]=ub[iub]
             lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
+            # compute smallest LM of the active bounds
+
             min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
             if options.verbose >= 3:
                 disp_('smallest Lagrange multiplier (for the bounds) = ',str(min_lm))
@@ -263,32 +311,29 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 xa=find_(x_active < 0).reshape(-1)
                 if length_(xa) == length_(x_fix):
                     if (np.sort(xa) == np.sort(x_fix)).all():
+                        # check the Lagrange multipliers to release one bound
+
                         for i in range(0,length_(x_fix)):
                             if i != ind_min_lm:
-#                                constraints=array([[constraints],[0]])
-#                                gconstraints=array([[gconstraints],[I[x_fix[i],:]]])
                                 constraints=concatenate_([constraints,array([[0]])])
                                 gconstraints=concatenate_([gconstraints,I[[x_fix[i]],:]])
-#                        x_fix[ind_min_lm]=[]
                         x_fix = np.delete(x_fix, ind_min_lm) 
                         finished=1
                     else:
+                        # the active are not the fixed variables - just fix the currently active vars and release all other
+
                         x_fix=array([])
                         for i in range(0,length_(find_(x_active < 0))):
-#                            constraints=array([[constraints],[0]])
-#                            gconstraints=array([[gconstraints],[I[xa[i],:]]])
                             constraints=concatenate_([constraints,array([[0]])])
                             gconstraints=concatenate_([gconstraints,I[[xa[i]],:]])
-#                            x_fix=array([x_fix,xa[i]])
                             x_fix=concatenate_([x_fix,[xa[i]]],axis=1)
                 else:
+                    # number of active and fixed variables is not the same - just fix the currently active vars and release all other
+
                     x_fix=array([])
                     for i in range(0,length_(find_(x_active < 0))):
-#                        constraints=array([[constraints],[0]])
-#                        gconstraints=array([[gconstraints],[I[xa[i],:]]])
                         constraints=concatenate_([constraints,array([[0]])])
                         gconstraints=concatenate_([gconstraints,I[[xa[i]],:]])
-#                        x_fix=array([x_fix,xa[i]])
                         x_fix=concatenate_([x_fix,[xa[i]]],axis=1)
                 if options.verbose >= 3:
                     x_fix
@@ -304,22 +349,29 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
             else:
                 if options.verbose >= 3:
                     disp_('non zero infeasible step - continue finding correct active set...')
+   #-----------------------------------------------------------------------
+   # Update x, g, delta and ce (if violated bound)
+   #-----------------------------------------------------------------------
+   
         if violated == 1:
             tstep=copy(t)
             if options.verbose >= 3:
                 disp_('shorten tangential step')
-#            aT=array([[eye_(n)],[- eye_(n)]])
+            # compute ratio of current step inside the bounds
             aT=concatenate_([eye_(n),- eye_(n)])
             aTx=aT.dot(xr)
-#            alpha=array([[ub[1:n]],[- lb[1:n]]])
             alpha=concatenate_([ub[0:n],- lb[0:n]])
             divisor=aT.dot(tstep)
             ratio=(alpha - aTx) / divisor
             minratio=min_(ratio[divisor > 0])
             if (minratio < 0):
+                # in case xk is slightly in the infeasible region, this should not
+                # be corrected here (tstep points in ascending direction if minratio<0)
                 minratio=0.
             else:
                 minratio=float(minratio)
+            # compute step inside the bounds
+
             tstep=minratio*tstep
             x=xr + tstep
             step=r + tstep
@@ -327,6 +379,8 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
                 disp_('t = (',str(tstep.T),')')
                 disp_('delta_t = ',str(delta_t),', norm_t = ',str(norm_(tstep)))
                 disp_('delta ',str(delta),', norm_s = ',str(norm_(r + tstep)))
+            # update gradient and Jacobian 
+
             glocal=glocal + M .dot(step)
             for i in range(0,me):
                 gconstraints[i,:]=gconstraints[[i],:] + (M .dot( step)).T

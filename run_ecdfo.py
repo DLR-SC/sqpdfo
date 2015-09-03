@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-%
-%  Driver for the optimizer ECDFO.
-%  ECDFO can solve a minimization problem of the form
-%
-%      minimize     f(x)
-%      subject to   lx <=   x   <= ux
-%                   li <= ci(x) <= ui
-%                   ce(x) == 0,
-%
-%  where f: Rn -> R (hence x is the vector of n variables to optimize),
-%  lx and ux are lower and upper bounds on x, ci: Rn -> Rmi, li and ui
-%  are lower and upper bounds on ci(x), and ce: Rn -> Rme.
-%
+#
+#  Driver for the optimizer ECDFO.
+#  ECDFO can solve a minimization problem of the form
+#
+#      minimize     f(x)
+#      subject to   lx <=   x   <= ux
+#                   li <= ci(x) <= ui
+#                   ce(x) == 0,
+#
+#  where f: Rn -> R (hence x is the vector of n variables to optimize),
+#  lx and ux are lower and upper bounds on x, ci: Rn -> Rmi, li and ui
+#  are lower and upper bounds on ci(x), and ce: Rn -> Rme.
+#
 """
 #from __future__ import division
 #try:
@@ -34,7 +34,13 @@ tic = time.clock()
 #_format(char('long'))
 #global n,nb,mi,me,prob,threshold
 
-set_prob(7) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+
+
+#---------------------------------------
+# Initialize problem
+#---------------------------------------
+
+set_prob(1) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 set_check_condition(1)
 prob=get_prob()
 options = helper.dummyUnionStruct()
@@ -43,26 +49,44 @@ options.tol=zeros(3)
 x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
 lb=zeros_(n,1)
 ub=zeros_(n,1)
+# bounds for variables and inequality constraints
+
 lb[arange(0,n)]=lx
 ub[arange(0,n)]=ux
 if mi:
     lb[arange(n,n + mi)]=li
     ub[arange(n ,n + mi)]=ui
+# Threshold for violated bounds 
+
 set_threshold(1e-08)
+#---------------------------------------
+# Set options
+#---------------------------------------
+
+# default options
 options.algo_method='quasi-Newton'
 options.algo_globalization='trust regions'
-options.hess_approx='model'
-options.bfgs_restart=0
-options.algo_descent='Powell'
+options.hess_approx='model' # options: 'model' or 'bfgs'
+options.bfgs_restart=0  # only taken into account if hess_approx is 'bfgs'
+options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
 if nb + mi + me == 0:
     options.algo_descent='Wolfe'
-options.tol[0]=1e-05
-options.tol[1]=1e-05
-options.tol[2]=1e-05
-options.dxmin=dxmin
-options.miter=500
-options.msimul=500
-options.verbose=2
+
+options.tol[0]  = 1e-5;       # tolerance on the gradient of the Lagrangian
+options.tol[1]  = 1e-5;       # tolerance on the feasibility
+options.tol[2]  = 1e-5;       # tolerance on the complementarity
+
+options.dxmin   = dxmin;      # minimum size of a step
+
+options.miter   = 500;        # max iterations
+options.msimul  = 500;        # max evaluations
+
+options.verbose = 6;          # verbosity level 0,...,3
+
+#------------------------------------
+# Call ECDFO
+#------------------------------------
+
 lm=array([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
 print x

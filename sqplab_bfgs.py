@@ -7,52 +7,52 @@ from copy import copy
     #from smop.runtime import *
 def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
     """
-    %
-% [M,info,values] = sqplab_bfgs (M,y,s,first,info,options,values);
-%
-% This procedure computes the BFGS update of the matrix M, which is
-% supposed to be positive definite approximation of some Hessian. If
-% y'*s is not sufficiently positive and options.algo_descent is set to
-% values.powell, Powell's correction is applied to y.
-%
-% On entry:
-%   M: matrix to update
-%   y: gradient variation
-%   s: point variation
-%   first: if true, the procedure will initialize the matrix M to a
-%       multiple of the identity before the update
-%
-% On return:
-%   M: updated matrix
+    #
+# [M,info,values] = sqplab_bfgs (M,y,s,first,info,options,values);
+#
+# This procedure computes the BFGS update of the matrix M, which is
+# supposed to be positive definite approximation of some Hessian. If
+# y'*s is not sufficiently positive and options.algo_descent is set to
+# values.powell, Powell's correction is applied to y.
+#
+# On entry:
+#   M: matrix to update
+#   y: gradient variation
+#   s: point variation
+#   first: if true, the procedure will initialize the matrix M to a
+#       multiple of the identity before the update
+#
+# On return:
+#   M: updated matrix
 
-%-----------------------------------------------------------------------
-%
-% Author: Jean Charles Gilbert, INRIA.
-%
-% Copyright 2008, 2009, INRIA.
-%
-% SQPlab is distributed under the terms of the Q Public License version
-% 1.0.
-%
-% This program is distributed in the hope that it will be useful, but
-% WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
-% License version 1.0 for more details.
-%
-% You should have received a copy of the Q Public License version 1.0
-% along with this program.  If not, see
-% <http://doc.trolltech.com/3.0/license.html>.
-%
-%-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#
+# Author: Jean Charles Gilbert, INRIA.
+#
+# Copyright 2008, 2009, INRIA.
+#
+# SQPlab is distributed under the terms of the Q Public License version
+# 1.0.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
+# License version 1.0 for more details.
+#
+# You should have received a copy of the Q Public License version 1.0
+# along with this program.  If not, see
+# <http://doc.trolltech.com/3.0/license.html>.
+#
+#-----------------------------------------------------------------------
 
-%-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-% Parameter
+# Parameter
 
-  eta = 0.2;    % constant for Powell corrections
-% eta = 0.6;    % constant for Powell corrections
+  eta = 0.2;    # constant for Powell corrections
+# eta = 0.6;    # constant for Powell corrections
 
-%-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
 TEST INPUT VALUES: (problem 3 options.hess_approx = 'bfgs')
 sqplab_bfgs
 K>> M
@@ -297,11 +297,15 @@ values =
     M=copy(M_)
     y=copy(y_)
     info=copy(info_)
-
-    eta=0.2
+ # Parameter
+   # eta = 0.6;    # constant for Powell corrections
+    eta=0.2 # constant for Powell corrections
+# initalization
     n=length_(s)
     pc=1
     info.flag=values.success
+# prepare the update of M
+
     if norm_(s) == 0:
         info.flag=values.fail_strange
         if options.verbose >= 3:
@@ -318,12 +322,14 @@ values =
             fprintf_(options.fout,'\n### sqplab_bfgs: BFGS Hessian approximation is not positive definite:\n')
             fprintf_(options.fout,"            s'*M*s = %g <= 0\n\n"%(sMs))
         return M,pc,info,values
-    if (options.algo_descent == values.powell) and (ys < eta * sMs):
+#  disp_(['sqplab_bfgs: curvature condition fails:', str(ys < eta*sMs)])
+
+    if (options.algo_descent == values.powell) and (ys < eta * sMs): # Powell's correction
         pc=(1 - eta) * sMs / (sMs - ys)
         if options.verbose >= 4:
             fprintf_(options.fout,"  Powell's corrector = %7.1e\n"%(pc))
         y=pc * y + (1 - pc) * Ms
-        ys=y.T.dot(s)
+        ys=y.T.dot(s)  # update ys, since y has changed
         if options.verbose >= 4:
             fprintf_(options.fout," (new y'*s/(s'*s) = %7.1e\n)"%(ys / (s.T.dot(s))))
         if ys <= 0:
@@ -337,15 +343,27 @@ values =
                 fprintf_(options.fout,"\n### sqplab_bfgs: y'*s = %9.3e is nonpositive\n\n"%(ys).T)
             info.flag=values.fail_strange
             return M,pc,info,values
+    # case when the matrix has to be initialized
+
     if first:
+     #   ol = ys/(s.T.dot(s));
         ol=(y.T.dot( y)) / ys
         M=ol * eye_(n)
         if options.verbose >= 4:
             fprintf_(options.fout,'  OL coefficient = %g\n'%(ol))
         Ms=ol*s
         sMs=s.T .dot(Ms)
-    M=M - (Ms.dot(Ms.T)) / sMs + (y .dot(y.T)) / ys
+    #   if options.verbose >= 6:
+    #     values.file_eigM = fopen_('sqplab_eigM.m','w');
+    #     fprintf_(values.file_eigM,'  Powell''s corrector    Eigenvalues of the updated matrix M\nn=%0i\n',n);
+# update the matrix M (TODO: update with the formula used in SQPpro, which is more stable)
+
+    M=M - (Ms.dot(Ms.T)) / sMs + (y .dot(y.T)) / ys   # BFGS formula
     if options.verbose >= 6:
         eigM=sort_(eig_(M))
         fprintf_(options.fout,'  eig(M): min = %g, max = %g, cond = %g\n'%(min_(eigM),max_(eigM),max_(eigM) / min_(eigM)))
+    #   fprintf_(values.file_eigM,'%22.15e',pc);
+    #   for i in range(0,n):
+    #     fprintf_(values.file_eigM,'  %22.15e',eigM(i));
+    #   fprintf_(values.file_eigM,'\n');
     return M,pc,info,values
