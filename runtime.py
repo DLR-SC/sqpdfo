@@ -14,7 +14,7 @@ from copy import copy
 #warnings.simplefilter('error', RuntimeWarning)
 import scipy
 import numpy as np
-import os,sys
+import sys
 import numpy #this is for the other files which import runtime and need numpy, for instance with numpy.linalg.solve
 from numpy import inf, logical_or, logical_and #some other files which import runtine need inf
 #import helper
@@ -195,7 +195,7 @@ def max_(a, d=None, nargout=None):
 #    warnings.simplefilter('ignore', RuntimeWarning)
 
     if isempty_(a):
-        ret = np.array([])                    
+        ret = np.array([])
     elif  d is not None:
         ret=np.fmax(a,d)
     else:
@@ -545,7 +545,7 @@ def null_(A, eps=1e-15):
     """
     Returns the null space of A
     """
-    u, s, vh = scipy.linalg.svd(A)
+    u, s, vh = np.linalg.svd(A)
     padding = max(0,np.shape(A)[1]-np.shape(s)[0])
     null_mask = np.concatenate(((s <= eps), np.ones((padding,),dtype=bool)),axis=0)
     null_space = scipy.compress(null_mask, vh, axis=0)
