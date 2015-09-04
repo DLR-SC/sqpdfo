@@ -1,15 +1,7 @@
 ﻿Comments on translation
 ================
 
-This file helps us find the bugs when doing the translation from matlab to python code.
-
-BCDFO files translated by Dr. Tröltzsch Anke:
-
-These files have been (hand?)-translated by Dr. Tröltzsch Anke and therefore use normal python arrays. We therefore have to be careful with indices.
-
-Besides the known issues notified on gitlab, this is what we have to be careful with :
--Lot of bugs were found on bcdfo_solve_TR_MS/bcdfo_solve_TR_MS_bc and thus more tests if we have time could reveal more.
--Almost all functions were tested with whichmodel=0, therefore more tests if we have time with other values of whichmodel could be important.
+This file helps us  to find the bugs when doing the translation from matlab to python code using the SMOP tool.
 
 BCDFO and ECDFO files automatically translated:
 
@@ -35,8 +27,6 @@ The important thing is the copy, because we get a view and not a copy of the par
 
 -Code such like H[ind_free,ind_free] may have to be handled with H[ix_(ind_free,ind_free)] or some reshape depeding on the shape of ind_free (could be H[ind_free, ind_free.T]),
 if we do not want python to compute indices corresponding to H[indfree[0],indfree[0]], H[indfree[1],indfree[1]], etc 
-
--All copy_ should be transformed into copy 
 
 -for i in arange_(1,p1).reshape(-1)  should be replaced by for i in range(0,p1) or range(1,p1+1) and then following indices have to be modified accordingly.
 
@@ -74,19 +64,17 @@ Same thing applies when we in matlab only want to take a few columns : lm=I(:,if
 							SHOULD BE TRANSLATED  BY:
 							fprintf_(options.fout,'VARIABLES:\n') 
 
+-'int2str_'and 'num2str_' could simply be replaced by 'str'
 
 -The "if(verbose) : variable" has to be corrected by something like "if(verbose) : print 'variable=',variable"
 							
 -The function isa(func,'function_handle') in matlab should be  translated by isinstance(evalfgh_, types.FunctionType) (with import types as a header of the file)
 							
--When functions call each other in python code, arguments may be modified => we have to make copy of all the arguments which are modified by the function to make sure that there is  no unwanted modification, even if the
-argument is returned at the end of the function. For instance, bcdfo_repair_Y modifies and returns Y, but it may be returned under an other name in matlab, for instance Yplus:
-QZplus, RZplus, Yplus, replaced, maximprove, Y_radius, xbase, scale = bcdfo_repair_Y_( QZ, RZ, Y, 0.7, 10, 1.0e-10, 1.1, 0.001, xbase, 1, 0, 0, matlabarray([-10,-10]), matlabarray([10,10]), matlabarray([1,2]), 1, scale, 0, 1, 1e15 )
-In this case, we would not want Y to be modified during the call. Therefore Y has to be copied in bcdfo_repair_Y, even though it is returned at the end. 
+-When object are modified during our function through a method of this object such as info.glag=3 or x[2]=3 we have to make a copy of this object at the beggining of our function.
 
--When there may be complex numbers, A' should be replaced in python by A.conj().T and not A.T. This is for instance important in : A=0.5*(A + A.conj().T)
+-When there may be complex numbers, A' should be replaced in python by A.conj().T and not A.T. This is for instance important in : A=0.5*(A + A.conj().T). However, this should be not the case in ECDFO algorithm in my opinion.
 
--There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case, those are the followings :
+-There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case. For instance there are the followings :
 
 	-roots function from matlab has to be handled in python like in the following example :
 	   root  = roots([norm(V(:,imu))^2 2*V(:,imu)'*scri nscri^2-Delta^2]);
@@ -101,13 +89,3 @@ In this case, we would not want Y to be modified during the call. Therefore Y ha
 		SHOULD BE IN PYTHON BY :
 		dsorted=np.sort(d.reshape(-1))[::-1])
 		jsorted=np.argsort(d.reshape(-1))[::-1])
- 
-PROBLEMS FROM AUTOMATIC TRANSLATION WHICH HAVE APPARENTLY BEEN DEALT WITH BY MODIFYING THE RUNTIME.PY (but we are keeping them close just in case):
-
--cholesky function in python does not give an answer when the matrix is not definite positive (whereas matlab does) and raises instead an exception  : therefore they have to be handle differently (cf bcdfo_solve_TR_MS for an instance)
-
--The eig_(A,1) function in python give the eigenvalues like matlab BUT :
-	the eig_(A,2) function gives FIRST the eigenvalues and only SECOND the eigenvectors, which is the reverse order in matlab.
-	the eig_(A,2) function gives the eigenvalues(in the first place) as a VECTOR, whereas it is a diagonal matrix in matlab (in the second place).
-	
--The U,S,V=svd_(A,0,nargout=3) function gives S as a vector and not as a diagonal matrix like in matlab 
