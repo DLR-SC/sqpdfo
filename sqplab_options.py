@@ -110,8 +110,9 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
             options.algo_method=values.quasi_newton
         elif (algo_method_str=='cheap quasi-newton')or(algo_method_str=='cheap quasi newton') or(algo_method_str=='cheap quasinewton'):
             options.algo_method=values.cheap_quasi_newton
-        elif options.verbose:
-            fprintf_(options.fout,'\n### ecdfo: options.algo_method "{}" not recognized\n\n'.format(options.algo_method))
+        else:
+            if options.verbose:
+                fprintf_(options.fout,'\n### ecdfo: options.algo_method "{}" not recognized\n\n'.format(options.algo_method))
             info.flag=values.fail_on_argument
             return info,options,values
     else:
@@ -124,8 +125,9 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
             options.algo_globalization=values.linesearch
         elif (algo_globalization_str=='trust regions')or(algo_globalization_str=='trust-regions')or(algo_globalization_str=='trustregions'):
             options.algo_globalization=values.trust_regions
-        elif options.verbose:
-            fprintf_(options.fout,'\n### ecdfo: options.algo_globalization "%s" not recognized\n\n'%(options.algo_globalization))
+        else:
+            if options.verbose:
+                fprintf_(options.fout,'\n### ecdfo: options.algo_globalization "%s" not recognized\n\n'%(options.algo_globalization))
             info.flag=values.fail_on_argument
             return info,options,values
     else:
@@ -136,8 +138,9 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
             options.algo_descent=values.powell
         elif (algo_descent_str=='wolfe'):
             options.algo_descent=values.wolfe
-        elif options.verbose:
-            fprintf_(options.fout,'\n### ecdfo: options.algo_descent "%s" not recognized\n\n'%(options.algo_descent))
+        else:
+            if options.verbose:
+                fprintf_(options.fout,'\n### ecdfo: options.algo_descent "%s" not recognized\n\n'%(options.algo_descent))
             info.flag=values.fail_on_argument
             return info,options,values
     if isfield_(options,'dxmin'):
@@ -189,8 +192,9 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
             options.hess_approx=values.bfgs
         elif 'model' == options.hess_approx.lower().replace(" ",""):
             options.hess_approx=values.model
-        elif options.verbose:
-            fprintf_(options.fout,'\n### ecdfo: options.hess_approx "%s" not recognized\n\n'%(options.hess_approx))
+        else:
+            if options.verbose:
+                fprintf_(options.fout,'\n### ecdfo: options.hess_approx "%s" not recognized\n\n'%(options.hess_approx))
             info.flag=values.fail_on_argument
             return info,options,values
     return info,options,values
