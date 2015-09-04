@@ -1,0 +1,8 @@
+SMOP_TO_USE
+================
+
+This is the translation tool used to convert matlab code to python code. How to use it is explained in the README.rst file in the 'smop' repository, for instance :    
+   $ python main.py file_to_translate.m
+   or :
+   $ python main.py otherfiles/*
+   and the translation will be written in the 'a.py' file.
