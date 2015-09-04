@@ -5,7 +5,7 @@ from runtime import *
 from bcdfo_evalZ import *
 from copy import copy
 from numpy import array
-
+import numpy
 def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
     """
 #

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #from __future__ import division
 from runtime import *
+import numpy
 from numpy import *
 from copy import copy
 #from numpy import inf

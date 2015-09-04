@@ -5,7 +5,7 @@ from runtime import *
 from bcdfo_evalZ import *
 from numpy import array
 from copy import copy
-
+import numpy
 def bcdfo_computeP_(QZ=None,RZ=None,Y_=None,fY=None,whichmodel=None,P_old=None,ind_Y=None,i_xold=None,i_xplus=None,g=None,scale=None,shift_Y=None,Delta0=None,*args,**kwargs):
     """
 #

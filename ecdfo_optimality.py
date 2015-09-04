@@ -3,7 +3,7 @@ from __future__ import division
 from runtime import *
 from copy import copy
 from numpy import arange
-
+from numpy import logical_and
 def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
     """    
 #-----------------------------------------------------------------------

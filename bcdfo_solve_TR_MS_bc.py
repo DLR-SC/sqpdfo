@@ -4,7 +4,7 @@ from runtime import *
 
 from copy import copy
 from numpy import *
-
+import numpy
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
 def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,stratLam=None,*args,**kwargs):
