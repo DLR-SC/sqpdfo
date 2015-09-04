@@ -179,8 +179,8 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
             lambda0=copy(_lambda)
             if (verbose == 2):
                 disp_('step outside bounds!')
-                out_of_ubound
-                out_of_lbound
+                print out_of_ubound
+                print out_of_lbound
                 disp_('lambda_0=',str(lambda0))
       #  Set lower bound on lambda.
   
@@ -457,7 +457,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
             if (ng_reduced <= 1e-05):
                 if (verbose >= 2):
                     disp_('point first order critical - return')
-                    ng_reduced
+                    print ng_reduced
                 if (verbose):
                     disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg

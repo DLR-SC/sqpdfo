@@ -355,10 +355,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         # Print detailed activity information for the new subspace 
                         # iterate, if requested.
                         if (verbose > 2):
-                            current_subspace_solution=ssub.T
-                            indices_of_free_variables=copy(free)
-                            indices_of_variables_at_their_lower_bound=copy(atlb)
-                            indices_of_variables_at_their_upper_bound=copy(atub)
+                            print "current_subspace_solution="+str(ssub.T)
+                            print "indices_of_variables_at_their_lower_bound="+str(atlb)
+                            print "indices_of_variables_at_their_upper_bound="+str(atub)
+                            print "indices_of_free_variables="+str(free)
 
                        #  Prepare the next subspace minimization by memorizing the
                        #  current solution.
@@ -377,7 +377,7 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                             print "current_subspace_solution="+str(ssub.T)
                             print "indices_of_variables_at_their_lower_bound="+str(atlb)
                             print "indices_of_variables_at_their_upper_bound="+str(atub)
-                            print str(free)
+                            print "indices_of_free_variables="+str(free)
                     break
             # Compute the optimality measure.
 

@@ -124,7 +124,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 constraints=concatenate_([constraints,array([[0]])])
                 gconstraints=concatenate_([gconstraints,I[[i],:]])
         if options.verbose >= 3 and sum_(x_active) > 0:
-            xactive=x_active.T
+            print "xactive="+str(x_active.T)
     finished=0
     iter_active=0
     while finished == 0:
@@ -335,7 +335,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                         gconstraints=concatenate_([gconstraints,I[[xa[i]],:]])
                         x_fix=concatenate_([x_fix,[xa[i]]],axis=1)
                 if options.verbose >= 3:
-                    x_fix
+                    print "x_fix="+str(x_fix)
             else:
                 if options.verbose >= 3:
                     disp_('Zero step and converged - go back to TR-loop...')

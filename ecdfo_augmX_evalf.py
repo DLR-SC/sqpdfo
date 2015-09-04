@@ -135,13 +135,13 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
     if isnan(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
-            x=copy(y)
+            print "x="+str(copy(y))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if isinf(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
-            x=copy(y)
+            print "x="+str(copy(y))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
     if outdic:
