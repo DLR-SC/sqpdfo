@@ -15,7 +15,6 @@
 #
 """
 #from __future__ import division
-#try:
 import helper
 from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
@@ -23,8 +22,7 @@ from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_c
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
 from numpy import array, zeros, arange
-#except ImportError:
-#from smop.runtime import *
+
 
 import time
 tic = time.clock()

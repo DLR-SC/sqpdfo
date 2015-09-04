@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from ecdfo_check_convex import *
 from ecdfo_check_cond import *
@@ -8,8 +7,7 @@ from blls import *
 from copy import copy
 from ecdfo_global_variables import get_check_condition
 from numpy import array
-#except ImportError:
-#    from smop.runtime import *
+
 
 def sqplab_lsmult_(x=None,lb=None,ub=None,info_=None,options=None,values=None,*args,**kwargs):
     """

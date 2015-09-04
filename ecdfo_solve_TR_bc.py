@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys
-#try:
 from runtime import *
-#except ImportError:
-#from smop.runtime import *
-
 import helper
 from bcdfo_solve_TR_MS_bc import *
-#from bcdfo_solve_TR_MS_bc_decorator import *
-#from blls import *
-#from ecdfo_check_cond import *
+
 from ecdfo_check_convex import *
 from sqplab_lsmult import *
 from sqplab_tcg import *

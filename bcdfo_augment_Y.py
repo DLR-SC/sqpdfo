@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
+from runtime import *
+
     
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from copy import copy
 
 def bcdfo_augment_Y_(Ynew=None,Y=None,whichmodel=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """

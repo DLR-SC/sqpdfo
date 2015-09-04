@@ -9,19 +9,13 @@ This file contains functions which serve mostly 2 purposes :
     outputs with the same shapes : S is a vector in python and a diagonal matrix in matlab, and V.transpose in python = V in matlab.
 
 """
-import warnings
+#import warnings
 from copy import copy
 #warnings.simplefilter('error', RuntimeWarning)
 import scipy
 import numpy as np
 import sys
-import numpy #this is for the other files which import runtime and need numpy, for instance with numpy.linalg.solve
-from numpy import inf, logical_or, logical_and #some other files which import runtine need inf
-#import helper
-try:
-    from scipy.io import loadmat
-except:
-    pass
+
 
 def isvector_or_scalar_(a):
     """

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from numpy import inf, arange
 from copy import copy
@@ -21,8 +20,7 @@ from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
 from numpy import array, zeros
-#except ImportError:
-    #from smop.runtime import *
+
 
 def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=None,nit_=None,i_xbest_=None,lb_=None,ub_=None,m_=None,X_=None,fX_=None,ciX_=None,ceX_=None,ind_Y_=None,QZ_=None,RZ_=None,delta_=None,cur_degree_=None,neval_=None,maxeval_=None,maxit_=None,fcmodel_=None,gx_=None,normgx_=None,show_errg_=None,pquad_=None,pdiag_=None,plin_=None,stallfact_=None,eps_rho_=None,Deltamax_=None,rep_degree_=None,epsilon_=None,verbose_=None,eta1_=None,eta2_=None,gamma1_=None,gamma2_=None,gamma3_=None,interpol_TR_=None,factor_CV_=None,Lambda_XN_=None,Lambda_CP_=None,factor_FPU_=None,factor_FPR_=None,Lambda_FP_=None,criterion_S_=None,criterion_FP_=None,criterion_CP_=None,mu_=None,theta_=None,eps_TR_=None,eps_L_=None,lSolver_=None,stratLam_=None,eps_current_=None,vstatus_=None,xstatus_=None,sstatus_=None,dstatus_=None,ndummyY_=None,sspace_save_=None,xspace_save_=None,xfix_=None,fxmax_=None,poised_model_=None,M_=None,kappa_ill_=None,kappa_th_=None,eps_bnd_=None,poised_=None,Y_radius_=None,c_=None,level_=None,whichmodel_=None,hardcons_=None,noisy_=None,scaleX_=None,scalefacX_=None,CNTsin_=None,shrink_Delta_=None,scale_=None,shift_Y_=None,info_=None,options_=None,values_=None,*args,**kwargs):
     """

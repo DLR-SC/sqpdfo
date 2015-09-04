@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
+from runtime import *
+
 from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy

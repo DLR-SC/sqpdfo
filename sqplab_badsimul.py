@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#from __future__ import division
-#try:
+from __future__ import division
+
 from runtime import *
-#except ImportError:
-#    from smop.runtime import *
+
 from copy import copy
 
 

@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
-#print "type eig", type(eig_)
-#except ImportError:
-#    from smop.runtime import *
 from numpy import diag, array,isreal,real
-from copy import copy
 import numpy
 
 def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):

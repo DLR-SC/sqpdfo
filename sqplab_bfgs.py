@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from copy import copy
-#except ImportError:
-    #from smop.runtime import *
+
 def sqplab_bfgs_(M=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
     """
     #

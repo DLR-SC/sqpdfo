@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from copy import copy
 from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
 from numpy import array
-#except ImportError:
-#from smop.runtime import *
 def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
     """
 #  Subroutine finds the smallest value in fY, which are the associated function

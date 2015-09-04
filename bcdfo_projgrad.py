@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
-from numpy import array
+from runtime import *
     
 def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
     """

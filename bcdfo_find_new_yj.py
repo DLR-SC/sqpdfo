@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
+from runtime import *
+
 from bcdfo_computeLj import bcdfo_computeLj_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_hessP import bcdfo_hessP_

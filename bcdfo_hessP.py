@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
-from copy import copy    
+from runtime import *
+
 from numpy import diag, zeros 
     
 def bcdfo_hessP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):

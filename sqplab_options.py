@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from numpy import inf
 from copy import copy
-#except ImportError:
-    #from smop.runtime import *
+
 
 class ecdfoValues():
 	def __init__(self):

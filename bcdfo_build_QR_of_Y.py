@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
+from runtime import *
 from bcdfo_evalZ import *
 from copy import copy
 from numpy import *

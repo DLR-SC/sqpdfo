@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from numpy import inf, array
 from ecdfo_global_variables import *
-#except ImportError:
-    #from smop.runtime import *
+
 def ecdfo_init_prob_(prob=None,*args,**kwargs):
     """
     # This function returns the dimensions of the problem:

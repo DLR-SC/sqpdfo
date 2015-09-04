@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
-#except ImportError:
-#    from smop.runtime import *
 from ecdfo_global_variables import get_prob,get_prob_cuter
 from numpy import array, zeros
 

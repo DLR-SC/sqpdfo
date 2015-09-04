@@ -6,13 +6,10 @@ from ecdfo_main import ecdfo_main_
 from ecdfo_global_variables import get_prob
 from ecdfo_prelim import ecdfo_prelim_
 from ecdfo_finish import ecdfo_finish_
-try:
-    from runtime import *
-except ImportError:
-    from smop.runtime import *
+from runtime import *
+
 from copy import copy
 from numpy import array
-import random
 
 
 def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwargs):

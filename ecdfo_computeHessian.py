@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_hessP import bcdfo_hessP_
 from copy import copy
 from numpy import zeros
-#except ImportError:
-    #from smop.runtime import *
 
 def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,lm=None,M=None,n=None,me=None,mi=None,s=None,gx=None,gci=None,gce=None,info_=None,options=None,values=None,fcmodel=None,Y=None,fY=None,ciY=None,ceY=None,sigma=None,scale=None,shift_Y=None,QZ=None,RZ=None,whichmodel=None,ind_Y=None,i_xbest=None,m=None,*args,**kwargs):
     """

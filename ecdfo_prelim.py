@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-#try:
 from runtime import *
-#except ImportError:
-#    from smop.runtime import *
-#import sys
+
 import types
 import helper
 import numpy as np
