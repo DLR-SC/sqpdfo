@@ -7,7 +7,7 @@ from runtime import *
 from copy import copy
 from numpy import append, isnan, isinf
 
-def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval_=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
+def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
     """
     
 #
@@ -89,7 +89,6 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
     fX=copy(fX_)
     ciX=copy(ciX_)
     ceX=copy(ceX_)
-    neval=copy(neval_)
     xstatus=copy(xstatus_)
     xstatus=copy(xstatus_)
     sstatus=copy(sstatus_)

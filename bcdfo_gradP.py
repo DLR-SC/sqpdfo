@@ -6,7 +6,7 @@ except ImportError:
     from smop.runtime import *
 from copy import copy    
     
-def bcdfo_gradP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_gradP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
     """
 #  Computes the gradient of the polynomial P at x, where P is represented by
 #  the row vector containing its coefficients for the successive monomials.
@@ -62,9 +62,6 @@ def bcdfo_gradP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
 #    varargin = cellarray(args)
 #    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 #
-    P=copy(P_)
-    x=copy(x_)
-
     n=length_(x)
     p1=length_(P)
     if (shift_Y):

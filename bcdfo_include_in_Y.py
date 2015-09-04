@@ -8,7 +8,7 @@ from bcdfo_evalL import bcdfo_evalL_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy
 
-def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase_=None,whichmodel=None,succ=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_include_in_Y_(x=None,QZ=None,RZ=None,Y=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase=None,whichmodel=None,succ=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 
     """
 #  Attempts to include x in the interpolation set by replacing an existing
@@ -112,11 +112,7 @@ def bcdfo_include_in_Y_(x=None,QZ_=None,RZ_=None,Y_=None,choice_set=None,poisedn
     
 #    varargin = cellarray(args)
 #    nargin = 15-[x,QZ,RZ,Y,choice_set,poisedness_threshold,criterion,xbase,whichmodel,succ,scale,shift_Y,Delta,normgx,kappa_ill].count(None)+len(args)
-    Y=copy(Y_)
-    QZ=copy(QZ_)
-    RZ=copy(RZ_)
-    xbase=copy(xbase_)
-    scale=copy(scale_)
+
 #  Compute the choice set combining the two requests.
     if (length_(choice_set) == 0):
         pos=-1

@@ -11,7 +11,7 @@ from numpy import array
 #except ImportError:
 #    from smop.runtime import *
 
-def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,*args,**kwargs):
+def sqplab_lsmult_(x=None,lb=None,ub=None,info_=None,options=None,values=None,*args,**kwargs):
     """
 # [lm,info] = sqplab_lsmult (x,lb,ub,info,options,values);
 #
@@ -70,8 +70,6 @@ def sqplab_lsmult_(x=None,lb_=None,ub_=None,info_=None,options=None,values=None,
     """
 #    varargin = cellarray(args)
     info=copy(info_)
-    lb=copy(lb_)
-    ub=copy(ub_)
 
     nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
     

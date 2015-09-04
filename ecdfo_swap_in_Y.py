@@ -3,7 +3,7 @@ from runtime import isempty_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from copy import copy
 
-def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase_=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def ecdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """
 #
 #  Swaps the position of interpolation points i and j in Y, and updates the
@@ -73,10 +73,7 @@ def ecdfo_swap_in_Y_(i=None,j=None,QZ_=None,RZ_=None,Y_=None,ind_Y_=None,fY_=Non
     fY=copy(fY_)
     ciY=copy(ciY_)
     ceY=copy(ceY_)
-    QZ=copy(QZ_)
-    RZ=copy(RZ_)
-    xbase=copy(xbase_)
-    scale=copy(scale_)
+
     
 #  Ensure that ii is smaller than jj.
 

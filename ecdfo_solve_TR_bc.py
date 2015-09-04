@@ -16,7 +16,7 @@ from sqplab_tcg import *
 from copy import copy
 from ecdfo_global_variables import get_threshold, get_check_condition
 
-def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me=None,M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,radius_has_been_rejected=None,lm_=None,ceY=None,ciY=None,gx=None,*args,**kwargs):
+def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=None,M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,radius_has_been_rejected=None,lm=None,ceY=None,ciY=None,gx=None,*args,**kwargs):
     """
 #  function to compute the new SQP-trust-region step inside delta and subject
 #  to simple bounds
@@ -33,10 +33,9 @@ def ecdfo_solve_TR_bc_(simul=None,x_=None,lb=None,ub=None,delta_=None,mi=None,me
 #    violated=None
     info_r=helper.dummyUnionStruct()
     
-    x=copy(x_)
-    delta=copy(delta_)
+
     info=copy(info_)
-    lm=copy(lm_)
+
 
     #If somewhere we have done set_check_condition (in the tests for instance we have set_check_condition(0)), then
     #we get this value, otherwise we take '1' by default.

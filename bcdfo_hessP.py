@@ -7,7 +7,7 @@ except ImportError:
 from copy import copy    
 from numpy import diag, zeros 
     
-def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_hessP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
     
     """
 #  Computes the Hessian of the polynomial P at x, where P is represented by
@@ -65,13 +65,6 @@ def bcdfo_hessP_(P_=None,x_=None,xbase=None,scale=None,shift_Y=None,*args,**kwar
 #    varargin = cellarray(args)
 #    nargin = 5-[P,x,xbase,scale,shift_Y].count(None)+len(args)
 
-    #Copy only if necessary
-    if (shift_Y):
-        x=copy(x_)
-    else:
-        x=x_
-
-    P=copy(P_)
     n=length_(x)
     p1=length_(P)
     nquad=p1 - n - 1

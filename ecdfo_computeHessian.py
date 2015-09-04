@@ -9,7 +9,7 @@ from numpy import zeros
 #except ImportError:
     #from smop.runtime import *
 
-def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,lm=None,M_=None,n=None,me=None,mi=None,s=None,gx=None,gci=None,gce=None,info_=None,options=None,values_=None,fcmodel=None,Y=None,fY=None,ciY=None,ceY=None,sigma=None,scale=None,shift_Y=None,QZ=None,RZ=None,whichmodel=None,ind_Y=None,i_xbest=None,m=None,*args,**kwargs):
+def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,lm=None,M=None,n=None,me=None,mi=None,s=None,gx=None,gci=None,gce=None,info_=None,options=None,values=None,fcmodel=None,Y=None,fY=None,ciY=None,ceY=None,sigma=None,scale=None,shift_Y=None,QZ=None,RZ=None,whichmodel=None,ind_Y=None,i_xbest=None,m=None,*args,**kwargs):
     """
     #-----------------------------------------------------------------------
     # approximation of the Hessian of the Lagrangian
@@ -19,9 +19,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 #    nargin = 30-[simul,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m].count(None)+len(args)
 
 
-    M=copy(M_)
     info=copy(info_)
-    values=copy(values_)
 
     norm_ceY=zeros(size_(Y,2))
 

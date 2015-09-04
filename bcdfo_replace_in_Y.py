@@ -7,7 +7,7 @@ except ImportError:
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from copy import copy
 
-def bcdfo_replace_in_Y_(QZ_=None,RZ_=None,ynew=None,Y_=None,j=None,xbase_=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_replace_in_Y_(QZ=None,RZ=None,ynew=None,Y_=None,j=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """
 #
 #  Updates the interpolation set for a transformation of Y in Yplus where the
@@ -107,10 +107,7 @@ def bcdfo_replace_in_Y_(QZ_=None,RZ_=None,ynew=None,Y_=None,j=None,xbase_=None,w
 
 
     Y=copy(Y_)
-    QZ=copy(QZ_)
-    RZ=copy(RZ_)
-    xbase=copy(xbase_)
-    scale=copy(scale_)
+
 # replace new point in Y
     Y[:,j]=ynew.reshape(-1)
 #  a new factorization must be computed. 

@@ -9,7 +9,7 @@ from bcdfo_evalP import bcdfo_evalP_
 import numpy
 from copy import copy
     
-def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
+def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
     """
 #
 #  Computes the values of the Lagrange polynomials at x.
@@ -52,10 +52,8 @@ def bcdfo_evalL_(QZ=None,RZ=None,Y_=None,choice_set=None,x=None,xbase_=None,whic
     #Copy only if necessary
     if (shift_Y):
         Y=copy(Y_)
-        xbase=copy(xbase_)
     else:
         Y=Y_
-        xbase=xbase_        
     
     choice_set=choice_set.reshape(-1)
     n,p1=size_(Y,nargout=2)

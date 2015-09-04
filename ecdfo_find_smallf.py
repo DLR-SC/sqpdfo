@@ -7,7 +7,7 @@ from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
 from numpy import array
 #except ImportError:
 #from smop.runtime import *
-def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,ind_Y_=None,i_xbest_=None,cur_degree=None,indfree=None,x_=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale_=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
+def ecdfo_find_smallf_(c=None,QZ=None,RZ=None,Y=None,fY=None,ciY=None,ceY=None,ind_Y=None,i_xbest=None,cur_degree=None,indfree=None,x=None,xl=None,xu=None,fx=None,dstatus=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,sigma=None,info_=None,*args,**kwargs):
     """
 #  Subroutine finds the smallest value in fY, which are the associated function
 #  values of the set Y. There are only points inside the bounds considered
@@ -53,16 +53,6 @@ def ecdfo_find_smallf_(c=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=
 
 
     info=copy(info_)
-    QZ=copy(QZ_)
-    RZ=copy(RZ_)
-    Y=copy(Y_)
-    fY=copy(fY_)
-    ciY=copy(ciY_)
-    ceY=copy(ceY_)
-    x=copy(x_)
-    scale=copy(scale_)
-    ind_Y=copy(ind_Y_)
-    i_xbest=copy(i_xbest_)
 
     norm_ceY = zeros_(1,cur_degree).reshape(-1)
 #  Select indices of all points inside the bounds and which are not a dummy point

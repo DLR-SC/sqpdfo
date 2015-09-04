@@ -8,7 +8,7 @@ import numpy
 #except ImportError:
 #    from smop.runtime import *
 
-def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
+def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
     """
     
 #
@@ -21,8 +21,6 @@ def ecdfo_check_cond_(A_=None,cthreshold=None,options=None,*args,**kwargs):
     """
 #    varargin = cellarray(args)
 #    nargin = 3-[A,cthreshold,options].count(None)+len(args)
-
-    A=copy(A_)
 
     badcond=0
     eps=1e-14

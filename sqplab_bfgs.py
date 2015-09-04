@@ -5,7 +5,7 @@ from runtime import *
 from copy import copy
 #except ImportError:
     #from smop.runtime import *
-def sqplab_bfgs_(M_=None,y_=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
+def sqplab_bfgs_(M=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
     """
     #
 # [M,info,values] = sqplab_bfgs (M,y,s,first,info,options,values);
@@ -294,8 +294,6 @@ values =
 #    varargin = cellarray(args)
 #    nargin = 7-[M,y,s,first,info,options,values].count(None)+len(args)
 
-    M=copy(M_)
-    y=copy(y_)
     info=copy(info_)
  # Parameter
    # eta = 0.6;    # constant for Powell corrections

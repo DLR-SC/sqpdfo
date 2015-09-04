@@ -8,7 +8,7 @@ from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy
     
-def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase_=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale_=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """
 #
 #  Repairs the interpolation set Y by first replacing the interpolation points
@@ -180,18 +180,12 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
 #    varargin = cellarray(args)
 #    nargin = 20-[QZ,RZ,Y,Delta,farfact,farthr,closethr,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,normgx,kappa_ill].count(None)+len(args)
 
-    Y=copy(Y_)
-    QZ=copy(QZ_)
-    RZ=copy(RZ_)
-    xbase=copy(xbase_)
-    scale=copy(scale_)
-
     replaced=np.array([])
     verbose=0 # 1 for debug
     max_improve_loops=20 # the max number of times every close point is 
                              # considered for improvement
     if (verbose):
-        disp_('--- enter bcdfo_repair_Y  for Delta = ',num2str_(Delta),' ---')
+        disp_('--- enter bcdfo_repair_Y  for Delta = ',str(Delta),' ---')
     n,p1=size_(Y,nargout=2)
 #  Compute the distance of the current interpolation points to the base point.
 
@@ -218,7 +212,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             else:
                 y,improvement,msgTR=bcdfo_find_new_yj_(QZ,RZ,Y,jmax,Delta,eps_L,xbase,lSolver,whichmodel,scale,shift_Y,nargout=2)
             if (verbose):
-                disp_('lambda = ',num2str_(improvement),' at j=',num2str_(jmax))
+                disp_('lambda = ',str(improvement),' at j=',str(jmax))
                 #     if ( improvement > farthr )
             QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,y,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
             replaced  = np.append( replaced, jmax )
@@ -230,7 +224,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         print 'replaced='
         print replaced
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-        disp_('after distant replace: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
+        disp_('after distant replace: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
 #  Perform a loop over possible optimal improvements.
 
   #mids = length(find( d > 1.01 * Delta ));
@@ -247,7 +241,7 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
       #  Remember the current polynomial value, index and replacement point is
       #  this is the best so far         
             if (verbose > 1):
-                disp_(' ==> j = ',int2str_(j),' improve = ',num2str_(improvement))
+                disp_(' ==> j = ',str(j),' improve = ',str(improvement))
                 print 'y='
                 print y
             if (improvement > maximprove):
@@ -261,16 +255,16 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
             if (verbose):
                 print 'replaced='
                 print replaced
-                disp_('maximprove(small)= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
+                disp_('maximprove(small)= ',str(maximprove),', jmax= ',str(jmax))
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-                disp_('after everything: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
-                disp_('--- exit 1 bcdfo_repair_Y in round k=',num2str_(k),' ---')
+                disp_('after everything: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
+                disp_('--- exit 1 bcdfo_repair_Y in round k=',str(k),' ---')
             if (isempty_(replaced)):
                 maximprove=0
             return QZ,RZ,Y,replaced,maximprove,Y_radius,xbase,scale
    #  Perform the best replacement.
         if (verbose):
-            disp_('maximprove= ',num2str_(maximprove),', jmax= ',int2str_(jmax))
+            disp_('maximprove= ',str(maximprove),', jmax= ',str(jmax))
         QZ,RZ,Y,xbase,scale=bcdfo_replace_in_Y_(QZ,RZ,ymax,Y,jmax,xbase,whichmodel,scale,shift_Y,Delta,normgx,kappa_ill,nargout=5)
         d[jmax]=norm_(ymax - Y[:,[0]])
         if (length_(find_(replaced == jmax)) == 0):
@@ -280,6 +274,6 @@ def bcdfo_repair_Y_(QZ_=None,RZ_=None,Y_=None,Delta=None,farfact=None,farthr=Non
         print 'replaced='
         print replaced
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
-        disp_('after everything: poisedness(Y) = ',num2str_(poised),' Y_radius  = ',num2str_(Y_radius))
-        disp_('--- exit 2 bcdfo_repair_Y after round k=',num2str_(k),'  ---')
+        disp_('after everything: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
+        disp_('--- exit 2 bcdfo_repair_Y after round k=',str(k),'  ---')
     return QZ,RZ,Y,replaced,maximprove,Y_radius,xbase,scale    

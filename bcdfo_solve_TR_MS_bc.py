@@ -9,7 +9,7 @@ from numpy import *
 
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
-def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,stratLam=None,*args,**kwargs):
+def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,stratLam=None,*args,**kwargs):
     """
 #
 #  An implementation of exact trust-region minimization based on the
@@ -65,9 +65,6 @@ def bcdfo_solve_TR_MS_bc_(g_=None,H=None,lb=None,ub=None,Delta_=None,eps_D=None,
     """    
 #    varargin = cellarray(args)
 #    nargin = 7-[g,H,lb,ub,Delta,eps_D,stratLam].count(None)+len(args)
-
-    Delta=copy(Delta_)    
-    g=copy(g_)
 
     lambda_save = []
     norms_b_save = []

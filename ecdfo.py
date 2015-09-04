@@ -15,7 +15,7 @@ from numpy import array
 import random
 
 
-def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,**kwargs):
+def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwargs):
     """
     # [x,lm,info] = ecdfo (func,x0);
 # [x,lm,info] = ecdfo (func,x0,lm0);
@@ -213,11 +213,6 @@ def ecdfo_(func_=None,x0_=None,lm0_=None,lb_=None,ub_=None,options_=None,*args,*
     """
 #    varargin = cellarray(args)
 
-    func=copy(func_)
-    x0=copy(x0_)
-    lm0=copy(lm0_)
-    lb=copy(lb_)
-    ub=copy(ub_)
     options=copy(options_)
 
     nargin = 6-[func,x0,lm0,lb,ub,options].count(None)+len(args)

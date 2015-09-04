@@ -9,7 +9,7 @@ from numpy import diag, array,isreal,real
 from copy import copy
 import numpy
 
-def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
+def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
     """
 #
 # checks whether matrix A is convex.
@@ -23,8 +23,6 @@ def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
     """
 #    varargin = cellarray(args)
 #    nargin = 2-[A,options].count(None)+len(args)
-
-    A=copy(A_)
 
     ev=numpy.linalg.eigvals(A)
     evneg=ev[ev < 0]
