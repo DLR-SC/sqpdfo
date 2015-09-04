@@ -3,10 +3,16 @@ from runtime import *
 import numpy as np
 	
 class dummyUnionStruct():
-	pass
+      """
+      Creates an empty object which can for instance later be used options, info in the ECDFO algorithm
+      """
+      pass
 	
 class dummyOptions():
-	def __init__(self):
+      """
+      Those are some basics options for the ECDFO algorithm : they are used for the ECDFO tests
+      """
+      def __init__(self):
 		self.algo_method = 101
 		self.algo_globalization = 112
 		self.hess_approx = 131
@@ -22,7 +28,10 @@ class dummyOptions():
 		self.df1 = 0
 
 class dummyValues():
-	def __init__(self):
+      """
+      Those are some basics options for the ECDFO algorithm : they are used for the ECDFO tests
+      """
+      def __init__(self):
            # Define ecdfo constant values
         
            self.success                =   0; # solution found
