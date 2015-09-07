@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from runtime import *
-from numpy import inf
+from numpy import inf,array
 from copy import copy
 
 
@@ -86,7 +86,7 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
     if isempty_(options):
         options.xxx=0
 # Set options
-
+    
     if isfield_(options,'fout'):
         if options.fout < 0:
             fprintf_('\n### ecdfo: options.fout = "%0i" is not a valid file identifier (use \'fopen\' to have a valid one)'%(options.fout))
@@ -182,7 +182,7 @@ def sqplab_options_(info_=None,options_=None,*args,**kwargs):
             info.flag=values.fail_on_argument
             return info,options,values
     else:
-        options.tol=[[1e-06],[1e-06],[1e-06]]
+        options.tol=array([[1e-06],[1e-06],[1e-06]])
     if not isfield_(options,'df1'):
         options.df1=0
     if isfield_(options,'hess_approx'):
