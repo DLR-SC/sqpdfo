@@ -20,7 +20,10 @@ from numpy import array, zeros, arange
 #import helper
 
 class Test_run_ecdfo(unittest.TestCase):
-
+    """
+      Reminder :
+      This class is a test for run_ecdfo
+    """
     def setUp(self):
         #self.options = helper.dummyOptions()
         #self.values = helper.dummyValues()
@@ -29,6 +32,9 @@ class Test_run_ecdfo(unittest.TestCase):
         pass
 
     def test_run_ecdfo_prob1(self):
+        """
+         Test which compare python and matlab results
+        """
 
         set_prob(1)
         set_check_condition(0)
@@ -77,7 +83,9 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.glag, 1e-10*array([0.76387451919401,-0.381947806715743]), self.abs_tol, self.rel_tol))
         
     def test_run_ecdfo_prob2(self):
-
+        """
+         Test which compare python and matlab results
+        """
         set_prob(2) 
         set_check_condition(0)
         prob=get_prob()
@@ -125,7 +133,9 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.glag, 1e-05*array([  -0.560839309260430,0.560883753109032]), self.abs_tol, self.rel_tol))
 #        
     def test_run_ecdfo_prob3(self):
-
+        """
+         Test which compare python and matlab results
+        """
         set_check_condition(0)
         set_prob(3) 
         prob=get_prob()
@@ -173,7 +183,9 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.glag, 1e-07*array([0.062859997207454,  0.188580686583393,-0.188580611126810]), self.abs_tol, self.rel_tol))
 
     def test_run_ecdfo_prob4(self):
-
+        """
+         Test which compare python and matlab results
+        """
         set_check_condition(1)
         set_prob(4) 
         prob=get_prob()
@@ -220,6 +232,9 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertTrue(compare_array(info.glag, 1e-05*array([0.284297517494370,-0.598060297747812,0.305862976301974,-0.000319574466889]), self.abs_tol, self.rel_tol))
 #
     def test_run_ecdfo_prob5(self):
+        """
+         Test which compare python and matlab results
+        """
         set_check_condition(1)
         set_prob(5) 
         prob=get_prob()
