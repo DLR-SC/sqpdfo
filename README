@@ -1,5 +1,12 @@
 SQPDFO Optimizer
 ================
 
-This is a python implementation of the SQPDFO Optimizer.
-We are trying to make it work with normal python arrays, instead of creating the subclass matlabarrays.
+This is a python implementation of the SQPDFO Optimizer which works using normal python arrays.
+A few bugs may remain but it is mainly functional.
+
+All the tests can be ran using the script 'runTests.py'.
+
+To add some functions, you have to :
+-add the function by following other examples in ecdfo_init_prob and ecdfo_func
+-change'set_prob('name_or_number_of_function')' in run_ecdfo
+-finally launch run_ecdfo
