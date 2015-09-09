@@ -6,3 +6,7 @@ This is the translation tool used to convert matlab code to python code. How to 
    or :
    $ python main.py otherfiles/*
    and the translation will be written in the 'a.py' file.
+   
+There are also 2 runtime files :
+runtime_with_matlabarray.py and runtime_without_matlabarray as well as their respective comment_on_translation file to explain the main problem for each translation.
+Translating with matlabarray is normally easier but may lead the program to run slower in the end.

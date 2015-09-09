@@ -1,0 +1,91 @@
+﻿Comments on translation
+================
+
+This file helps us  to find the bugs when doing the translation from matlab to python code using the SMOP tool and using normal python array instead of matlabarray
+
+BCDFO and ECDFO files automatically translated:
+
+These files have been translated by SMOP, i.e. automatic translation. These are the known points which give issues with this automatic translation :
+
+-We have to be very careful with the dimensions of our arrays ! Python will, at some points, replicate arrays to match dimensions at places where matlab raise an error. For instance, if y is a vector column, and Y a matrix
+where columns have the same size  as y :
+	the code (y-Y[:,0]) will not work because Y[:,0] gives in python something like array([a,b,c]), but it will be executed because arrays will somehow be replicated and then soustraction will be done...
+	The good solution here is (y-Y[:,[0]]) because this kind of indexing for Y will returns a column vector like array([[a],[b],[c]]).
+
+-This kind of  matlab code
+	Z  = [ ones( 1, m ); X(1:n,1:m); 0.5*X(1:ndiag,1:m).^2 ];
+ has to be dealt with a code like this :
+    Z=concatenate_((ones_(1,m),X[0:n,0:m],0.5 * X[0:ndiag,0:m] ** 2), axis=0) (first indices from slices has to be decremented, and when it is an integer it has to be decremented too)
+  NB : Axis=0 is the implicit value when nothing is said. To concatenate vertically, we then set axis=1. Either we recognize the dimensions of the matrix and  then we can choose 0 or 1, or else we can refer to the matlab code :
+  [Y, Ynew] or [Y Ynew] in matlabcode should be replaced with axis=1 and [Y ; Ynew] should be replaced with axis =0
+  
+-Matrix multiplication with python arrays is A.dot(B), the translation with SMOP does not take well into account the differences between .* and * in matlab, we have to be careful.
+
+- xbase=Y[:,1] should by replaced  xbase=copy(Y[:,0]). We may also consider the code xbase=copy(Y[:,[0]]) or  xbase=copy(Y[:,0].reshape(-1,1)) if we want to keep the shape of the vector. To see details about indexing, here is one reference :
+http://docs.scipy.org/doc/numpy/user/basics.indexing.html
+The important thing is the copy, because we get a view and not a copy of the part of the matrix that we get. This happens also in others cases, cf the basics of indexing.
+
+-Code such like H[ind_free,ind_free] may have to be handled with H[ix_(ind_free,ind_free)] or some reshape depeding on the shape of ind_free (could be H[ind_free, ind_free.T]),
+if we do not want python to compute indices corresponding to H[indfree[0],indfree[0]], H[indfree[1],indfree[1]], etc 
+
+-for i in arange_(1,p1).reshape(-1)  should be replaced by for i in range(0,p1) or range(1,p1+1) and then following indices have to be modified accordingly.
+
+-Matlab code AAn(k,:) = []/Agn(k)=[] is translated with AAn[k,:]=[]/Agn[k]=[] in python but and should be replaced by np.delete(AAn, k, 0)/Agn = np.delete(Agn, k, 0). 0 means that the (k-nth line will be deleted,
+and 1 should be put when we want the (k-nth) column to be deleted.
+Same thing applies when we in matlab only want to take a few columns : lm=I(:,ifree > 0) * sn is replaced by lm=np.delete(I, find_(ifree<=0), 1)*sn.
+
+-Matlab code X(:,m)=y do not work when m > columns_(X) : it can be dealt with the following code :
+	try:
+		X(:,m)=y
+	except IndexError:
+		X=concatenate_([X,y],axis=1) or X=append(X,y) is we have an array such as array([a,b])
+		
+			
+-Logicals operators from matlab & and | have to be replaced by logical_and_ and logical_or_.
+	For instance find_(Y[:,i] < xl[indfree] or Y[:,i] > xu[indfree],1)) has to be replaced by find_(logical_or_(Y[:,i] < xl[indfree] , Y[:,i] > xu[indfree]),1))
+	
+-The matlab elsif are automatically translated with else..if instead of elif
+
+-Analogue translation to (length_(find_(not isreal_(H))) != 0) are not correct, the correct version is to replace 'not' by '~' or one might later use (not isreal_(H).all) (or isreal_(H).any() when there is no negation) which may be quicker.
+
+-The disp_ and fprint_ fundamentally do the same thing. Here are some automatically translated false python code and its correction :
+                            fprintf_(1,char('%s%d%s %12.8e %s %12.8e\\n'),char(' bcdfo_solve_TR_MS_bc ('),i,char('): |s_i| = '),norms_b,char('  |bound_i| = '),delta_b)
+							SHOULD BE TRANSLATED BY (Working with version 2.7):
+							fprintf_(1,'%s%d%s %12.8e %s %12.8e\n' % (' bcdfo_solve_TR_MS_bc (',i,'): |s_i| = ',norms_b,'  |bound_i| = ',delta_b))
+							
+							NB:Please note that one backslash \ also had to be deleted for \\n 
+							fid=fopen_(char('convhist.m'),char('w'))
+							fprintf_(fid,char('function A=history \\n A=[ \\n'))
+							SHOULD BE TRANSLATED BY :
+							fid=fopen_('convhist.m','w')
+							fprintf_(fid,'function A=history \n A=[ \n')
+							
+							fprintf_(options.fout,'VARIABLES:\\n')
+							SHOULD BE TRANSLATED  BY:
+							fprintf_(options.fout,'VARIABLES:\n') 
+
+-'int2str_'and 'num2str_' could simply be replaced by 'str'
+
+-The "if(verbose) : variable" has to be corrected by something like "if(verbose) : print 'variable=',variable"
+							
+-The function isa(func,'function_handle') in matlab should be  translated by isinstance(evalfgh_, types.FunctionType) (with import types as a header of the file)
+							
+-When object are modified during our function through a method of this object such as info.glag=3 or x[2]=3 we have to make a copy of this object at the beggining of our function.
+
+-When there may be complex numbers, A' should be replaced in python by A.conj().T and not A.T. This is for instance important in : A=0.5*(A + A.conj().T). However, this should be not the case in ECDFO algorithm in my opinion.
+
+-There are some matlab functions which are not so common in this code so that implemtenting them completely is not necessary, and we deal with them case by case. For instance there are the followings :
+
+	-roots function from matlab has to be handled in python like in the following example :
+	   root  = roots([norm(V(:,imu))^2 2*V(:,imu)'*scri nscri^2-Delta^2]);
+	   s     = scri + root(1)*V(:,imu);
+	  SHOULD BE TRANSLATED IN PYTHON BY :
+		p2=poly1d_([norm_(V[:,imu]) ** 2,2 * V[:,imu].T * scri,nscri ** 2 - Delta ** 2])
+		root=max(p2.r) #CAREFUL, p2.r is an ARRAY and not a MATLABARRAY, therefore we use max from numpy and not max_ from runtime
+		s=scri + root * V[:,imu]
+		
+	-sort function from matlab has to be handled in python like in the following example :
+	    dsorted,jsorted=sort_(d,char('descend'),nargout=2)
+		SHOULD BE IN PYTHON BY :
+		dsorted=np.sort(d.reshape(-1))[::-1])
+		jsorted=np.argsort(d.reshape(-1))[::-1])
