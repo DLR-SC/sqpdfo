@@ -179,10 +179,8 @@ def length_(a):
 
 def max_(a, d=None, nargout=None):
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
-        min_(a,b) where a,b are integer, inf or nan
+        min_(a,b) where a,b are arrays containing integer, inf or nan
         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
-        One case not implemented but not necessary yet is the following :
-        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
@@ -211,10 +209,8 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     #print "a", a
 #    print "len(a)", len(a)     
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
-        min_(a,b) where a,b are integer, inf or nan
+        min_(a,b) where a,b are arrays containing integer, inf or nan
         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
-        One case not implemented but not necessary yet is the following :
-        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
     
