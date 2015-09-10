@@ -705,10 +705,8 @@ except:
 
 def max_(a, d=None, nargout=None):
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
-        min_(a,b) where a,b are integer, inf or nan
+        min_(a,b) where a,b are arrays containing integer, inf or nan
         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
-        One case not implemented but not necessary yet is the following :
-        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
@@ -737,10 +735,8 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     #print "a", a
 #    print "len(a)", len(a)     
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
-        min_(a,b) where a,b are integer, inf or nan
+        min_(a,b) where a,b are arrays containing integer, inf or nan
         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
-        One case not implemented but not necessary yet is the following :
-        min_(a,b) where both a and b are arrays containing NaNs. Python returns then NaNs in priority.
         (same for max_ obviously)
     """
     
@@ -940,6 +936,20 @@ def inv_(A):
 def norm_(A, order=2, axis=None):
     if isempty_(A):
         return 0
+#for some reason, python does not give exactly (precision differs
+#after the 10nth variable or so, but still this makes differences...) the same 2-norm
+#when it does it from the norm of an array such as array([a b c...]) or such as array([[a b c...]])/array([[a] [b] [c]...])
+#And it is closer to matlab when it is like array([[a b c..]]).
+#Also, python will compute a different 'inf' norm for a vector such as  array([[a] [b] [c]...])/array([a,b,c]) or such as array([[a b c...]])
+#and it is array([[a] [b] [c]...])/array([a,b,c]) which corresponds to the normal vector-inf norm we are looking for generally.
+#Hence the following modifications :
+    if isvector_or_scalar(A):
+        if order==2:
+            #A=A.reshape(-1,1)# <- this also works
+            A=A.reshape(1,-1)  
+        if order==np.inf:
+            A=A.reshape(-1,1)# <- this also works
+#            A=A.reshape(-1)
     
     if axis==None:
             return np.linalg.norm(np.asarray(A), order,axis)
