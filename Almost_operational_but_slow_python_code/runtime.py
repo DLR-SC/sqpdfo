@@ -706,7 +706,7 @@ except:
 def max_(a, d=None, nargout=None):
     """min_ and max_ function normally returns the same as matlab min and max in the following cases :
         min_(a,b) where a,b are arrays containing integer, inf or nan
-        min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
+         min_(a) and min_(a, nargout=2) where a is an array containing numbers, inf or nan
         (same for max_ obviously)
     """
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings
