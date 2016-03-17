@@ -133,6 +133,9 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     info.ae=[]
     info.hl=[]
     info.niter=0
+    info.glagn = float('NaN')
+    info.feasn = float('NaN')
+    info.compl = float('NaN')
     shift_Y=1
     x=copy(np.NaN)
     fx=copy(np.NaN)
