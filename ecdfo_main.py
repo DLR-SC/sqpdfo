@@ -169,6 +169,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     fx=fX[i_xbest]
     itype=' '
     pc=0
+    s=[]
     norms=0
     pred=0
     if mi > 0:
