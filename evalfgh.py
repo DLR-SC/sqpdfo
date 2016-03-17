@@ -37,8 +37,8 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
 #     there required values)
 #   hl: Hessian of the Lagrangian
     """
-    #varargin = cellarray(args)
-    nargin = 3-[key,xy,lm].count(None)+len(args)
+
+    nargin = 3-[key is None,xy is None,lm is None].count(True)+len(args)
 
     # Global and persistent variables
 

@@ -211,8 +211,8 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
 #    varargin = cellarray(args)
 
     options=copy(options_)
-
-    nargin = 6-[func,x0,lm0,lb,ub,options].count(None)+len(args)
+    nones = [func is None,x0 is None,lm0 is None,lb is None,ub is None,options is None].count(True)
+    nargin = 6-nones+len(args)
 #  Set some constants
 
     c = helper.dummyUnionStruct()
@@ -245,6 +245,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     xspace_save=array([])
     ndummyY=0
     info.flag=0
+
     #Reset the random generator : did not find something equivalent in python for rand_('seed',5) but this is commented in matlab
 #    random.seed(np.pi / np.sqrt(2))
 #    randn_('seed',5)
@@ -359,7 +360,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     # -------------------------------------------------------------------------
     # Preliminaries:
     # -------------------------------------------------------------------------
-    
+
     # - check bounds and the given options
     # - build initial poised interpolation set
     # - compute function + constraint values and initial multiplier (if not given)

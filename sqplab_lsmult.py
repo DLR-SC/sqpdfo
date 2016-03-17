@@ -66,10 +66,10 @@ def sqplab_lsmult_(x=None,lb=None,ub=None,info_=None,options=None,values=None,*a
 #
 #-----------------------------------------------------------------------
     """
-#    varargin = cellarray(args)
+
     info=copy(info_)
 
-    nargin = 6-[x,lb,ub,info,options,values].count(None)+len(args)
+    nargin = 6-[x is None,lb is None,ub is None,info is None,options is None,values is None].count(True)+len(args)
     
     #If somewhere we have done set_check_condition (in the tests for instance we have set_check_condition(0)), then
     #we get this value, otherwise we take '1' by default.
