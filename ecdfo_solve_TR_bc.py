@@ -376,7 +376,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             glocal=glocal + M .dot(step)
             for i in range(0,me):
                 gconstraints[i,:]=gconstraints[[i],:] + (M .dot( step)).T
-            delta=delta - norm_(step)
+            delta=delta - 0.5*norm_(step)
 
     return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info
 
