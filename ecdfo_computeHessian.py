@@ -18,7 +18,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 
     info=copy(info_)
 
-    norm_ceY=zeros(size_(Y,2))
+    lagfY=zeros(size_(Y,2))
 
     
 
@@ -87,26 +87,26 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             info.g=gx
             info.ai=gci
             info.ae=gce
-            # compute the model of the merit function   
+            # compute the model of the Lagrange function   
  
          #   M=eye(size(M));
             cur_degree=size_(Y,2)
             # constrained case
 
             if me + mi > 0:
-                  #  Compute merit function values for all points
+                  #  Compute Lagrange function values for all points
 
                 if length_(ceY) > 0:
                     for i in range(0,cur_degree):
-                        norm_ceY[i]=norm_(ceY[:,i])
+                        lagfY[i] = fY[i] + lm[n:n+me].T.dot(ceY[:,i])
                 else:
-                    norm_ceY=zeros(cur_degree)
-                meritfY=fY + sigma *norm_ceY
-                model=bcdfo_computeP_(QZ,RZ,Y,meritfY.reshape(1,-1),whichmodel,fcmodel[[0],:],ind_Y,i_xbest,m,gx,scale,shift_Y)
+                    lagfY=zeros(cur_degree)
+
+                model=bcdfo_computeP_(QZ,RZ,Y,lagfY.reshape(1,-1),whichmodel,fcmodel[[0],:],ind_Y,i_xbest,m,gx,scale,shift_Y)
                 M=bcdfo_hessP_(model,x,x,scale,shift_Y)
             else:
                 M=bcdfo_hessP_(fcmodel[[0],:],x,x,scale,shift_Y)
-        # assemble the Hessian of the merit function model
+        # assemble the Hessian of the Lagrange function model
 
         else:
             if options.verbose:
