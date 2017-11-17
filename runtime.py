@@ -478,8 +478,11 @@ def concatenate_(arrs, axis=0):
     if copy_arrs==[]:
         return np.array([])
     else:
-        return np.concatenate(copy_arrs, axis)
-    
+        if axis == 0:
+            return np.vstack(copy_arrs)
+        else:
+            return np.hstack(copy_arrs)
+
 def sign_(A):
     """
     Returns a matrix of the same shape of A, with values -1 if the sign is negative, 0 if null, 1 if positive

@@ -344,7 +344,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 try:
                     xstatus[m]=c.inY
                 except IndexError:
-                    concatenate_([xstatus,[m]])
+                    concatenate_([xstatus,[m]],axis=1)
          #  Update X and evaluate function
 
                 X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,[j]],m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=10)
