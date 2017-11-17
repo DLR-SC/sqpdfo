@@ -9,7 +9,7 @@ This file contains functions which serve mostly 2 purposes :
     outputs with the same shapes : S is a vector in python and a diagonal matrix in matlab, and V.transpose in python = V in matlab.
 
 """
-#import warnings
+import warnings
 from copy import copy
 #warnings.simplefilter('error', RuntimeWarning)
 import scipy
@@ -216,7 +216,7 @@ def min_(a, d=None, nargout=None):#, nargout=0):
     
     
     #The warnigns happens when NaNs are involved, but the function returns in any case what we want, so no need to print the warnings or to worry about them.
-#    warnings.simplefilter('ignore', RuntimeWarning)
+    warnings.simplefilter('ignore', RuntimeWarning)
     if isempty_(a):
         ret = np.array([])                    
     elif d is not None:
@@ -228,10 +228,10 @@ def min_(a, d=None, nargout=None):#, nargout=0):
             ret2 = np.array([])                                    
         else:
             ret2 = np.nanargmin(a)  
-#        warnings.simplefilter('default', RuntimeWarning)                                              
+        warnings.simplefilter('default', RuntimeWarning)
         return ret, ret2
     else:
-#        warnings.simplefilter('default', RuntimeWarning)
+        warnings.simplefilter('default', RuntimeWarning)
         return ret                                
 
 def mod_(a,b):
