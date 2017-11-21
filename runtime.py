@@ -454,13 +454,15 @@ def fprintf_(fid,*args, **kwargs):
             print >>sys.stderr, out,
         else:
             print '### Warning from runtime.py: unknown integer file identifier (1 and 2 are known) ###'
-    elif isinstance(fid,file):
-        print >>fid, out,
     elif isinstance(fid,str):
         print fid + out,
+    elif hasattr(fid, "read"):
+        # writes to file
+        print >> fid, out,
     else:
+        print fid + out,
         print '### Warning from runtime.py: unknown file identifier type (int, str and file are known) ###'
-        
+
 def poly1d_(A, r=0):
     """
     A one dimension polynomial class
