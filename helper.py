@@ -13,19 +13,19 @@ class dummyOptions():
       Those are some basics options for the ECDFO algorithm : they are used for the ECDFO tests
       """
       def __init__(self):
-		self.algo_method = 101
-		self.algo_globalization = 112
-		self.hess_approx = 131
-		self.bfgs_restart = 0
-		self.algo_descent = 120
-		self.tol = np.array( [1.0e-05, 1.0e-05, 1.0e-05])
-		self.dxmin = 1.0e-06
-		self.miter = 500
-		self.msimul = 500
-		self.verbose = 0#2 set to a low level to avoid messages : matlab is the reference to debug
-		self.fout = 1
-		self.inf = np.Inf#Inf
-		self.df1 = 0
+        self.algo_method = 101
+        self.algo_globalization = 112
+        self.hess_approx = 131
+        self.bfgs_restart = 0
+        self.algo_descent = 120
+        self.tol = np.array( [1.0e-05, 1.0e-05, 1.0e-05])
+        self.dxmin = 1.0e-06
+        self.miter = 500
+        self.msimul = 500
+        self.verbose = 0#2 set to a low level to avoid messages : matlab is the reference to debug
+        self.fout = 1
+        self.inf = np.Inf#Inf
+        self.df1 = 0
 
 class dummyValues():
       """
