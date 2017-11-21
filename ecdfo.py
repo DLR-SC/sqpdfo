@@ -254,72 +254,72 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     if ( size_(x0,1) == 1 and size_(x0,2) > 1 ):    # make sure the starting point is 
        x0 = x0.T                                # a column vector
     
-    n       = length_( x0 );                     # the dimension of the space
-    pquad   = ( ( n + 1 ) * ( n + 2 ) ) / 2;    # the size of a fully quadratic model
+    n       = length_( x0 )                     # the dimension of the space
+    pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
     #pquad   = ( 2 * ( n + 6 ) );
-    pdiag   = 2 * n + 1;                        # the size of a diagonal model
-    plin    = n + 1;                            # the size of a linear model
+    pdiag   = int(2 * n + 1)                        # the size of a diagonal model
+    plin    = int(n + 1)                            # the size of a linear model
     
-    msg              = 'Unexpected exit';       # no meaningful message at this point
-    poisedness_known = 0;                       # the poisedness is not known yet
-    eps_rho          = 1.0e-14;                 # stabilization constant for rho
-    stallfact        = 10 * eps;                # termination (stalled) when
+    msg              = 'Unexpected exit'       # no meaningful message at this point
+    poisedness_known = 0                       # the poisedness is not known yet
+    eps_rho          = 1.0e-14                 # stabilization constant for rho
+    stallfact        = 10 * eps                # termination (stalled) when
                                                 # ||s|| <= stallfact * norm( x )
-    factor_Dmax      = 1e5;                    # the ratio between Deltamax and Delta0
-    factor_fmax      = 1e20;                   # the ratio between the upper bound on the objective function
+    factor_Dmax      = 1e5                    # the ratio between Deltamax and Delta0
+    factor_fmax      = 1e20                   # the ratio between the upper bound on the objective function
                                                 # value and the absolute value of t(f(x0))
-    CNTsin           = 0;                       # variable to produce a quasi-random vector
+    CNTsin           = 0                       # variable to produce a quasi-random vector
 
     #  Set defaults
     
-    Delta0       = 1;                # the initial TR radius
-    cur_degree   = copy(plin);             # the degree for the initial model
-    rep_degree   = copy(plin);             # the minimum degree for the model after repair
-    epsilon      = 1.0e-5;           # gradient termination accuracy
-    maxeval      = 200 * n;          # maximum number of evaluations
-    maxit        = copy(maxeval);          # maximum number of iterations
-    verbose      = 1;                # printout quantity
-    show_errg    = 0;                # display of the gradient error estimate
-    initial_Y    = 'simplx';         # geometry of the initial interpolation set
-    eta1         = 0.0001;           # min rho value for successful iterations
-    eta2         = 0.9;              # min rho value for very successful iterations
-    gamma1       = 0.01;             # lower bound on Delta interval (unsuccessful its)
-    gamma2       = 0.5 ;             # upper bound on Delta interval (unsuccessful its)
-    gamma3       = 2.0;              # increase in Delta (successful its)
-    interpol_TR  = 1;                # use interpolation for the radius of the trust region
-    factor_CV    = 100;               # constant for termination (see above)
-    Lambda_XN    = 1.0e-10;          # poisedness for new iterates
-    Lambda_CP    = 1.2;              # poisedness for close points
-    Lambda_FP    = 1.0e-10;          # poisedness for far points
-    factor_FPU   = 1;                # multiple of TR radius defining far points
+    Delta0       = 1                # the initial TR radius
+    cur_degree   = copy(plin)             # the degree for the initial model
+    rep_degree   = copy(plin)             # the minimum degree for the model after repair
+    epsilon      = 1.0e-5           # gradient termination accuracy
+    maxeval      = 200 * n          # maximum number of evaluations
+    maxit        = copy(maxeval)          # maximum number of iterations
+    verbose      = 1                # printout quantity
+    show_errg    = 0                # display of the gradient error estimate
+    initial_Y    = 'simplx'         # geometry of the initial interpolation set
+    eta1         = 0.0001           # min rho value for successful iterations
+    eta2         = 0.9              # min rho value for very successful iterations
+    gamma1       = 0.01             # lower bound on Delta interval (unsuccessful its)
+    gamma2       = 0.5              # upper bound on Delta interval (unsuccessful its)
+    gamma3       = 2.0              # increase in Delta (successful its)
+    interpol_TR  = 1                # use interpolation for the radius of the trust region
+    factor_CV    = 100               # constant for termination (see above)
+    Lambda_XN    = 1.0e-10          # poisedness for new iterates
+    Lambda_CP    = 1.2              # poisedness for close points
+    Lambda_FP    = 1.0e-10          # poisedness for far points
+    factor_FPU   = 1                # multiple of TR radius defining far points
                                      # (for unsuccessful iterations)
-    factor_FPR   = 10;               # multiple of TR radius defining far points
+    factor_FPR   = 10               # multiple of TR radius defining far points
                                      # (for reconstruction of a poised interpolation set
                                      # for large model gradient)
-    criterion_S  = 'distance';       # selection of outgoing point at successful iterations:
-    criterion_FP = 'distance';       # the same, but for far points at unsuccessful iterations
-    criterion_CP = 'standard';       # the same, but for close points at unsuccessful iterations
-    mu0          = 0;                # initial reduction in gradient norm before repair
-    mu           = 0;                # subsequent reduction in gradient norm before repair
-    theta        = 1;                # ratio between gradient norm and radius after repair
-    eps_TR       = 0.0001;           # rel. accuracy on the trust-region constraint for steps
-    eps_L        = 0.001;            # rel. accuracy on the trust-region constraint for L max
-    shift_Y      = 1;                # shifting and scaling of the set Y is used
-    lSolver      = 1;                # local solver for minimizing the model. 1: 2-norm, 2: inf-norm.
-    stratLam     = 1;                # strategy to adjust lambda when solving the bc MS problem, 
-    kappa_ill    = 1e+15;            # threshold to declare a system matrix as ill-conditioned
-    kappa_th     = 2000;             # threshold for a safely nondegenerate set of points
-    eps_bnd      = epsilon/10;       # epsilon to define a bound as nearly-active: |x - bnd|<eps_bnd
-    whichmodel   = 0;                # approach to build the local models
-    hardcons     = 0;                # apply hard bounds when maximizing the Lagrange polynomials
-    noisy        = 0;                # function supposed to be noisy
-    scaleX       = 0;                # scaling of variables is applied
-    scalefacX    = ones_(1,n);        # scaling factors initialized to one
-    shrink_Delta = 1;                # shrink trust-region radius in every unsuccessful iteration
+    criterion_S  = 'distance'       # selection of outgoing point at successful iterations:
+    criterion_FP = 'distance'       # the same, but for far points at unsuccessful iterations
+    criterion_CP = 'standard'       # the same, but for close points at unsuccessful iterations
+    mu0          = 0                # initial reduction in gradient norm before repair
+    mu           = 0                # subsequent reduction in gradient norm before repair
+    theta        = 1                # ratio between gradient norm and radius after repair
+    eps_TR       = 0.0001           # rel. accuracy on the trust-region constraint for steps
+    eps_L        = 0.001            # rel. accuracy on the trust-region constraint for L max
+    shift_Y      = 1                # shifting and scaling of the set Y is used
+    lSolver      = 1                # local solver for minimizing the model. 1: 2-norm, 2: inf-norm.
+    stratLam     = 1                # strategy to adjust lambda when solving the bc MS problem,
+    kappa_ill    = 1e+15            # threshold to declare a system matrix as ill-conditioned
+    kappa_th     = 2000             # threshold for a safely nondegenerate set of points
+    eps_bnd      = epsilon/10       # epsilon to define a bound as nearly-active: |x - bnd|<eps_bnd
+    whichmodel   = 0                # approach to build the local models
+    hardcons     = 0                # apply hard bounds when maximizing the Lagrange polynomials
+    noisy        = 0                # function supposed to be noisy
+    scaleX       = 0                # scaling of variables is applied
+    scalefacX    = ones_(1,n)        # scaling factors initialized to one
+    shrink_Delta = 1                # shrink trust-region radius in every unsuccessful iteration
     
     #  Compute the maximal TR radius.
     
-    Deltamax = factor_Dmax * Delta0;
+    Deltamax = factor_Dmax * Delta0
     
     # -------------------------------------------------------------------------
     # Check input arguments
