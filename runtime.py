@@ -446,14 +446,20 @@ def fprintf_(fid,*args, **kwargs):
             out = out + str(arg)
         except Exception as e:
             print "Display Error:", e.message()
-    if  fid==1:
-        print out,
-    elif fid==2:
-        print >>sys.stderr, out,
-    elif type(fid)==file:
+
+    if isinstance(fid,int):
+        if  fid == 1:
+            print out,
+        elif fid == 2:
+            print >>sys.stderr, out,
+        else:
+            print '### Warning from runtime.py: unknown integer file identifier (1 and 2 are known) ###'
+    elif isinstance(fid,file):
         print >>fid, out,
+    elif isinstance(fid,str):
+        print fid + out,
     else:
-        print fid+out,
+        print '### Warning from runtime.py: unknown file identifier type (int, str and file are known) ###'
         
 def poly1d_(A, r=0):
     """
