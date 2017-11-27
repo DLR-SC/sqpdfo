@@ -74,7 +74,7 @@ class Test_bcdfo_evalP(unittest.TestCase):
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
         
         #we verify that the first point is interpolated
-        model = ( QZ.dot(  np.linalg.solve( RZ.T , array([[6,0,0,03,0,0 ]]).T ) )).T
+        model = ( QZ.dot(  np.linalg.solve( RZ.T , array([[6,0,0,0o3,0,0 ]]).T ) )).T
         res = bcdfo_evalP_( model, array([[1],[1]]), xbase, scale, 1 )
         self.assertAlmostEqual(float(res), 6, places=15)
         

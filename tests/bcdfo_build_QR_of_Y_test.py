@@ -84,7 +84,7 @@ class Test_bcdfo_build_QR_of_Y(unittest.TestCase):
         """
         Y = array([[ 1, 2, 1, 3, 3, 1],  [1, 2, 2, 1, 1.01, 3 ]])
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1, 1, 1e15 )
-        model = ( QZ.dot( np.linalg.solve( RZ.T , array([[6,0,0,03,0,0 ]]).T ))).T
+        model = ( QZ.dot( np.linalg.solve( RZ.T , array([[6,0,0,0o3,0,0 ]]).T ))).T
         res = np.dot(model, bcdfo_evalZ_( (array([[1],[1]])-xbase)*scale[1],6))
 
         self.assertAlmostEqual(float(res), 6,places=15)

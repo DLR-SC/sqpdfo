@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_

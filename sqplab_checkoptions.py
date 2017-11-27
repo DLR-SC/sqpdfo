@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 #try:
 from runtime import *
 from copy import copy

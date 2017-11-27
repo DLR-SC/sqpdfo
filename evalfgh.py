@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 from ecdfo_func import *
 from ecdfo_global_variables import *

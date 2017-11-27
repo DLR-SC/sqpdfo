@@ -14,7 +14,6 @@
 #  are lower and upper bounds on ci(x), and ce: Rn -> Rme.
 #
 """
-#from __future__ import division
 import helper
 from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
@@ -38,7 +37,7 @@ tic = time.clock()
 # Initialize problem
 #---------------------------------------
 
-set_prob(1) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_prob(5) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 set_check_condition(1)
 prob=get_prob()
 options = helper.dummyUnionStruct()
@@ -79,7 +78,7 @@ options.dxmin   = dxmin;      # minimum size of a step
 options.miter   = 500;        # max iterations
 options.msimul  = 500;        # max evaluations
 
-options.verbose = 6;          # verbosity level 0,...,3
+options.verbose = 2;          # verbosity level 0,...,3
 
 #------------------------------------
 # Call ECDFO
@@ -87,7 +86,7 @@ options.verbose = 6;          # verbosity level 0,...,3
 
 lm=array([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
-print x
+print(x)
 
 toc = time.clock()
-print "Elapsed time is " + str(toc - tic) + " seconds."
+print("Elapsed time is " + str(toc - tic) + " seconds.")

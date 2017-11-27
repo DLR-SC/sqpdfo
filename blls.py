@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 #try:
 from runtime import *
 from numpy import arange,append
@@ -117,17 +117,17 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
         disp_('     The problem has ',str(n),' variables and ',str(m),' rows.')
         disp_(' ')
         if (verbose > 2):
-            print "problem_matrix="+str(A)
-            print "right_hand_side="+str(b.T)
-            print "lower_bounds="+str(lb.T)
-            print "upper_bounds="+str(ub.T)
+            print("problem_matrix="+str(A))
+            print("right_hand_side="+str(b.T))
+            print("lower_bounds="+str(lb.T))
+            print("upper_bounds="+str(ub.T))
             disp_(' ')
         fprintf_('     nit     ||r||    optimality')
         fprintf_('                 nfr nlow nupp\n\n')
         fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n' % (nit,resn,opt,lfree,latlb,latub))
         if (verbose > 1):
             if (verbose > 2):
-                print "unconstrained_solution="+str(s.T)
+                print("unconstrained_solution="+str(s.T))
             disp_(' ')
             disp_('   --------------------------------------------------------------')
             disp_(' ')
@@ -187,10 +187,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
         if (verbose > 1):
             fprintf_('                %4d %4d %4d\n'%(lfree,latlb,latub))
             if (verbose > 2):
-                print "Cauchy_point="+str(s.T)
-                print "indices_of_free_variables="+str(free)
-                print "indices_of_variables_at_their_lower_bound="+str(atlb)
-                print "indices_of_variables_at_their_upper_bound="+str(atub)
+                print("Cauchy_point="+str(s.T))
+                print("indices_of_free_variables="+str(free))
+                print("indices_of_variables_at_their_lower_bound="+str(atlb))
+                print("indices_of_variables_at_their_upper_bound="+str(atub))
    ##########################################################################
    #       Beyond the Cauchy point: nested subspace minimization            #
    ##########################################################################
@@ -218,9 +218,9 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
 
                 if (verbose > 2):
                     disp_('    > Solving in subspace ',str(k))
-                    print "indices_of_free_variables="+str(free)
-                    print "indices_of_variables_at_their_lower_bound="+str(atlb)
-                    print "indices_of_variables_at_their_upper_bound="+str(atub)
+                    print("indices_of_free_variables="+str(free))
+                    print("indices_of_variables_at_their_lower_bound="+str(atlb))
+                    print("indices_of_variables_at_their_upper_bound="+str(atub))
                 rhs=copy(b)
                 if not isempty_(atlb):
                     rhs=rhs - A[0:m,atlb].dot(lb[atlb])
@@ -355,10 +355,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                         # Print detailed activity information for the new subspace 
                         # iterate, if requested.
                         if (verbose > 2):
-                            print "current_subspace_solution="+str(ssub.T)
-                            print "indices_of_variables_at_their_lower_bound="+str(atlb)
-                            print "indices_of_variables_at_their_upper_bound="+str(atub)
-                            print "indices_of_free_variables="+str(free)
+                            print("current_subspace_solution="+str(ssub.T))
+                            print("indices_of_variables_at_their_lower_bound="+str(atlb))
+                            print("indices_of_variables_at_their_upper_bound="+str(atub))
+                            print("indices_of_free_variables="+str(free))
 
                        #  Prepare the next subspace minimization by memorizing the
                        #  current solution.
@@ -374,10 +374,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                     if (verbose > 1):
                         fprintf_('   %5df %.4e  %.4e   %.4e   %4d %4d %4d\n'%(k,resn,1,resn,lfree,latlb,latub))
                         if (verbose > 2):
-                            print "current_subspace_solution="+str(ssub.T)
-                            print "indices_of_variables_at_their_lower_bound="+str(atlb)
-                            print "indices_of_variables_at_their_upper_bound="+str(atub)
-                            print "indices_of_free_variables="+str(free)
+                            print("current_subspace_solution="+str(ssub.T))
+                            print("indices_of_variables_at_their_lower_bound="+str(atlb))
+                            print("indices_of_variables_at_their_upper_bound="+str(atub))
+                            print("indices_of_free_variables="+str(free))
                     break
             # Compute the optimality measure.
 
@@ -393,10 +393,10 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
                 fprintf_('                 nfr nlow nupp\n\n')
                 fprintf_('   %5d  %.4e  %.4e                %4d %4d %4d\n'%(nit,resn,opt,lfree,latlb,latub))
                 if (verbose > 2):
-                    print "current_solution="+str(s.T)
-                    print "indices_of_free_variables="+str(free)
-                    print "indices_of_variables_at_their_lower_bound="+str(atlb)
-                    print "indices_of_variables_at_their_upper_bound="+str(atub)
+                    print("current_solution="+str(s.T))
+                    print("indices_of_free_variables="+str(free))
+                    print("indices_of_variables_at_their_lower_bound="+str(atlb))
+                    print("indices_of_variables_at_their_upper_bound="+str(atub))
                 disp_('   --------------------------------------------------------------')
                 disp_(' ')
         # Optimality termination test
@@ -414,11 +414,11 @@ def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     if (verbose > 0):
         disp_(' ')
         if (verbose > 2):
-            print "indices_of_free_variables="+str(free)
-            print "indices_of_variables_at_their_lower_bound="+str(atlb)
-            print "indices_of_variables_at_their_upper_bound="+str(atub)
-            print "final_solution="+str(s.T)
-            print "final_residual="+str(res.T)
+            print("indices_of_free_variables="+str(free))
+            print("indices_of_variables_at_their_lower_bound="+str(atlb))
+            print("indices_of_variables_at_their_upper_bound="+str(atub))
+            print("final_solution="+str(s.T))
+            print("final_residual="+str(res.T))
         if (exitc == 1):
             disp_('   !!! maxit reached !!!')
             keyboard

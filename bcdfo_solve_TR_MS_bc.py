@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 
 from copy import copy
@@ -149,7 +149,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
 
             if (length_(ind_u_crit) + length_(ind_l_crit) != 0):
                 ind_active=concatenate_([ind_active,ind_free[ind_u_crit].T,ind_free[ind_l_crit].T],axis=1)
-                ind_free=setdiff_(range(0,n),ind_active)
+                ind_free=setdiff_(list(range(0,n)),ind_active)
                 nfree=length_(ind_free)
                 if (verbose):
                     disp_('fixed one or more variables')
@@ -177,8 +177,8 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
             lambda0=copy(_lambda)
             if (verbose == 2):
                 disp_('step outside bounds!')
-                print out_of_ubound
-                print out_of_lbound
+                print(out_of_ubound)
+                print(out_of_lbound)
                 disp_('lambda_0=',str(lambda0))
       #  Set lower bound on lambda.
   
@@ -222,11 +222,11 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
  
                 R,p=chol_(H[ix_(ind_free,ind_free)] + _lambda * eye_(nfree),nargout=2)
                 if (not isempty_(find_(isnan(R)))):
-                    print "H="+str(H)
-                    print "Lambda ="+str(_lambda)
-                    print "norm(g)="+str(norm(g))
-                    print "R="+R
-                    print "p="+p
+                    print("H="+str(H))
+                    print("Lambda ="+str(_lambda))
+                    print("norm(g)="+str(norm(g)))
+                    print("R="+R)
+                    print("p="+p)
                     disp_('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
                     msg='error4'
                     if (verbose):
@@ -446,7 +446,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
         g=g0 + H .dot( s )
         ind_active=find_(logical_or((ub - s) <= eps_bound, (s - lb) <= eps_bound))
         ind_active=ind_active.T
-        ind_free=setdiff_(range(0,n),ind_active)
+        ind_free=setdiff_(list(range(0,n)),ind_active)
         nfree=length_(ind_free)
         if (nfree > 0):
           #  check first-order criticality
@@ -455,7 +455,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
             if (ng_reduced <= 1e-05):
                 if (verbose >= 2):
                     disp_('point first order critical - return')
-                    print ng_reduced
+                    print(ng_reduced)
                 if (verbose):
                     disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 
 from bcdfo_find_new_yj import bcdfo_find_new_yj_
@@ -193,12 +193,12 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
     dsorted=np.sort(d.reshape(-1))[::-1]
     jsorted=np.argsort(d.reshape(-1))[::-1]
     if (verbose):
-      print 'd='
-      print d
-      print 'dsorted='
-      print dsorted
-      print 'jsorted='
-      print jsorted
+      print('d=')
+      print(d)
+      print('dsorted=')
+      print(dsorted)
+      print('jsorted=')
+      print(jsorted)
 
 #  First replace the distant points.      
      
@@ -219,8 +219,8 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
             Y_radius=dsorted[j]
             break
     if (verbose):
-        print 'replaced='
-        print replaced
+        print('replaced=')
+        print(replaced)
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
         disp_('after distant replace: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
 #  Perform a loop over possible optimal improvements.
@@ -240,8 +240,8 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
       #  this is the best so far         
             if (verbose > 1):
                 disp_(' ==> j = ',str(j),' improve = ',str(improvement))
-                print 'y='
-                print y
+                print('y=')
+                print(y)
             if (improvement > maximprove):
                 maximprove=copy(improvement)
                 jmax=copy(j)
@@ -251,8 +251,8 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
         if (maximprove < closethr or jmax == 0):
             Y_radius=max_(d)  # recompute Y_radius after the exchanges
             if (verbose):
-                print 'replaced='
-                print replaced
+                print('replaced=')
+                print(replaced)
                 disp_('maximprove(small)= ',str(maximprove),', jmax= ',str(jmax))
                 poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
                 disp_('after everything: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
@@ -269,8 +269,8 @@ def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,c
             replaced  = np.append( replaced, jmax )
     Y_radius=max_(d) # recompute Y_radius after the exchanges
     if (verbose):
-        print 'replaced='
-        print replaced
+        print('replaced=')
+        print(replaced)
         poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,xbase,lSolver,whichmodel,hardcons,xl,xu,indfree,stratLam,scale,shift_Y,nargout=2)
         disp_('after everything: poisedness(Y) = ',str(poised),' Y_radius  = ',str(Y_radius))
         disp_('--- exit 2 bcdfo_repair_Y after round k=',str(k),'  ---')

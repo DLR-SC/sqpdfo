@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
     
 def bcdfo_gradP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):

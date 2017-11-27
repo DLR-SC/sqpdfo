@@ -9,13 +9,13 @@ This file contains functions which serve mostly 2 purposes :
     outputs with the same shapes : S is a vector in python and a diagonal matrix in matlab, and V.transpose in python = V in matlab.
 
 """
+from __future__ import print_function
 import warnings
 from copy import copy
-#warnings.simplefilter('error', RuntimeWarning)
 import scipy
 import numpy as np
 import sys
-
+#warnings.simplefilter('error', RuntimeWarning)
 
 def isvector_or_scalar_(a):
     """
@@ -51,8 +51,8 @@ def disp_(*args):
         try:
             out = out + str(arg)
         except Exception as e:
-            print "Display Error:", e.message()
-    print out#(args)
+            print("Display Error:", e.message())
+    print(out)#(args)
     
 def false_(*args):
     """
@@ -78,7 +78,7 @@ def find_(a,n=None,d=None,nargout=1):
             return []
                                                 
         if n is not None:
-            i = i.take(range(n))
+            i = i.take(list(range(n)))
         return np.array(i)
     elif nargout == 2:
         i,j = np.nonzero(a)
@@ -113,7 +113,7 @@ def fclose_(*args):
     function which closes a file
     """
     if args[0] == -1:
-        print "No file to close, continue..."
+        print("No file to close, continue...")
     else:
         args[0].close()
 
@@ -445,15 +445,23 @@ def fprintf_(fid,*args, **kwargs):
         try:
             out = out + str(arg)
         except Exception as e:
-            print "Display Error:", e.message()
-    if  fid==1:
-        print out,
-    elif fid==2:
-        print >>sys.stderr, out,
-    elif type(fid)==file:
-        print >>fid, out,
+            print("Display Error:", e.message())
+
+    if isinstance(fid,int):
+        if  fid == 1:
+            print(out, end=' ')
+        elif fid == 2:
+            print(out, end=' ', file=sys.stderr)
+        else:
+            print('### Warning from runtime.py: unknown integer file identifier (1 and 2 are known) ###')
+    elif isinstance(fid,str):
+        print(fid + out, end=' ')
+    elif hasattr(fid, "read"):
+        # writes to file
+        print(out, end=' ', file=fid)
     else:
-        print fid+out,
+        print(fid + out, end=' ')
+        print('### Warning from runtime.py: unknown file identifier type (int, str and file are known) ###')
         
 def poly1d_(A, r=0):
     """
@@ -499,7 +507,7 @@ def isfield_(obj, name):
     """
     Returns true if 'name' is a key for obj
     """
-    return obj.__dict__.has_key(str(name))
+    return str(name) in obj.__dict__
     
 def any_(A):
     """
@@ -579,7 +587,7 @@ def strcat_(*args):
     return ret
     
 def randn_(msg, number):
-    print "Warning: randn does not do anything, because it's discouraged syntax"
+    print("Warning: randn does not do anything, because it's discouraged syntax")
     
 def compare_array(x, y, abs_tol, rel_tol):
     """  Function which compares the matlabarray x and y and returns true if all the elements are

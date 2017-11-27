@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_hessP import bcdfo_hessP_

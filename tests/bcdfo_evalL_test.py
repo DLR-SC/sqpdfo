@@ -37,7 +37,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
         
         #Here we choose the first point of the interpolant set
-        values = bcdfo_evalL_( QZ, RZ, Y, array(range(0,6)), array([[0],[0]]), xbase, 0, scale, 1 )
+        values = bcdfo_evalL_( QZ, RZ, Y, array(list(range(0,6))), array([[0],[0]]), xbase, 0, scale, 1 )
         correctvalues = array([ [1],   [0],    [0],    [0], [0],   [0] ])
         
         self.assertTrue(compare_array(values, correctvalues, self.abs_tol, self.rel_tol))
@@ -52,7 +52,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
         
         #Here we choose the fifth point of the interpolant set
-        values = bcdfo_evalL_( QZ, RZ, Y, array(range(1,6)), array([[1],[0.01]]), xbase, 0, scale, 1 )
+        values = bcdfo_evalL_( QZ, RZ, Y, array(list(range(1,6))), array([[1],[0.01]]), xbase, 0, scale, 1 )
         correctvalues = array([ [0.],   [0.],    [0.],    [0.], [1.],   [0.] ])
         
         self.assertTrue(compare_array(values, correctvalues, self.abs_tol, self.rel_tol))
@@ -81,7 +81,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
         
         #Here we choose a random point, and the complete interpolant set
         for i in range(0,50):
-            values = bcdfo_evalL_( QZ, RZ, Y, array(range(0,6)), array([[(random.random()-0.5)*100],[(random.random()-0.5)*100]]), xbase, 0, scale, 1 )
+            values = bcdfo_evalL_( QZ, RZ, Y, array(list(range(0,6))), array([[(random.random()-0.5)*100],[(random.random()-0.5)*100]]), xbase, 0, scale, 1 )
             self.assertAlmostEqual(values.sum(), 1.0,places=9) #NB : random values force us to reduce the precision 
 
     def test_bcdfo_evalL_5(self):
@@ -90,7 +90,7 @@ class Test_bcdfo_evalL(unittest.TestCase):
         """
         Y = array([[ 0, 1, 0, 2, 1, 0],[0, 0, 1, 0, 0.01, 2 ]]) 
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 1, 1,1,1e15 )
-        values = bcdfo_evalL_( QZ, RZ, Y, array(range(1,6)), array([[-1],[1]]), xbase, 0, scale, 1 )
+        values = bcdfo_evalL_( QZ, RZ, Y, array(list(range(1,6))), array([[-1],[1]]), xbase, 0, scale, 1 )
         correctvalues = array([ [0],   [97.0000],    [2.9900],    [1.0000], [-100.0000],   [-0.4950] ])
         self.assertTrue(compare_array(values, correctvalues, self.abs_tol, self.rel_tol))
         

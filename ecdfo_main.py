@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 from numpy import inf, arange
 from copy import copy
@@ -335,7 +335,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
       #  Compute the corresponding function values.
 
             for i in range(0,length_(replaced)):
-                j=replaced[i]
+                j=int(replaced[i])
          #  Set index of new point and update status of the old point
 
                 m=m + 1

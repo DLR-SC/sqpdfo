@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from runtime import *
 from copy import copy
 from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
