@@ -52,7 +52,7 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,s
 
     j=j+1
     n,p1=size_(Y,nargout=2)
-    q=((n + 1) * (n + 2)) / 2
+    q=int(((n + 1) * (n + 2)) / 2)
     if (whichmodel == 3 and p1 < q):
 #          for underdetermined regression model use min l2-norm model
         whichmodel=2

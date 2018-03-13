@@ -74,7 +74,7 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
     if (whichmodel == 0):
         q=copy(p1)
     else:
-        q=((n + 1) * (n + 2)) / 2
+        q=int(((n + 1) * (n + 2)) / 2)
     if (whichmodel == 3 and p1 < q):
 #         for underdetermined regression model use min l2-norm model
 
@@ -121,19 +121,22 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
-    elif (whichmodel == 1):
-#           Mixed model: minimum Frobenius-norm model (when underdetermined) and 
-#           minimum l2-norm model (at linear and quadratic degree)
+
+    elif whichmodel == 1:
+        # Mixed model: minimum Frobenius-norm model (when underdetermined) and
+        # minimum l2-norm model (at linear and quadratic degree)
         if (p1 == n + 1 or p1 == q):
             F=bcdfo_evalZ_(Y,p1).T
         else:
-#       QR of Minimum Frobenius norm interpolation matrix (p1 <= q)
-#       (factorize matrix F = [MQMQ' ML; ML' 0])            
+            # QR of Minimum Frobenius norm interpolation matrix (p1 <= q)
+            # (factorize matrix F = [MQMQ' ML; ML' 0])
             M=bcdfo_evalZ_(Y,q).T
             ML=M[:,0:n + 1]
             MQ=M[:,n + 1:q]
-            F=concatenate([MQ.dot(MQ.T),ML,ML.T,zeros_(n + 1,n + 1)], axis=1)
-#       Check condition of Z and cure if ill-conditioned
+            F1=concatenate([MQ.dot(MQ.T),ML], axis=1)
+            F2=concatenate([ML.T,zeros_(n + 1,n + 1)], axis=1)
+            F=concatenate([F1,F2],axis=0)
+        # Check condition of Z and cure if ill-conditioned
         if (length_(find_(isnan(F))) == 0 and length_(find_(isinf(F))) == 0):
             condZ=cond_(F)
             if (condZ > kappa_ill):

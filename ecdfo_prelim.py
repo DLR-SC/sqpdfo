@@ -291,21 +291,22 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             Y[:,0]=x0.reshape(-1)
 #                    Y[:,1]=x0.T
             for j in range(0,n):
-                # lin
-
+                # initial degree is linear
                 step1=- Delta0
                 Y[:,j + 1]=x0.reshape(-1) + step1 * I[:,j]
+
                 if (cur_degree >= pdiag):
+                    # initial degree is diagonal
                     step2=copy(Delta0)
                     Y[:,j + 1 + n]=x0.reshape(-1) + step2 * I[:,j]
-            # quad
 
-            if (cur_degree == pquad):
-                k=2 * n + 2
-                for j in range(0,n):
-                    for jj in range(j + 1,n+1):
-                        Y[:,k-1]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
-                        k=k + 1
+        #    if (cur_degree == pquad):
+                 # initial degree is quadratic
+        #        k=2 * n + 2
+        #        for j in range(0,n):
+        #            for jj in range(j + 1,n+1):
+        #                Y[:,k-1]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
+        #                k=k + 1
             #  Build the initial factorization.
 
             QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)

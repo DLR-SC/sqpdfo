@@ -679,9 +679,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 if options.verbose == 3 or options.verbose >= 5:
                     fprintf_(options.fout,'  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
          #  The model is not fully quadratic yet: add (if possible)
-         #  the new point to the interpolation set and recompute the model. 
-
-
+         #  the new point to the interpolation set and recompute the model.
                 if (((cur_degree < pquad) or (whichmodel == 3 and cur_degree < pquad + pquad)) and (rho < eta1)):
                     cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
                     if (options.verbose >= 3):

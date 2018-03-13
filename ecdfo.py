@@ -7,6 +7,7 @@ from ecdfo_global_variables import get_prob
 from ecdfo_prelim import ecdfo_prelim_
 from ecdfo_finish import ecdfo_finish_
 from runtime import *
+import time
 
 from copy import copy
 from numpy import array
@@ -218,7 +219,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     c = helper.dummyUnionStruct()
     info = helper.dummyUnionStruct()
     eps = 2.220446049250313e-16
-    prob=get_prob
+    prob=get_prob()
     c.free=0
     c.fixed=1
     c.alwaysfixed=2
@@ -255,10 +256,10 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
        x0 = x0.T                                # a column vector
     
     n       = length_( x0 )                     # the dimension of the space
-    pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
-    #pquad   = ( 2 * ( n + 6 ) );
+    #pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
+    pquad   = int( 2* n )
     pdiag   = int(2 * n + 1)                        # the size of a diagonal model
-    plin    = int(n + 1)                            # the size of a linear model
+    plin    = int(n + 1)                             # the size of a linear model
     
     msg              = 'Unexpected exit'       # no meaningful message at this point
     poisedness_known = 0                       # the poisedness is not known yet
@@ -310,7 +311,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     kappa_ill    = 1e+15            # threshold to declare a system matrix as ill-conditioned
     kappa_th     = 2000             # threshold for a safely nondegenerate set of points
     eps_bnd      = epsilon/10       # epsilon to define a bound as nearly-active: |x - bnd|<eps_bnd
-    whichmodel   = 0                # approach to build the local models
+    whichmodel   = 2                # approach to build the local models
     hardcons     = 0                # apply hard bounds when maximizing the Lagrange polynomials
     noisy        = 0                # function supposed to be noisy
     scaleX       = 0                # scaling of variables is applied
@@ -324,7 +325,6 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     # -------------------------------------------------------------------------
     # Check input arguments
     # -------------------------------------------------------------------------
-
 
     if nargin < 2:
         fprintf_('\n### EC-DFO: the first 2 arguments are required\n\n')
@@ -347,16 +347,13 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     if nargin < 6:
         options.fout=1
         options.verbose=1
- # von Karman ogive 
-    if prob == 100:
-        Delta0=0.01
-        epsilon=0.001
+    # GTlab problem
+    #if prob == 100:
+        #Delta0=0.01
+        #epsilon=0.001
         #scaleX = 1;
-        #scalefacX = array([[50 50 50 100 100 100 100 100 100 100 100 100 200 200 200 200 200 200 300 500]]).T;
-    
-        # check if function log file exists and delete if so
-        if exist_('fvalues_ecdfo_karmanogive.dat','file') == 2: #Those 2 lines (exist_ and delete_) have not been dealt with, but only concerns prob==100
-            delete_('fvalues_ecdfo_karmanogive.dat')
+        #scalefacX = array([[100,0.01, 1, 0.1, 0.1]]).T;
+
     # -------------------------------------------------------------------------
     # Preliminaries:
     # -------------------------------------------------------------------------
@@ -381,7 +378,6 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     if (verbose):
         fid=fopen_('convhist.m','w')
         fprintf_(fid,'function A=history \n A=[ \n')
-        fprintf_(fid,'%6d  %+.14e %.2e \n'%(neval,fx,normgx))
         fclose_(fid)
     # -------------------------------------------------------------------------
     # Call main optimization loop

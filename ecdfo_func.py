@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-from ecdfo_global_variables import get_prob,get_prob_cuter
+import ecdfo_global_variables as glob
 from numpy import array, zeros
+import time
 
 def ecdfo_func_(x=None,*args,**kwargs):
     """
@@ -13,8 +14,12 @@ def ecdfo_func_(x=None,*args,**kwargs):
 #    varargin = cellarray(args)
 #    nargin = 1-[x].count(None)+len(args)
     # Initialization
-    prob=get_prob()
+    prob=glob.get_prob()
     ci=array([])
+    ce=array([])
+    msgf = 0
+    msgce = 0
+    msg = 0
     if prob == 1:
         f=- (5 - (x[0] - 2) ** 2 - 2 * (x[1] - 1) ** 2)
         ce=zeros(1)
@@ -49,7 +54,6 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce[2]=x[0] ** 3 + x[1] ** 3 + 1
         ce=ce.reshape(-1,1)
     elif prob ==6:
-        ce=array([])
         f=-(0.592*((exp_(1)-1)*x[0])/((-0.408*x[0]+1)*(exp_(x[0])-1)) -1)
     elif prob==7:  #alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
         f=x[0]
@@ -63,11 +67,36 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce[6]=x[9]*x[13]+22.2*x[10]-35.82
         ce[7]=x[10]*x[14]-3*x[7]+1.33
         ce=ce.reshape(-1,1)
-    else:
-        cproblem=get_prob_cuter()
-            
+    elif prob==100:
+        ffunc = glob.get_filename_f()
+        cfunc = glob.get_filename_ce()
+        # GTlab problem
+        #scalefacX = array([[1000., 0.1, 10., 1., 1.]]).T
+        #x = copy(x) / scalefacX
+        xc = copy(x.T)
+        xc = list(xc[0])
+
+        try:
+            f = ffunc(xc)
+        except:
+            f = np.inf
+            msgf = 1
+        if cfunc != '':
+            try:
+                ce = cfunc(xc)
+                ce = array(ce).reshape(-1, 1)
+            except:
+                msgce = 1
+        if msgf > 0 or msgce > 0:
+            msg = 'Error: error during calculating f (and/or ce) in user-defined problem !'
+    elif prob==1000:
+        # CUTEr problems
+        cproblem=glob.get_prob_cuter()
         (f, c)=cproblem.objcons(x.reshape(-1))
         ce=c.reshape(-1,1)
-    msg=0
+    else:
+        msg = 'Error: Problem number prob='+str(prob)+' is not defined in ecdfo_func.py ! \nUserdefined problems have problem number prob=100.'
+        f = np.inf
+
     return msg,f,ci,ce
    

@@ -3,7 +3,7 @@
 from runtime import *
 
 from bcdfo_evalZ import *
-from numpy import array
+from numpy import array,zeros
 from copy import copy
 import numpy
 def bcdfo_computeP_(QZ=None,RZ=None,Y_=None,fY=None,whichmodel=None,P_old=None,ind_Y=None,i_xold=None,i_xplus=None,g=None,scale=None,shift_Y=None,Delta0=None,*args,**kwargs):
@@ -62,9 +62,9 @@ def bcdfo_computeP_(QZ=None,RZ=None,Y_=None,fY=None,whichmodel=None,P_old=None,i
     else:
         Y=Y_
 
-    n,p1=size_(Y,nargout=2)
+    n,p1 = size_(Y,nargout=2)
     badcond=0
-    q=((n + 1) * (n + 2)) / 2
+    q=int(((n + 1) * (n + 2)) / 2)
     if (whichmodel == 3 and p1 < q):
 #     for underdetermined regression model use min l2-norm model
         whichmodel=2
@@ -77,10 +77,9 @@ def bcdfo_computeP_(QZ=None,RZ=None,Y_=None,fY=None,whichmodel=None,P_old=None,i
 #        build mixed model: Minimum Frobenius norm model (p1 <= q)
 #        and l2-norm model (p1 == n+1 or p1 == q)
         n_rhs=size_(fY,1)
+        P=zeros((n_rhs,q))
         if (p1 == n + 1 or p1 == q):
             P[0:n_rhs,0:p1]=(numpy.linalg.solve(RZ,(QZ.T.dot(fY.T)))).T
-            if (p1 == n + 1):
-                P[0:n_rhs,n + 1:q]=0.0
         else:
 #        build Minimum Frobenius norm model (p1 <= q)
 #        minimizing the norm of the Hessian

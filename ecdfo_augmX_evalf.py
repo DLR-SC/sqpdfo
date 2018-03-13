@@ -3,6 +3,7 @@
 from runtime import *
 from copy import copy
 from numpy import append, isnan, isinf
+import time
 
 def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
     """
@@ -121,6 +122,8 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
             X[:,m]=y
         except IndexError:
             X=concatenate_([X,y],axis=1)
+        if (scaleX):
+            y=y / scalefacX
         info.nsimul[1]=info.nsimul[1] + 1
         outdic,fvalue,info.ci,info.ce=f(2,y)
         info.f=fvalue

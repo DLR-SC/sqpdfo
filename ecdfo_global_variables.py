@@ -54,7 +54,15 @@ def set_check_condition(value):
     global check_condition
     check_condition=value
 
-    
+def set_filename_f(value):
+    global filename_f
+    filename_f = value
+
+def set_filename_ce(value):
+    global filename_ce
+    filename_ce = value
+
+
 def get_prob():
     return prob
 
@@ -78,3 +86,9 @@ def get_iter():
     
 def get_check_condition():
     return check_condition
+
+def get_filename_f():
+    return filename_f
+
+def get_filename_ce():
+    return filename_ce

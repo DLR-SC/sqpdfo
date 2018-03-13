@@ -45,9 +45,9 @@ class Test_bcdfo_computeLj(unittest.TestCase):
                 for j in range(0,6):
                     value=bcdfo_evalP_( L, array([[x1_coord[j]],[x2_coord[j]]]), xbase, scale, 1 )
                     if i==j:
-                        self.assertAlmostEqual(value, 1.0,places=10)
+                        self.assertTrue(np.allclose(value, 1., atol=1e-10))
                     else:
-                        self.assertAlmostEqual(value, 0,places=10)
+                        self.assertTrue(np.allclose(value, 0., atol=1e-10))
 
     def test_bcdfo_computeLj_2(self):
         """

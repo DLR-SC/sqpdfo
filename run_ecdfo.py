@@ -37,13 +37,15 @@ tic = time.clock()
 # Initialize problem
 #---------------------------------------
 
-set_prob(5) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_prob(7) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 set_check_condition(1)
 prob=get_prob()
+print(prob)
 options = helper.dummyUnionStruct()
 options.tol=zeros(3)
 
 x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+
 lb=zeros_(n,1)
 ub=zeros_(n,1)
 # bounds for variables and inequality constraints

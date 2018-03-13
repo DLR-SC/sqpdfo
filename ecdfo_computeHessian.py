@@ -3,6 +3,7 @@
 from runtime import *
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_hessP import bcdfo_hessP_
+from sqplab_bfgs import sqplab_bfgs_
 from copy import copy
 from numpy import zeros
 
@@ -69,7 +70,8 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             # compute the BFGS approximation of the Hessian of the Lagrangian (with Powell corrections)
 
             if options.bfgs_restart > 0 and mod_(info.nsimul[1],options.bfgs_restart) == 0:
-                M=eye_(size_(M))
+                szM = size_(M)
+                M=eye_(szM[0])
                 pc=2.0
             else:
                 first=0
@@ -77,7 +79,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                     first=1
                 M,pc,info,values=sqplab_bfgs_(M,y,s,first,info,options,values,nargout=4)
                 if info.flag == values.fail_strange:
-                    M=eye_(size_(M))
+                    M=eye_(size_(M)[0])
                     M,pc,info,values=sqplab_bfgs_(M,y,s,first,info,options,values,nargout=4)
                     if info.flag == values.fail_strange:
                         #            disp('ecdfo_computeHessian: fail_strange ')
