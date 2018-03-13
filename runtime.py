@@ -139,7 +139,7 @@ def isempty_(a):
     """
     function which returns true if the argument 'a' is an empty array (array([])) or an empty list []
     """
-    if a==[] :
+    if np.array(a).size == 0 :
         return True
     try:
         return 0 in a.shape
@@ -483,7 +483,15 @@ def concatenate_(arrs, axis=0):
     for arr in arrs:
         if isempty_(arr):
             copy_arrs.remove(arr)
-    if copy_arrs==[]:
+    #print(copy_arrs)
+    #print(isinstance(copy_arrs,np.ndarray))
+    #print(np.array(copy_arrs))
+    #print(0 in copy_arrs.shape)
+    #if isinstance(copy_arrs,np.ndarray) and copy_arrs.size == 0:
+    #    return np.array([])
+    #elif not isinstance(copy_arrs,np.ndarray) and 0 in np.array(copy_arrs).shape:
+    #    return np.array([])
+    if copy_arrs == []:
         return np.array([])
     else:
         if axis == 0:
