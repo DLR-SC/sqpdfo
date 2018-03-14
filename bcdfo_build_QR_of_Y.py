@@ -112,12 +112,11 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         else:
             badcond=1
         if (badcond):
-            U,Sdiag,V=linalg.svd(Z)
-            V=V.T
+            U,Sdiag,V=linalg.svd(Z,full_matrices=0)
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
             S=diag(Sdiag)
-            M=(V.dot(S.dot(U.T))).T
+            M = np.dot(U, np.dot(S, V))
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
@@ -144,12 +143,11 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         else:
             badcond=1
         if (badcond):
-            U,Sdiag,V=linalg.svd(F)
-            V=V.T
+            U,Sdiag,V=linalg.svd(F,full_matrices=0)
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
             S=diag(Sdiag)
-            M=(V.dot(S.dot(U.T))).T
+            M = np.dot(U, np.dot(S, V))
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(F,nargout=2)
@@ -165,12 +163,11 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         else:
             badcond=1
         if (badcond):
-            U,Sdiag,V=linalg.svd(Z)
-            V=V.T
+            U,Sdiag,V=linalg.svd(Z,full_matrices=0)
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
             S=diag(Sdiag)
-            M=(V.dot(S.dot(U.T))).T
+            M = np.dot(U, np.dot(S, V))
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
@@ -186,12 +183,11 @@ def bcdfo_build_QR_of_Y_(Y_=None,whichmodel=None,shift_Y=None,Delta=None,normgx=
         else:
             badcond=1
         if (badcond):
-            U,Sdiag,V=linalg.svd(Z)
-            V=V.T
+            U,Sdiag,V=linalg.svd(Z,full_matrices=0)
             indices=find_(Sdiag < _del)
             Sdiag[indices]=_del
             S=diag(Sdiag)
-            M=(V.dot(S.dot(U.T))).T
+            M = np.dot(U, np.dot(S, V))
             QZ,RZ=qr_(M,nargout=2)
         else:
             QZ,RZ=qr_(Z,nargout=2)
