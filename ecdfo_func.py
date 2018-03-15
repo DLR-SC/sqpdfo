@@ -55,7 +55,14 @@ def ecdfo_func_(x=None,*args,**kwargs):
         ce=ce.reshape(-1,1)
     elif prob ==6:
         f=-(0.592*((exp_(1)-1)*x[0])/((-0.408*x[0]+1)*(exp_(x[0])-1)) -1)
-    elif prob==7:  #alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
+    elif prob==7:
+        # alkyl problem found here :http://www.gamsworld.org/global/globallib/alkyl.htm
+        # best known solution found by Baron f*=-1.76499964633
+        # x1=-1.76499964633; x2=1.70370291772; x3=1.58470999786; x4=0.543084200389; x5=3.03582206371; x6=2.0; x6=-0.882499871995;
+        # x7=0.901319381076; x8=0.95; x8=-17.3201583536; x9=10.4754765591; x10=1.56163636364; x11=1.53535353535;
+        # x12=0.99; x12=2.06361745003; x13=0.99; x13=21.9374937958; x14= 1.11111111111; x14=-0.488775780565;
+        # x15=0.99; x15=10.7759591879;
+        # e1=1.0; e2=-5.13314985138; e3=12.7096102404; e4=0.035; e5=-0.679755732296; e6=-23.0920987324; e7=0.312989497393; e8=-7.01855236578
         f=x[0]
         ce=zeros(8)
         ce[0]=6.3*x[4]*x[7]+x[0]-5.04*x[1]-0.35*x[2]-x[3]-3.36*x[5]
