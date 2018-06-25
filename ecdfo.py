@@ -7,7 +7,6 @@ from ecdfo_global_variables import get_prob
 from ecdfo_prelim import ecdfo_prelim_
 from ecdfo_finish import ecdfo_finish_
 from runtime import *
-import time
 
 from copy import copy
 from numpy import array
@@ -301,7 +300,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     criterion_FP = 'distance'       # the same, but for far points at unsuccessful iterations
     criterion_CP = 'standard'       # the same, but for close points at unsuccessful iterations
     mu0          = 0                # initial reduction in gradient norm before repair
-    mu           = 0                # subsequent reduction in gradient norm before repair
+    mu           = 0.1              # subsequent reduction in gradient norm before repair
     theta        = 1                # ratio between gradient norm and radius after repair
     eps_TR       = 0.0001           # rel. accuracy on the trust-region constraint for steps
     eps_L        = 0.001            # rel. accuracy on the trust-region constraint for L max
