@@ -256,7 +256,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     
     n       = length_( x0 )                     # the dimension of the space
     #pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
-    pquad   = int( 2* n )
+    pquad   = int( 2* n + 1 )
     pdiag   = int(2 * n + 1)                        # the size of a diagonal model
     plin    = int(n + 1)                             # the size of a linear model
     
