@@ -6,7 +6,7 @@ from copy import copy
 def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
 
 ###############################################################################
-# ecdfo_bfgs_update_(H,y,s,first,info,options,values);
+# ecdfo_bfgs_update_(H,y,s,first,info,options,values)
 #
 # This procedure computes the BFGS update of the matrix H, which is
 # supposed to be a positive definite approximation of some Hessian.
