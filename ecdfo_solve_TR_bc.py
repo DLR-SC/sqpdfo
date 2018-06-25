@@ -2,6 +2,7 @@
 from runtime import *
 import helper
 from bcdfo_solve_TR_MS_bc import *
+from minq import Minq
 
 from ecdfo_check_convex import *
 from sqplab_lsmult import *
@@ -153,13 +154,26 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
 
             lb_r=lb[0:n] - x
             ub_r=ub[0:n] - x
-            stratLam=1
-            r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+            lls_solver = 'bcdfo'
+            if lls_solver == 'bcdfo':
+                stratLam=1
+                r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+            elif lls_solver == 'minq':
+                cc = np.array(g1.T[0])
+                G = np.matrix(H1)
+                yu = np.array(np.maximum(lb_r, -delta_r).T[0])
+                yo = np.array(np.minimum(ub_r, delta_r).T[0])
+                prt = 0
+                m = Minq(0, cc, G, yu, yo, prt)
+                xy, value, msg, nsub = m.search()
+                gplus = g1
+                r = numpy.array([xy]).T
+
             info_r.prec=sqrt_(gplus.T.dot(gplus))
             xr=x + r
             norm2_r=r.T.dot(r)
             norm_r=sqrt_(norm2_r)
-            if msg=='error' or msg=='limit':
+            if msg=='error' or msg=='limit' or msg >= 1:
                 info_r.flag=- 1
             elif msg=='boundary' or (delta_r - norm_r < 1e-08):
                 info_r.flag=1
