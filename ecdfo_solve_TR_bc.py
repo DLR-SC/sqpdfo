@@ -368,6 +368,11 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             aTx=aT.dot(xr)
             alpha=concatenate_([ub[0:n],- lb[0:n]])
             divisor=aT.dot(tstep)
+            indices1 = find_(divisor < 1e-15)
+            indices2 = find_(divisor > -1e-15)
+            iii = [i in indices2 for i in indices1]
+            indices = indices1[iii]
+            divisor[indices] = 1e-15
             ratio=(alpha - aTx) / divisor
             minratio=min_(ratio[divisor > 0])
             if (minratio < 0):
