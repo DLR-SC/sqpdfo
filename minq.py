@@ -454,7 +454,7 @@ class Minq:
             else: # No bound active 
                 if  alpha != 0: 
                     if self.prt>1 and not self.free[k]: 
-                        unfixstep=[ x[k], alpha ] 
+                        unfixstep=[ self.x[k], alpha ]
   
                     self.x[k] = xnew 
                     self.gradient += alpha * q 
