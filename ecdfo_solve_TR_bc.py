@@ -166,6 +166,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 prt = 0
                 m = Minq(0, cc, G, yu, yo, prt)
                 xy, value, msg, nsub = m.search()
+                if msg > 0: msg = 'error'
                 gplus = g1
                 r = numpy.array([xy]).T
 
@@ -173,7 +174,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             xr=x + r
             norm2_r=r.T.dot(r)
             norm_r=sqrt_(norm2_r)
-            if msg=='error' or msg=='limit' or msg >= 1:
+            if msg=='error' or msg=='limit':
                 info_r.flag=- 1
             elif msg=='boundary' or (delta_r - norm_r < 1e-08):
                 info_r.flag=1
