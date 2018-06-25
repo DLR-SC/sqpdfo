@@ -12,15 +12,15 @@ from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
-from sqplab_checkoptions import sqplab_checkoptions_
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
 from copy import copy
 from numpy import array, arange
 
 def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,whichmodel_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
-    """
-# [n,nb,mi,me,x,lm,lb,ub,info,options,values] = ecdfo_prelim (func,x0,lm0,lb,ub,options);
+
+###############################################################################
+# ecdfo_prelim (func,x0,lm0,lb,ub,options)
 #
 # This function realizes the following preliminary jobs:
 # - set default output arguments
@@ -29,33 +29,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 # - get the possible 'values' of options
 # - compute function values and deduce dimensions
 # - compute an initial multiplier (if not given)
-# - initial printings
-#
-#-----------------------------------------------------------------------
-
-# Authors: Jean Charles Gilbert, INRIA.
-#      and Anke Troeltzsch, DLR.
-#
-# Copyright 2008, 2009, INRIA. 2013, DLR.
-#
-# EC-DFO is distributed under the terms of the Q Public License version
-# 1.0.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
-# License version 1.0 for more details.
-#
-# You should have received a copy of the Q Public License version 1.0
-# along with this program.  If not, see
-# <http://doc.trolltech.com/3.0/license.html>.
-#
-#-----------------------------------------------------------------------
-
-    """
-#    varargin = cellarray(args)
-#    nargin = 28-[func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options].count(None)+len(args)
-    
+# - initial printings#
+###############################################################################
 
     func=copy(func_)
     x0=copy(x0_)
@@ -417,7 +392,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     fprintf_('*                                                                                    *\n')
     fprintf_('*            EC-DFO: equality-constrained minimization without derivatives           *\n')
     fprintf_('*                                                                                    *\n')
-    fprintf_('*                            (c)  A. Troeltzsch, 2013                                *\n')
+    fprintf_('*                          (c)  A. Troeltzsch, 2013-2018                             *\n')
     fprintf_('*                                                                                    *\n')
     fprintf_('**************************************************************************************\n')
     fprintf_('\n')
@@ -539,8 +514,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'%(norm_(compl,inf)))
         fprintf_(options.fout,'  tunings:\n')
         fprintf_(options.fout,'  . printing level                  %0i\n'%(options.verbose))
-    info,options=sqplab_checkoptions_(nb,mi,me,0,info,options,values,nargout=2)
-    
+
     # Check the options
 
     if info.flag:
