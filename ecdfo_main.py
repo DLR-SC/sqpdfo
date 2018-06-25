@@ -271,10 +271,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             #  Reduce eps_current if repair degree is reached.
 
             if (augment <= 0):
-                eps_current=max_(mu * eps_current,epsilon)
+                if (pred == -1):
+                    eps_current = min_(mu * eps_current, epsilon)
+                else:
+                    eps_current = epsilon
             #  Rebuild a poised model in the eps_current ball, and ...
 
-            if (normgx <= epsilon):
+            if (normgx <= epsilon or pred == -1):
                 # ... remove far points (with strict criterion: farfact = 1, forcing all
                 # new interpolation points to be within distance epsilon)
 
@@ -322,7 +325,9 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     if (lSolver == 2):
                         radius=min_(delta / sqrt_(n),epsilon / sqrt_(n))
                     else:
-                        radius=min_(delta,epsilon)
+                        radius=min_(delta, epsilon)
+                elif pred == -1:
+                    radius = min_(delta, eps_current)
                 else:
                     radius=max_(delta,eps_current)
                 QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,radius,effective_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,normgx,kappa_ill,nargout=8)
