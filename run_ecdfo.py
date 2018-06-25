@@ -26,21 +26,13 @@ from numpy import array, zeros, arange
 import time
 tic = time.clock()
 
-#clear(char('all'))
-#close(char('all'))
-#_format(char('long'))
-#global n,nb,mi,me,prob,threshold
-
-
-
 #---------------------------------------
 # Initialize problem
 #---------------------------------------
 
-set_prob(7) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
+set_prob(2) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
 set_check_condition(1)
 prob=get_prob()
-print(prob)
 options = helper.dummyUnionStruct()
 options.tol=zeros(3)
 
@@ -48,13 +40,10 @@ x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13
 
 lb=zeros_(n,1)
 ub=zeros_(n,1)
-# bounds for variables and inequality constraints
 
 lb[arange(0,n)]=lx
 ub[arange(0,n)]=ux
-if mi:
-    lb[arange(n,n + mi)]=li
-    ub[arange(n ,n + mi)]=ui
+
 # Threshold for violated bounds 
 
 set_threshold(1e-08)
@@ -71,16 +60,16 @@ options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
 if nb + mi + me == 0:
     options.algo_descent='Wolfe'
 
-options.tol[0]  = 1e-5;       # tolerance on the gradient of the Lagrangian
-options.tol[1]  = 1e-5;       # tolerance on the feasibility
-options.tol[2]  = 1e-5;       # tolerance on the complementarity
+options.tol[0]  = 1e-5       # tolerance on the gradient of the Lagrangian
+options.tol[1]  = 1e-5       # tolerance on the feasibility
+options.tol[2]  = 1e-5       # tolerance on the complementarity
 
-options.dxmin   = dxmin;      # minimum size of a step
+options.dxmin   = dxmin      # minimum size of a step
 
-options.miter   = 500;        # max iterations
-options.msimul  = 500;        # max evaluations
+options.miter   = 5000        # max iterations
+options.msimul  = 5000        # max evaluations
 
-options.verbose = 2;          # verbosity level 0,...,3
+options.verbose = 2          # verbosity level 0,...,3
 
 #------------------------------------
 # Call ECDFO
@@ -89,6 +78,7 @@ options.verbose = 2;          # verbosity level 0,...,3
 lm=array([])
 x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
 print(x)
+print(info.ce)
 
 toc = time.clock()
 print("Elapsed time is " + str(toc - tic) + " seconds.")
