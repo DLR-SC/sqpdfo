@@ -363,7 +363,15 @@ def cond_(A):
     """
     function returning the condition number of A
     """
-    return np.linalg.cond(A)
+    # return np.linalg.cond(A)
+    # we do not use the function cond() from numpy.linalg
+    # because it has no safeguard in case the smallest eigenvalue is zero!
+
+    s = np.linalg.svd(A, compute_uv=False)
+    if s[...,-1] == 0.0:
+        return np.infty
+    else:
+        return s[..., 0] / s[..., -1]
     
 def svd_(A, full_matrices=1, *args,**kwargs):
     """
