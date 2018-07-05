@@ -6,7 +6,7 @@ from minq import Minq
 
 from ecdfo_check_convex import *
 from sqplab_lsmult import *
-from sqplab_tcg import *
+from ecdfo_truncated_cg import *
 from copy import copy
 from ecdfo_global_variables import get_threshold, get_check_condition
 
@@ -21,10 +21,6 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
 #  outputs:
 #
     """
-#    varargin = cellarray(args)
-#    nargin = 18-[simul,x,lb,ub,delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx].count(None)+len(args)
-
-#    violated=None
     info_r=helper.dummyUnionStruct()
     
 
@@ -226,7 +222,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             g_t=Z_.T.dot((glocal + M.dot(r)))
          #  Compute minimizer of the model in the tangent space
 
-            u,info_t=sqplab_tcg_(M_t,- g_t,delta_t,20 * (n - me),prec_t,plevel_t,options.fout,nargout=2)
+            u,info_t=ecdfo_truncated_cg_(M_t,- g_t,delta_t,20 * (n - me),prec_t,nargout=2)
             t=Z_.dot(u)
             active_t=(info_t.flag == 1) or (info_t.flag == 2)
             if options.verbose >= 5:
