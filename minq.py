@@ -28,7 +28,7 @@ __docformat__ = "restructuredtext en"
    
    
 import numpy 
-from util import toRow, toCol, find, mldiv, crdot
+from minq_util import toRow, toCol, find, mldiv, crdot
 eps   = numpy.finfo('d').eps 
 inf   = numpy.inf 
    
