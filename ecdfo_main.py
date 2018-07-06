@@ -17,6 +17,9 @@ from bcdfo_projgrad import bcdfo_projgrad_
 from ecdfo_computeHessian import ecdfo_computeHessian_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
+#from bcdfo_find_new_yj_bc import bcdfo_find_new_yj_bc_
+from bcdfo_find_new_yj import bcdfo_find_new_yj_
+from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
 from numpy import array, zeros
@@ -464,7 +467,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info=ecdfo_solve_TR_bc_(func,x,lb[indfree],ub[indfree],delta,mi,me,M,prec_r,prec_t,info,options,values,radius_has_been_rejected,lm,ceY,ciY,gx,nargout=8)
    # check for error
 
-        if info.flag == values.fail_strange:
+        if info.flag == values.fail_unexpected:
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
    # ---------------------
    # Full step computation
@@ -551,7 +554,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             if pred < 0:  # should not occur, since here s ~= 0
                 if options.verbose:
                     fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should be positive\n\n'%(pred))
-                info.flag=values.fail_strange
+                info.flag=values.fail_unexpected
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
             elif pred == 0:
                 # here, stationarity is assumed but model maybe inaccurate to state convergence

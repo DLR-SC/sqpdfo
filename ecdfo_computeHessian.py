@@ -53,12 +53,11 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                 if info.niter == 1:
                     first=1
                 M,pc,info,values=ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
-                if info.flag == values.fail_strange:
+                if info.flag == values.fail_unexpected:
                     M=eye_(size_(M)[0])
                     M,pc,info,values=ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
-                    if info.flag == values.fail_strange:
-                        #            disp('ecdfo_computeHessian: fail_strange ')
-
+                    if info.flag == values.fail_unexpected:
+                        disp_('ecdfo_computeHessian: fail_unexpected ')
                         return M,pc,info
 
         elif options.hess_approx == values.model:

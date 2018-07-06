@@ -30,7 +30,7 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
 
     # prepare the update of H
     if norm_(s) == 0:
-        info.flag=values.fail_strange
+        info.flag=values.fail_unexpected
         if options.verbose >= 3:
             fprintf_(options.fout,'\n### ecdfo_bfgs_update: null step s\n\n')
         return H,pc,info,values
@@ -39,7 +39,7 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
     Hs=H.dot(s)
     sHs=s.T.dot(Hs)
     if sHs <= 0:
-        info.flag=values.fail_strange
+        info.flag=values.fail_unexpected
         if options.verbose >= 3:
             fprintf_(options.fout,'\n### ecdfo_bfgs_update: BFGS Hessian approximation is not positive definite:\n')
             fprintf_(options.fout,"            s'*H*s = %g <= 0\n\n"%(sHs))
@@ -53,13 +53,13 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
         y=pc * y + (1 - pc) * Hs
         ys=y.T.dot(s)  # update ys, since y has changed
         if ys <= 0:
-            info.flag=values.fail_strange
+            info.flag=values.fail_unexpected
             if options.verbose >= 3:
                 fprintf_(options.fout,"\n### ecdfo_bfgs_update: y'*s = %9.3e not positive despite correction:\n\n"%(ys).T)
             return H,pc,info,values
     else:
         if ys <= 0:
-            info.flag=values.fail_strange
+            info.flag=values.fail_unexpected
             if options.verbose >= 3:
                 fprintf_(options.fout,"\n### sqplab_bfgs: y'*s = %9.3e is nonpositive\n\n"%(ys).T)
             return H,pc,info,values

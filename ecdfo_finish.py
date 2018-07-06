@@ -32,8 +32,6 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
 
     if options.verbose >= 2:
         fprintf_(options.fout,'%s\n'%(values.dline))
-   #    fprintf_(options.fout,'\necdfo optimization solver (exit point)');
-
         fprintf_(options.fout,'  Exit code %i: '%(info.flag))
         if values.success == info.flag:
             fprintf_(options.fout,'converged')
@@ -53,10 +51,10 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
             fprintf_(options.fout,'too small variation in x (dxmin active)')
         elif values.fail_on_non_decrease == info.flag:
             fprintf_(options.fout,'the merit function cannot be decreased')
-        elif values.fail_on_ascent_dir == info.flag:
-            fprintf_(options.fout,'ascent direction encountered in linesearch')
-        elif values.fail_on_max_ls_iter == info.flag:
-            fprintf_(options.fout,'too many stepsize trials in linesearch')
+        #elif values.fail_on_ascent_dir == info.flag:
+        #    fprintf_(options.fout,'ascent direction encountered in linesearch')
+        #elif values.fail_on_max_ls_iter == info.flag:
+        #    fprintf_(options.fout,'too many stepsize trials in linesearch')
         elif values.fail_on_ill_cond == info.flag:
             fprintf_(options.fout,'ill conditioning')
         elif values.fail_on_null_step == info.flag:
@@ -65,8 +63,8 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
             fprintf_(options.fout,'infeasible QP')
         elif values.fail_on_unbounded_QP == info.flag:
             fprintf_(options.fout,'unbounded QP')
-        elif values.fail_strange == info.flag:
-            fprintf_(options.fout,'strange failure, call a guru')
+        elif values.fail_unexpected == info.flag:
+            fprintf_(options.fout,'unexpected failure')
         elif values.stop_on_small_trust_region == info.flag:
             fprintf_(options.fout,'trust region radius small')
         fprintf_(options.fout,'\n')

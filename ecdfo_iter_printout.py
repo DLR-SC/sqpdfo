@@ -19,8 +19,8 @@ def ecdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,
         fid = fopen_('convhist.m', 'a')
         fprintf_(fid, '%6d  %6d  %+14.8e  %+14.8e  ' %(info.niter,info.nsimul[1]+info.nsimul[3],info.f,merit))
         if constrained_pbl:
-            fprintf_(options.fout,'%10.4e  %14.8e'%(info.glagn,info.feasn))
-            fprintf_(fid, '%10.4e  %14.8e  '%(info.glagn,info.feasn))
+            fprintf_(options.fout,'%10.4e  %10.4e'%(info.glagn,info.feasn))
+            fprintf_(fid, '%10.4e  %10.4e  '%(info.glagn,info.feasn))
         else:
             fprintf_(options.fout,'%10.4e'%(info.glagn))
             fprintf_(fid,'%10.4e'%(info.glagn))

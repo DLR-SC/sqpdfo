@@ -5,12 +5,13 @@ from runtime import *
 import types
 import helper
 import numpy as np
-from sqplab_options import *
+from ecdfo_options import *
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
+from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
 from sqplab_lsmult import sqplab_lsmult_
 from ecdfo_optimality import ecdfo_optimality_
@@ -123,10 +124,11 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         checkoptions=0
     # get the user options
 
-    info,options,values=sqplab_options_(info,options,nargout=3)
+    info,options,values=ecdfo_options_(info,options,nargout=3)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     info.nsimul=np.zeros(values.nsimultype)
+
     # Check the argument x0; deduce n
 
     n=size_(x0,1)
@@ -254,11 +256,13 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 
                 if (cond_(RZ) < kappa_ill):
                     ill_init=0
+
             #  Make the set poised.
 
             QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,Delta0,factor_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,1,kappa_ill,nargout=8)
             poisedness_known=1
         elif initial_Y=='simplx':
+
             #  Compute the initial interpolation set (simplex plus midpoints).
 
             I=eye_(n)
@@ -282,6 +286,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         #            for jj in range(j + 1,n+1):
         #                Y[:,k-1]=0.5 * (Y[:,j + 1] + Y[:,jj + 1])
         #                k=k + 1
+
             #  Build the initial factorization.
 
             QZ,RZ,x,scale=bcdfo_build_QR_of_Y_(Y,whichmodel,shift_Y,Delta0,1,kappa_ill,nargout=4)
@@ -302,6 +307,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=ecdfo_augmX_evalf_(func,Y[:,[i]],i,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,1e+25,info.nsimul[1],xstatus,c.inY,sstatus,dstatus,scaleX,scalefacX,info,options,values,nargout=9)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
+
             #  If the computed function value is infinite, restart with a smaller Delta0.
 
             if (abs(fX[i]) > 1e+25):
@@ -316,21 +322,24 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         ceY=copy(ceX)
         xstatus=xstatus.T
         dstatus=dstatus.T
+
         #  Another pass is needed with a smaller Delta0 (at least one function
         #  value is infinite). 
         if (getfY):
             #  Decrease Delta0.
 
             Delta0=gamma1 * Delta0
+
             #  Terminate with an error message if Delta0 becomes negligible wrt x0.
 
             if (Delta0 < stallfact * norm_(x0)):
                 disp_('Error: cannot find enough finite objective function values',' in the neighbourhood of the starting point! Terminating.')
+
                 #  including fixed variables at return
 
                 if (nfix > 0):
                     I=eye_(n + nfix)
-                    x=I[:,indfix] * xl_(indfix) + I[:,indfree].dot( x )
+                    x=I[:,indfix] * zeros_(nfix,1) + I[:,indfree].dot( x )
                     gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree].dot( gx )
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
 
@@ -359,11 +368,13 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         info.flag=values.fail_on_simul
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     info.g=gx
+
     #  Check constraints and deduce mi and me
 
     mi=size_(ciY,1)
     if mi > 0:
         info.ci=copy(ciY[:,[0]])
+
         # compute model gradient associated with the inequality constraints
 
         gci=zeros_(mi,n)
@@ -376,6 +387,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     me=size_(ceY,1)
     if me > 0:
         info.ce=copy(ceY[:,[0]])
+
         # compute model gradient associated with the equality constraints
 
         gce=zeros_(me,n)
@@ -390,9 +402,9 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     fprintf_('\n')
     fprintf_('**************************************************************************************\n')
     fprintf_('*                                                                                    *\n')
-    fprintf_('*            EC-DFO: equality-constrained minimization without derivatives           *\n')
+    fprintf_('*              ECDFO: Equality-Constrained Derivative-Free Optimization              *\n')
     fprintf_('*                                                                                    *\n')
-    fprintf_('*                          (c)  A. Troeltzsch, 2013-2018                             *\n')
+    fprintf_('*                        (c)  A. Troeltzsch, 2013-2018                               *\n')
     fprintf_('*                                                                                    *\n')
     fprintf_('**************************************************************************************\n')
     fprintf_('\n')
@@ -403,20 +415,20 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     values.sline='*******************************************'
     values.sline=strcat_(values.sline,values.sline) # 80 '*' characters
     if options.verbose < 4:
-        fprintf_(options.fout,'iter neval        fval            merit      ')
+        fprintf_(options.fout,' iter  neval     fvalue             merit      ')
         if (nb + mi + me > 0):
-            fprintf_(options.fout,' |grad Lag|   feasibility')
+            fprintf_(options.fout,' |grad Lag|  feasibility')
         else:
             fprintf_(options.fout,'gradient')
-        fprintf_(options.fout,'     delta    stepsize')
-        if options.algo_method == values.quasi_newton:
+        fprintf_(options.fout,'  delta     stepsize')
+        if options.hess_approx == values.bfgs:
             fprintf_(options.fout,'  BFGS\n')
         else:
             fprintf_(options.fout,'  \n')
         fprintf_(options.fout,'  \n')
     if options.verbose >= 4:
         fprintf_(options.fout,'%s'%(values.sline))
-        fprintf_(options.fout,'ecdfo optimization solver (Version 0.4.4, February 2009, entry point)\n\n')
+        fprintf_(options.fout,'ecdfo optimization solver\n\n')
         if isinstance(func, types.FunctionType):
             func_name=str(func)
         else:
@@ -442,34 +454,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         fprintf_(options.fout,'  . max iterations                  %4i\n'%(options.miter))
         fprintf_(options.fout,'  . max function evaluations        %4i\n'%(options.msimul))
         fprintf_(options.fout,'  algorithm:\n')
-        if values.newton == options.algo_method:
-            fprintf_(options.fout,'  . Newton method\n')
-        else:
-            if values.quasi_newton == options.algo_method:
-                fprintf_(options.fout,'  . quasi-Newton method\n')
-            else:
-                if values.cheap_quasi_newton == options.algo_method:
-                    fprintf_(options.fout,'  . cheap quasi-Newton method\n')
-        if values.unit_stepsize == options.algo_globalization:
-            fprintf_(options.fout,'  . unit step-size\n')
-        else:
-            if values.linesearch == options.algo_globalization:
-                if options.algo_method == values.newton:
-                    fprintf_(options.fout,"  . globalization by Armijo's linesearch\n")
-                else:
-                    if options.algo_method == values.quasi_newton:
-                        if isfield_(options,'algo_descent'):
-                            if options.algo_descent == values.powell:
-                                fprintf_(options.fout,"  . globalization by Armijo's linesearch (descent ensured by Powell corrections)\n")
-                            else:
-                                if options.algo_descent == values.wolfe:
-                                    if nb + mi + me == 0:
-                                        fprintf_(options.fout,"  . globalization by Wolfe's linesearch\n")
-                        else:
-                            fprintf_(options.fout,"  . globalization by Armijo's linesearch\n")
-            else:
-                if values.trust_regions == options.algo_globalization:
-                    fprintf_(options.fout,'  . globalization by trust regions\n')
+        fprintf_(options.fout,'  . globalization by trust regions\n')
         fprintf_(options.fout,'  various input/initial values:\n')
         if (options.algo_method == values.quasi_newton) and (nb + mi + me == 0) and (options.df1 > 0) and (info.f > 0):
             fprintf_(options.fout,'  . expected initial decrease       %8.2e\n'%(options.df1 * info.f))
@@ -478,7 +463,6 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
         fprintf_(options.fout,'  . |x|_2                           %8.2e\n'%(norm_(x)))
 
     # Compute an initial multiplier if not given (takes a while); info.ci must be known
-
 
     if (nb + mi + me > 0):
         if isempty_(lm0):
@@ -514,8 +498,6 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
             fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'%(norm_(compl,inf)))
         fprintf_(options.fout,'  tunings:\n')
         fprintf_(options.fout,'  . printing level                  %0i\n'%(options.verbose))
-
-    # Check the options
 
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
