@@ -73,7 +73,7 @@ values =
              fail_on_null_step: 20
          fail_on_infeasible_QP: 21
           fail_on_unbounded_QP: 22
-                  fail_strange: 99
+               fail_unexpected: 30
                     nsimultype: 16
                 max_null_steps: 1
                         newton: 100
