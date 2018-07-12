@@ -27,11 +27,6 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
         d=diag(d)    # CONVERT VECTOR d INTO A MATRIX 
         A=v.dot( d .dot( v.T ))  # RECOMPOSE MATRIX USING EIGENDECOMPOSITION
 
-        # check for complex entries
+    # remove possible complex entries
        
-        if not isempty_(find_(~ isreal(A),1)):
-            if options.verbose >= 2:
-                disp_('### ecdfo_check_convex: matrix has complex entries. Resetting A to its real values.')
-            A=real(A)
-
-    return A
+    return real(A)
