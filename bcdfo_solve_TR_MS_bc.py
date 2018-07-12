@@ -7,7 +7,8 @@ from numpy import *
 import numpy
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
-def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,stratLam=None,*args,**kwargs):
+
+def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,stratLam=None,options=None,*args,**kwargs):
     """
 #
 #  An implementation of exact trust-region minimization based on the
@@ -39,7 +40,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
 #  DEPENDENCIES: bcdfo_solve_TR_MS
 #
 #  PROGRAMMING: A. Troeltzsch, S. Gratton, July 2009.
-#              ( This version 14 I 2010 )
+#              ( This version 14 VI 2018 )
 #
 #  TEST:
 #
@@ -61,55 +62,57 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #
     """    
-#    varargin = cellarray(args)
-#    nargin = 7-[g,H,lb,ub,Delta,eps_D,stratLam].count(None)+len(args)
 
     lambda_save = []
     norms_b_save = []
-    verbose    = 0;                # 2 for debug
+    verbose = 0;                    # default : 0 (silent)
+    if options.verbose == 2:
+        verbose = 1
+    elif options.verbose > 2:
+        verbose = 2                 # 2 for debug
     theta      = 1.0e-13;          # accuracy of the interval on lambda
     eps_bound  = 1.0e-5;           # the max distance | bound - x | < eps_bound for 
                                # a boundary solution
                                  
     # initialization 
 
-    msg        = 'no free variables';
-    _lambda     = 0;                # initial lambda
-    value      = 0;                # initial model value
-    nfact      = 0;                # initialize in case of error
-    neigd      = 0;                # initialize in case of error
-    Delta0     = copy(Delta);
-    g0         = copy(g);           # copy initial gradient
-    gplus      = copy(g);           # initialize gplus
-    s          = zeros_(size_(g));  # initial zero step
-    norms      = 0;
-    n          = length_(g);        # space dimension
-    I          = eye_(n);           # identity matrix used for projection
-    ind_active = array([]);         # indeces of active bounds
-    ind_free   = arange(0,n);       # indeces of inactive bounds
-    nfree      = copy(n);           # nbr of inactive indeces
+    msg        = 'no free variables'
+    _lambda     = 0                # initial lambda
+    value      = 0                # initial model value
+    nfact      = 0                # initialize in case of error
+    neigd      = 0                # initialize in case of error
+    Delta0     = copy(Delta)
+    g0         = copy(g)           # copy initial gradient
+    gplus      = copy(g)           # initialize gplus
+    s          = zeros_(size_(g))  # initial zero step
+    norms      = 0
+    n          = length_(g)        # space dimension
+    I          = eye_(n)           # identity matrix used for projection
+    ind_active = array([])         # indeces of active bounds
+    ind_free   = arange(0,n)       # indeces of inactive bounds
+    nfree      = copy(n)           # nbr of inactive indeces
     
-    if (verbose):
+    if (verbose > 1):
         disp_('bcdfo_solve_TR_MS_bc: enter')
     if (not isempty_(find_(isnan(H)))):
         if (verbose):
             disp_('Error in bcdfo_solve_TR_MS_bc: H contains NaNs!')
         msg='error1'
-        if (verbose):
+        if (verbose > 1):
             disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
     if (not isempty_(find_(~ isreal(H)))):
         if (verbose):
             disp_('Error in bcdfo_solve_TR_MS_bc: H contains imaginary parts!')
         msg='error2'
-        if (verbose):
+        if (verbose > 1):
             disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
     if (not isempty_(find_(isinf(H)))):
         if (verbose):
             disp_('Error in bcdfo_solve_TR_MS_bc: H contains infinite elements!')
         msg='error3'
-        if (verbose):
+        if (verbose > 1):
             disp_('bcdfo_solve_TR_MS_bc: exit!')
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
 #  Fix active components
@@ -131,7 +134,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
       #  Minimize system in the (possibly) reduced subspace
 
             j=j + 1
-            if (verbose >= 1):
+            if (verbose > 1):
                 disp_('(',str(j),') ---- minimizing in the (sub)space of ',str(length_(ind_free)),' variable(s)')
             g_reduced=g[ind_free]
             H_reduced=H[ix_(ind_free,ind_free)]
@@ -151,14 +154,14 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                 ind_active=concatenate_([ind_active,ind_free[ind_u_crit].T,ind_free[ind_l_crit].T],axis=1)
                 ind_free=setdiff_(list(range(0,n)),ind_active)
                 nfree=length_(ind_free)
-                if (verbose):
+                if (verbose > 1):
                     disp_('fixed one or more variables')
                 #  If no inactive variables anymore --> exit
 
                 if (nfree == 0):
                     norms=norm_(s)
                     value=0.5 * s.T.dot( H.dot( s )) + s.T .dot( g0 )
-                    if (verbose):
+                    if (verbose > 1):
                         disp_('no inactive variables anymore - return')
                         disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
@@ -166,7 +169,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                 new_call_to_MS=0
    #  Check if step is outside the bounds
 
-        if (verbose == 2):
+        if (verbose > 1):
             disp_('check if step inside bounds')
         out_of_ubound=find_((ub[ind_free] - s_after_reduced_ms[ind_free]) < 0.0)
         out_of_lbound=find_((s_after_reduced_ms[ind_free] - lb[ind_free]) < 0.0)
@@ -175,7 +178,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
         if (length_(out_of_ubound) + length_(out_of_lbound) != 0):
             back_inside=0
             lambda0=copy(_lambda)
-            if (verbose == 2):
+            if (verbose > 1):
                 disp_('step outside bounds!')
                 print(out_of_ubound)
                 print(out_of_lbound)
@@ -216,20 +219,21 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                #  Print lambda value
                 old_lambda=copy(_lambda)
                 new_lambda=- 1
-                if (verbose):
+                if (verbose > 1):
                     disp_(' bcdfo_solve_TR_MS_bc (',str(i),'): lower = ',str(lower),' lambda = ',str(_lambda),' upper = ',str(upper))
             #  Factorize H + lambda * I.
  
                 R,p=chol_(H[ix_(ind_free,ind_free)] + _lambda * eye_(nfree),nargout=2)
                 if (not isempty_(find_(isnan(R)))):
-                    print("H="+str(H))
-                    print("Lambda ="+str(_lambda))
-                    print("norm(g)="+str(norm(g)))
-                    print("R="+R)
-                    print("p="+p)
-                    disp_('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
+                    if verbose:
+                        print("H="+str(H))
+                        print("Lambda ="+str(_lambda))
+                        print("norm(g)="+str(norm_(g)))
+                        print("R="+R)
+                        print("p="+p)
+                        disp_('Error in bcdfo_solve_TR_MS_bc: NaNs in Cholesky factorization')
                     msg='error4'
-                    if (verbose):
+                    if (verbose > 1):
                         disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
                 nfact=nfact + 1
@@ -253,7 +257,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                     out_of_lbound=find_((s_duringH[ind_free] - lb[ind_free]) < 0.0)
                     # find an appropriate bound for the next homotopy-step when using Newton's method
 
-                    if (stratLam == 1 or verbose > 0):
+                    if (stratLam == 1 or verbose > 1):
                         if ((length_(out_of_ubound) != 0) or (length_(out_of_lbound) != 0)):
                          #  OUTSIDE the bounds: find the furthest step component 
 
@@ -311,7 +315,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                                     delta_b=abs(lb[ind_free[out_of_lbound_init[ind_b_l]]] - s[ind_free[out_of_lbound_init[ind_b_l]]])
                                     ind_b=out_of_lbound_init[ind_b_l]
                                     sign_b=sign_(lb[ind_free[out_of_lbound_init[ind_b_l]]] - s[ind_free[out_of_lbound_init[ind_b_l]]])
-                    if (verbose):
+                    if (verbose > 1):
                         #  Iteration printout
 
                         lambda_save.append(_lambda)
@@ -325,7 +329,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                     out_of_uEpsbound=find_((ub[ind_free] - s_duringH[ind_free]) < - eps_bound)
                     out_of_lEpsbound=find_((s_duringH[ind_free] - lb[ind_free]) < - eps_bound)
                     if (isempty_(out_of_uEpsbound) and isempty_(out_of_lEpsbound)):
-                        if (verbose >= 2):
+                        if (verbose > 1):
                             disp_('all components inside the bounds + eps_bound')
                         back_inside=1
                       # check if at least one component active
@@ -333,7 +337,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                         ind_u_active=find_(abs(ub[ind_free] - s_duringH[ind_free]) <= eps_bound)
                         ind_l_active=find_(abs(s_duringH[ind_free] - lb[ind_free]) <= eps_bound)
                         if ((length_(ind_u_active) + length_(ind_l_active)) != 0):
-                            if (verbose >= 2):
+                            if (verbose > 1):
                                 disp_('all components inside the bounds + eps_bound, ',str(length_(ind_u_active) + length_(ind_l_active)),' component/s close to one of its bounds')
                             #  Compute the current step after the homotopy-step
 
@@ -396,7 +400,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                         else:
                             _lambda=real_(max_(sqrt_(lower * upper),lower + theta_range))
                 else:  #  Unsuccessful factorization: compute new lambda
-                    if (verbose):
+                    if (verbose > 1):
                         disp_('unsuccessful factorization')
                     hardcase=0
                     lower=copy(_lambda)
@@ -409,12 +413,13 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                     msg='limit in bc-MS exceeded'
                     if (verbose):
                         disp_('Error in bcdfo_solve_TR_MS_bc: iteration limit in bc-MS exceeded!')
+                    if verbose > 1:
                         disp_('bcdfo_solve_TR_MS_bc: exit!')
                     return s,_lambda,norms,value,gplus,nfact,neigd,msg
           # end of while-loop
         else:
           # MS was successful inside the bounds
-            if (verbose >= 2):
+            if (verbose > 1):
                 disp_('step inside bounds!')
           #  Define information message.
             msg='(partly) interior solution'
@@ -422,7 +427,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
             s=copy(s_after_reduced_ms)
             norms=norm_(s)
             value=0.5 * s.T.dot( H .dot( s )) + s.T .dot( g0 )
-            if (verbose):
+            if (verbose > 1):
                 disp_('bcdfo_solve_TR_MS_bc: exit!')
             return s,_lambda,norms,value,gplus,nfact,neigd,msg
        #  update the step and model value
@@ -432,14 +437,15 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
        #  update trust-region radius
         Delta=Delta0 - norms
         if (Delta < - eps_bound):
-            disp_('Error in bcdfo_solve_TR_MS_bc: delta smaller than zero !!!!!!')
+            if verbose:
+                disp_('Error in bcdfo_solve_TR_MS_bc: delta smaller than zero !!!!!!')
             msg='error7'
-            if (verbose):
+            if (verbose > 1):
                 disp_('bcdfo_solve_TR_MS_bc: exit!')
             return s,_lambda,norms,value,gplus,nfact,neigd,msg
         else:
             if (Delta < 0):
-                if (verbose):
+                if (verbose > 1):
                     disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg
       #  update gradient 
@@ -453,10 +459,10 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
 
             ng_reduced=norm_(g[ind_free],inf)
             if (ng_reduced <= 1e-05):
-                if (verbose >= 2):
+                if (verbose > 1):
                     disp_('point first order critical - return')
                     print(ng_reduced)
-                if (verbose):
+                if (verbose > 1):
                     disp_('bcdfo_solve_TR_MS_bc: exit!')
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg
           #  Fix components which became active
