@@ -16,8 +16,6 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
 # programming: A. Troeltzsch, 2014
 #
     """
-#    varargin = cellarray(args)
-#    nargin = 2-[A,options].count(None)+len(args)
 
     ev=numpy.linalg.eigvals(A)
     evneg=ev[ev < 0]
@@ -27,15 +25,13 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
         d,v=numpy.linalg.eig(A)   # CALCULATE EIGENVECTOR AND EIGENVALUES 
         d[d < ZERO]=EPS  # FIND ALL EIGENVALUES<=ZERO AND CHANGE THEM FOR EPS 
         d=diag(d)    # CONVERT VECTOR d INTO A MATRIX 
-        A=v.dot( d .dot( v.T ))  # RECOMPOSE MATRIX USING EIGENDECOMPOSITION 
-    # check for complex entries
+        A=v.dot( d .dot( v.T ))  # RECOMPOSE MATRIX USING EIGENDECOMPOSITION
+
+        # check for complex entries
        
         if not isempty_(find_(~ isreal(A),1)):
-            if options.verbose >= 3:
-                #This is a little bit weird since we did not test if it was symmetric. Maybe a error of copy/paste with ecdfo_check_cond ?
-                disp_('### ecdfo_check_convex: matrix is non symmetric. Resetting A.')
-            A=0.5*(A+A.conj().T)
+            if options.verbose >= 2:
+                disp_('### ecdfo_check_convex: matrix has complex entries. Resetting A to its real values.')
+            A=real(A)
 
-    #On account of the test asking if there is a non real in A, I suppose that we only want the real parts (also having imaginary parts raise errors on problem 5 in ecdfo_func),
-    #hence the real conversion
-    return real(A)
+    return A
