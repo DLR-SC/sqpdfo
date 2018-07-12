@@ -17,10 +17,10 @@ class dummyOptions():
         self.bfgs_restart = 0
         self.algo_descent = 120
         self.tol = np.array( [1.0e-05, 1.0e-05, 1.0e-05])
-        self.dxmin = 1.0e-06
+        self.dxmin = 1.0e-16
         self.miter = 500
         self.msimul = 500
-        self.verbose = 0 #2 set to a low level to avoid messages
+        self.verbose = 1
         self.fout = 1
         self.inf = np.infty
         self.df1 = 0
