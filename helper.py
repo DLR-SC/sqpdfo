@@ -20,7 +20,7 @@ class dummyOptions():
         self.dxmin = 1.0e-16
         self.miter = 500
         self.msimul = 500
-        self.verbose = 1
+        self.verbose = 0
         self.fout = 1
         self.inf = np.infty
         self.df1 = 0
