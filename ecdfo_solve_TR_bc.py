@@ -63,7 +63,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
         lb_r=lb[0:n] - x
         ub_r=ub[0:n] - x
         stratLam=1
-        s,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(glocal,M,lb_r,ub_r,delta,1e-07,stratLam,nargout=8)
+        s,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(glocal,M,lb_r,ub_r,delta,1e-07,stratLam,options,nargout=8)
         xnew=x + s
         rpred=0
         active_r=0
@@ -153,7 +153,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             lls_solver = 'bcdfo'
             if lls_solver == 'bcdfo':
                 stratLam=1
-                r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,nargout=8)
+                r,_lambda,norms,value,gplus,nfact,neigd,msg=bcdfo_solve_TR_MS_bc_(g1,H1,lb_r,ub_r,delta_r,prec_r,stratLam,options,nargout=8)
             elif lls_solver == 'minq':
                 cc = np.array(g1.T[0])
                 G = np.matrix(H1)
