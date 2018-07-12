@@ -14,30 +14,26 @@ from numpy import array
 
 def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwargs):
     """
-    # [x,lm,info] = ecdfo (func,x0);
+# [x,lm,info] = ecdfo (func,x0);
 # [x,lm,info] = ecdfo (func,x0,lm0);
 # [x,lm,info] = ecdfo (func,x0,lm0,lb);
 # [x,lm,info] = ecdfo (func,x0,lm0,lb,ub);
 # [x,lm,info] = ecdfo (func,x0,lm0,lb,ub,options);
 #
 # The function computes the solution to a smooth nonlinear optimization
-# problem possibly having bound constraints on the n variables x(1:n),
-# nonlinear inequality constraints (ci) and nonlinear equality constraints
-# (ce). The problem is supposed to be written in the form:
+# problem possibly subject to bound constraints on the variables x(1:n)
+# and nonlinear equality constraints ce.
+# The problem can be written in the form:
 #
 #   minimize    f(x)
-#   subject to  lb(1:n)      <= x     <= ub(1:n)
-#               lb(n+1:n+mi) <= ci(x) <= ub(n+1:n+mi)
+#   subject to  lb(1:n) <= x <= ub(1:n)
 #               ce(x) = 0
 #
-# The constraints functions are ci: Rn -> Rmi and ce: Rn -> Rme
-# which means that there are mi (>=0) inequality constraints and 
-# me (>=0) equality constraints. Lower and upper bounds can be infinite 
-# (see the meaning of options.inf below). 
+# The constraints functions are ce: Rn -> Rme which means that there are
+# me (>=0) equality constraints. Lower and upper bounds can be infinite.
 #
-# On entry in 'ecdfo'
-#   func: function handle of the user-supplied simulator; if this one
-#     is named mysimul, use the handle @mysimul as the first argument
+# Inputs:
+#   func: function handle of the user-supplied objective function and constraints.
 #   x0: n vector giving the initial guess of the solution, the number
 #     of variables is assumed to be the length of the given x0
 #   lm0 (optional): n+mi+me vector giving the initial guess of the
@@ -57,163 +53,50 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
 #     (when a string is required, both lower or uppercase letters can
 #     be used, multiple white spaces are considered as a single white
 #     space)
-#     - options.algo_method = local algorithm to use:
-#       . 'quasi-Newton' (default): requires a quasi-Newton algorithm;
-#         only first order derivatives will be computed; the
-#         full Hessian of the Lagrangian is approximated
-#       . 'Newton' requires a Newton algorithm; second order
-#         derivatives will be computed in the form of the
-#         Hessian of the Lagrangian 
-#     - options.algo_globalization specifies the type of globalization
-#       technique to use:
-#       . 'unit stepsize' prevents ecdfo from using a globalization
-#         technique,
-#       . 'linesearch' requires ecdfo to force convergence with
-#         linesearch (default)
-#       . 'trust-region' requires ecdfo to force convergence using a
-#         composite step trust-region methodology
-#     - options.dxmin = positive number that specifes the precision to
-#       which the primal variables must be determined; if the solver
+#     - options.dxmin = positive number that specifies the precision to
+#       which the variables must be determined; if the solver
 #       needs to make a step smaller than 'dxmin' in the infinity-norm
-#       to progress to optimality, it will stop; a too small value will
-#       force the solver to work for nothing at the very end when
-#       rounding errors prevent making any progress (default 1.e-20)
+#       to progress to optimality, it will stop (default 1.e-20)
 #     - options.fout = FID for the printed output file (default 1,
 #       i.e., the screen)
 #     - options.inf = a lower bound lb(i) <= -options.inf will be
 #       considered to be absent and an upper bound ub(i) >= options.inf
-#       will be considered to be obsent (default = inf)
+#       will be considered to be absent (default = inf)
 #     - options.miter = maximum number of iterations (default = 1000)
 #     - options.tol = tolerance on optimality
 #       (1) = tolerance on the Lagrangian gradient
 #       (2) = tolerance on feasibility
 #       (3) = tolerance on complementarity
 #     - options.verbose = verbosity level for the outputs (default 1)
-#        = 0: nothing is printed
-#       >= 1: error messages (default)
-#       >= 2: initial setting and final status
-#       >= 3: one line per iteration
-#       >= 4: details on the iterations
-#       >= 5: details on the globalization
-#       >= 6: some additional information, requiring expensive
-#             operations, such as the computation of eigenvalues
 #
-# On return from 'ecdfo'
-#   x: n vector giving the computed primal solution
-#   lm: n+mi+me vector giving the dual solution (Lagrange or KKT
-#     multiplier),
+# Output:
+#   x: giving the computed solution
+#   lm: n+me vector giving the dual solution (Lagrange multiplier),
 #     - lm(1:n) is associated with the bound constraints on x
 #     - lm(n+1:n+mi) is associated with the inequality constraints
-#     - lm(n+mi+1:n+mi+me) is associated with the equality constraints
+#     - lm(n+1:n+me) is associated with the equality constraints
 #   info.flag: output status
 #      0: solution found
 #      1: an argument is wrong
 #      2: unaccepted problem structure
-#      3: error on a simulation
+#      3: error on a function evaluation
 #      4: max iterations
 #      5: max simulations
-#      6: stop required by the simulator
+#      6: stop required
 #      7: stop on dxmin
 #      8: infeasible QP
 #      9: unbounded QP
-#     10: nondescent direction (in linesearch)
-#     99: should not have happened, call your guru
+#     30: unexpected exit
 #   info.niter: number of realized iterations
-#   info.nsimul(i): number of simulations with indic = i
-#
-# To have information on the problem, 'ecdfo' uses a simulator (direct
-# communication), whose name is given by the argument 'func'. If
-# 'mysimul' is the name of the simulator, the procedure is called by
-# ecdfo by one of the following manner
-#
-#   [outdic] = mysimul (indic,x,lm);                 # indic=1
-#   [outdic,f,ci,ce,cs,g,ai,ae] = mysimul (indic,x); # indic=2:4
-#   [outdic,hl] = mysimul (indic,x,lm);              # indic=5:6
-#   [outdic,hlv] = mysimul (indic,x,lm,v);           # indic=7
-#   [outdic,mv] = mysimul (indic,x,v);               # indic=11:16
-#
-# where the input and output arguments of 'mysimul' have the following
-# meaning:
-#   indic is used by 'ecdfo' to drive the behavior of the simulator
-#      1: the simulator will do whatever (the simulator is called with
-#         indic = 1 at each iteration, so that these calls can be used
-#         to count the iterations within the simulator)
-#      2: the simulator will compute f(x), ci(x), ce(x), and cs(x)
-#      3: the simulator will compute g(x), ai(x), and ae(x), and
-#         prepare for subsequent evaluations of as(x)*v, asm(x)*v,
-#         zsm(x)*v, etc
-#      4: the simulator will compute f(x), ci(x), ce(x), cs(x), g(x),
-#         ai(x), and ae(x), and prepare for subsequent evaluations of
-#         as(x)*v, asm(x)*v, zsm(x)*v, etc
-#      5: the simulator will compute hl(x,lm)
-#     11: the simulator will compute as(x)*v, where as(x) is the
-#         Jacobian of the state constraint cs at x and v is an n-vector
-#     12: the simulator will compute as(x)'*v, where as(x) is the
-#         Jacobian of the state constraint cs at x and v is an n-vector
-#     13: the simulator will compute asm(x)*v, where asm(x) is a right
-#         inverse of the Jacobian of the state constraint cs at x and v
-#         is an ms-vector
-#     14: the simulator will compute asm(x)'*v, where asm(x) is a right
-#         inverse of the Jacobian of the state constraint cs at x and v
-#         is an n-vector
-#     15: the simulator will compute zsm(x)*v, where zsm(x) is a matrix
-#         whose columns form a basis of the null space of as(x) and v
-#         is an (n-ms)-vector
-#     16: the simulator will compute zsm(x)'*v, where zsm(x) is a
-#         matrix whose columns form a basis of the null space of as(x)
-#         and v is an n-vector
-#   x: n vector of variables at which the functions have to be evaluated
-#   lm: KKT (or Lagrange) multiplier associated with the constraints,
-#     at which the Hessian of the Lagrangian have to be computed,
-#     - lm(1:n) is associated with the bound constraints on x
-#     - lm(n+1:n+mi) is associated with the inequality constraints
-#     - lm(n+mi+1:n+mi+me) is associated with the equality constraints
-#   v: a vector that is aimed to multiply one of the matrices as(x),
-#     asm(x), asm(x)', zsm(x), and zsm(x)'; its dimension depends on
-#     the number of column of the matrix, hence on the value of indic
-#     (see above)
-#   outdic is supposed to describe the result of the simulation
-#      0: the required computation has been done
-#      1: x is out of an implicit domain
-#      2: the simulator wants to stop
-#      3: incorrect input parameters
-#   f: cost-function value at x
-#   ci: mi-vector giving the inequality constraint value at x
-#   ce: me-vector giving the equality constraint value at x
-#   cs: ms-vector giving the state constraint value at x
-#   g: n vector giving the gradient of f at x
-#   ai: matrix giving the Jacobian of the inequality constraints at x
-#   ae: matrix giving the Jacobian of the equality constraints at x
-#   hl: n x n matrix giving the Hessian of the Lagrangian at (x,lm)
-#   mv: is one of the product as(x)*v, asm(x)*v, or zsm(x)*v, depending
-#     on the value of indic
-#
+#   info.nsimul(1): number of function evaluations
 #-----------------------------------------------------------------------
-
-# Authors: Jean Charles Gilbert, INRIA.
-#      and Anke Troeltzsch, DLR.
-#
-# Copyright 2008, 2009, INRIA. 2013, DLR.
-#
-# EC-DFO is distributed under the terms of the Q Public License version
-# 1.0.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Q Public
-# License version 1.0 for more details.
-#
-# You should have received a copy of the Q Public License version 1.0
-# along with this program.  If not, see
-# <http://doc.trolltech.com/3.0/license.html>.
-#
-    """
-#    varargin = cellarray(args)
+"""
 
     options=copy(options_)
     nones = [func is None,x0 is None,lm0 is None,lb is None,ub is None,options is None].count(True)
     nargin = 6-nones+len(args)
-#  Set some constants
+
+    #  Set some constants
 
     c = helper.dummyUnionStruct()
     info = helper.dummyUnionStruct()
@@ -228,7 +111,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     c.inY=1
     c.dummy=1
     c.nodummy=0
-#  Initialize to zero
+    #  Initialize to zero
     x=copy(np.NaN)
     fx=copy(np.NaN)
     gx=copy(np.NaN)
@@ -246,9 +129,6 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     ndummyY=0
     info.flag=0
 
-    #Reset the random generator : did not find something equivalent in python for rand_('seed',5) but this is commented in matlab
-#    random.seed(np.pi / np.sqrt(2))
-#    randn_('seed',5)
     #  Miscellaneous initializations
   
     if ( size_(x0,1) == 1 and size_(x0,2) > 1 ):    # make sure the starting point is 
@@ -363,21 +243,22 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
     if info.flag:
         return x,lm,info
+
     # Initialize the current epsilon
-
     eps_current=max_(mu0 * normgx,epsilon)
+
     # Compute the maximal objective function value.
-
     fxmax=min_(1e+25,factor_fmax * abs(fx))
+
     # Initialize the Hessian of the Lagrangian or its approximation
-
     M=eye_(n)
-    # printout to file convhist.m
 
+    # printout to file convhist.m
     if (verbose):
         fid=fopen_('convhist.m','w')
         fprintf_(fid,'function A=history \n A=[ \n')
         fclose_(fid)
+
     # -------------------------------------------------------------------------
     # Call main optimization loop
     # -------------------------------------------------------------------------
@@ -386,38 +267,33 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
 
     #  Append closing bracket in file convhist.m
-
     if (verbose):
         fid=fopen_('convhist.m','a')
         fprintf_(fid,'];')
         fclose_(fid)
-    #  Re-assemble gradient at return
 
+    #  Re-assemble gradient at return
     if (nfix > 0):
         I=eye_(n + nfix)
         x=I[:,indfix] * xfix[indfix] + I[:,indfree].dot(x)
         gx=I[:,indfix] * zeros_(nfix,1) + I[:,indfree].dot(gx)
         Ilm=eye_(n + nfix + me + mi)
-        indfree_lm=setdiff_(arange(0,n + nfix + me + mi),indfix)
+        indfree_lm=setdiff_(range(0,n + nfix + me + mi),indfix)
         lm=Ilm[:,indfix] * zeros_(nfix,1) + Ilm[:,indfree_lm] * lm
         n=n + nfix
-    #  Rescale x if necessary
 
+    #  Rescale x if necessary
     if (scaleX):
         x=x / scalefacX
     info_best=copy(info)
     info_best.f=fx
     x=X[:,i_xbest]
     ecdfo_finish_(nb,mi,me,info_best,options,values)
-#    disp_('  Best result is function value number : ',str(i_xbest),' with fval = ', str(fX[i_xbest]))
-#    if me:
-#       fprintf_(1,'%s','  with nce ');
-#       fprintf_(1,'%g ',ceX[:,i_xbest]);
-#    fprintf_(1,'\n');
-    
+
     #---------------------------------------
     # Recover the results
     #---------------------------------------
+
     if options.verbose > 2:
         if nb:
             fprintf_(options.fout,'VARIABLES:\n')
@@ -454,4 +330,3 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
             else:
                 fprintf_(options.fout,'\n')
     return x,lm,info
-				
