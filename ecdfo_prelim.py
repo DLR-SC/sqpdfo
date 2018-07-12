@@ -24,13 +24,12 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 # ecdfo_prelim (func,x0,lm0,lb,ub,options)
 #
 # This function realizes the following preliminary jobs:
-# - set default output arguments
-# - set options (default values if absent, numeric values for lexical options)
+# - build initial poised interpolation set
+# - check the bounds and that initial point inside the bounds
 # - check the given options
-# - get the possible 'values' of options
-# - compute function values and deduce dimensions
-# - compute an initial multiplier (if not given)
-# - initial printings#
+# - compute function and constraint values
+# - compute initial multipliers (if not given)
+# - initial printings
 ###############################################################################
 
     func=copy(func_)
@@ -415,11 +414,11 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     values.sline='*******************************************'
     values.sline=strcat_(values.sline,values.sline) # 80 '*' characters
     if options.verbose < 4:
-        fprintf_(options.fout,' iter  neval     fvalue             merit      ')
-        if (nb + mi + me > 0):
+        fprintf_(options.fout,' iter  neval     fvalue            merit      ')
+        if (me > 0):
             fprintf_(options.fout,' |grad Lag|  feasibility')
         else:
-            fprintf_(options.fout,'gradient')
+            fprintf_(options.fout,'  gradient  ')
         fprintf_(options.fout,'  delta     stepsize')
         if options.hess_approx == values.bfgs:
             fprintf_(options.fout,'  BFGS\n')
