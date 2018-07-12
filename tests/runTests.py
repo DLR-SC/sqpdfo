@@ -33,12 +33,12 @@ import bcdfo_solve_TR_MS_bc_test
 import ecdfo_check_cond_test
 import ecdfo_check_convex_test
 import blls_test
-import sqplab_badsimul_test
-import sqplab_bfgs_test
-import sqplab_checkoptions_test
-import sqplab_lsmult_test
-import sqplab_options_test
-import sqplab_tcg_test
+#import sqplab_badsimul_test
+#import sqplab_bfgs_test
+#import sqplab_checkoptions_test
+#import sqplab_lsmult_test
+#import sqplab_options_test
+#import sqplab_tcg_test
 
 #Import of ECDFO ests which do not print anything on the screen
 
@@ -88,12 +88,12 @@ suite.addTests(loader.loadTestsFromTestCase(bcdfo_solve_TR_MS_bc_test.Test_bcdfo
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_check_convex_test.Test_ecdfo_check_convex))
 suite.addTests(loader.loadTestsFromTestCase(ecdfo_check_cond_test.Test_ecdfo_check_cond))
 suite.addTests(loader.loadTestsFromTestCase(blls_test.Test_blls))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_badsimul_test.Test_sqplab_badsimul))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_bfgs_test.Test_sqplab_bfgs))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_checkoptions_test.Test_sqplab_checkoptions))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_lsmult_test.Test_sqplab_lsmult))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_options_test.Test_sqplab_options))
-suite.addTests(loader.loadTestsFromTestCase(sqplab_tcg_test.Test_sqplab_tcg))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_badsimul_test.Test_sqplab_badsimul))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_bfgs_test.Test_sqplab_bfgs))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_checkoptions_test.Test_sqplab_checkoptions))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_lsmult_test.Test_sqplab_lsmult))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_options_test.Test_sqplab_options))
+#suite.addTests(loader.loadTestsFromTestCase(sqplab_tcg_test.Test_sqplab_tcg))
 #
 ##ECDFO Tests which do not print anything on the screen
 #
