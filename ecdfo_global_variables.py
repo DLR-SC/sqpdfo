@@ -8,9 +8,7 @@ List of variables :
     fileoutput : the output (a file or screen) of many fprintf_ functions
     simul_not_initialized : a variable indicating if simul has been initialized (0) or not (1)
     foutxy :  an output (a file or screen) which is not used anywhere yet (07.08.2015)
-    _iter : count iterations in sqplab_tcg
-    
-    
+
 Variables are not initialized here so that we are sure that the user set them himself, and do not forget that these variables exist (this is important at least for the tests)
 """
 
