@@ -49,39 +49,9 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
 #
 #  DEPENDENCIES: -
 #
-#  TEST:
-#  X = [ 0 1 0 ; 0 0 1 ];
-#  fX = [ 1 100 101 ];
-#  y = [ 2; 4 ];
-#
-#  To put y on 4-th position in the set X call:
-#  [X, fX, neval, xstatus, sstatus, dstatus] = ecdfo_augmX_evalf(@banana, ...
-#     y, 4, X, fX, 0, [0;0], [], [1 2 3], 1e25, 3, 100, 1, ...
-#     0, [1 1 1], 1, [1 1 1], [ 0 0 0], 0, [ 1, 1])
-#  where
-#     function fx = banana( x )
-#     fx  = 100 * ( x(2) - x(1)^2 ) ^2 + (1-x(1))^2;
-#
-#  which gives
-#  X =
-#     0     1     0     2
-#     0     0     1     4
-#  fX =
-#     1     100     101   1
-#  neval =
-#     4
-#  xstatus =
-#     1     1     1     1
-#  sstatus =
-#     1     1     1     1
-#  dstatus =
-#     0     0     0     0
-#
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #
     """
-#    varargin = cellarray(args)
-#    nargin = 22-[f,y,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,fxmax,neval,xstatus,xstatus_val,sstatus,dstatus,scaleX,scalefacX,info,options,values].count(None)+len(args)
 
     X=copy(X_)
     fX=copy(fX_)
@@ -92,12 +62,11 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
     sstatus=copy(sstatus_)
     dstatus=copy(dstatus_)
     info=copy(info_)
-    
-    
 
     full_n=length_(xfix)
     I=eye_(full_n)
-#  Set status of the new point
+
+    #  Set status of the new point
 
     try:
         xstatus[m]=xstatus_val
@@ -107,7 +76,8 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         xstatus=append(xstatus, xstatus_val)
         sstatus=append(sstatus, 1)
         dstatus=append(dstatus, 0)
- #  Augment X with full-dimensional y, scale if user-defined and evaluate f at y
+
+    #  Augment X with full-dimensional y, scale if user-defined and evaluate f at y
 
     if (nfix > 0):
         yfull=I[:,indfix] * xfix[indfix] + I[:,indfree] * y
@@ -115,7 +85,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if (scaleX):
             yfull=yfull / scalefacX
         info.nsimul[1]=info.nsimul[1] + 1
-        outdic,fvalue,info.ci,info.ce=f(2,yfull)
+        msg,fvalue,info.ci,info.ce=f(2,yfull)
         info.f=fvalue
     else:
         try:
@@ -125,38 +95,43 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if (scaleX):
             y=y / scalefacX
         info.nsimul[1]=info.nsimul[1] + 1
-        outdic,fvalue,info.ci,info.ce=f(2,y)
+        msg,fvalue,info.ci,info.ce=f(2,y)
         info.f=fvalue
-    if outdic == 1:
+
+    # error handling
+
+    if msg == 1:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
     if isnan(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
             print("x="+str(copy(y)))
         info.flag=values.fail_on_simul
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
     if isinf(fvalue):
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
             print("x="+str(copy(y)))
         info.flag=values.fail_on_simul
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
-    if outdic:
-        info=sqplab_badsimul_(outdic,info,options,values)
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
+    if msg:
+        if options.verbose:
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: failure in computation of f\n\n')
+        info.flag=values.fail_on_simul
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
     if not isempty_(info.ci) and size_(info.ci,2) != 1:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ci must be a column vector\n\n')
         info.flag=values.fail_on_simul
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
     if not isempty_(info.ce) and size_(info.ce,2) != 1:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ce must be a column vector\n\n')
         info.flag=values.fail_on_simul
-        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
 #  Augment fX, ciX, and ceX with new function and constraint value
 
     try:
@@ -175,4 +150,4 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
             ceX=concatenate_([ceX, real_(info.ce)],axis=1)
 #  Update evaluation counter
     neval=neval + 1
-    return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic
+    return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
