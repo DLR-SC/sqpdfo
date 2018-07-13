@@ -84,13 +84,13 @@ def ecdfo_func_(x=None,*args,**kwargs):
         xc = list(xc[0])
 
         try:
-            f = ffunc(xc)
+            f,msgf = ffunc(xc)
         except:
             f = np.inf
             msgf = 1
         if cfunc != '':
             try:
-                ce = cfunc(xc)
+                ce,msgce = cfunc(xc)
                 ce = array(ce).reshape(-1, 1)
             except:
                 msgce = 1
