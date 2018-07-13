@@ -13,7 +13,7 @@ from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
-from sqplab_lsmult import sqplab_lsmult_
+from ecdfo_compute_multiplier import ecdfo_compute_multiplier_
 from ecdfo_optimality import ecdfo_optimality_
 from copy import copy
 from numpy import array, arange
@@ -465,7 +465,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
 
     if (nb + mi + me > 0):
         if isempty_(lm0):
-            lm,info=sqplab_lsmult_(x,[],[],info,options,values,nargout=2)
+            lm,info=ecdfo_compute_multiplier_(x,[],[],info,options,values,nargout=2)
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
             if options.verbose >= 4:

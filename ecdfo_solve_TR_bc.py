@@ -5,7 +5,7 @@ from bcdfo_solve_TR_MS_bc import *
 from minq import Minq
 
 from ecdfo_check_convex import *
-from sqplab_lsmult import *
+from ecdfo_compute_multiplier import *
 from ecdfo_truncated_cg import *
 from copy import copy
 from ecdfo_global_variables import get_threshold, get_check_condition
@@ -300,7 +300,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             iub=abs(ub - xnew) < 1e-05
             lbounds[ilb]=lb[ilb]
             ubounds[iub]=ub[iub]
-            lm,info=sqplab_lsmult_(xnew,lbounds,ubounds,info,options,values,nargout=2)
+            lm,info=ecdfo_compute_multiplier_(xnew,lbounds,ubounds,info,options,values,nargout=2)
             # compute smallest LM of the active bounds
 
             min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
