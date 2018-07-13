@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-#
+###############################################################################
 #  Driver for the optimizer ECDFO.
 #  ECDFO can solve a minimization problem of the form
 #
 #      minimize     f(x)
-#      subject to   lx <=   x   <= ux
-#                   ce(x) == 0,
+#      subject to   lx <= x <= ux
+#      subject to   ce(x) == 0,
 #
 #  where f: Rn -> R (hence x is the vector of n variables to optimize),
 #  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
-#
-"""
-# python sqpdfo(func_f,[-1.2,1.0],[-5.,-5.],[10.,10.])
-# python sqpdfo(func_f,[-1.2,1.0],[-5.,-5.],[10.,10.],func_c)
+###############################################################################
 
-import helper
 from runtime import *
 import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
@@ -43,7 +38,8 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     # Initialize problem
     #---------------------------------------
 
-    options = helper.dummyUnionStruct()
+    class options:
+        pass
     options.tol = zeros(3)
     lm = array([])
     n = max(shape(x))
@@ -55,12 +51,6 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
         lx = array([lx]).T
     if not isinstance(ux, np.ndarray):
         ux = array([ux]).T
-
-    # bounds for variables
-    lb = zeros_(n, 1)
-    ub = zeros_(n, 1)
-    lb[arange(0,n)]=lx
-    ub[arange(0,n)]=ux
 
     #---------------------------------------
     # Set options
@@ -76,15 +66,37 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     options.dxmin   = 1e-8       # minimum size of a step
     options.miter   = 1000        # max iterations
     options.msimul  = 1000        # max evaluations
-    options.verbose = 2          # verbosity level 0,...,3
+    options.verbose = 1          # verbosity level 0,...,3
 
     #------------------------------------
     # Call ECDFO
     #------------------------------------
 
-    x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+    x,lm,info=ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
 
     # Return values
     f = info.f
     ce = info.ce
     return x, f, ce
+
+if __name__ == '__main__':
+    from func_f import func_f
+    try:
+        from func_c import func_c
+    except:
+        pass
+
+    # initialize start values
+    x0 = array([[-1.2,1.0]])
+    lb = array([[-5.,-5.]]).T
+    ub = array([[10.,10.]]).T
+
+    # call sqpdfo
+    #x,f,ce = sqpdfo(func_f,x0,lb,ub)
+    x,f,ce = sqpdfo(func_f,x0,lb,ub,func_c)
+
+    print('')
+    print('x* = '+str(x))
+    print('f* = '+str(f))
+    if ce.size>0:
+        print('ce* = '+str(ce.T[0]))
