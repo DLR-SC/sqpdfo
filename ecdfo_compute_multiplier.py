@@ -66,7 +66,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,options=None,val
     else:
         lb = lb[:]
         if any_(size_(lb) != [n, 1]):
-            fprintf_('\n### sqplab_lsmult: incorrect size of lb\n\n')
+            fprintf_('\n### ecdfo_compute_multiplier: incorrect size of lb\n\n')
             info.flag = values.fail_unexpected
             return lm, info
     if (nargin < 5) or isempty_(ub):
@@ -74,7 +74,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,options=None,val
     else:
         ub = ub[:]
         if any_(size_(ub) != [n, 1]):
-            fprintf_('\n### sqplab_lsmult: incorrect size of ub\n\n')
+            fprintf_('\n### ecdfo_compute_multiplier: incorrect size of ub\n\n')
             info.flag = values.fail_unexpected
             return lm, info
 
