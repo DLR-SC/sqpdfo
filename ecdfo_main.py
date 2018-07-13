@@ -4,7 +4,7 @@ from runtime import *
 from numpy import inf, arange
 from copy import copy
 
-from sqplab_lsmult import sqplab_lsmult_
+from ecdfo_compute_multiplier import ecdfo_compute_multiplier_
 from ecdfo_optimality import ecdfo_optimality_
 from ecdfo_iter_printout import ecdfo_iter_printout_
 from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_
@@ -200,7 +200,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
         lbounds[ilb]=lb[indfree[ilb]]
         ubounds[iub]=ub[indfree[iub]]
-        lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
+        lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
         feas,comp,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
         if info.flag:
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
@@ -401,7 +401,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
             lbounds[ilb]=lb[indfree[ilb]]
             ubounds[iub]=ub[indfree[iub]]
-            lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
+            lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
             feas,comp,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
             if info.flag:
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
@@ -687,7 +687,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
                         lbounds[ilb]=lb[indfree[ilb]]
                         ubounds[iub]=ub[indfree[iub]]
-                        lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
+                        lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
             # Update Hessian approximation
 
                     M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
@@ -961,7 +961,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
                 lbounds[ilb]=lb[indfree[ilb]]
                 ubounds[iub]=ub[indfree[iub]]
-                lm,info=sqplab_lsmult_(x,lbounds,ubounds,info,options,values,nargout=2)
+                lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
                 #  Compute / update Hessian
 
                 M,pc,info=ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
