@@ -8,12 +8,10 @@ import sys
 sys.path.append("../")
 import unittest
 from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
-#from bcdfo_solve_TR_MS_Anke import bcdfo_solve_TR_MS_
 
 from runtime import compare_array
-from numpy import array
-#import numpy as np
-#import helper
+from numpy import array, double
+
 
 class Test_bcdfo_solve_TR_MS(unittest.TestCase):
     """
@@ -21,8 +19,6 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
       This class is a test for solve_TR_MS which as its name indicates, solves the Trust Region minimization based on the More-Sorensen algorithm
     """ 
     def setUp(self):
-        #self.options = helper.dummyOptions()
-        #self.values = helper.dummyValues()
          self.abs_tol=1e-13;
          self.rel_tol=1e-13;
          pass
@@ -37,7 +33,7 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
         self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(lamb, 2.103780596518304, places=15)
         self.assertAlmostEqual(norms, 1.000435877536504, places=14)
-        self.assertAlmostEqual(value, -1.823817946895660, places=14)
+        self.assertAlmostEqual(double(value), -1.823817946895660, places=14)
         self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,8)
         self.assertEqual(neigd,0)
@@ -50,12 +46,11 @@ class Test_bcdfo_solve_TR_MS(unittest.TestCase):
         self.assertTrue(compare_array(correctS, s, self.abs_tol, self.rel_tol))
         self.assertAlmostEqual(lamb, 15, places=15)
         self.assertAlmostEqual(norms, 1, places=15)
-        self.assertAlmostEqual(value, -7.605263157894736, places=14)
+        self.assertAlmostEqual(double(value), -7.605263157894736, places=14)
         self.assertTrue(compare_array(correctgplus, gplus, self.abs_tol, self.rel_tol))
         self.assertEqual(nfact,45)
         self.assertEqual(neigd,1)
         self.assertEqual(msg, 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )')
-#        self.assertEqual(str(msg), "[[ 'boundary solution ( 45 factorizations, 1 eigen decomposition, lambda = 15.0 )']]") # for Anke's translation
         self.assertEqual(hardcase,1)
 
 if __name__ == '__main__':
