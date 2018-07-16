@@ -431,20 +431,17 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
             self.sigma,self.scale,self.shift_Y,self.QZ,self.RZ,self.whichmodel,
             self.ind_Y,self.i_xbest,self.m)
             
-        #print "M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g
-            
+        #print("M:\n", M, "\npc:\n", pc, "\ninfo.g:\n", info.g)
+
         correctM = array([
-
-[   2.620301230585867,                   0,                   0],
- [                  0,                   0,                   0],
-  [                 0,                   0,                   0]])
-
-
+            [          3.2036145300413947,                   0,                   0],
+            [                  0,                   0,                   0],
+            [                 0,                   0,                   0]])
         correctpc = 1
         correctinfog = array([
-  [-0.009783923878659],
-  [ 1.000000000000000],
-                   [0]])
+            [-0.009783923878659],
+            [ 1.000000000000000],
+            [0]])
         
         self.assertEqual(pc, correctpc)
         self.assertTrue(compare_array(M, correctM, self.abs_tol, self.rel_tol))
