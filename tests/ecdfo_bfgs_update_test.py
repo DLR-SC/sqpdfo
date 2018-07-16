@@ -5,14 +5,14 @@ Created on Tue Nov 11 11:22:07 2014
 @author: jaco_da + troe_an
 """
 import sys
-
 sys.path.append("../")
 
 import unittest
 from ecdfo_bfgs_update import ecdfo_bfgs_update_
 import numpy as np
 import helper
-from numpy import array
+from numpy import array, double
+from runtime import compare_array
 
 
 class dummyInfo():
@@ -64,7 +64,7 @@ class Test_ecdfo_bfgs_update(unittest.TestCase):
         _, _, info, values = ecdfo_bfgs_update_(self.M, self.y, self.s, self.first, self.info, self.options,
                                                 self.values)
 
-        self.assertEqual(info.flag, values.fail_strange)
+        self.assertEqual(info.flag, values.fail_unexpected)
 
     def test_ecdfo_bfgs_update_negative_definite(self):
         """
@@ -74,7 +74,7 @@ class Test_ecdfo_bfgs_update(unittest.TestCase):
         _, _, info, values = ecdfo_bfgs_update_(self.M, self.y, self.s, self.first, self.info, self.options,
                                                 self.values)
 
-        self.assertEqual(info.flag, values.fail_strange)
+        self.assertEqual(info.flag, values.fail_unexpected)
 
     def test_ecdfo_bfgs_update_test(self):
         """
@@ -88,7 +88,7 @@ class Test_ecdfo_bfgs_update(unittest.TestCase):
                           [0.003553460424288, 0.195307727402361, -0.000901167227317],
                           [0.000655537162145, -0.000901167227317, 0.200026425015353]])
 
-        self.assertAlmostEqual(0.803070936030031, pc, places=10)
+        self.assertAlmostEqual(0.803070936030031, double(pc), places=10)
         self.assertTrue(compare_array(M, correctM, 1e-12, 1e-12))
 
 
