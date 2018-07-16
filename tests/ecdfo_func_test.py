@@ -1,45 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Nov 13 14:55:53 2014
-INPUT VALUES
-x =
 
-  -1.717000000000000   1.595700000000000   1.827200000000000  -0.763600000000000  -0.763600000000000
-
-OUTPUT VALUES
->> [msg,f,ci,ce] = ecdfo_func(x)
-powells func
-
-msg =
-
-     0
-
-
-f =
-
-   0.053985698962084
-
-
-ci =
-
-     []
-
-
-ce =
-
-  -0.000822750000001
-   0.000238240000000
-   0.001195859492999
 @author: jaco_da
 """
 import sys
 sys.path.append("../")
 import unittest
 from ecdfo_func import *
-#import numpy as np
-#import helper
 from ecdfo_global_variables import set_prob
-from numpy import array
+from numpy import array, double
 
 
 class Test_ecdfo_func(unittest.TestCase):
@@ -49,8 +19,6 @@ class Test_ecdfo_func(unittest.TestCase):
     """
     def setUp(self):
         self.x =  array([[ -1.717000000000000],   [1.595700000000000],   [1.827200000000000],  [-0.763600000000000],  [-0.763600000000000]])
-        #self.options = helper.dummyOptions()
-        #self.values = helper.dummyValues()
         self.abs_tol=1e-11
         self.rel_tol=1e-11
         pass
@@ -69,7 +37,7 @@ class Test_ecdfo_func(unittest.TestCase):
         correctce = array([  -0.000822750000001, 0.000238240000000, 0.001195859492999])
         
         self.assertEqual(correctmsg, msg)
-        self.assertAlmostEqual(correctf, f, 7)
+        self.assertAlmostEqual(correctf, double(f), 7)
         self.assertTrue(isempty_(ci))
         self.assertTrue(compare_array(correctce, ce, self.abs_tol, self.rel_tol))
 
