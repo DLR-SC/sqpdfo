@@ -7,17 +7,19 @@
 #      subject to   lx <= x <= ux
 #      subject to   ce(x) == 0,
 #
-#  where f: Rn -> R (hence x is the vector of n variables to optimize),
+#  where f: Rn -> R (x is the vector of n variables to optimize),
 #  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
 #
-# Example call to ECDFO as in __main__ below.
+#  ---------------------------------------------------------
+#  See example call to ECDFO in '__main__' below !!
 ###############################################################################
 
 from runtime import *
 import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
-from numpy import array, zeros, arange, shape
+from numpy import array, zeros, shape
+
 
 def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
@@ -68,38 +70,49 @@ def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     options.dxmin   = 1e-8       # minimum size of a step
     options.miter   = 1000        # max iterations
     options.msimul  = 1000        # max evaluations
-    options.verbose = 1          # verbosity level 0,...,3
+    options.verbose =2          # verbosity level 0,...,3
 
     #------------------------------------
     # Call ECDFO
     #------------------------------------
 
-    x,lm,info=ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
+    x,lm,info = ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
 
     # Return values
     f = info.f
     ce = info.ce
     return x, f, ce
 
-if __name__ == '__main__':
-    try:
-        from func_f import func_f
-    except:
-        print('Error: Definition of the objective function (in func_f.py) is missing !')
-    try:
-        from func_c import func_c
-    except:
-        pass
 
-    # initialize start values
-    x0 = array([[-1.2,1.0]])
+def func_f(xvector):
+    # 2D Rosenbrock function (constrained on the unitdisk if func_c() is considered)
+    # x* = (1.0, 1.0)        (constrained on the unitdisk: x* = (0.7864, 0.6177))
+    # f* = 0.0               (constrained on the unitdisk: f* = 0.045674824758137236)
+    f =  (1-xvector[0])**2 + 100*(xvector[1]-xvector[0]**2)**2
+    msg = 0
+    return f,msg
+
+
+def func_c(xvector):
+    # solution on the unitdisk
+    ce = np.zeros(1)
+    ce[0] = xvector[0]**2 + xvector[1]**2 - 1
+    msg = 0
+    return ce, msg
+
+
+if __name__ == '__main__':
+
+    # initialize starting point and bounds
+    x0 = array([[2.5,1.0]])
     lb = array([[-5.,-5.]]).T
     ub = array([[10.,10.]]).T
 
-    # call sqpdfo
+    # call run_ecdfo
     #x,f,ce = run_ecdfo(func_f,x0,lb,ub)
     x,f,ce = run_ecdfo(func_f,x0,lb,ub,func_c)
 
+    # final printout
     print('')
     print('x* = '+str(x))
     print('f* = '+str(f))
