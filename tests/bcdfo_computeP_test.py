@@ -15,8 +15,7 @@ from bcdfo_evalP import *
 from random import random
 from runtime import compare_array
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class Test_bcdfo_computeP(unittest.TestCase):
     """
@@ -34,7 +33,7 @@ class Test_bcdfo_computeP(unittest.TestCase):
         at least when there are enough point to create a complete quadratic model (for instance, with points with 2 coordinates, we need 6 points to 
         have a fully determined quadratic model (with random points, poisedness is assumed to be verified))
         """
-        for i in range(0,20):
+        for i in range(0,10):
             x1_coord=[(random()-0.5)*100 for p in range(0,6)]
             x2_coord=[(random()-0.5)*100 for p in range(0,6)]
             y_coord=[(random()-0.5)*100 for p in range(0,6)]
@@ -47,7 +46,7 @@ class Test_bcdfo_computeP(unittest.TestCase):
                                 1, 1, array([0, 0]), scale, 1, 1)
             for j in range(0,6):
                 value=bcdfo_evalP_( P, array([[x1_coord[j]],[x2_coord[j]]]), xbase, scale, 1 )
-                self.assertAlmostEqual(value, y_coord[j],places=8)   
+                self.assertAlmostEqual(double(value), y_coord[j],places=8)
     
     def test_bcdfo_computeP_1(self):
         """
@@ -66,6 +65,25 @@ class Test_bcdfo_computeP(unittest.TestCase):
         P = bcdfo_computeP_( QZ, RZ, Y, fY, whichmodel, array([0, 0, 0, 0, 0]), 0,
             1, 1, array([0, 0]), scale, 1, 1)
         self.assertTrue(compare_array(P, array([1, 1, 4, 4, 0]), self.abs_tol, self.rel_tol))
+
+    def test_bcdfo_computeP_2(self):
+        """
+        See test_bcdfo_computeP_0 with whichmodel = 2.
+        """
+        for i in range(0, 10):
+            x1_coord = [(random() - 0.5) * 100 for p in range(0, 6)]
+            x2_coord = [(random() - 0.5) * 100 for p in range(0, 6)]
+            y_coord = [(random() - 0.5) * 100 for p in range(0, 6)]
+            Y = array([x1_coord, x2_coord])
+            fY = array([y_coord])
+            whichmodel = 2
+
+            QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_(Y, whichmodel, 1, 1, 1, 1e15)
+            P = bcdfo_computeP_(QZ, RZ, Y, fY, whichmodel, array([0, 0, 0, 0, 0, 0]), 0,
+                                1, 1, array([0, 0]), scale, 1, 1)
+            for j in range(0, 6):
+                value = bcdfo_evalP_(P, array([[x1_coord[j]], [x2_coord[j]]]), xbase, scale, 1)
+                self.assertAlmostEqual(double(value), y_coord[j], places=8)
 
 
 if __name__ == '__main__':
