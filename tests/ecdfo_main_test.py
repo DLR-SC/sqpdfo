@@ -852,20 +852,18 @@ from ecdfo_main import *
 from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 import helper
-from numpy import array
-
+from numpy import array, infty
 
 
 class dummyInfo():
     def __init__(self):        
         self.g = array([
-     [0.0],
-     [1.0],
-     [0.0]])
-
+        [0.0],
+        [1.0],
+        [0.0]])
         self.ai = array([])
         self.ae = array([
-         [1.0,     1.0,     1.0],
+        [1.0,     1.0,     1.0],
         [1.0 ,    2.0,     3.0]])
         self.hl = array( [])
         self.niter = 0
@@ -873,13 +871,13 @@ class dummyInfo():
         self.nsimul = array( [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.ci = array( [])
         self.ce =  array([
-         [2],
+        [2],
         [3]])
         self.f = 1.500000000000000
         self.glag =  array([
-[-0.333333333013890],
-[   0.666666666736111],
-[  -0.333333333513889]])
+        [-0.333333333013890],
+        [   0.666666666736111],
+        [  -0.333333333513889]])
 
 class correctInfo():
     def __init__(self):
@@ -887,7 +885,7 @@ class correctInfo():
         self.g = array([[-1.000001597463464, 0.000000267687146, 0.999990706694728]]).T
         self.ai = array( [])
         self.ae = array([[1.000000000001365,   1.000000000001130,   0.999999999995923],
-   [0.999999999985469,   1.999999999999835,   2.999999999990382]])
+            [0.999999999985469,   1.999999999999835,   2.999999999990382]])
         self.hl = array( [])
         self.niter = 4
         self.flag = 0
@@ -919,58 +917,56 @@ class Test_ecdfo_main(unittest.TestCase):
         self.mi = 0
         self.me = 2
         self.lm = array([ 
-[                  0.0],
-[                   0.0],
-[                   0.0],
-[  -0.333333332763891],
-[  -0.000000000249999]])
+        [                  0.0],
+        [                   0.0],
+        [                   0.0],
+        [  -0.333333332763891],
+        [  -0.000000000249999]])
         self.nitold = 0
         self.nit = 0
         self.i_xbest = 0
         self.lb = array([
-  [-0.500000000000000],
-   [                0.0],
-    [            -np.Inf]])
+        [-0.500000000000000],
+        [                0.0],
+        [            -np.Inf]])
         self.ub = array([
-   [np.Inf],
-   [np.Inf],
-   [np.Inf]])
+        [np.Inf],
+        [np.Inf],
+        [np.Inf]])
         self.m = 3
         self.X = array([
-   [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
-   [1.000000000000000,   1.000000000000000,                   0.0,   1.000000000000000],
-   [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
+        [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000],
+        [1.000000000000000,   1.000000000000000,                   0.0,   1.000000000000000],
+        [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000]])
         self.fX = array([1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000])
         self.ciX = array([])
         self.ceX = array([
-     [2.0,     1.0,     1.0,     1.0],
-     [3.0,     2.0,     1.0,     0.0]])
+        [2.0,     1.0,     1.0,     1.0],
+        [3.0,     2.0,     1.0,     0.0]])
         self.ind_Y = array([0,     1,     2,     3])
         self.QZ = array([
-     [1.0,     0.0,     0.0,     0.0],
-     [0.0,     1.0,     0.0,     0.0],
-     [0.0,     0.0,     1.0,     0.0],
-     [0.0,     0.0,     0.0,     1.0]])
-
-
+        [1.0,     0.0,     0.0,     0.0],
+        [0.0,     1.0,     0.0,     0.0],
+        [0.0,     0.0,     1.0,     0.0],
+        [0.0,     0.0,     0.0,     1.0]])
         self.RZ = array([
-     [1.0,     1.0,     1.0,     1.0],
-     [0.0,    -1.0,     0.0,     0.0],
-     [0.0 ,    0.0,    -1.0,     0.0],
-     [0.0,     0.0,     0.0,    -1.0]])
+        [1.0,     1.0,     1.0,     1.0],
+        [0.0,    -1.0,     0.0,     0.0],
+        [0.0 ,    0.0,    -1.0,     0.0],
+        [0.0,     0.0,     0.0,    -1.0]])
         self.delta = 1
         self.cur_degree = 4
         self.neval = 0
         self.maxeval = 600
         self.maxit = 600
         self.fcmodel = array([
-   [1.500000000000000,                   0.0,   1.000000000000000,                   0.0],
-   [2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
-   [3.000000000000000,   1.000000000000000,   2.000000000000000,   3.000000000000000]])
+        [1.500000000000000,                   0.0,   1.000000000000000,                   0.0],
+        [2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000],
+        [3.000000000000000,   1.000000000000000,   2.000000000000000,   3.000000000000000]])
         self.gx = array([
-     [0.0],
-     [1.0],
-     [0.0]])
+        [0.0],
+        [1.0],
+        [0.0]])
         self.normgx = 1.0
         self.show_errg = 0
         self.pquad = 10
@@ -1005,37 +1001,37 @@ class Test_ecdfo_main(unittest.TestCase):
         self.stratLam = 1
         self.eps_current = 1.000000000000000e-05
         self.vstatus = array([
-     [0],
-     [0],
-     [0]])
+        [0],
+        [0],
+        [0]])
         self.xstatus = array([
-     [1],
-     [1],
-     [1],
-     [1]])
+        [1],
+        [1],
+        [1],
+        [1]])
         self.sstatus = array([
-     [1],
-     [1],
-     [1],
-     [1]])
+        [1],
+        [1],
+        [1],
+        [1]])
         self.dstatus = array([
-     [0],
-     [0],
-     [0],
-     [0]])
+        [0],
+        [0],
+        [0],
+        [0]])
         self.ndummyY = 0
         self.sspace_save = array([])
         self.xspace_save = array([])
         self.xfix = array([
-     [0],
-     [0],
-     [0]])
+        [0],
+        [0],
+        [0]])
         self.fxmax = 1.000000000000000e+25
         self.poised_model = 1
         self.M = array([
-     [1.0,     0.0,     0.0],
-     [0.0,     1.0,     0.0],
-     [0.0,     0.0,     1.0]])
+        [1.0,     0.0,     0.0],
+        [0.0,     1.0,     0.0],
+        [0.0,     0.0,     1.0]])
         self.kappa_ill = 1.000000000000000e+15
         self.kappa_th = 2000
         self.eps_bnd = 1.000000000000000e-06
@@ -1060,17 +1056,14 @@ class Test_ecdfo_main(unittest.TestCase):
         self.CNTsin = 0
         self.shrink_Delta = 1
         self.scale = array([
-     [1],
-     [1],
-     [1],
-     [1]])
+            [1],
+            [1],
+            [1],
+            [1]])
         self.shift_Y = 1
-
         self.info = dummyInfo()
-        
         self.options = helper.dummyOptions()
         self.values = helper.dummyValues()
-        
         self.abs_tol=1e-5
         self.rel_tol=1e-5
 
@@ -1081,41 +1074,39 @@ class Test_ecdfo_main(unittest.TestCase):
             Test with some values, results compared with matlab
         """
         nit, i_xbest, x, fx, m, X, fX, ciX, ceX, ind_Y, Delta, eps_current, cur_degree, fcmodel, gx, normgx, vstatus, xstatus, sstatus, dstatus, M, ndummyY, sspace_save, xspace_save, msg, CNTsin, neval, lm, info = ecdfo_main_(self.func,self.n,self.nb,self.mi,self.me,self.lm,self.nitold, self.nit, self.i_xbest, self.lb, self.ub, self.m, self.X, self.fX, self.ciX, self.ceX, self.ind_Y, self.QZ, self.RZ, self.delta, self.cur_degree, self.neval, self.maxeval, self.maxit, self.fcmodel, self.gx, self.normgx, self.show_errg, self.pquad, self.pdiag, self.plin, self.stallfact, self.eps_rho, self.Deltamax, self.rep_degree, self.epsilon, self.verbose, self.eta1, self.eta2, self.gamma1, self.gamma2, self.gamma3, self.interpol_TR, self.factor_CV, self.Lambda_XN, self.Lambda_CP, self.factor_FPU, self.factor_FPR, self.Lambda_FP, self.criterion_S, self.criterion_FP, self.criterion_CP, self.mu, self.theta, self.eps_TR, self.eps_L, self.lSolver, self.stratLam, self.eps_current, self.vstatus, self.xstatus, self.sstatus, self.dstatus, self.ndummyY, self.sspace_save, self.xspace_save, self.xfix, self.fxmax, self.poised_model, self.M, self.kappa_ill, self.kappa_th, self.eps_bnd, self.poised, self.Y_radius, self.c, self.level, self.whichmodel, self.hardcons, self.noisy, self.scaleX, self.scalefacX, self.CNTsin, self.shrink_Delta, self.scale, self.shift_Y,self.info,self.options,self.values)
-        
-        
+
         correctnit = 0
         correcti_xbest = 5
         correctx = array([  -0.500000000000000, 0,  0.500000000000000]).T
         correctfx = array([0.500000000000000])
         correctm = 10
         correctX = array([
-   [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.003054026564966,  -0.500000000000000, -0.500002253056410,  -0.500000286192314,  -0.500009741475754,  -0.499999900588771,    -0.499990015903692],
-   [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000,                   0,                   0, 0.000000442034118 , -0.000009988577082 ,  0.000000127297985 ,  0.000009999638990,    -0.000000045756443],
-   [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000,   0.315521468125839,   0.500000000000000, 0.499990267148911 ,  0.499999612175087 ,  0.500002260696260 ,  0.500000134714239,     0.499999438103251]])
+            [0.500000000000000,  -0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.003054026564966,  -0.500000000000000, -0.500002253056410,  -0.500000286192314,  -0.500009741475754,  -0.499999900588771,    -0.499990015903692],
+            [1.000000000000000,   1.000000000000000,                   0,   1.000000000000000,                   0,                   0, 0.000000442034118 , -0.000009988577082 ,  0.000000127297985 ,  0.000009999638990,    -0.000000045756443],
+            [0.500000000000000,   0.500000000000000,   0.500000000000000,  -0.500000000000000,   0.315521468125839,   0.500000000000000, 0.499990267148911 ,  0.499999612175087 ,  0.500002260696260 ,  0.500000134714239,     0.499999438103251]])
         correctfX = array([   1.500000000000000,   1.500000000000000,   0.500000000000000,   1.500000000000000,   0.099563123926544,   0.500000000000000, 0.499992520305321,   0.499999898467405,   0.500000035403030,   0.500012002272037,   0.499989454106944])
         correctciX = array( [])
         correctceX = array([
-  [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   -0.000007353481509, 0.000010233764458,     0.000009376443116],
-  [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,  -0.000002704791005,  0.000020502831926 ,    0.000008206893176]])
+            [  2.000000000000000,   1.000000000000000,   1.000000000000000,   1.000000000000000,   0.312467441560872,   0.000000000000000, -0.000011543873381,  -0.000010662594309,   -0.000007353481509, 0.000010233764458,     0.000009376443116],
+            [ 3.000000000000000 ,  2.000000000000000,   1.000000000000000 ,                  0,  -0.056489622187450,  -0.000000000000000, -0.000030567541440,  -0.000021426821217,  -0.000002704791005,  0.000020502831926 ,    0.000008206893176]])
         correctind_Y = array([   5,     8, 9,     6,     7,    10])
         correctDelta = 5.672511970824019
         correcteps_current =  1.000000000000000e-05
         correctcur_degree =  6
         correctfcmodel = array([
-   [0.500000000000000,  -0.000010001181020,   0.000000000002677,   0.000010001072100,   0.000000000222233,   0.000000000197548],
-   [0.000000000000000,   0.000010001165044,   0.000010001165044,   0.000010001165044,   0.000000000000000,  -0.000000000000000],
-  [-0.000000000000000,   0.000010001165043,   0.000020002330087,   0.000030003495131,   0.000000000000000,   0.000000000000000]])
+            [0.500000000000000,  -0.000010001181020,   0.000000000002677,   0.000010001072100,   0.000000000222233,   0.000000000197548],
+            [0.000000000000000,   0.000010001165044,   0.000010001165044,   0.000010001165044,   0.000000000000000,  -0.000000000000000],
+            [-0.000000000000000,   0.000010001165043,   0.000020002330087,   0.000030003495131,   0.000000000000000,   0.000000000000000]])
         correctgx = array([ -1.000001597463464, 0.000000267687146, 0.999990706694728]).T
         correctnormgx = 1.000001597463464
         correctvstatus = array([  0,  0,  0]).T
         correctxstatus = array([ 0,  0, 0, 0, 0, 1, 1, 1, 1,  1, 1]).T
         correctsstatus = array([ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]).T
         correctdstatus = array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).T
-        correctM =   1.0e+05 * array([
-   [3.981667193893546,                   0,                   0],
-   [                0,   6.903934759857267,                   0],
-   [                0,                  0 ,                  0]])
-
+        correctM =   array([
+            [2.221812198103844,                   0,                   0],
+            [                0,   1.9750204582389879,                   0],
+            [                0,                  0 ,                  0]])
         correctndummyY =  0
         correctsspace_save = array(  [])
         correctxspace_save = array(  [])
@@ -1146,7 +1137,7 @@ class Test_ecdfo_main(unittest.TestCase):
         self.assertTrue(compare_array(correctxstatus, xstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctdstatus, dstatus, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctsstatus, sstatus, self.abs_tol, self.rel_tol))
-        self.assertTrue(compare_array(correctM, M, 2000, 1e-2))
+        self.assertTrue(compare_array(correctM, M, self.abs_tol, self.rel_tol))
         self.assertEqual(correctndummyY, ndummyY)
         self.assertTrue(compare_array(correctsspace_save, sspace_save, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(correctxspace_save, xspace_save, self.abs_tol, self.rel_tol))
