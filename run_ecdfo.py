@@ -1,71 +1,107 @@
 # -*- coding: utf-8 -*-
-"""
-#
-#  Driver for the optimizer ECDFO
-#  (Equality-Constrained Derivative-Free Optimization).
-#
-#  ECDFO can solve minimization problems of the form
+###############################################################################
+#  Driver for the optimizer ECDFO.
+#  ECDFO can solve a minimization problem of the form
 #
 #      minimize     f(x)
-#      subject to   lx <=   x   <= ux
-#                   ce(x) == 0,
+#      subject to   lx <= x <= ux
+#      subject to   ce(x) == 0,
 #
 #  where f: Rn -> R (hence x is the vector of n variables to optimize),
-#  lx and ux are lower and upper bounds on x and ce: Rn -> Rme are
-#  equality constraints.
+#  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
 #
-"""
-import helper
+# Example call to ECDFO as in __main__ below.
+###############################################################################
+
 from runtime import *
-from ecdfo_init_prob import ecdfo_init_prob_
-from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
+import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
 from evalfgh import evalfgh_
-from numpy import array, zeros, arange
+from numpy import array, zeros, arange, shape
 
+def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
-import time
-tic = time.clock()
+    # Set problem global variables
+    glob.set_prob(100)                       # set problem number (100 is userdefined problem)
+    if func == None:
+        print('Error: Definition of the objective function (in func_f.py) is missing !')
+    else:
+        glob.set_filename_f(func)
+    if cfunc == None:
+        glob.set_filename_ce('')
+    else:
+        glob.set_filename_ce(cfunc)
+    glob.set_check_condition(1)
+    glob.set_fileoutput(1)
+    glob.set_simul_not_initialized(1)
+    glob.set_threshold(1e-08)                # Threshold for violated bounds
 
-#---------------------------------------
-# Initialize problem
-#---------------------------------------
+    #---------------------------------------
+    # Initialize problem
+    #---------------------------------------
 
-set_prob(2) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
-set_check_condition(1)
-set_threshold(1e-08) # Threshold for violated bounds
-prob=get_prob()
-options = helper.dummyUnionStruct()
-options.tol=zeros(3)
+    class options:
+        pass
+    options.tol = zeros(3)
+    lm = array([])
+    n = max(shape(x))
 
-x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+    # Check right format of x and bounds lx and ux
+    if not isinstance(x, np.ndarray):
+        x = array([x])
+    if not isinstance(lx, np.ndarray):
+        lx = array([lx]).T
+    if not isinstance(ux, np.ndarray):
+        ux = array([ux]).T
 
-#---------------------------------------
-# Set options
-#---------------------------------------
+    #---------------------------------------
+    # Set options
+    #---------------------------------------
 
-options.hess_approx='model' # options: 'model' or 'bfgs'
-options.bfgs_restart=0  # only taken into account if hess_approx is 'bfgs'
-options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
-if nb + me == 0:
-    options.algo_descent='Wolfe'
-options.tol[0]  = 1e-5       # tolerance on the gradient of the Lagrangian
-options.tol[1]  = 1e-5       # tolerance on the feasibility
-options.tol[2]  = 1e-5       # tolerance on the complementarity
-options.dxmin   = 1e-20      # minimum size of a step
-options.miter   = 500        # max iterations
-options.msimul  = 500        # max evaluations
-options.verbose = 1          # verbosity level 0,...,3 (default: 1)
+    # default options
+    options.hess_approx='model'  # options: 'model' or 'bfgs'
+    options.bfgs_restart=0       # only taken into account if hess_approx is 'bfgs'
+    options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
+    options.tol[0]  = 1e-5       # tolerance on the gradient of the Lagrangian
+    options.tol[1]  = 1e-5       # tolerance on the feasibility of the equality constraints
+    options.tol[2]  = 1e-5       # tolerance on the bounds
+    options.dxmin   = 1e-8       # minimum size of a step
+    options.miter   = 1000        # max iterations
+    options.msimul  = 1000        # max evaluations
+    options.verbose = 1          # verbosity level 0,...,3
 
-#------------------------------------
-# Call ECDFO
-#------------------------------------
+    #------------------------------------
+    # Call ECDFO
+    #------------------------------------
 
-lm=array([])
-x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
-print('x = '+str(x))
-if info.ce.size > 0:
-    print(' c = '+str(info.ce.T[0]))
+    x,lm,info=ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
 
-toc = time.clock()
-print("Elapsed time is " + str(toc - tic) + " seconds.")
+    # Return values
+    f = info.f
+    ce = info.ce
+    return x, f, ce
+
+if __name__ == '__main__':
+    try:
+        from func_f import func_f
+    except:
+        print('Error: Definition of the objective function (in func_f.py) is missing !')
+    try:
+        from func_c import func_c
+    except:
+        pass
+
+    # initialize start values
+    x0 = array([[-1.2,1.0]])
+    lb = array([[-5.,-5.]]).T
+    ub = array([[10.,10.]]).T
+
+    # call sqpdfo
+    #x,f,ce = run_ecdfo(func_f,x0,lb,ub)
+    x,f,ce = run_ecdfo(func_f,x0,lb,ub,func_c)
+
+    print('')
+    print('x* = '+str(x))
+    print('f* = '+str(f))
+    if ce.size>0:
+        print('ce* = '+str(ce.T[0]))
