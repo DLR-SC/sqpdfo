@@ -43,6 +43,7 @@ class Test_ecdfo_options(unittest.TestCase):
         """
         Second little test
         """
+        self.options.fout = 1
         info, options, values = ecdfo_options_(self.info, self.options)
         self.assertEqual(options.algo_descent, values.powell)
         self.assertEqual(options.hess_approx, values.bfgs)
