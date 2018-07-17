@@ -190,7 +190,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     kappa_ill    = 1e+15            # threshold to declare a system matrix as ill-conditioned
     kappa_th     = 2000             # threshold for a safely nondegenerate set of points
     eps_bnd      = epsilon/10       # epsilon to define a bound as nearly-active: |x - bnd|<eps_bnd
-    whichmodel   = 2                # approach to build the local models
+    whichmodel   = 0                # approach to build the local models
     hardcons     = 0                # apply hard bounds when maximizing the Lagrange polynomials
     noisy        = 0                # function supposed to be noisy
     scaleX       = 0                # scaling of variables is applied
