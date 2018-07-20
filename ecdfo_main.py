@@ -217,7 +217,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
         # Stop on convergence.
 
-        if ((info.glagn <= options.tol[0]) and (info.feasn <= options.tol[1]) and (info.compl <= options.tol[2])) or delta <= epsilon * 1e-05 or (pred == - 1.0):
+        if ((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds)) or delta <= epsilon * 1e-05 or (pred == - 1.0):
 
             # check for accuracy and improve if necessary
 
@@ -237,7 +237,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
                     disp_('error on gradient before set improvement = ',str(errg))
-                if (((info.glagn <= options.tol[0]) and (info.feasn <= options.tol[1]) and (info.compl <= options.tol[2]) and errg <= epsilon) or delta <= epsilon * 1e-05) and level=='toplevel':
+                if (((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds) and errg <= epsilon) or delta <= epsilon * 1e-05) and level=='toplevel':
                     info.niter=info.niter + 1
                     itype='conv'
 
@@ -421,7 +421,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             errg=poised * Y_radius / factor_CV
             if options.verbose >= 3:
                 disp_('error on gradient after set improvement = ',str(errg))
-            if (info.glagn / factor_CV <= options.tol[0]) and (info.feasn / factor_CV <= options.tol[1]) and (info.compl / factor_CV <= options.tol[2]) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
+            if (info.glagn / factor_CV <= options.tol_grad) and (info.feasn / factor_CV <= options.tol_feas) and (info.compl / factor_CV <= options.tol_bnds) and errg <= epsilon and cur_degree >= rep_degree and level=='toplevel':
                 info.niter=info.niter + 1
                 itype='conv'
                 ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
@@ -446,8 +446,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             ce0     = info.ce;          # memorize ce at the current iterate in case of step rejection
             ce0n    = norm_(ce0);
             merit0  = f0 + sigma * ce0n;  # inital value of the merit function, for the given sigma
-            prec_r  = options.tol[1]/10;  # initial precision for the restoration problem
-            prec_t  = options.tol[0]/10;  # initial precision for the tangent problem
+            prec_r  = options.tol_feas/10;  # initial precision for the restoration problem
+            prec_t  = options.tol_grad/10;  # initial precision for the tangent problem
 
             if options.verbose >= 5:
                 fprintf_(options.fout,'\nStep computation: merit = %12.5e\n'%(merit0))
