@@ -7,18 +7,18 @@ from ecdfo_global_variables import get_prob
 from ecdfo_prelim import ecdfo_prelim_
 from ecdfo_finish import ecdfo_finish_
 from runtime import *
-
+from evalfgh import evalfgh_
 from copy import copy
 from numpy import array
 
 
-def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwargs):
+def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     """
-# [x,lm,info] = ecdfo (func,x0);
-# [x,lm,info] = ecdfo (func,x0,lm0);
-# [x,lm,info] = ecdfo (func,x0,lm0,lb);
-# [x,lm,info] = ecdfo (func,x0,lm0,lb,ub);
-# [x,lm,info] = ecdfo (func,x0,lm0,lb,ub,options);
+# [x,lm,info] = ecdfo (x0);
+# [x,lm,info] = ecdfo (x0,lm0);
+# [x,lm,info] = ecdfo (x0,lm0,lb);
+# [x,lm,info] = ecdfo (x0,lm0,lb,ub);
+# [x,lm,info] = ecdfo (x0,lm0,lb,ub,options);
 #
 # The function computes the solution to a smooth nonlinear optimization
 # problem possibly subject to bound constraints on the variables x(1:n)
@@ -33,7 +33,6 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
 # me (>=0) equality constraints. Lower and upper bounds can be infinite.
 #
 # Inputs:
-#   func: function handle of the user-supplied objective function and constraints.
 #   x0: n vector giving the initial guess of the solution, the number
 #     of variables is assumed to be the length of the given x0
 #   lm0 (optional): n+mi+me vector giving the initial guess of the
@@ -88,18 +87,45 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
 #      9: unbounded QP
 #     30: unexpected exit
 #   info.niter: number of realized iterations
-#   info.nsimul(1): number of function evaluations
+#   info.nsimul[1]: number of function evaluations
 #-----------------------------------------------------------------------
 """
 
-    options=copy(options_)
-    nones = [func is None,x0 is None,lm0 is None,lb is None,ub is None,options is None].count(True)
-    nargin = 6-nones+len(args)
+    # Check input arguments
+
+    if x0 is None:
+        fprintf_('\n### ecdfo: x0 is required input!\n\n')
+        x = array([])
+        lm = array([])
+        info = helper.dummyUnionStruct()
+        info.flag = 1
+        info.f = -np.infty
+        info.ce=array([])
+        return x, lm, info
+    if lm0 is None:
+        lm0 = array([])
+    else:
+        lm0 = lm0[:]
+    if lb is None:
+        lb = array([])
+    else:
+        lb = lb[:]
+    if ub is None:
+        ub = array([])
+    else:
+        ub = ub[:]
+    if options_ is None:
+        print('No options are given by the user, default values are used.')
+        class options:
+            pass
+    else:
+        options = copy(options_)
 
     #  Set some constants
 
+    func = evalfgh_
     c = helper.dummyUnionStruct()
-    info = helper.dummyUnionStruct()
+
     eps = 2.220446049250313e-16
     prob=get_prob()
     c.free=0
@@ -127,7 +153,6 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     sspace_save=array([])
     xspace_save=array([])
     ndummyY=0
-    info.flag=0
 
     #  Miscellaneous initializations
   
@@ -135,8 +160,7 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
        x0 = x0.T                                # a column vector
     
     n       = length_( x0 )                     # the dimension of the space
-    #pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
-    pquad   = int( 2* n + 1 )
+    pquad   = int(( ( n + 1 ) * ( n + 2 ) ) / 2)    # the size of a fully quadratic model
     pdiag   = int(2 * n + 1)                        # the size of a diagonal model
     plin    = int(n + 1)                             # the size of a linear model
     
@@ -190,59 +214,36 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     kappa_ill    = 1e+15            # threshold to declare a system matrix as ill-conditioned
     kappa_th     = 2000             # threshold for a safely nondegenerate set of points
     eps_bnd      = epsilon/10       # epsilon to define a bound as nearly-active: |x - bnd|<eps_bnd
-    whichmodel   = 0                # approach to build the local models
     hardcons     = 0                # apply hard bounds when maximizing the Lagrange polynomials
     noisy        = 0                # function supposed to be noisy
     scaleX       = 0                # scaling of variables is applied
     scalefacX    = ones_(1,n)        # scaling factors initialized to one
     shrink_Delta = 1                # shrink trust-region radius in every unsuccessful iteration
+
+    # GTlab problem:
+    # if prob == 100:
+    # Delta0=0.01
+    # epsilon=0.001
+    # scaleX = 1;
+    # scalefacX = array([[100,0.01, 1, 0.1, 0.1]]).T;
     
     #  Compute the maximal TR radius.
     
     Deltamax = factor_Dmax * Delta0
-    
-    # -------------------------------------------------------------------------
-    # Check input arguments
-    # -------------------------------------------------------------------------
-
-    if nargin < 2:
-        fprintf_('\n### EC-DFO: the first 2 arguments are required\n\n')
-        x=array([])
-        lm=array([])
-        info.flag=1
-        return x,lm,info
-    if nargin < 3:
-        lm0=array([])
-    else:
-        lm0=lm0[:]
-    if nargin < 4:
-        lb=array([])
-    else:
-        lb=lb[:]
-    if nargin < 5:
-        ub=array([])
-    else:
-        ub=ub[:]
-    if nargin < 6:
-        options.fout=1
-        options.verbose=1
-    # GTlab problem
-    #if prob == 100:
-        #Delta0=0.01
-        #epsilon=0.001
-        #scaleX = 1;
-        #scalefacX = array([[100,0.01, 1, 0.1, 0.1]]).T;
 
     # -------------------------------------------------------------------------
     # Preliminaries:
     # -------------------------------------------------------------------------
-
     # - check bounds and the given options
     # - build initial poised interpolation set
     # - compute function + constraint values and initial multiplier (if not given)
-    n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,whichmodel,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
+    n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=\
+        ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
     if info.flag:
         return x,lm,info
+
+    # Set approach to build the local models
+    whichmodel = options.whichmodel
 
     # Initialize the current epsilon
     eps_current=max_(mu0 * normgx,epsilon)
@@ -263,8 +264,8 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
     # Call main optimization loop
     # -------------------------------------------------------------------------
 
-
-    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
+    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=\
+        ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
 
     #  Append closing bracket in file convhist.m
     if (verbose):
@@ -305,23 +306,14 @@ def ecdfo_(func=None,x0=None,lm0=None,lb=None,ub=None,options_=None,*args,**kwar
             else:
                 fprintf_(options.fout,'\n')
         else:
-            fprintf_(options.fout,'VARIABLES:\n')
+            fprintf_(options.fout,'Variables:\n')
             fprintf_(options.fout,'\n',x[0:min_(n,40)])
             if (n > 40):
                 fprintf_(options.fout,'.....\n')
             else:
                 fprintf_(options.fout,'\n')
-        if mi:
-            fprintf_(options.fout,'INEQUALITY CONSTRAINTS:\n')
-            fprintf_(options.fout,'i     lower bound          ci           upper bound       multiplier\n')
-            for i in range(0,min_(mi,40)):
-                fprintf_(options.fout,'%0i %+16.6e %+16.6e %+16.6e %+16.6e\n'%(i,lb[n + i],ciX[i,i_xbest],ub[n + i],lm[n + i]))
-            if (mi > 40):
-                fprintf_(options.fout,'\n.....')
-            else:
-                fprintf_(options.fout,'\n')
         if me:
-            fprintf_(options.fout,'EQUALITY CONSTRAINTS:\n')
+            fprintf_(options.fout,'Equality constraints:\n')
             fprintf_(options.fout,'i         ce            multiplier\n')
             for i in range(0,min_(me,40)):
                 fprintf_(options.fout,'%0i %+16.6e %+16.6e\n'%(i,ceX[i,i_xbest],lm[n + mi + i]))
