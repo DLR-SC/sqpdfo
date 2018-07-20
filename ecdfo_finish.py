@@ -52,5 +52,5 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
         fprintf_(options.fout,'  Counters:\n')
         fprintf_(options.fout,'  . nbr of iterations                   %4i\n'%(info.niter))
         fprintf_(options.fout,'  . nbr of function evaluations         %4i\n'%(info.nsimul[1] + info.nsimul[3]))
-    fprintf_(options.fout,'%s\n'%(values.sline))
+        fprintf_(options.fout,'%s\n'%(values.sline))
     return
