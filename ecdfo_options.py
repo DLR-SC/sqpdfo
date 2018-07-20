@@ -3,42 +3,14 @@
 from runtime import *
 from numpy import inf, array
 from copy import copy
+from ecdfo_values import ecdfoValues
 
-
-class ecdfoValues():
-    def __init__(self):
-        # Define ecdfo constant values
-
-        self.success = 0;  # solution found
-        self.fail_on_argument = 1;  # an argument is wrong
-        self.fail_on_problem = 2;  # unaccepted problem structure
-        self.fail_on_simul = 3;  # error on a simulation
-        self.stop_on_simul = 4; # simulator wants to stop
-        self.stop_on_max_iter = 5;  # max iterations
-        self.stop_on_max_simul = 6;  # max simulations
-        self.stop_on_dxmin = 7;  # stop on dxmin
-        self.fail_on_non_decrease = 8;  # the merit function no longer decrease
-        self.fail_on_ascent_dir = 9;  # nondescent direction in linesearch
-        self.fail_on_ill_cond = 11;  # ill-conditioning
-        self.stop_on_small_trust_region = 15; # small trust-region radius
-        self.fail_on_null_step = 20;  # null step d is solution of 'values.max_null_steps' QPs
-        self.fail_on_infeasible_QP = 21;  # infeasible QP
-        self.fail_on_unbounded_QP = 22;  # unbounded QP
-        self.fail_unexpected = 30;  # should not have happened
-
-        self.nsimultype = 4;  # nb of simulation types
-        self.max_null_steps = 1;  # maximum nbr of null QP steps
-
-        self.powell = 120
-        self.wolfe = 121
-        self.bfgs = 130
-        self.model = 131
 
 def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     """
 # [info,options,values] = ecdfo_options (info,options)
 #
-# Set the options of the optimizer 'ecdfo'
+# Set the default options of the optimizer 'ecdfo'
     """
 
     info = copy(info_)
@@ -61,20 +33,20 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
 
     if isfield_(options, 'fout'):
         if options.fout < 0:
-            fprintf_(
-                '\n### ecdfo: options.fout = "%0i" is not a valid file identifier (use \'fopen\' to have a valid one)' % (
-                    options.fout))
-            fprintf_('\n            options.fout is set to 1\n\n')
+            fprintf_('\n### ecdfo_options: options.fout = "%0i" is not a valid file identifier' % (options.fout))
+            fprintf_('\n    options.fout is set to 1\n\n')
             options.fout = 1
     else:
-        options.fout = 1
+        options.fout = 1  # default value
+
     if isfield_(options, 'verbose'):
         if (options.verbose < 0) or (options.verbose > 6):
             fprintf_(options.fout,
-                     '\n### ecdfo: options.verbose = "%0i" and should be in [0,6], reset to 1\n\n' % (options.verbose))
+                     '\n### ecdfo_options: options.verbose = "%0i" and should be in [0,6], reset to 1\n\n' % (options.verbose))
             options.verbose = 1
     else:
-        options.verbose = 1
+        options.verbose = 1  # default value
+
     if isfield_(options, 'algo_descent'):
         algo_descent_str = options.algo_descent.lower().replace(" ", "")
         if (algo_descent_str == 'powell'):
@@ -84,49 +56,81 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo: options.algo_descent "%s" not recognized\n\n' % (options.algo_descent))
+                         '\n### ecdfo_options: options.algo_descent "%s" not recognized\n\n' % (options.algo_descent))
             info.flag = values.fail_on_argument
             return info, options, values
+    else:
+        options.algo_descent = values.powell  # default value
+
     if isfield_(options, 'dxmin'):
         if (options.dxmin <= 0):
             if options.verbose:
-                fprintf_(options.fout, '\n### ecdfo: options.dxmin = %g must be > 0\n\n' % (options.dxmin))
+                fprintf_(options.fout, '\n### ecdfo_options: options.dxmin = %g must be > 0\n\n' % (options.dxmin))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
-        options.dxmin = 1e-08
+        options.dxmin = 1e-08  # default value
+
     if isfield_(options, 'inf'):
         if options.inf <= 0:
             if options.verbose:
-                fprintf_('\n### ecdfo: incorrect value of options.inf %g (should be > 0)\n\n' % (options.inf))
+                fprintf_('\n### ecdfo_options: incorrect value of options.inf %g (should be > 0)\n\n' % (options.inf))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
-        options.inf = inf
+        options.inf = inf  # default value
+
     if isfield_(options, 'miter'):
         if options.miter <= 0:
             if options.verbose:
-                fprintf_('\n### ecdfo: incorrect value of options.miter %g (should be > 0)\n\n' % (options.miter))
+                fprintf_('\n### ecdfo_options: incorrect value of options.miter %g (should be > 0)\n\n' % (options.miter))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
-        options.miter = 1000
+        options.miter = 1000  # default value
+
     if isfield_(options,'msimul'):
         if options.msimul <= 0:
            if options.verbose:
-              fprintf_('\n### ecdfo: incorrect value of options.msimul %g (should be > 0)\n\n',options.msimul)
+              fprintf_('\n### ecdfo_options: incorrect value of options.msimul %g (should be > 0)\n\n',options.msimul)
            info.flag = values.fail_on_argument;
            return info, options, values
     else:
-        options.msimul = 1000;
-    if isfield_(options, 'tol'):
-        if any_(options.tol <= 0):
+        options.msimul = 1000  # default value
+
+    if isfield_(options, 'tol_grad'):
+        if (options.tol_grad < 0):
             if options.verbose:
-                fprintf_('\n### ecdfo: incorrect value of some options.tol (should be > 0)\n\n')
+                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_grad (should be > 0)\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
+        elif options.tol_grad==0:
+                options.tol_grad=1e-5
     else:
-        options.tol = array([[1e-06], [1e-06], [1e-06]])
+        options.tol_grad = 1e-5  # default value
+
+    if isfield_(options, 'tol_feas'):
+        if (options.tol_feas < 0):
+            if options.verbose:
+                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_feas (should be > 0)\n\n')
+            info.flag = values.fail_on_argument
+            return info, options, values
+        elif options.tol_feas==0:
+                options.tol_feas=1e-5
+    else:
+        options.tol_feas = 1e-5  # default value
+
+    if isfield_(options, 'tol_bnds'):
+        if (options.tol_bnds < 0):
+            if options.verbose:
+                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_bnds (should be > 0)\n\n')
+            info.flag = values.fail_on_argument
+            return info, options, values
+        elif options.tol_bnds==0:
+                options.tol_bnds=1e-5
+    else:
+        options.tol_bnds = 1e-5  # default value
+
     if isfield_(options, 'hess_approx'):
         if 'bfgs' == options.hess_approx.lower().replace(" ", ""):
             options.hess_approx = values.bfgs
@@ -135,8 +139,47 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo: options.hess_approx "%s" not recognized\n\n' % (options.hess_approx))
+                         '\n### ecdfo_options: options.hess_approx "%s" not recognized' % (options.hess_approx))
+                fprintf_('\n    options.hess_approx must be either "model" or "bfgs"\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
+    else:
+        options.hess_approx = values.model  # default value
+
+    if isfield_(options, 'whichmodel'):
+        if 'subbasis' == options.whichmodel.lower().replace(" ", ""):
+            options.whichmodel = values.subbasis
+        elif 'frobnorm' == options.whichmodel.lower().replace(" ", ""):
+            options.whichmodel = values.frobnorm
+        elif 'l2norm' == options.whichmodel.lower().replace(" ", ""):
+            options.whichmodel = values.l2norm
+        elif 'regression' == options.whichmodel.lower().replace(" ", ""):
+            options.whichmodel = values.regression
+        else:
+            if options.verbose:
+                fprintf_(options.fout,
+                         '\n### ecdfo_options: options.whichmodel "%s" not recognized' % (options.whichmodel))
+                fprintf_('\n    options.whichmodel must be either "Subbasis", "Frobnorm", "L2norm" or "Regression"\n\n')
+            info.flag = values.fail_on_argument
+            return info, options, values
+    else:
+        options.whichmodel = 0  # default value
+
+    if isfield_(options, 'final_degree'):
+        if 'linear' == options.final_degree.lower().replace(" ", ""):
+            options.final_degree = values.linear
+        elif 'diagonal' == options.final_degree.lower().replace(" ", ""):
+            options.final_degree = values.diagonal
+        elif 'quadratic' == options.final_degree.lower().replace(" ", ""):
+            options.final_degree = values.quadratic
+        else:
+            if options.verbose:
+                fprintf_(options.fout,
+                         '\n### ecdfo_options: options.final_degree "%s" not recognized' % (options.final_degree))
+                fprintf_('\n    options.final_degree must be either "linear", "diagonal" or "quadratic"\n\n')
+            info.flag = values.fail_on_argument
+            return info, options, values
+    else:
+        options.final_degree = values.diagonal  # default value
 
     return info, options, values
