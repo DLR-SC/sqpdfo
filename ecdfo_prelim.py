@@ -18,7 +18,7 @@ from ecdfo_optimality import ecdfo_optimality_
 from copy import copy
 from numpy import array, arange
 
-def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,whichmodel_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
+def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
 
 ###############################################################################
 # ecdfo_prelim (func,x0,lm0,lb,ub,options)
@@ -48,7 +48,6 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     c=copy(c_)
     initial_Y=copy(initial_Y_)
     kappa_ill=copy(kappa_ill_)
-    whichmodel=copy(whichmodel_)
     factor_FPR=copy(factor_FPR_)
     Lambda_FP=copy(Lambda_FP_)
     Lambda_CP=copy(Lambda_CP_)
@@ -127,6 +126,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     info.nsimul=np.zeros(values.nsimultype)
+    whichmodel = options.whichmodel
 
     # Check the argument x0; deduce n
 
