@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+from runtime import *
+import ecdfo_global_variables as glob
+from ecdfo import ecdfo_
+from numpy import array, zeros, shape
+
 ###############################################################################
 #  Driver for the optimizer ECDFO.
 #  ECDFO can solve a minimization problem of the form
@@ -14,22 +19,32 @@
 #  See example call to ECDFO in '__main__' below !!
 ###############################################################################
 
-from runtime import *
-import ecdfo_global_variables as glob
-from ecdfo import ecdfo_
-from evalfgh import evalfgh_
-from numpy import array, zeros, shape
+
+class optionsClass:
+    def __init__(self):
+        self.hess_approx = 'model'  # Type of Hessian approximation, options: 'model' or 'bfgs'
+        self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after how many iterations
+        # only taken into account if hess_approx is 'bfgs'
+        self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
+        # only taken into account if hess_approx is 'model'
+        self.final_degree = 'diagonal'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
+        self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
+        self.tol_feas = 1e-5  # tolerance on the feasibility
+        self.tol_bnds = 1e-5  # tolerance on the bounds
+        self.miter = 500  # max iterations
+        self.msimul = 500  # max evaluations
+        self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
 
 def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
     # Set problem global variables
-    glob.set_prob(100)                       # set problem number (100 is userdefined problem)
-    if func == None:
-        print('Error: Definition of the objective function (in func_f.py) is missing !')
+    glob.set_prob(100)                       # set problem number to 100 (=userdefined problem which reads func_f() and func_c())
+    if func is None:
+        print('Error: Definition of the objective function (in func_f()) is missing !')
     else:
         glob.set_filename_f(func)
-    if cfunc == None:
+    if cfunc is None:
         glob.set_filename_ce('')
     else:
         glob.set_filename_ce(cfunc)
@@ -42,9 +57,6 @@ def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     # Initialize problem
     #---------------------------------------
 
-    class options:
-        pass
-    options.tol = zeros(3)
     lm = array([])
     n = max(shape(x))
 
@@ -60,23 +72,13 @@ def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     # Set options
     #---------------------------------------
 
-    # default options
-    options.hess_approx='model'  # options: 'model' or 'bfgs'
-    options.bfgs_restart=0       # only taken into account if hess_approx is 'bfgs'
-    options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
-    options.tol[0]  = 1e-5       # tolerance on the gradient of the Lagrangian
-    options.tol[1]  = 1e-5       # tolerance on the feasibility of the equality constraints
-    options.tol[2]  = 1e-5       # tolerance on the bounds
-    options.dxmin   = 1e-8       # minimum size of a step
-    options.miter   = 1000        # max iterations
-    options.msimul  = 1000        # max evaluations
-    options.verbose =2          # verbosity level 0,...,3
+    options = optionsClass()
 
     #------------------------------------
     # Call ECDFO
     #------------------------------------
 
-    x,lm,info = ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
+    x,lm,info = ecdfo_(x,lm,lx,ux,options)
 
     # Return values
     f = info.f
