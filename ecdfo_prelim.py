@@ -102,6 +102,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     mi=0
     me=0
     lm=array([])
+    info.f=np.NaN
+    info.ce=array([])
     info.g=[]
     info.ai=[]
     info.ae=[]
@@ -413,7 +415,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     values.eline=strcat_(values.eline,values.eline)  # 80 '=' characters
     values.sline='*******************************************'
     values.sline=strcat_(values.sline,values.sline) # 80 '*' characters
-    if options.verbose < 4:
+    if options.verbose > 0 and options.verbose < 4:
         fprintf_(options.fout,' iter  neval     fvalue            merit      ')
         if (me > 0):
             fprintf_(options.fout,' |grad Lag|  feasibility')
