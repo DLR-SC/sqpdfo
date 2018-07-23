@@ -21,8 +21,6 @@ from numpy import array, arange
 def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,hardcons_=None,stratLam_=None,xstatus_=None,sstatus_=None,dstatus_=None,options_=None,*args,**kwargs):
 
 ###############################################################################
-# ecdfo_prelim (func,x0,lm0,lb,ub,options)
-#
 # This function realizes the following preliminary jobs:
 # - build initial poised interpolation set
 # - check the bounds and that initial point inside the bounds
@@ -59,7 +57,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     sstatus=copy(sstatus_)
     dstatus=copy(dstatus_)
     options=copy(options_)
-    
+
     info = helper.dummyUnionStruct()
     info.nsimul = array([])
     
@@ -116,13 +114,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,s
     x=copy(np.NaN)
     fx=copy(np.NaN)
     gx=copy(np.NaN)
-    # Set a default value to an absent option, set a numeric value to a lexical option, and get the possible 'values' of options
 
-    # check validity of the options only if some of them have been set by the user
-    checkoptions=1
-    if isempty_(options):
-        checkoptions=0
-    # get the user options
+    # check user options or get default values if no values given by the user
 
     info,options,values=ecdfo_options_(info,options,nargout=3)
     if info.flag:

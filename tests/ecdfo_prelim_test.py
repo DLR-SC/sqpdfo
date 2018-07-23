@@ -546,8 +546,6 @@ from numpy import array
 
 class myDummyOptions():
     def __init__(self):
-        self.algo_method = 'quasi newton'#'quasi newton')
-        self.algo_globalization = 'trust regions'
         self.hess_approx = 'model'
         self.bfgs_restart = 0
         self.algo_descent = 'powell'
@@ -614,7 +612,6 @@ class Test_ecdfo_prelim(unittest.TestCase):
         set_prob(3)
         set_check_condition(0)
         set_simul_not_initialized(1)
-        #self.values = helper.dummyValues()
         self.abs_tol=1e-8
         self.rel_tol=1e-8
 
@@ -622,15 +619,13 @@ class Test_ecdfo_prelim(unittest.TestCase):
         """
         Test with somes values, results compared with matlab
         """
-        #self.options.algo_method = 'quasi newton'
-        #print "################-----STARTING TEST!!!-----#########################"
-        n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = ecdfo_prelim_(self.func,self.x0,self.lm0,self.Delta0,
+        n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = \
+            ecdfo_prelim_(self.func,self.x0,self.lm0,self.Delta0,
         self.lb,self.ub,self.scaleX,self.scalefacX,self.cur_degree,self.rep_degree,
         self.plin,self.pdiag,self.pquad,self.c,self.initial_Y,self.kappa_ill,
-        self.whichmodel,self.factor_FPR,self.Lambda_FP,self.Lambda_CP,
+        self.factor_FPR,self.Lambda_FP,self.Lambda_CP,
         self.eps_L,self.lSolver,self.hardcons,self.stratLam,self.xstatus,
-        self.sstatus,self.dstatus,self.options)
-        
+        self.sstatus,self.dstatus)
         
         correctn = 3
         correctnb = 2

@@ -12,9 +12,12 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
 #
 # Set the default options of the optimizer 'ecdfo'
     """
-
     info = copy(info_)
-    options = copy(options_)
+    if options_ is None:
+        class options:
+            pass
+    else:
+        options = copy(options_)
 
     # Define ecdfo constant values
 
@@ -23,11 +26,6 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     # Initialization
 
     info.flag = values.success
-
-    # Force the existence of 'options'
-
-    if isempty_(options):
-        options.xyz = 0
 
     # Set options
 
