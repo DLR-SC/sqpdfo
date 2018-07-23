@@ -55,7 +55,7 @@ class Test_ecdfo(unittest.TestCase):
          Test which compare python and matlab results
          test runs with whichmodel = 0 in ecdfo.py
         """
-        x,lm,info = ecdfo_(self.func,self.x0,self.lm0,self.lb,self.ub,self.options) 
+        x,lm,info = ecdfo_(self.x0,self.lm0,self.lb,self.ub,self.options)
         correctx = array([[ -0.500000000000000, 0,0.500000000000000]])
         correctlm = array([[0,-0.000005713064576,0,2.,-1.]])
 

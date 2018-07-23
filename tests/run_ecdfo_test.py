@@ -12,7 +12,6 @@ from runtime import *
 from ecdfo_init_prob import ecdfo_init_prob_
 from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
 from ecdfo import ecdfo_
-from evalfgh import evalfgh_
 import unittest
 from numpy import array, zeros, arange, double
 
@@ -51,7 +50,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.msimul=500
         options.verbose=0
         lm=array([])
-        x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+        x,lm,info=ecdfo_(x,lm,lb,ub,options)
 
         self.assertTrue(compare_array(x, array([[1.950000000000000,0.262499999999991]]), 1e-5, 1e-5))
         self.assertTrue(compare_array(lm, array([[-0.6375,0,  0.7375]]), self.abs_tol, self.rel_tol))
@@ -89,7 +88,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.msimul=500
         options.verbose=0
         lm=array([])
-        x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+        x,lm,info=ecdfo_(x,lm,lb,ub,options)
         self.assertTrue(compare_array(x, array([[   0.333326758778846,  0.666659126169760]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[0,0,    -1.333312643708242]]), self.abs_tol, self.rel_tol))
 
@@ -127,7 +126,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.msimul=500
         options.verbose=0
         lm=array([])
-        x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+        x,lm,info=ecdfo_(x,lm,lb,ub,options)
 
         self.assertTrue(compare_array(x, array([[-0.5,0,0.5]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[ 0, -0.000005713064576 ,0,   1.999997749517402,  -0.999996152071198]]), self.abs_tol, self.abs_tol))
@@ -165,7 +164,7 @@ class Test_run_ecdfo(unittest.TestCase):
     #     options.msimul=500
     #     options.verbose=1
     #     lm=array([])
-    #     x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+    #     x,lm,info=ecdfo_(x,lm,lb,ub,options)
     #
     #     self.assertTrue(compare_array(x, array([[ -0.499998511434003,  -0.000002977131994,   0.500001488565997,   0.999999998348743]]), self.abs_tol, 1e-6))
     #     self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
@@ -214,7 +213,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.msimul=500
         options.verbose=0
         lm=array([])
-        x,lm,info=ecdfo_(evalfgh_,x,lm,lb,ub,options,nargout=3)
+        x,lm,info=ecdfo_(x,lm,lb,ub,options)
         
         self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1e-3, 1e-4))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]), 1e-3, 1e-4))
