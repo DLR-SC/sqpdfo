@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import ecdfo_global_variables as glob
 from ecdfo_init_prob import ecdfo_init_prob_
-from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
 from ecdfo import ecdfo_
-from numpy import array, zeros, arange
+from numpy import array
 import time
 
 """
@@ -28,12 +28,8 @@ tic = time.clock()
 # Initialize problem
 #---------------------------------------
 
-set_prob(5) #  definition of prob 1,...,5 in ecdfo_func(), extendable...
-set_check_condition(1)
-set_threshold(1e-08) # Threshold for violated bounds
-prob=get_prob()
-
-x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+glob.set_prob(3) #  definition of prob 1,...,5 in ecdfo_func_(), extendable...
+x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(glob.get_prob(),nargout=13)
 
 #---------------------------------------
 # Set options
@@ -41,18 +37,18 @@ x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13
 
 class optionsClass:
     def __init__(self):
-         self.hess_approx='model'      # Type of Hessian approximation, options: 'model' or 'bfgs'
-         self.bfgs_restart=0           # Restart of the BFGS Hessian approximation after how many iterations
-                                       # only taken into account if hess_approx is 'bfgs'
-         self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
-                                       # only taken into account if hess_approx is 'model'
-         self.final_degree = 'diagonal' # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
-         self.tol_grad  = 1e-5       # tolerance on the gradient of the Lagrangian
-         self.tol_feas  = 1e-5       # tolerance on the feasibility
-         self.tol_bnds  = 1e-5       # tolerance on the bounds
-         self.miter   = 500        # max iterations
-         self.msimul  = 500        # max evaluations
-         self.verbose = 1          # verbosity level 0,...,3 (default: 1)
+        self.hess_approx='model'      # Type of Hessian approximation, options: 'model' or 'bfgs'
+        self.bfgs_restart=0           # Restart of the BFGS Hessian approximation after how many iterations
+                                      # only taken into account if hess_approx is 'bfgs'
+        self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
+                                      # only taken into account if hess_approx is 'model'
+        self.final_degree = 'quadratic' # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
+        self.tol_grad  = 1e-5       # tolerance on the gradient of the Lagrangian
+        self.tol_feas  = 1e-5       # tolerance on the feasibility
+        self.tol_bnds  = 1e-5       # tolerance on the bounds
+        self.miter   = 500        # max iterations
+        self.msimul  = 500        # max evaluations
+        self.verbose = 1          # verbosity level 0,...,3 (default: 1)
 
 options = optionsClass()
 

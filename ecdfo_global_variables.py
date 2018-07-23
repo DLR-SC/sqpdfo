@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import sys
+import types
+
 """
 This file is used to set and get the global variables used in the ECDFO algorithm.
 
@@ -13,6 +16,23 @@ Variables are not initialized here so that we are sure that the user set them hi
 """
 
 
+class ecdfo_global_variables:
+    # default values, in case the global variable is not set by the user
+    global prob
+    prob = None
+    global fileoutput
+    fileoutput = 1
+    global threshold
+    threshold = 1e-8  # Threshold for violated bounds
+    global check_condition
+    check_condition = 1  # Check condition of the interpolation matrix regularly
+    global simul_not_initialized
+    simul_not_initialized = 1  # Initial value
+    global filename_f
+    filename_f = None
+    global filename_ce
+    filename_ce = None
+
 def set_prob(value):
 	global prob
 	prob = value
@@ -22,9 +42,9 @@ def set_prob_cuter(prob_cuter):
     #Warning : here the CUTEr interface from this website has to be installed in order to use CUTEr problems :
     #http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html. Thanks to Prof. Dr. Árpád Bűrmen
     from pycutermgr import clearCache, prepareProblem, importProblem
-    clearCache(prob)
-    prepareProblem(prob)
-    cproblem=importProblem(prob)
+    clearCache(prob_cuter)
+    prepareProblem(prob_cuter)
+    cproblem=importProblem(prob_cuter)
 
 def set_threshold(value):
 	global threshold
@@ -54,15 +74,30 @@ def set_check_condition(value):
 
 def set_filename_f(value):
     global filename_f
-    filename_f = value
+    if value is None:
+        sys.exit('Error: Definition of the objective function in func() is missing !')
+    elif isinstance(value, types.FunctionType):
+        filename_f = value
+    else:
+        sys.exit('Error: function handle for the objective is not of type function !')
 
 def set_filename_ce(value):
     global filename_ce
-    filename_ce = value
+    if isinstance(value, types.FunctionType):
+        filename_ce = value
+    elif value is '' or value is None:
+        filename_ce = ''
+    else:
+        sys.exit('Error: function handle for the constraints is not of type function !')
 
 
 def get_prob():
-    return prob
+    if prob is None:
+        sys.exit('Problem number is not set!\n'\
+            'Please import ecdfo_global_variables and use set_prob(nbr)\n'\
+            'where nbr is 1,...,5 for test examples or 100 for a user defined problem.')
+    else:
+        return prob
 
 def get_prob_cuter():
     return cproblem

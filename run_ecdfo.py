@@ -2,7 +2,7 @@
 from runtime import *
 import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
-from numpy import array, zeros, shape
+from numpy import array, ones_like, infty
 
 ###############################################################################
 #  Driver for the optimizer ECDFO.
@@ -15,8 +15,11 @@ from numpy import array, zeros, shape
 #  where f: Rn -> R (x is the vector of n variables to optimize),
 #  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
 #
-#  ---------------------------------------------------------
-#  See example call to ECDFO in '__main__' below !!
+#  -------------------------------------------------------------
+#  Example calls to ECDFO:
+#      x,f    = run_ecdfo(func_f, x0)
+#      x,f    = run_ecdfo(func_f, x0, lb, ub)
+#      x,f,ce = run_ecdfo(func_f, x0, lb, ub, func_c)
 ###############################################################################
 
 
@@ -38,40 +41,36 @@ class optionsClass:
 
 def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
-    # Set problem global variables
-    glob.set_prob(100)                       # set problem number to 100 (=userdefined problem which reads func_f() and func_c())
-    if func is None:
-        print('Error: Definition of the objective function (in func_f()) is missing !')
-    else:
-        glob.set_filename_f(func)
+    # Set global variables
+    glob.set_prob(100)  # set problem number to 100 (=userdefined problem which reads func() and cfunc())
+    glob.set_filename_f(func)
     if cfunc is None:
         glob.set_filename_ce('')
     else:
         glob.set_filename_ce(cfunc)
-    glob.set_check_condition(1)
-    glob.set_fileoutput(1)
-    glob.set_simul_not_initialized(1)
-    glob.set_threshold(1e-08)                # Threshold for violated bounds
 
     #---------------------------------------
     # Initialize problem
     #---------------------------------------
 
+    # initial Lagrange multipliers for the problem (not necessary)
     lm = array([])
-    n = max(shape(x))
 
     # Check right format of x and bounds lx and ux
-    if not isinstance(x, np.ndarray):
+    if x is None:
+        sys.exit('Error: No starting values of x given !')
+    elif not isinstance(x, np.ndarray):
         x = array([x])
-    if not isinstance(lx, np.ndarray):
+    if lx is None:
+        lx = -1e20 * ones_like(x).T
+    elif not isinstance(lx, np.ndarray):
         lx = array([lx]).T
-    if not isinstance(ux, np.ndarray):
+    if ux is None:
+        ux = 1e20 * ones_like(x).T
+    elif not isinstance(ux, np.ndarray):
         ux = array([ux]).T
 
-    #---------------------------------------
     # Set options
-    #---------------------------------------
-
     options = optionsClass()
 
     #------------------------------------
@@ -79,17 +78,11 @@ def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     #------------------------------------
 
     x,lm,info = ecdfo_(x,lm,lx,ux,options)
-
-    # Return values
-    f = info.f
-    ce = info.ce
-    return x, f, ce
+    return x, info.f, info.ce
 
 
 def func_f(xvector):
     # 2D Rosenbrock function (constrained on the unitdisk if func_c() is considered)
-    # x* = (1.0, 1.0)        (constrained on the unitdisk: x* = (0.7864, 0.6177))
-    # f* = 0.0               (constrained on the unitdisk: f* = 0.045674824758137236)
     f =  (1-xvector[0])**2 + 100*(xvector[1]-xvector[0]**2)**2
     msg = 0
     return f,msg
@@ -111,8 +104,9 @@ if __name__ == '__main__':
     ub = array([[10.,10.]]).T
 
     # call run_ecdfo
+    x,f,ce = run_ecdfo(func_f,x0)
     #x,f,ce = run_ecdfo(func_f,x0,lb,ub)
-    x,f,ce = run_ecdfo(func_f,x0,lb,ub,func_c)
+    #x,f,ce = run_ecdfo(func_f,x0,lb,ub,func_c)
 
     # final printout
     print('')
