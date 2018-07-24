@@ -35,20 +35,21 @@ class Test_run_ecdfo(unittest.TestCase):
         set_check_condition(0)
         prob=get_prob()
         options = helper.dummyUnionStruct()
-        options.tol=zeros(3)
 
         x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
         options.algo_descent='Powell'
-        options.tol[0]=1e-05
-        options.tol[1]=1e-05
-        options.tol[2]=1e-05
+        options.tol_grad=1e-05
+        options.tol_feas=1e-05
+        options.tol_bnds=1e-05
         options.dxmin=dxmin
         options.miter=500
         options.msimul=500
         options.verbose=0
+        options.whichmodel = 'subbasis'
+        options.final_degree = 'quadratic'
         lm=array([])
         x,lm,info=ecdfo_(x,lm,lb,ub,options)
 
@@ -73,20 +74,21 @@ class Test_run_ecdfo(unittest.TestCase):
         set_check_condition(0)
         prob=get_prob()
         options = helper.dummyUnionStruct()
-        options.tol=zeros(3)
 
         x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
         options.algo_descent='Powell'
-        options.tol[0]=1e-05
-        options.tol[1]=1e-05
-        options.tol[2]=1e-05
+        options.tol_grad=1e-05
+        options.tol_feas=1e-05
+        options.tol_bnds=1e-05
         options.dxmin=dxmin
         options.miter=500
         options.msimul=500
         options.verbose=0
+        options.whichmodel = 'subbasis'
+        options.final_degree = 'quadratic'
         lm=array([])
         x,lm,info=ecdfo_(x,lm,lb,ub,options)
         self.assertTrue(compare_array(x, array([[   0.333326758778846,  0.666659126169760]]), self.abs_tol, self.rel_tol))
@@ -111,20 +113,21 @@ class Test_run_ecdfo(unittest.TestCase):
         set_prob(3) 
         prob=get_prob()
         options = helper.dummyUnionStruct()
-        options.tol=zeros(3)
 
         x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
         options.algo_descent='Powell'
-        options.tol[0]=1e-05
-        options.tol[1]=1e-05
-        options.tol[2]=1e-05
+        options.tol_grad=1e-05
+        options.tol_feas=1e-05
+        options.tol_bnds=1e-05
         options.dxmin=dxmin
         options.miter=500
         options.msimul=500
         options.verbose=0
+        options.whichmodel = 'subbasis'
+        options.final_degree = 'quadratic'
         lm=array([])
         x,lm,info=ecdfo_(x,lm,lb,ub,options)
 
@@ -149,20 +152,21 @@ class Test_run_ecdfo(unittest.TestCase):
     #     set_prob(4)
     #     prob=get_prob()
     #     options = helper.dummyUnionStruct()
-    #     options.tol=zeros(3)
     #
     #     x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
     #     set_threshold(1e-08)
     #     options.hess_approx='model'
     #     options.bfgs_restart=0
     #     options.algo_descent='Powell'
-    #     options.tol[0]=1e-05
-    #     options.tol[1]=1e-05
-    #     options.tol[2]=1e-05
+    #     options.tol_grad=1e-05
+    #     options.tol_feas=1e-05
+    #     options.tol_bnds=1e-05
     #     options.dxmin=dxmin
     #     options.miter=500
     #     options.msimul=500
-    #     options.verbose=1
+    #     options.verbose=0
+    #     options.whichmodel = 'subbasis'
+    #     options.final_degree = 'quadratic'
     #     lm=array([])
     #     x,lm,info=ecdfo_(x,lm,lb,ub,options)
     #
@@ -187,7 +191,6 @@ class Test_run_ecdfo(unittest.TestCase):
         set_prob(5) 
         prob=get_prob()
         options = helper.dummyUnionStruct()
-        options.tol=zeros(3)
 
         x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
         lb=zeros_(n,1)
@@ -198,20 +201,20 @@ class Test_run_ecdfo(unittest.TestCase):
             lb[arange(n,n + mi)]=li
             ub[arange(n,n + mi)]=ui
         set_threshold(1e-08)
-        options.algo_method='quasi-Newton'
-        options.algo_globalization='trust regions'
         options.hess_approx='model'
         options.bfgs_restart=0
         options.algo_descent='Powell'
         if nb + mi + me == 0:
             options.algo_descent='Wolfe'
-        options.tol[0]=1e-05
-        options.tol[1]=1e-05
-        options.tol[2]=1e-05
+        options.tol_grad=1e-05
+        options.tol_feas=1e-05
+        options.tol_bnds=1e-05
         options.dxmin=dxmin
         options.miter=500
         options.msimul=500
         options.verbose=0
+        options.whichmodel = 'subbasis'
+        options.final_degree = 'quadratic'
         lm=array([])
         x,lm,info=ecdfo_(x,lm,lb,ub,options)
         

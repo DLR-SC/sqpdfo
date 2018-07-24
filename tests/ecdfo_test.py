@@ -20,11 +20,15 @@ class myOptions():
         self.hess_approx = 'model'
         self.bfgs_restart = 0
         self.algo_descent = 'powell'
-        self.tol = array( [1.000000000000000e-06, 1.000000000000000e-06, 1.000000000000000e-06])
+        self.tol_grad = 1.000000000000000e-06
+        self.tol_feas = 1.000000000000000e-06
+        self.tol_bnds = 1.000000000000000e-06
         self.dxmin = 1.000000000000000e-16
         self.miter = 500
         self.msimul = 500
         self.verbose = 0
+        self.whichmodel = 'subbasis'
+        self.final_degree = 'quadratic'
 
 
 class Test_ecdfo(unittest.TestCase):
