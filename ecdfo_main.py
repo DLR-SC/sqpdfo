@@ -605,7 +605,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
       # --------------------------------------
       # Successful iteration (accept the step)
       # --------------------------------------
-            print(cur_degree)
+
             if (rho >= eta1):
                 if options.verbose >= 5:
                     fprintf_(options.fout,'  Step accepted (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
