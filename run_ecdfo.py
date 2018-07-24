@@ -78,7 +78,7 @@ def run_ecdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     #------------------------------------
 
     x,lm,info = ecdfo_(x,lm,lx,ux,options)
-    return x, info.f, info.ce
+    return x,info
 
 
 def func_f(xvector):
@@ -104,13 +104,13 @@ if __name__ == '__main__':
     ub = array([[10.,10.]]).T
 
     # call run_ecdfo
-    x,f,ce = run_ecdfo(func_f,x0)
-    #x,f,ce = run_ecdfo(func_f,x0,lb,ub)
-    #x,f,ce = run_ecdfo(func_f,x0,lb,ub,func_c)
+    #x,info = run_ecdfo(func_f,x0)
+    #x,info = run_ecdfo(func_f,x0,lb,ub)
+    x,info = run_ecdfo(func_f,x0,lb,ub,func_c)
 
     # final printout
     print('')
     print('x* = '+str(x))
-    print('f* = '+str(f))
-    if ce.size>0:
-        print('ce* = '+str(ce.T[0]))
+    print('f* = '+str(info.f))
+    if info.ce.size>0:
+        print('ce* = '+str(info.ce.T[0]))
