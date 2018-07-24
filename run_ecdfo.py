@@ -27,9 +27,8 @@ class optionsClass:
     def __init__(self):
         self.hess_approx = 'model'  # Type of Hessian approximation, options: 'model' or 'bfgs'
         self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after how many iterations
-        # only taken into account if hess_approx is 'bfgs'
+                               # only taken into account if hess_approx is 'bfgs'
         self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
-        # only taken into account if hess_approx is 'model'
         self.final_degree = 'diagonal'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
         self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
         self.tol_feas = 1e-5  # tolerance on the feasibility
