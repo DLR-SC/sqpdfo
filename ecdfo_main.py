@@ -161,6 +161,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     else:
         ceY=array([])
         gce=array([])
+    if options.final_degree == values.quadratic:
+        pfinal = pquad
+    elif options.final_degree == values.diagonal:
+        pfinal = pdiag
+    elif options.final_degree == values.linear:
+        pfinal = plin
 
     ##########################################################################
     # Begin main loop
@@ -599,7 +605,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
       # --------------------------------------
       # Successful iteration (accept the step)
       # --------------------------------------
-
+            print(cur_degree)
             if (rho >= eta1):
                 if options.verbose >= 5:
                     fprintf_(options.fout,'  Step accepted (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
@@ -608,7 +614,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
          #  Augment interpolation set if not fully quadratic yet
 
-                if (cur_degree < pquad or (whichmodel == 3 and cur_degree < pquad + pquad)):
+                if (cur_degree < pfinal or (whichmodel == 3 and cur_degree < pfinal + pfinal)):
                     cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
                     pos=copy(cur_degree)-1
          #  Include xplus in the interpolation set, by replacing another point if
@@ -707,7 +713,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     fprintf_(options.fout,'  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
          #  The model is not fully quadratic yet: add (if possible)
          #  the new point to the interpolation set and recompute the model.
-                if (((cur_degree < pquad) or (whichmodel == 3 and cur_degree < pquad + pquad)) and (rho < eta1)):
+                if (((cur_degree < pfinal) or (whichmodel == 3 and cur_degree < pfinal + pfinal)) and (rho < eta1)):
                     cur_degree,QZ,RZ,Y,xbase,scale=bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,delta,normgx,kappa_ill,nargout=6)
                     if (options.verbose >= 3):
                         disp_(' including interpolation point ',str(cur_degree-1),' (augm)')
@@ -759,7 +765,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
          #  xplus could not yet be included in the set. 
          #  The decision to include xplus here depends on possibly eliminating 
          #  another point.
-                if (cur_degree >= pquad or pos == -1):
+                if (cur_degree >= pfinal or pos == -1):
                     if ((pos == -1) and (poised_model == 0 or delta <= eps_current)):
                         #  Compute the distance of the interpolation points to the current 
                         #  iterate. (Distinguish between the badly conditioned successful
