@@ -89,19 +89,27 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         lx=array([-inf,0,0,0,0,0,0.85,0.9,3,1.2,1.45,0.99,0.99,0.9,0.99]).reshape(-1,1)
         ux=array([inf,2,1.6,1.2,5,2,0.93,0.95,12,4,1.62,1.01010101010101,1.01010101010101,1.11111111111111,1.01010101010101]).reshape(-1,1)
 
-    else:
-        #Warning : here the CUTEr interface from this website has to be installed in order to use CUTEr problems :
-        #http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html Thanks to Prof. Dr. Árpád Bűrmen
-        set_prob_cuter(prob)
+    elif prob==1000:
+        #Warning : here the CUTEst interface from this website has to be 
+        #installed in order to use CUTEst problems :
+        #https://jfowkes.github.io/pycutest/_build/html/index.html 
+        #Thanks to Jaroslav Fowkes and Lindon Roberts
         
         cproblem=get_prob_cuter()
-        info=cproblem.getinfo()
-        n=info['n']
-        mi=0
-        me=info['m']
-        x0=info['x'].reshape(-1,1)
-        lx=info['bl'].reshape(-1,1)
-        ux=info['bu'].reshape(-1,1)
+        n=cproblem.n
+        m=cproblem.m
+        me= sum(cproblem.is_eq_cons)
+        mi=m-me
+        #x0=info['x'].reshape(-1,1)
+        #lx=info['bl'].reshape(-1,1)
+        #ux=info['bu'].reshape(-1,1)
+        x0=cproblem.x0.reshape(-1,1)
+        lx=cproblem.bl.reshape(-1,1)
+        ux=cproblem.bu.reshape(-1,1)
         nb=sum_(min_((lx[0:n]>-inf)+(inf > ux[0:n]),1))
+    else:
+        sys.exit('Problem number is not set!\n'\
+            'Please import ecdfo_global_variables and use set_prob(nbr)\n'\
+            'where nbr is 1,...,5 for test examples or 1000 for a CUTEst problem.')
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info

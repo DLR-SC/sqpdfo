@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+from runtime import *
+import ecdfo_global_variables as glob
+from ecdfo import ecdfo_
+from numpy import array, zeros, arange, shape
+
 ###############################################################################
 #  Driver for the optimizer ECDFO.
 #  ECDFO can solve a minimization problem of the form
@@ -11,15 +16,25 @@
 #  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
 ###############################################################################
 
-from runtime import *
-import ecdfo_global_variables as glob
-from ecdfo import ecdfo_
-from evalfgh import evalfgh_
-from numpy import array, zeros, arange, shape
+class optionsClass:
+    def __init__(self):
+        self.hess_approx = 'model'  # Type of Hessian approximation, options: 'model' or 'bfgs'
+        self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after how many iterations
+                               # only taken into account if hess_approx is 'bfgs'
+        self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
+        self.final_degree = 'diagonal'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
+        self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
+        self.tol_feas = 1e-5  # tolerance on the feasibility
+        self.tol_bnds = 1e-5  # tolerance on the bounds
+        self.miter = 500  # max iterations
+        self.msimul = 500  # max evaluations
+        self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
 def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
+    #---------------------------------------
     # Set problem global variables
+    #---------------------------------------
     glob.set_prob(100)                       # set problem number (100 is userdefined problem)
     if func == None:
         print('Error: Definition of the objective function (in func_f.py) is missing !')
@@ -29,62 +44,65 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
         glob.set_filename_ce('')
     else:
         glob.set_filename_ce(cfunc)
-    glob.set_check_condition(1)
-    glob.set_fileoutput(1)
-    glob.set_simul_not_initialized(1)
-    glob.set_threshold(1e-08)                # Threshold for violated bounds
+    #glob.set_check_condition(1)
+    #glob.set_fileoutput(1)
+    #glob.set_simul_not_initialized(1)
+    #glob.set_threshold(1e-08)                # Threshold for violated bounds
 
     #---------------------------------------
     # Initialize problem
     #---------------------------------------
 
-    class options:
-        pass
-    options.tol = zeros(3)
     lm = array([])
-    n = max(shape(x))
 
     # Check right format of x and bounds lx and ux
-    if not isinstance(x, np.ndarray):
+    if x is None:
+        sys.exit('Error: No starting values of x given !')
+    elif not isinstance(x, np.ndarray):
         x = array([x])
-    if not isinstance(lx, np.ndarray):
+    if lx is None:
+        lx = -1e20 * ones_like(x).T
+    elif not isinstance(lx, np.ndarray):
         lx = array([lx]).T
-    if not isinstance(ux, np.ndarray):
+    if ux is None:
+        ux = 1e20 * ones_like(x).T
+    elif not isinstance(ux, np.ndarray):
         ux = array([ux]).T
 
-    #---------------------------------------
     # Set options
-    #---------------------------------------
-
-    # default options
-    options.hess_approx='model'  # options: 'model' or 'bfgs'
-    options.bfgs_restart=0       # only taken into account if hess_approx is 'bfgs'
-    options.algo_descent='Powell' # options: 'Powell' or 'Wolfe'
-    options.tol[0]  = 1e-3       # tolerance on the gradient of the Lagrangian
-    options.tol[1]  = 1e-2       # tolerance on the feasibility
-    options.tol[2]  = 1e-5       # tolerance on the complementarity
-    options.dxmin   = 1e-8       # minimum size of a step
-    options.miter   = 1000        # max iterations
-    options.msimul  = 1000        # max evaluations
-    options.verbose = 1          # verbosity level 0,...,3
+    options = optionsClass()
 
     #------------------------------------
     # Call ECDFO
     #------------------------------------
 
-    x,lm,info=ecdfo_(evalfgh_,x,lm,lx,ux,options,nargout=3)
+    x,lm,info=ecdfo_(x,lm,lx,ux,options)
 
     # Return values
     f = info.f
     ce = info.ce
     return x, f, ce
+    
+def func_f(xvector):
+    # 2D Rosenbrock function (constrained on the unitdisk if func_c() is considered)
+    f =  (1-xvector[0])**2 + 100*(xvector[1]-xvector[0]**2)**2
+    msg = 0
+    return f,msg
+
+
+def func_c(xvector):
+    # solution on the unitdisk
+    ce = np.zeros(1)
+    ce[0] = xvector[0]**2 + xvector[1]**2 - 1
+    msg = 0
+    return ce, msg
 
 if __name__ == '__main__':
-    from func_f import func_f
-    try:
-        from func_c import func_c
-    except:
-        pass
+    #from func_f import func_f
+    #try:
+    #    from func_c import func_c
+    #except:
+    #    pass
 
     # initialize start values
     x0 = array([[-1.2,1.0]])
@@ -95,6 +113,7 @@ if __name__ == '__main__':
     #x,f,ce = sqpdfo(func_f,x0,lb,ub)
     x,f,ce = sqpdfo(func_f,x0,lb,ub,func_c)
 
+    # printout results
     print('')
     print('x* = '+str(x))
     print('f* = '+str(f))

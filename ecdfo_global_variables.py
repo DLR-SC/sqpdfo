@@ -37,15 +37,22 @@ def set_prob(value):
 	global prob
 	prob = value
 
-def set_prob_cuter(prob_cuter):
+def set_prob_cuter(prob_cuter, params):
     global cproblem
-    #Warning : here the CUTEr interface from this website has to be installed in order to use CUTEr problems :
-    #http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html. Thanks to Prof. Dr. Árpád Bűrmen
-    from pycutermgr import clearCache, prepareProblem, importProblem
-    clearCache(prob_cuter)
-    prepareProblem(prob_cuter)
-    cproblem=importProblem(prob_cuter)
-
+    #Warning : here the pyCUTEst interface from this website has to be 
+    #installed in order to use CUTEst problems :
+    #https://jfowkes.github.io/pycutest/_build/html/index.html 
+    #Thanks to Jaroslav Fowkes and Lindon Roberts
+    import pycutest
+    print('params: ',params)
+    len_params = len(params)
+    if len_params == 0:
+        cproblem = pycutest.import_problem(prob_cuter)
+    elif len_params == 2:
+        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1])})
+    elif len_params == 4:
+        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1]),params[2]:float(params[3])})
+    
 def set_threshold(value):
 	global threshold
 	threshold = value
