@@ -35,7 +35,7 @@ class optionsClass:
         self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after how many iterations
                                # only taken into account if hess_approx is 'bfgs'
         self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
-        self.final_degree = 'diagonal'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
+        self.final_degree = 'quadratic'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
         self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
         self.tol_feas = 1e-5  # tolerance on the feasibility
         self.tol_bnds = 1e-5  # tolerance on the bounds
@@ -48,7 +48,7 @@ def run_ecdfo_cutest(*args, **kwargs):
 
     # Set global variables
     glob.set_prob(1000)  # set problem number to 1000 (=problem from CUTEst library)
-
+    glob.set_check_condition(0)
     #---------------------------------------
     # Initialize problem
     #---------------------------------------
@@ -74,7 +74,8 @@ if __name__ == '__main__':
     #glob.set_prob_cuter(name,params)
     #glob.set_prob_cuter('AIRCRFTA',[])
     #glob.set_prob_cuter('ALJAZZAF', ['N', 3, 'N1', 2])
-    glob.set_prob_cuter('ARTIF', ['N', 10])
+    #glob.set_prob_cuter('ARTIF', ['N', 10])
+    glob.set_prob_cuter('BOXBOD',[])
     
     # call run_ecdfo_cutest
     x,info = run_ecdfo_cutest()

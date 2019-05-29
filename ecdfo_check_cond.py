@@ -14,20 +14,26 @@ def ecdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
 # number is exceeded, matrix is perturbed by exchanging very small singular
 # values
 #
-# programming: A. Troeltzsch, 2014
+# programming: A. Troeltzsch, 2014 (nan_to_num: 06/2019)
 #
     """
-#    varargin = cellarray(args)
-#    nargin = 3-[A,cthreshold,options].count(None)+len(args)
 
     badcond=0
     eps=1e-14
-    if (isempty_(find_(isnan(A))) and isempty_(find_(isinf(A)))):
-        condA=cond_(A)
-        if (condA > cthreshold):
-            badcond=1
-    else:
+    
+    # check whether A has Nan or Inf entries
+    if (isnan(A).any() or isinf(A).any()):
+        if options.verbose >= 3:
+            print('### ecdfo_check_cond: Matrix A has Nan or Inf entries !!!')
+        
+        # repair matrix
+        A = nan_to_num(A)
+    
+    # compute condition number
+    condA=cond_(A)
+    if (condA > cthreshold):
         badcond=1
+    
     if (badcond):
         U,Sdiag,V=numpy.linalg.svd(A)
         V=V.T
