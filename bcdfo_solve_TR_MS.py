@@ -217,6 +217,8 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 
 #  Find eigen decomposition and the minimal eigenvalue.
     V,D=eig_(H,nargout=2)
+    V = real(V)
+    D = real(D)
     neigd=neigd + 1
     mu,imu=min_(diag(D),nargout=2)
     if (verbose):
