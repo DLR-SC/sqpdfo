@@ -105,16 +105,20 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
             fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if isnan(fvalue):
+    if isnan(fvalue) or isnan(info.ci).any() or isnan(info.ce).any():
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f or ce is NaN at the point x\n\n')
             print("x="+str(copy(y)))
+            print('f='+str(fvalue))
+            print('ce='+str(info.ce))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if isinf(fvalue):
+    if isinf(fvalue) or isinf(info.ci).any() or isinf(info.ce).any():
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f or ce is Inf at the point x\n\n')
             print("x="+str(copy(y)))
+            print('f='+str(fvalue))
+            print('ce='+str(info.ce))
         info.flag=values.fail_on_simul
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
     if msg:
