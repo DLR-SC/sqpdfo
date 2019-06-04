@@ -673,10 +673,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             #  Update the trust-region radius.
  
                     if rho >= eta2:
-                        if (active_r or active_t):
+                        if (active_r or active_t) and delta<5.0:
                             delta=delta * tau3
                         else:
-                            delta=min_(max_(tau3 * norms,delta),Deltamax)
+                            delta=min_(max_(tau2 * norms,delta),Deltamax)
                     else:
                         if rho >= eta1:
                             if (active_r or active_t):
