@@ -36,9 +36,9 @@ class optionsClass:
                                # only taken into account if hess_approx is 'bfgs'
         self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
         self.final_degree = 'quadratic'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
-        self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
-        self.tol_feas = 1e-5  # tolerance on the feasibility
-        self.tol_bnds = 1e-5  # tolerance on the bounds
+        self.tol_grad = 1e-4  # tolerance on the gradient of the Lagrangian
+        self.tol_feas = 1e-4  # tolerance on the feasibility
+        self.tol_bnds = 1e-4  # tolerance on the bounds
         self.miter = 500  # max iterations
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     #glob.set_prob_cuter('AIRCRFTA',[])
     #glob.set_prob_cuter('ALJAZZAF', ['N', 3, 'N1', 2])
     #glob.set_prob_cuter('ARTIF', ['N', 10])
-    glob.set_prob_cuter('BOXBOD',[])
+    glob.set_prob_cuter('BT13',[])
     
     # call run_ecdfo_cutest
     x,info = run_ecdfo_cutest()
