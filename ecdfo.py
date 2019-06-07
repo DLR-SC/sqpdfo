@@ -237,9 +237,20 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     # - check bounds and the given options
     # - build initial poised interpolation set
     # - compute function + constraint values and initial multiplier (if not given)
+    
+    # printout to file convhist.m
+    if (verbose):
+        fid=fopen_('convhist.m','w')
+        fprintf_(fid,'function A=history \n A=[ \n')
+        fclose_(fid)
     n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=\
         ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
     if info.flag:
+        #  Append closing bracket in file convhist.m
+        if (verbose):
+            fid=fopen_('convhist.m','a')
+            fprintf_(fid,'];')
+            fclose_(fid)
         return x,lm,info
 
     # Set approach to build the local models
@@ -253,12 +264,6 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
 
     # Initialize the Hessian of the Lagrangian or its approximation
     M=eye_(n)
-
-    # printout to file convhist.m
-    if (verbose):
-        fid=fopen_('convhist.m','w')
-        fprintf_(fid,'function A=history \n A=[ \n')
-        fclose_(fid)
 
     # -------------------------------------------------------------------------
     # Call main optimization loop
