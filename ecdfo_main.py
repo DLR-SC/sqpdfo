@@ -270,7 +270,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
             if (augment <= 0):
                 if (pred == -1):
-                    eps_current = min_(mu * eps_current, epsilon)
+                    # in case of not yet converged feasibility problem
+                    if (info.feasn > options.tol_feas):
+                        eps_current = mu * delta
+                    # else improve in mu * eps_current
+                    else:
+                        eps_current = min_(mu * eps_current, epsilon)
+                    
                 else:
                     eps_current = epsilon
 
@@ -326,15 +332,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 #  If gradient small, repair in epsilon-radius, else in Delta
                 #  (distinguish between infty-norm and 2-norm local solver)
 
-                if (info.glagn <= factor_CV * epsilon):
+                if pred == -1:
+                    radius = min_(delta, eps_current)
+                elif (info.glagn <= factor_CV * epsilon):
                     if (lSolver == 2):
                         radius=min_(delta / sqrt_(n),epsilon / sqrt_(n))
                     else:
                         radius=min_(delta, epsilon)
-                elif pred == -1:
-                    radius = min_(delta, eps_current)
                 else:
                     radius=max_(delta,eps_current)
+                
                 QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,radius,effective_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,normgx,kappa_ill,nargout=8)
                 if options.verbose >= 3:
                     disp_('improve interpolation set (in radius = ',str(radius),') : replaced = ',str(replaced),', poised = ',str(poised),', Y_radius = ',str(Y_radius))
