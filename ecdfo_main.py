@@ -223,7 +223,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
         # Stop on convergence.
 
-        if ((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds)) or delta <= epsilon * 1e-05 or (pred == - 1.0):
+        if ((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds)) or (pred == - 1.0):
 
             # check for accuracy and improve if necessary
 
@@ -243,7 +243,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 errg=poised * Y_radius / factor_CV
                 if options.verbose >= 3:
                     disp_('error on gradient before set improvement = ',str(errg))
-                if (((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds) and errg <= epsilon) or delta <= epsilon * 1e-05) and level=='toplevel':
+                if (((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) and (info.compl <= options.tol_bnds) and errg <= epsilon)) and level=='toplevel':
                     info.niter=info.niter + 1
                     itype='conv'
 
@@ -951,16 +951,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         #  Check that the trust-region radius has not become so small that a step
                         #  of this size will not be significant.
                         if (delta < stallfact * norm_(x) or delta < epsilon * 1e-05):
-                            if options.verbose >= 2 and level=='toplevel':
-                                # final printout
-
-                                ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
-                                if (show_errg):
-                                    disp_('************************************* Trust-region',' radius small *********************************')
-                                else:
-                                    disp_('******************************** Trust-region',' radius small ****************************')
                             msg='Algorithm stopped after '+str(neval)+' evaluations of the objective function because Delta small.'
                             info.flag=values.stop_on_small_trust_region
+                            # final printout
+                            ecdfo_iter_printout_(info,delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
                             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
                 # Recover ce at the current iterate
 
