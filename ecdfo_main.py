@@ -341,6 +341,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         radius=min_(delta, epsilon)
                 else:
                     radius=max_(delta,eps_current)
+                    
+                #  Check that the trust-region radius has not become so small that a repair step
+                #  of this size will not be meaningful.
+                if (radius < stallfact * norm_(x) or radius < epsilon * 1e-5):
+                    msg='Algorithm stopped after '+str(neval)+' evaluations of the objective function because Delta small.'
+                    info.flag=values.stop_on_small_trust_region
+                    # final printout
+                    ecdfo_iter_printout_(info,radius,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+                    return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
+
                 
                 QZ,RZ,Y,replaced,poised,Y_radius,x,scale=bcdfo_repair_Y_(QZ,RZ,Y,radius,effective_FPR,Lambda_FP,Lambda_CP,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,normgx,kappa_ill,nargout=8)
                 if options.verbose >= 3:
@@ -950,7 +960,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         itype='redD'
                         #  Check that the trust-region radius has not become so small that a step
                         #  of this size will not be significant.
-                        if (delta < stallfact * norm_(x) or delta < epsilon * 1e-05):
+                        if (delta < stallfact * norm_(x) or delta < epsilon * 1e-5):
                             msg='Algorithm stopped after '+str(neval)+' evaluations of the objective function because Delta small.'
                             info.flag=values.stop_on_small_trust_region
                             # final printout
