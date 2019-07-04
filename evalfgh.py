@@ -52,9 +52,6 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
     simul_not_initialized = get_simul_not_initialized()
     if simul_not_initialized:
 
-        # fid of the file with the xy coordinates of the hanging chain
-        set_foutxy(fopen_('results.out','w'))
-
         # iteration counter
         set_iter(0)
 
