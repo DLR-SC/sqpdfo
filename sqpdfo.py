@@ -18,14 +18,18 @@ from numpy import array, zeros, arange, shape
 
 class optionsClass:
     def __init__(self):
-        self.hess_approx = 'model'  # Type of Hessian approximation, options: 'model' or 'bfgs'
-        self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after how many iterations
+        self.hess_approx = 'model'  # Type of Hessian approximation, options: 
+                                    # 'model' or 'bfgs'
+        self.bfgs_restart = 0  # Restart of the BFGS Hessian approximation after 
+                               # how many iterations
                                # only taken into account if hess_approx is 'bfgs'
-        self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm','Regression'
-        self.final_degree = 'diagonal'  # Final degree of the model, options: 'linear', 'diagonal', 'quadratic'
-        self.tol_grad = 1e-5  # tolerance on the gradient of the Lagrangian
-        self.tol_feas = 1e-5  # tolerance on the feasibility
-        self.tol_bnds = 1e-5  # tolerance on the bounds
+        self.whichmodel = 'subbasis'  # options: 'Subbasis', 'Frobnorm', 'L2norm', 
+                                      # 'Regression'
+        self.final_degree = 'quadratic'  # Final degree of the model, options: 
+                                        # 'linear', 'diagonal', 'quadratic'
+        self.tol_grad = 1e-4  # tolerance on the gradient of the Lagrangian
+        self.tol_feas = 1e-4  # tolerance on the feasibility
+        self.tol_bnds = 1e-4  # tolerance on the bounds
         self.miter = 500  # max iterations
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
@@ -35,7 +39,7 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     #---------------------------------------
     # Set problem global variables
     #---------------------------------------
-    glob.set_prob(100)                       # set problem number (100 is userdefined problem)
+    glob.set_prob(100)               # set problem number (100 is userdefined problem)
     if func == None:
         print('Error: Definition of the objective function (in func_f.py) is missing !')
     else:
@@ -44,10 +48,6 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
         glob.set_filename_ce('')
     else:
         glob.set_filename_ce(cfunc)
-    #glob.set_check_condition(1)
-    #glob.set_fileoutput(1)
-    #glob.set_simul_not_initialized(1)
-    #glob.set_threshold(1e-08)                # Threshold for violated bounds
 
     #---------------------------------------
     # Initialize problem
@@ -98,11 +98,6 @@ def func_c(xvector):
     return ce, msg
 
 if __name__ == '__main__':
-    #from func_f import func_f
-    #try:
-    #    from func_c import func_c
-    #except:
-    #    pass
 
     # initialize start values
     x0 = array([[-1.2,1.0]])
