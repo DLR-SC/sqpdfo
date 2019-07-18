@@ -88,12 +88,12 @@ def set_filename_f(value):
     else:
         sys.exit('Error: function handle for the objective is not of type function !')
 
-def set_filename_ce(value):
-    global filename_ce
+def set_filename_cons(value):
+    global filename_cons
     if isinstance(value, types.FunctionType):
-        filename_ce = value
+        filename_cons = value
     elif value is '' or value is None:
-        filename_ce = ''
+        filename_cons = ''
     else:
         sys.exit('Error: function handle for the constraints is not of type function !')
 
@@ -130,5 +130,5 @@ def get_check_condition():
 def get_filename_f():
     return filename_f
 
-def get_filename_ce():
-    return filename_ce
+def get_filename_cons():
+    return filename_cons
