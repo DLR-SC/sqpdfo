@@ -2,7 +2,7 @@
 from runtime import *
 import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
-from numpy import array, zeros, arange, shape
+from numpy import array, zeros, arange, shape, concatenate
 
 ###############################################################################
 #  Driver for the optimizer ECDFO.
@@ -34,7 +34,7 @@ class optionsClass:
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
-def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
+def sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *args, **kwargs):
 
     #---------------------------------------
     # Set problem global variables
@@ -45,9 +45,9 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     else:
         glob.set_filename_f(func)
     if cfunc == None:
-        glob.set_filename_ce('')
+        glob.set_filename_cons('')
     else:
-        glob.set_filename_ce(cfunc)
+        glob.set_filename_cons(cfunc)
 
     #---------------------------------------
     # Initialize problem
@@ -80,8 +80,8 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
     # Return values
     f = info.f
-    ce = info.ce
-    return x, f, ce
+    c = info.ce
+    return x, f, c
     
 def func_f(xvector):
     # 2D Rosenbrock function (constrained on the unitdisk if func_c() is considered)
@@ -91,11 +91,15 @@ def func_f(xvector):
 
 
 def func_c(xvector):
-    # solution on the unitdisk
+    # solution on a disk
     ce = np.zeros(1)
-    ce[0] = xvector[0]**2 + xvector[1]**2 - 1
+    ce[0] = xvector[0]**2 + xvector[1]**2 - 2
+    ci = np.zeros(2)
+    ci[0] = - xvector[0] - xvector[1] + 2
+    ci[1] = - (xvector[0] - 1)**3 + xvector[1] - 1
+    c = concatenate((ce,ci))  # equalities first !!!
     msg = 0
-    return ce, msg
+    return c, msg
 
 if __name__ == '__main__':
 
@@ -103,14 +107,16 @@ if __name__ == '__main__':
     x0 = array([[-1.2,1.0]])
     lb = array([[-5.,-5.]]).T
     ub = array([[10.,10.]]).T
+    
+    me = 1; mi = 2
 
     # call sqpdfo
-    #x,f,ce = sqpdfo(func_f,x0,lb,ub)
-    x,f,ce = sqpdfo(func_f,x0,lb,ub,func_c)
+    x,f,c = sqpdfo(func_f,x0,lb,ub)
+    #x,f,c = sqpdfo(func_f,x0,lb,ub,me,mi,func_c)
 
     # printout results
     print('')
     print('x* = '+str(x))
     print('f* = '+str(f))
-    if ce.size>0:
-        print('ce* = '+str(ce.T[0]))
+    if c.size>0:
+        print('c* = '+str(c.T[0]))
