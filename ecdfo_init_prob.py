@@ -12,23 +12,23 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
 # . mi = number of inequality constraints,
 # . me = number of equality constraints.
     """
-#    varargin = cellarray(args)
-#    nargin = 1-[prob].count(None)+len(args)
 
     eps = 2.220446049250313e-16
-# Set output variables
-   
+
+    # Set output variables   
+    
     x0=array([])
     lx=array([])
     ux=array([])
     li=array([])
     ui=array([])
-# fid of the output file
-
+    
+    # fid of the output file
+    
     set_fileoutput(1)
     set_simul_not_initialized(1)
+    
     #dxmin = sqrt(eps);
-
     dxmin=1e-06
     dcimin=sqrt_(eps)
     infb=1e+20
@@ -88,7 +88,46 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         x0=array([[-0.9,1.745,1.2,1.1,3.048,1.974,0.893,0.928,8,3.6,1.50,1,1,1,1]]).T
         lx=array([-inf,0,0,0,0,0,0.85,0.9,3,1.2,1.45,0.99,0.99,0.9,0.99]).reshape(-1,1)
         ux=array([inf,2,1.6,1.2,5,2,0.93,0.95,12,4,1.62,1.01010101010101,1.01010101010101,1.11111111111111,1.01010101010101]).reshape(-1,1)
-
+    elif prob == 10:  # problem 19 from Hock-Schittkowskis collection
+        n=2
+        nb=4
+        me=0
+        mi=2
+        x0 = array([[20.1,5.84]])
+        lx = array([[13.0,0.0]]).reshape(-1,1)
+        ux = array([[100.0,100.0]]).reshape(-1,1)
+    elif prob == 11:  # problem 21 from Hock-Schittkowskis collection
+        n=2
+        nb=4
+        me=0
+        mi=1
+        x0 = array([[-1.0,-1.0]])
+        lx = array([[2.0,-50.0]]).reshape(-1,1)
+        ux = array([[50.0,50.0]]).reshape(-1,1)
+    elif prob == 12:  # problem 35 (Beale) from HS collection
+        n=3
+        nb=3
+        me=0
+        mi=1
+        x0 = array([[0.5,0.5,0.5]])
+        lx = array([[0.0,0.0,0.0]]).reshape(-1,1)
+        ux = array([[1e20,1e20,1e20]]).reshape(-1,1)
+    elif prob == 13:  # problem 76 from Hock-Schittkowskis collection
+        n=4
+        nb=4
+        me=0
+        mi=3
+        x0 = array([[0.5,0.5,0.5,0.5]])
+        lx = array([[0.0,0.0,0.0,0.0]]).reshape(-1,1)
+        ux = array([[1e20,1e20,1e20,1e20]]).reshape(-1,1)
+    elif prob == 14:  # problem 44 from Hock-Schittkowskis collection
+        n=4
+        nb=4
+        me=0
+        mi=6
+        x0 = array([[0.0,0.0,0.0,0.0]])
+        lx = array([[0.0,0.0,0.0,0.0]]).reshape(-1,1)
+        ux = array([[1e20,1e20,1e20,1e20]]).reshape(-1,1)
     elif prob==1000:
         #Warning : here the CUTEst interface from this website has to be 
         #installed in order to use CUTEst problems :
