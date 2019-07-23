@@ -243,8 +243,17 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
         fid=fopen_('convhist.m','w')
         fprintf_(fid,'function A=history \n A=[ \n')
         fclose_(fid)
-    n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=\
-        ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,factor_FPR,Lambda_FP,Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,options,nargout=47)
+        
+    # call to ecdfo_prelim
+    n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,\
+    sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,\
+    ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,\
+    cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=\
+        ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,\
+        rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,factor_FPR,Lambda_FP,\
+        Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,\
+        options,nargout=47)
+        
     if info.flag:
         #  Append closing bracket in file convhist.m
         if (verbose):
@@ -269,8 +278,20 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     # Call main optimization loop
     # -------------------------------------------------------------------------
 
-    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info=\
-        ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,shift_Y,info,options,values,nargout=29)
+    # call ecdfo_main
+    nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,\
+    gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,\
+    msg,CNTsin,neval,lm,info=\
+        ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,\
+        ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,\
+        show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,\
+        verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,\
+        Lambda_CP,factor_FPU,factor_FPR,Lambda_FP,criterion_S,criterion_FP,\
+        criterion_CP,mu,theta,eps_TR,eps_L,lSolver,stratLam,eps_current,vstatus,\
+        xstatus,sstatus.T,dstatus,ndummyY,sspace_save,xspace_save,xfix,fxmax,\
+        poised_model,M,kappa_ill,kappa_th,eps_bnd,poised,Y_radius,c,'toplevel',\
+        whichmodel,hardcons,noisy,scaleX,scalefacX,CNTsin,shrink_Delta,scale,\
+        shift_Y,info,options,values,nargout=29)
 
     #  Append closing bracket in file convhist.m
     if (verbose):
