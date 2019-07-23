@@ -30,8 +30,12 @@ class ecdfo_global_variables:
     simul_not_initialized = 1  # Initial value
     global filename_f
     filename_f = None
-    global filename_ce
-    filename_ce = None
+    global filename_cons
+    filename_cons = None
+    global nbr_slacks
+    nbr_slacks = 0
+    global slacks
+    slacks = None
 
 def set_prob(value):
 	global prob
@@ -97,6 +101,14 @@ def set_filename_cons(value):
     else:
         sys.exit('Error: function handle for the constraints is not of type function !')
 
+def set_nbr_slacks(value):
+    global nbr_slacks
+    nbr_slacks = value
+    
+def set_slacks(value):
+    global slacks
+    slacks = value
+    
 
 def get_prob():
     if prob is None:
@@ -132,3 +144,9 @@ def get_filename_f():
 
 def get_filename_cons():
     return filename_cons
+    
+def get_nbr_slacks():
+    return nbr_slacks
+    
+def get_slacks():
+    return slacks
