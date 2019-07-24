@@ -117,7 +117,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
         return s,_lambda,norms,value,gplus,nfact,neigd,msg
 #  Fix active components
 
-    ind_g_crit=find_(logical_or(logical_and(g>0, abs(lb) <= 1e-10), logical_and(g < 0, ub <= 1e-10)))
+    ind_g_crit=find_(logical_or(logical_and(g[ind_free]>0, abs(lb[ind_free]) <= 1e-10), logical_and(g[ind_free] < 0, ub[ind_free] <= 1e-10)))
 
     if (not isempty_(ind_g_crit)):
         ind_active=ind_free[ind_g_crit].T
@@ -467,7 +467,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                 return s,_lambda,norms,value,gplus,nfact,neigd,msg
           #  Fix components which became active
             ind_g_crit=find_(logical_or(logical_and(abs(lb[ind_free]) <= 1e-10, g[ind_free] > 0), logical_and(ub[ind_free] <= 1e-10, g[ind_free] < 0)))
-            if (length_(ind_g_crit) != 0):
+            if (not isempty_(ind_g_crit)):
                 ind_active=concatenate_([ind_active,ind_free[ind_g_crit].T],axis=1)
                 ind_free=setdiff_(ind_free,ind_active)
                 nfree=length_(ind_free)
