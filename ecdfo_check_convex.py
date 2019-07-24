@@ -20,10 +20,7 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
     if (isnan(A).any() or isinf(A).any()):
         if options.verbose >= 3:
             print('### ecdfo_check_convex: Matrix A has Nan or Inf entries !!!')
-        
-        # repair matrix
-        A = nan_to_num(A)
-        
+               
     # compute eigenvalues
     ev=linalg.eigvals(A)
     
@@ -39,5 +36,13 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
         d=diag(d)    # CONVERT VECTOR d INTO A MATRIX 
         A=v.dot( d .dot( v.T ))  # RECOMPOSE MATRIX USING EIGENDECOMPOSITION
 
-    # remove possible complex entries       
+    # check for complex entries (non-symmetric matrix)
+    if not isempty_(not isreal(A).any()):
+        if options.verbose >= 3:
+            print('### ecdfo_check_convex: Matrix A is non symmetric. Resetting A !')
+            
+        # repair matrix
+        A = (A+A.T)*0.5
+    
+    # remove still possible complex entries       
     return real(A)
