@@ -22,10 +22,10 @@ def bcdfo_projgrad_(n=None,x=None,g=None,bl=None,bu=None,*args,**kwargs):
 #
     """
     
-#    varargin = cellarray(args)
-#    nargin = 5-[n,x,g,bl,bu].count(None)+len(args)
+    n = min_(n,size_(bl,1))
     gn=zeros_(n,1)
     gnorm=0.0
+    
     for i in range(0,n):
         gi=g[i,0]
         if gi < 0.0:
