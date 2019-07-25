@@ -487,9 +487,9 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 fY[j]=fX[m]
                 
                 if mi > 0:
-                    ciY[:,j]=copy(info.ci.T)
+                    ciY[:,j]=copy(ciX[:,m].T)
                 if me > 0:
-                    ceY[:,j]=copy(info.ce.T)
+                    ceY[:,j]=copy(ceX[:,m].T)
                     
                 poised_model=0
                 
@@ -788,24 +788,26 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             ared=merit0 - merit
             pred=- qcost + sigma * rpred
             
-            if pred < 0:  # should not occur, since here s ~= 0
+            if rpred < 0:
+                # inaccurate model is assumed, thus an improvement step is performed
+                # at the next iteration
+                pred = -1.0
             
-                if options.verbose > 1:
-                    fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should be positive\n\n'%(pred))
-                    
-                info.flag=values.fail_unexpected
-                return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
-                cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
-                ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
+            if pred < 0:  
+                # should not occur, since here s ~= 0
+                # an improvement step is performed at the next iteration
+                pred=-1.0
+                            
+                if options.verbose >= 3:
+                    fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should '\
+                            'be positive\n\n'%(pred))
                 
-            elif pred == 0:
-            
-                # here, stationarity is assumed but model maybe inaccurate to state convergence
-                # thus, an improvement step is performed below
-                
+            elif pred == 0:            
+                # here, stationarity is assumed but model maybe inaccurate to state 
+                # convergence thus, an improvement step is performed next iteration
                 pred=- 1.0
                 
-                if verbose > 1:
+                if options.verbose >= 3:
                     disp_('### ecdfo_main : Warning : predicted reduction is 0 ###')
                     
             rho=ared / pred
@@ -835,7 +837,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
             if (rho >= eta1):
             
-                if options.verbose >= 5:
+                if options.verbose >= 3:
                     fprintf_(options.fout,'  Step accepted (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
                     
                 if (merit >= merit0):
