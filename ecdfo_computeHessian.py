@@ -16,6 +16,8 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
     info=copy(info_)
 
     lagfY=zeros(size_(Y,2))
+    norm_ceY = zeros(size_(Y,2))
+    norm_lm = zeros(size_(Y,2))
 
     pc=1.0
     if not null_step:
@@ -43,7 +45,8 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             if me:
                 y=y + info.ae.T.dot(lm[n + mi:n + mi + me])
 
-            # compute the BFGS approximation of the Hessian of the Lagrangian (with Powell corrections)
+            # compute the BFGS approximation of the Hessian of the Lagrangian 
+            # (with Powell corrections)
             if options.bfgs_restart > 0 and mod_(info.nsimul[1],options.bfgs_restart) == 0:
                 szM = size_(M)
                 M=eye_(szM[0])
@@ -52,10 +55,12 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                 first=0
                 if info.niter == 1:
                     first=1
-                M,pc,info,values=ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
+                M,pc,info,values=\
+                ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
                 if info.flag == values.fail_unexpected:
                     M=eye_(size_(M)[0])
-                    M,pc,info,values=ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
+                    M,pc,info,values=\
+                    ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
                     if info.flag == values.fail_unexpected:
                         disp_('ecdfo_computeHessian: fail_unexpected ')
                         return M,pc,info
@@ -65,26 +70,30 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             info.ai=gci
             info.ae=gce
 
-            # compute the model of the Lagrange function   
-            #M=eye(size(M));
             cur_degree=size_(Y,2)
 
             # constrained case
-            if me + mi > 0:
+            if not isempty_(ceY):
 
                 #  Compute Lagrange function values for all points
-                if length_(ceY) > 0:
-                    for i in range(0,cur_degree):
-                        lagfY[i] = fY[i] + lm[n:n+me].T.dot(ceY[:,i])
-                else:
-                    lagfY=zeros(cur_degree)
+                for i in range(0,cur_degree):
+                    norm_ceY[i] = norm_(ceY[:,i])
+                    norm_lm[i] = lm[n:n+me].T.dot(ceY[:,i])
+                
+                lagfY = fY + sigma * norm_ceY + norm_lm
 
-                model=bcdfo_computeP_(QZ,RZ,Y,lagfY.reshape(1,-1),whichmodel,fcmodel[[0],:],ind_Y,i_xbest,m,gx,scale,shift_Y)
+                # Compute model of the Lagrangian
+                model=\
+                bcdfo_computeP_(QZ,RZ,Y,lagfY.reshape(1,-1),\
+                               whichmodel,fcmodel[[0],:],ind_Y,\
+                               i_xbest,m,gx,scale,shift_Y)
+                
+                # Compute Hessian of the Lagrangian
                 M=bcdfo_hessP_(model,x,x,scale,shift_Y)
+                
             else:
                 M=bcdfo_hessP_(fcmodel[[0],:],x,x,scale,shift_Y)
 
-        # assemble the Hessian of the Lagrange function model
         else:
             if options.verbose:
                 fprintf_(options.fout,'\n### ecdfo: options.hess_approx not recognized\n\n')
