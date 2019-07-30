@@ -34,7 +34,7 @@ class optionsClass:
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
-def sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *args, **kwargs):
+def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
 
     #---------------------------------------
     # Set problem global variables
@@ -94,10 +94,7 @@ def func_c(xvector):
     # solution on a disk
     ce = np.zeros(1)
     ce[0] = xvector[0]**2 + xvector[1]**2 - 2
-    ci = np.zeros(2)
-    ci[0] = - xvector[0] - xvector[1] + 2
-    ci[1] = - (xvector[0] - 1)**3 + xvector[1] - 1
-    c = concatenate((ce,ci))  # equalities first !!!
+    c=ce
     msg = 0
     return c, msg
 
@@ -108,11 +105,9 @@ if __name__ == '__main__':
     lb = array([[-5.,-5.]]).T
     ub = array([[10.,10.]]).T
     
-    me = 1; mi = 2
-
     # call sqpdfo
-    x,f,c = sqpdfo(func_f,x0,lb,ub)
-    #x,f,c = sqpdfo(func_f,x0,lb,ub,me,mi,func_c)
+    #x,f,c = sqpdfo(func_f,x0,lb,ub)
+    x,f,c = sqpdfo(func_f,x0,lb,ub,func_c)
 
     # printout results
     print('')
