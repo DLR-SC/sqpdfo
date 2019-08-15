@@ -2,7 +2,7 @@
 from runtime import *
 import ecdfo_global_variables as glob
 from ecdfo import ecdfo_
-from numpy import array, zeros, arange, shape, concatenate
+from numpy import array, zeros, ones, arange, shape, concatenate
 
 ###############################################################################
 #  Driver for the optimizer ECDFO.
@@ -34,11 +34,12 @@ class optionsClass:
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
-def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
+def sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *args, **kwargs):
 
-    #---------------------------------------
+    # Set options
+    options = optionsClass()
+
     # Set problem global variables
-    #---------------------------------------
     glob.set_prob(100)               # set problem number (100 is userdefined problem)
     if func == None:
         print('Error: Definition of the objective function (in func_f.py) is missing !')
@@ -48,12 +49,6 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
         glob.set_filename_cons('')
     else:
         glob.set_filename_cons(cfunc)
-
-    #---------------------------------------
-    # Initialize problem
-    #---------------------------------------
-
-    lm = array([])
 
     # Check right format of x and bounds lx and ux
     if x is None:
@@ -69,13 +64,15 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     elif not isinstance(ux, np.ndarray):
         ux = array([ux]).T
 
-    # Set options
-    options = optionsClass()
+    # Handling of inequalities if any
+    if mi:
+        glob.set_nbr_slacks(mi)
+        glob.set_slacks(zeros((mi,1)))
+        lx = concatenate((lx,zeros((mi,1))))
+        ux = concatenate((ux,1e20*ones((mi,1))))
 
-    #------------------------------------
     # Call ECDFO
-    #------------------------------------
-
+    lm = array([])
     x,lm,info=ecdfo_(x,lm,lx,ux,options)
 
     # Return values
@@ -84,7 +81,7 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, cfunc=None, *args, **kwargs):
     return x, f, c
     
 def func_f(xvector):
-    # 2D Rosenbrock function (constrained on the unitdisk if func_c() is considered)
+    # 2D Rosenbrock function
     f =  (1-xvector[0])**2 + 100*(xvector[1]-xvector[0]**2)**2
     msg = 0
     return f,msg
@@ -92,9 +89,12 @@ def func_f(xvector):
 
 def func_c(xvector):
     # solution on a disk
-    ce = np.zeros(1)
+    ce = np.zeros(2)
     ce[0] = xvector[0]**2 + xvector[1]**2 - 2
-    c=ce
+    ce[1] = - (xvector[0] - 1)**3 + xvector[1] - 1
+    ci = np.zeros(1)
+    ci[0] = - xvector[0] - xvector[1] + 2    
+    c = concatenate((ce,ci))  # equalities first !!!
     msg = 0
     return c, msg
 
@@ -105,9 +105,11 @@ if __name__ == '__main__':
     lb = array([[-5.,-5.]]).T
     ub = array([[10.,10.]]).T
     
+    me = 1; mi = 2
+
     # call sqpdfo
     #x,f,c = sqpdfo(func_f,x0,lb,ub)
-    x,f,c = sqpdfo(func_f,x0,lb,ub,func_c)
+    x,f,c = sqpdfo(func_f,x0,lb,ub,me,mi,func_c)
 
     # printout results
     print('')
