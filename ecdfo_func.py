@@ -131,6 +131,28 @@ def ecdfo_func_(x=None,*args,**kwargs):
         c = concatenate((ce,ci))     
         c=c.reshape(-1,1)
         
+    elif prob == 15: # 2D Rosenbrock with 2 eq + 1 ineq
+        f =  (1-x[0])**2 + 100*(x[1]-x[0]**2)**2
+        ce = np.zeros(2)
+        ce[0] = x[0]**2 + x[1]**2 - 2
+        ce[1] = - (x[0] - 1)**3 + x[1] - 1
+        ci = np.zeros(1)
+        ci[0] = - x[0] - x[1] + 2    
+        ce=ce.reshape(-1,1)
+        ci=ci.reshape(-1,1)
+        c = concatenate((ce,ci))   
+    
+    elif prob == 16: # 2D Rosenbrock with 1 eq + 2 ineq
+        f =  (1-x[0])**2 + 100*(x[1]-x[0]**2)**2
+        ce = np.zeros(1)
+        ce[0] = x[0]**2 + x[1]**2 - 2
+        ci = np.zeros(2)
+        ci[0] = - x[0] - x[1] + 2    
+        ci[1] = - (x[0] - 1)**3 + x[1] - 1
+        ce=ce.reshape(-1,1)
+        ci=ci.reshape(-1,1)
+        c = concatenate((ce,ci))   
+        
     elif prob==100:  # user-defined problem (given in function handles)
         ffunc = glob.get_filename_f()
         cfunc = glob.get_filename_cons()

@@ -128,6 +128,22 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         x0 = array([[0.0,0.0,0.0,0.0]])
         lx = array([[0.0,0.0,0.0,0.0]]).reshape(-1,1)
         ux = array([[1e20,1e20,1e20,1e20]]).reshape(-1,1)
+    elif prob == 15:
+        n=2
+        nb=4
+        me=2
+        mi=1
+        x0 = array([[-1.2,1.0]])
+        lx = array([[-5.0,-5.0]]).reshape(-1,1)
+        ux = array([[10.0,10.0]]).reshape(-1,1)
+    elif prob == 16:
+        n=2
+        nb=4
+        me=1
+        mi=2
+        x0 = array([[0.3,0.3]])
+        lx = array([[-5.0,-5.0]]).reshape(-1,1)
+        ux = array([[10.0,10.0]]).reshape(-1,1)
     elif prob==1000:
         #Warning : here the CUTEst interface from this website has to be 
         #installed in order to use CUTEst problems :
