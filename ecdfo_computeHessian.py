@@ -54,7 +54,8 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 
             # compute the BFGS approximation of the Hessian of the Lagrangian 
             # (with Powell corrections)
-            if options.bfgs_restart > 0 and mod_(info.nsimul[1],options.bfgs_restart) == 0:
+            if options.bfgs_restart > 0 \
+            and mod_(info.nsimul[1],options.bfgs_restart) == 0:
                 szM = size_(M)
                 M=eye_(szM[0])
                 pc=2.0
@@ -84,12 +85,12 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
             if not isempty_(ceY):
 
                 #  Compute Lagrange function values for all points
-                
+
                 if nbr_slacks > 0:
                     for i in range(0,cur_degree):
                         norm_ceY[i] = norm_(ceY[:,i] - \
                                    concatenate((zeros((me-nbr_slacks,1)),sl**2)).T[0])   
-                        norm_lm[i] = lm[n:n+me].T.dot(\
+                        norm_lm[i] = lm[n:n+me].T.dot(ceY[:,i] - \
                                    concatenate((zeros((me-nbr_slacks,1)),sl**2)).T[0])
                 else:
                     for i in range(0,cur_degree):
@@ -114,7 +115,8 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 
         else:
             if options.verbose:
-                fprintf_(options.fout,'\n### ecdfo: options.hess_approx not recognized\n\n')
+                fprintf_(options.fout,'\n### ecdfo: options.hess_approx',\
+                ' not recognized\n\n')
             info.flag=values.fail_on_argument
             return M,pc,info
     return M,pc,info

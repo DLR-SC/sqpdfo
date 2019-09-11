@@ -22,23 +22,26 @@ from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from ecdfo_find_smallf import ecdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
-from numpy import array, zeros
+from numpy import array, zeros, concatenate, zeros_like
+import ecdfo_global_variables as glob
 
 
 def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=None,nit_=None,\
-    i_xbest_=None,lb_=None,ub_=None,m_=None,X_=None,fX_=None,ciX_=None,ceX_=None,ind_Y_=None,\
-    QZ_=None,RZ_=None,delta_=None,cur_degree_=None,neval_=None,maxeval_=None,maxit_=None,\
-    fcmodel_=None,gx_=None,normgx_=None,show_errg_=None,pquad_=None,pdiag_=None,plin_=None,\
-    stallfact_=None,eps_rho_=None,Deltamax_=None,rep_degree_=None,epsilon_=None,\
-    verbose_=None,eta1_=None,eta2_=None,gamma1_=None,gamma2_=None,gamma3_=None,interpol_TR_=None,\
-    factor_CV_=None,Lambda_XN_=None,Lambda_CP_=None,factor_FPU_=None,factor_FPR_=None,\
-    Lambda_FP_=None,criterion_S_=None,criterion_FP_=None,criterion_CP_=None,mu_=None,\
-    theta_=None,eps_TR_=None,eps_L_=None,lSolver_=None,stratLam_=None,eps_current_=None,\
-    vstatus_=None,xstatus_=None,sstatus_=None,dstatus_=None,ndummyY_=None,sspace_save_=None,\
-    xspace_save_=None,xfix_=None,fxmax_=None,poised_model_=None,M_=None,kappa_ill_=None,\
-    kappa_th_=None,eps_bnd_=None,poised_=None,Y_radius_=None,c_=None,level_=None,whichmodel_=None,\
-    hardcons_=None,noisy_=None,scaleX_=None,scalefacX_=None,CNTsin_=None,shrink_Delta_=None,\
-    scale_=None,shift_Y_=None,info_=None,options_=None,values_=None,*args,**kwargs):
+    i_xbest_=None,lb_=None,ub_=None,m_=None,X_=None,fX_=None,ciX_=None,ceX_=None,\
+    ind_Y_=None,QZ_=None,RZ_=None,delta_=None,cur_degree_=None,neval_=None,\
+    maxeval_=None,maxit_=None,fcmodel_=None,gx_=None,normgx_=None,show_errg_=None,\
+    pquad_=None,pdiag_=None,plin_=None,stallfact_=None,eps_rho_=None,Deltamax_=None,\
+    rep_degree_=None,epsilon_=None,verbose_=None,eta1_=None,eta2_=None,gamma1_=None,\
+    gamma2_=None,gamma3_=None,interpol_TR_=None,factor_CV_=None,Lambda_XN_=None,\
+    Lambda_CP_=None,factor_FPU_=None,factor_FPR_=None,Lambda_FP_=None,\
+    criterion_S_=None,criterion_FP_=None,criterion_CP_=None,mu_=None,theta_=None,\
+    eps_TR_=None,eps_L_=None,lSolver_=None,stratLam_=None,eps_current_=None,\
+    vstatus_=None,xstatus_=None,sstatus_=None,dstatus_=None,ndummyY_=None,\
+    sspace_save_=None,xspace_save_=None,xfix_=None,fxmax_=None,poised_model_=None,\
+    M_=None,kappa_ill_=None,kappa_th_=None,eps_bnd_=None,poised_=None,Y_radius_=None,\
+    c_=None,level_=None,whichmodel_=None,hardcons_=None,noisy_=None,scaleX_=None,\
+    scalefacX_=None,CNTsin_=None,shrink_Delta_=None,scale_=None,shift_Y_=None,\
+    info_=None,options_=None,values_=None,*args,**kwargs):
     ###############################################################################
     # Main optimization loop for ECDFO.
     ###############################################################################
@@ -137,14 +140,26 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     
     old_delta  = copy(delta);     # for printing
     sigma      = 1;         # initial penalty parameter
-    rho_factor = 0.3;       # it is imposed that pred/vred >= rho_factor*sigmab (must be in (0,1))
+    rho_factor = 0.3;       # it is imposed that pred/vred >= rho_factor*sigmab 
+                            # (must be in (0,1))
     tau1       = copy(gamma2);    # trust radius reduction factor if out of domain
-    tau2       = copy(gamma3);    # good trust radius augmentation factor when active and rho is >= eta1
-    tau3       = 5;         # extra trust radius augmentation factor when active and rho is >= eta2
+    tau2       = copy(gamma3);    # good trust radius augmentation factor 
+                                  # when active and rho is >= eta1
+    tau3       = 5;         # extra trust radius augmentation factor 
+                            # when active and rho is >= eta2
+                            
+    nbr_slacks = glob.get_nbr_slacks()
+    sl = glob.get_slacks()
+    slplus = zeros_like(sl)
 
     constrained_pbl=copy(me)
     null_step=0
-    merit=info.f + sigma * norm_(info.ce)
+    ce = info.ce
+    if nbr_slacks:
+        merit=info.f + sigma * \
+              norm_(ce - concatenate((zeros((len(ce)-nbr_slacks,1)),sl**2)))
+    else:
+        merit=info.f + sigma * norm_(info.ce)
     msg='Unexpected message from ecdfo_main'
     m=size_(X,2)-1
     indfree=find_(vstatus == c.free)
@@ -158,14 +173,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     if not isempty_(indfix):
         indfix=indfix.reshape(-1)
         
-    n=size_(Y,1)
+    n=size_(x,1)
     fY=fX[ind_Y]
     fx=fX[i_xbest]
     itype=' '
     pc=0
-    s=[]
+    s=zeros((size_(x)))
     norms=0
     pred=0
+    ciplus=array([])
+    ceplus=array([])
     
     if mi > 0:
         ciY=copy(ciX[:,ind_Y])
@@ -193,7 +210,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     radius_has_been_rejected=copy(False)
     
     while 1:
-
+        
         # Stop on counter.
 
         if info.niter >= options.miter:
@@ -236,9 +253,11 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         lbounds[ilb]=lb[indfree[ilb]]
         ubounds[iub]=ub[indfree[iub]]
         
-        lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+        lm,info=\
+        ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
         
-        feas,comp,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+        feas,comp,info=\
+        ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
         
         if info.flag:
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -274,7 +293,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                 #  Compute poisedness of the interpolation set Y
 
-                poised,Y_radius=bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
+                poised,Y_radius=\
+                bcdfo_poisedness_Y_(QZ,RZ,Y,eps_L,x,lSolver,whichmodel,hardcons,\
+                                   lb,ub,indfree,stratLam,scale,shift_Y,nargout=2)
+                                   
                 poisedness_known=1
 
                 #  Compute gradient accuracy 
@@ -286,7 +308,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     
                 #  Check whether convergence tolerances are satisfied
                     
-                if (((info.glagn <= options.tol_grad) and (info.feasn <= options.tol_feas) \
+                if (((info.glagn <= options.tol_grad) \
+                and (info.feasn <= options.tol_feas) \
                 and (info.compl <= options.tol_bnds) and errg <= epsilon)) \
                 and level=='toplevel':
                 
@@ -296,11 +319,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                     # Final printout
 
-                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
+                                        nb,mi,options,constrained_pbl,merit)
                     
                     info.flag=values.success
                     
-                    msg='Convergence in '+str(neval)+' evaluations of the objective function.'
+                    msg='Convergence in '+str(neval)+\
+                    ' evaluations of the objective function.'
                     
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
                     cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
@@ -311,8 +336,9 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     info.niter=info.niter + 1
 
                     #iteration printout
-
-                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+                    
+                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
+                                        nb,mi,options,constrained_pbl,merit)
 
             #  Not at a solution: improve the interpolation set.
 
@@ -420,8 +446,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 else:
                     radius=max_(delta,eps_current)
                     
-                #  Check that the trust-region radius has not become so small that a repair step
-                #  of this size will not be meaningful.
+                #  Check that the trust-region radius has not become so small that a 
+                #  repair step of this size will not be meaningful.
                 
                 if (radius < stallfact * norm_(x) or radius < epsilon * 1e-5):
                 
@@ -432,7 +458,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     
                     # final printout
                     
-                    ecdfo_iter_printout_(info,radius,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+                    ecdfo_iter_printout_(info,radius,norms,pc,itype,values,nb,mi,\
+                          options,constrained_pbl,merit)
                     
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
                     cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
@@ -530,7 +557,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
 
             # Update Hessian approximation (and gradients in info.g, info.ai, info.ae)
-
+            
             M,pc,info=\
             ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,\
                                  gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,\
@@ -550,11 +577,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             
             # compute multiplier
             
-            lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+            lm,info=\
+            ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
             
             # compute optimality
             
-            feas,comp,info=ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+            feas,comp,info=\
+            ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
             
             if info.flag:
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -583,7 +612,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 
             # check whether convergence tolerances are satisfied   
              
-            if (info.glagn / factor_CV <= options.tol_grad) and (info.feasn / factor_CV <= options.tol_feas)\
+            if (info.glagn / factor_CV <= options.tol_grad)\
+                and (info.feasn / factor_CV <= options.tol_feas)\
                 and (info.compl / factor_CV <= options.tol_bnds) and errg <= epsilon\
                 and cur_degree >= rep_degree and level=='toplevel':
                 
@@ -591,9 +621,11 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 
                 itype='conv'                
                 
-                ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+                ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+                      options,constrained_pbl,merit)
                 
-                msg='Convergence in '+str(neval)+' evaluations of the objective function.'
+                msg='Convergence in '+str(neval)+\
+                ' evaluations of the objective function.'
                 
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
                 cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
@@ -614,26 +646,37 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         #-----------------------------------------------------------------------
   
         if not(radius_has_been_rejected):
-            f0      = info.f;           # memorize f at the current iterate, useful in the sufficient decrease condition
-            ce0     = info.ce;          # memorize ce at the current iterate in case of step rejection
+            f0      = info.f;           # memorize f at the current iterate, 
+                                        # useful in the sufficient decrease condition
+            if nbr_slacks:     
+                ce0 = copy(info.ce) - \
+                      concatenate((zeros((len(info.ce)-nbr_slacks,1)),sl**2))
+            else:
+                ce0 = info.ce;          # memorize ce at the current iterate in
+                                         # case of step rejection
             ce0n    = norm_(ce0);
-            merit0  = f0 + sigma * ce0n;  # inital value of the merit function, for the given sigma
-            prec_r  = options.tol_feas/10;  # initial precision for the restoration problem
-            prec_t  = options.tol_grad/10;  # initial precision for the tangent problem
+            merit0  = f0 + sigma * ce0n;  # inital value of the merit function, 
+                                          # for the given sigma
+            prec_r  = options.tol_feas/10;  # initial precision for the restoration
+                                            # problem
+            prec_t  = options.tol_grad/10;  # initial precision for the tangent 
+                                            # problem
 
             if options.verbose >= 5:
                 fprintf_(options.fout,'\nStep computation: merit = %12.5e\n'%(merit0))
                 
             if options.verbose == 4:
-                fprintf_(options.fout,'   radius     |r|      |t|      |s|     sigma     rho\n')
+                fprintf_(options.fout,'   radius     |r|      |t|      |s|',\
+                '     sigma     rho\n')
                 
         info.niter=info.niter + 1
 
         #-----------------------------------------------------------------------
         # Iteration printout
         #-----------------------------------------------------------------------
-   
-        ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
+        
+        ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+              options,constrained_pbl,merit)
         
         if options.verbose >= 5:
             fprintf_(options.fout,'  Trust radius = %8.2e\n'%(delta))
@@ -649,12 +692,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         # solve trust-region subproblem in delta
         
         old_delta=copy(delta)
-        
-        xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info=\
-        ecdfo_solve_TR_bc_(func,x,lb[indfree],ub[indfree],delta,mi,me,M,\
-                           prec_r,prec_t,info,options,values,\
-                           radius_has_been_rejected,lm,ceY,ciY,gx,nargout=8)
 
+        xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info,slplus=\
+        ecdfo_solve_TR_bc_(func,x,lb,ub,delta,mi,me,M,\
+                           prec_r,prec_t,info,options,values,\
+                           radius_has_been_rejected,lm,ceY,ciY,gx,indfree,\
+                           nargout=9)
+        
         # check for error
 
         if info.flag == values.fail_unexpected:
@@ -666,9 +710,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         # Full step computation
         # ---------------------
 
-        s=xnew - xk
-        x=copy(xk)
-        norms=norm_(s)
+        #s=xnew - xk
+        #x=copy(xk)
+        s=xnew-x
+        
+        if nbr_slacks:
+            norms=norm_(concatenate((s,slplus-sl)))
+        else:
+            norms=norm_(s)
         
         if options.verbose >= 3:
             fprintf_(options.fout,'  Full step:\n    |s| = %8.2e\n'%(norms))
@@ -690,7 +739,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             merit0=f0 + sigma * ce0n
             
         if options.verbose >= 4:
-            fprintf_(options.fout,'  Penalty parameter = %8.2e (threshold %8.2e)\n'%(sigma,sigmab))
+            fprintf_(options.fout,'  Penalty parameter = %8.2e (threshold %8.2e)\n'\
+            %(sigma,sigmab))
 
         # -----------------------------------------
         # Evaluate function values at the new point
@@ -709,12 +759,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
         # Include point in X and evaluate f
         # (xstatus(m) is set to 0 but is updated later on)
-  
+        
         X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,retval=\
         ecdfo_augmX_evalf_(func,xplus,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,\
                           fxmax,neval,xstatus,0,sstatus,dstatus,scaleX,\
                           scalefacX,info,options,values,nargout=10)
-                          
+                         
         if (info.flag):
         
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -724,11 +774,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         else:
         
             fxplus=copy(fX[m])
+            
+            if ceX.any():
+                ceX[ceX>=1e25] = 10*max_(ceX[ceX<1e25])
+                ceX[ceX<=-1e25] = 10*min_(ceX[ceX>-1e25])
+                ceplus = copy(array([ceX[:,m]]).T)
 
         # ---------------
         # Step validation
         # ---------------
-
+        
         if retval:
         
             if retval == 1:
@@ -772,7 +827,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             delta=tau1 * delta
             
             if options.verbose == 3 or options.verbose >= 5:
-                fprintf_(options.fout,'  Step rejected due to failure in function evaluation\n')
+                fprintf_(options.fout,'  Step rejected due to failure in function'\
+                                ' evaluation\n')
                 
         else:
         
@@ -780,10 +836,15 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
           # Compute merit function and ratio rho
           # -------------------------------------
       
-            merit=info.f + sigma * norm_(info.ce)
+            if nbr_slacks:
+                merit=fxplus + sigma * norm_(ceplus - \
+                      concatenate((zeros((len(ceplus)-nbr_slacks,1)),slplus**2))) 
+            else:
+                merit=fxplus + sigma * norm_(ceplus)
             
             if options.verbose >= 3:
-                fprintf_(options.fout,'  Merit function: %15.8e -> %15.8e\n'%(merit0,merit))
+                fprintf_(options.fout,'  Merit function: %15.8e -> %15.8e\n'\
+                %(merit0,merit))
                 
             ared=merit0 - merit
             pred=- qcost + sigma * rpred
@@ -799,8 +860,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 pred=-1.0
                             
                 if options.verbose >= 3:
-                    fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should '\
-                            'be positive\n\n'%(pred))
+                    fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should be positive\n\n'%(pred))
                 
             elif pred == 0:            
                 # here, stationarity is assumed but model maybe inaccurate to state 
@@ -821,8 +881,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 succ=0
                 
             if options.verbose == 4:   
-                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %9.2e\n'%(delta,norms,sigma,rho))
-#                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\n'%(delta,norm_r,norm_(t),norms,sigma,rho))
+                fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %9.2e\n'\
+                %(delta,norms,sigma,rho))
+#               fprintf_(options.fout,'  %8.2e  %7.1e  %7.1e  %7.1e  %7.1e  %9.2e\n'\
+#               %(delta,norm_r,norm_(t),norms,sigma,rho))
 
             ###################################################################
             # Include the new point in the interpolation set Y 
@@ -834,11 +896,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             # --------------------------------------
             # Successful iteration (accept the step)
             # --------------------------------------
-
+            
             if (rho >= eta1):
             
                 if options.verbose >= 3:
-                    fprintf_(options.fout,'  Step accepted (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
+                    fprintf_(options.fout,'  Step accepted (rho = %9.2e;'\
+                    ' ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
                     
                 if (merit >= merit0):
                     info.flag=values.fail_on_non_decrease
@@ -848,7 +911,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
          
                 #  Augment interpolation set if not fully quadratic yet
 
-                if (cur_degree < pfinal or (whichmodel == 3 and cur_degree < pfinal + pfinal)):
+                if (cur_degree < pfinal or (whichmodel == 3 \
+                and cur_degree < pfinal + pfinal)):
                     cur_degree,QZ,RZ,Y,xbase,scale=\
                     bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,\
                                     delta,normgx,kappa_ill,nargout=6)
@@ -868,13 +932,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         xstatus[ind_Y[pos]]=c.unused
                         
                 #  If xplus could/should be included in the interpolation set
-
+                
                 if (pos >= 0):
                 
                     itype='succ'
                     
                     if (options.verbose >= 3):
-                        disp_(' replacing/including interpolation point ',str(pos),' (successful)')
+                        disp_(' replacing/including interpolation point ',\
+                        str(pos),' (successful)')
                         
                     xstatus[m]=c.inY
                     
@@ -884,19 +949,26 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     except IndexError:
                         ind_Y=concatenate_([ind_Y,[m]],axis=1)
                         fY=concatenate_([fY, [fxplus]],axis=1)
-                        
-                    if mi > 0:
-                        try:
-                            ciY[:,pos]=copy(info.ci.T)
-                        except IndexError:
-                            ciY=concatenate_([ciY, info.ci],axis=1)
-                            
+                                                    
                     if me > 0:
                         try:
+                            info.ce=copy(ceplus)
                             ceY[:,pos]=copy(info.ce.T)
                         except IndexError:
+                            info.ce=copy(ceplus)
                             ceY=concatenate_([ceY, info.ce],axis=1)
+  
+                        if nbr_slacks:
+                            # move slack variable away from zero if inequality
+                            # value gets above zero (here trial use of 0.1)
                             
+                            for i in range(0,nbr_slacks):
+                                if slplus[i]==0 and info.ce[me-nbr_slacks+i]>0.01:
+                                   slplus[i] = sqrt_(info.ce[me-nbr_slacks+i])
+                                    
+                            sl = slplus
+                            glob.set_slacks(slplus)
+    
                     #  Move it in the first position, redefining the base point.
 
                     QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
@@ -913,7 +985,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     
                     #  Compute the associated polynomial interpolation models.
 
-                    fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_([fY.reshape(1,-1),ciY,ceY]),whichmodel,fcmodel[[0],:],ind_Y,i_xold,m,gx,scale,shift_Y)
+                    fcmodel=\
+                    bcdfo_computeP_(QZ,RZ,Y,concatenate_(\
+                                 [fY.reshape(1,-1),ciY,ceY]),whichmodel,\
+                                 fcmodel[[0],:],ind_Y,i_xold,m,gx,scale,shift_Y)
                   
                     #  Compute model gradients for objective and constraint
                     #  functions.
@@ -924,11 +999,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     if mi > 0:
                         gci=zeros_(mi,n)
                         for i in range(0,mi):
-                            gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
+                            gci[i,:]=\
+                            bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                     if me > 0:
                         gce=zeros_(me,n)
                         for i in range(0,me):
-                            gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                            gce[i,:]=\
+                            bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
                             
                     #  Update the trust-region radius.
  
@@ -956,21 +1033,24 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         lbounds[ilb]=lb[indfree[ilb]]
                         ubounds[iub]=ub[indfree[iub]]
                         
-                        lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+                        lm,info=\
+                        ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,\
+                                                 values,nargout=2)
                         
                     # Update Hessian approximation
-
+                    
                     M,pc,info=\
                     ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,\
                                          n,me,mi,s,gx,gci,gce,info,options,values,\
                                          fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,\
                                          QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
-                                         
+                                        
             # ---------------------------------------
             # Unsuccessful iteration - step rejection
             # ---------------------------------------
     
-            # model accuracy is questionable - go to next iteration and choose new interpolation set
+            # model accuracy is questionable - go to next iteration 
+            # and choose new interpolation set
             
             if pred == - 1.0:
                 pos=0
@@ -984,19 +1064,22 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 radius_has_been_rejected=copy(True)
                 
                 if options.verbose == 3 or options.verbose >= 5:
-                    fprintf_(options.fout,'  Step rejected (rho = %9.2e; ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
+                    fprintf_(options.fout,'  Step rejected (rho = %9.2e;'\
+                    ' ared = %9.2e, pred = %9.2e)\n'%(rho,ared,pred))
                     
                 #  The model is not fully quadratic yet: add (if possible)
                 #  the new point to the interpolation set and recompute the model.
                 
-                if (((cur_degree < pfinal) or (whichmodel == 3 and cur_degree < pfinal + pfinal)) and (rho < eta1)):
+                if (((cur_degree < pfinal) or (whichmodel == 3 \
+                    and cur_degree < pfinal + pfinal)) and (rho < eta1)):
                     
                     cur_degree,QZ,RZ,Y,xbase,scale=\
                     bcdfo_augment_Y_(xplus,Y[:,0:cur_degree],whichmodel,shift_Y,\
                                     delta,normgx,kappa_ill,nargout=6)
                                     
                     if (options.verbose >= 3):
-                        disp_(' including interpolation point ',str(cur_degree-1),' (augm)')
+                        disp_(' including interpolation point ',\
+                        str(cur_degree-1),' (augm)')
                         
                     # Update status and position of the new point
 
@@ -1011,14 +1094,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         
                     if mi > 0:
                         try:
-                            ciY[:,cur_degree-1]=copy(info.ci.T)
+                            ciY[:,cur_degree-1]=copy(ciplus.T)
                         except IndexError:
-                            ciY=concatenate_([ciY, info.ci],axis=1)
+                            ciY=concatenate_([ciY, ciplus],axis=1)
                     if me > 0:
                         try:
-                            ceY[:,cur_degree-1]=copy(info.ce.T)
+                            ceY[:,cur_degree-1]=copy(ceplus.T)
                         except IndexError:
-                            ceY=concatenate_([ceY, info.ce],axis=1)  
+                            ceY=concatenate_([ceY, ceplus],axis=1)  
                               
                     poised_model=0
                     
@@ -1036,11 +1119,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     if mi > 0:
                         gci=zeros_(mi,n)
                         for i in range(0,mi):
-                            gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
+                            gci[i,:]=\
+                            bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                     if me > 0:
                         gce=zeros_(me,n)
                         for i in range(0,me):
-                            gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                            gce[i,:]=\
+                            bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
                     itype='augm'
                     pos=copy(m)
                     
@@ -1060,9 +1145,9 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 
                     if ((pos == -1) and (poised_model == 0 or delta <= eps_current)):
                     
-                        #  Compute the distance of the interpolation points to the current 
-                        #  iterate. (Distinguish between the badly conditioned successful
-                        #  and the unsuccessful case!)
+                        #  Compute the distance of the interpolation points to the
+                        #  current iterate. (Distinguish between the badly conditioned
+                        #  successful and the unsuccessful case!)
                         
                         d=zeros(cur_degree)
                         
@@ -1073,7 +1158,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 else:
                                     d[j]=norm_(Y[:,[j]] - xplus,inf)
                         else:
-                            for j in range(1,cur_degree): #was a range(2,cur_degree) in matlab
+                            for j in range(1,cur_degree): 
                                 if (lSolver == 1):
                                     d[j]=norm_(Y[:,[j]] - x)
                                 else:
@@ -1086,7 +1171,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         #  Replace a far interpolation point.
 
                         if (rho >= eta1):
-                            criterion_FPn='weighted'   # use weighted measure, not furthest point
+                            criterion_FPn='weighted'   # use weighted measure, 
+                                                       # not furthest point
                         else:
                             criterion_FPn=copy(criterion_FP)
                             
@@ -1107,13 +1193,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                             xstatus[ind_Y[pos]]=c.unused
                             xstatus[m]=c.inY
-                            ind_Y[pos]=m
-                            fY[pos]=fxplus
+                            ind_Y[pos]=copy(m)
+                            fY[pos]=copy(fxplus)
                             
                             if mi > 0:
-                                ciY[:,pos]=info.ci.T
+                                ciY[:,pos]=copy(ciplus.T)
                             if me > 0:
-                                ceY[:,pos]=info.ce.T
+                                ceY[:,pos]=copy(ceplus.T)
                                 
                             #  Swap points if included a successful point
 
@@ -1171,11 +1257,14 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             if mi > 0:
                                 gci=zeros_(mi,n)
                                 for i in range(0,mi):
-                                    gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
+                                    gci[i,:]=\
+                                    bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
                             if me > 0:
                                 gce=zeros_(me,n)
                                 for i in range(0,me):
-                                    gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                                    gce[i,:]=\
+                                    bcdfo_gradP_(fcmodel[[1 + mi +\
+                                               i],:],x,x,scale,shift_Y).T
                                     
                         # Replace a close interpolation point.
 
@@ -1187,7 +1276,8 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 criterion_CPn=copy(criterion_CP)
                                 
                             if (rho >= eta1):
-                                Lambda_CPn=1e-15  # try hard to include a successful point
+                                Lambda_CPn=1e-15  # try hard to include a successful 
+                                                  # point
                             else:
                                 Lambda_CPn=copy(Lambda_CP)
                                 d[0]=2 * FPlength   # excludes the current iterate
@@ -1202,25 +1292,27 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             
                                 itype='repC'      
                                 
-                                #  Safeguard frobenius model type 4 when replacing point 1
+                                #  Safeguard i_x for frobenius model type 4 when 
+                                #  replacing point 1
 
                                 if (pos == 0):
-                                    i_xold=ind_Y[1] #was a Y[2] in matlab
+                                    i_xold=ind_Y[1] 
                                     
                                 if (options.verbose >= 3):
-                                    disp_(' replacing interpolation point ',str(pos-1),' (close)')
+                                    disp_(' replacing interpolation point ',\
+                                    str(pos-1),' (close)')
                                     
                                 #  Update status and position of the new point
 
                                 xstatus[ind_Y[pos]]=c.unused
                                 xstatus[m]=c.inY
-                                ind_Y[pos]=m
-                                fY[pos]=fxplus
+                                ind_Y[pos]=copy(m)
+                                fY[pos]=copy(fxplus)
                                 
                                 if mi > 0:
-                                    ciY[:,pos]=info.ci.T
+                                    ciY[:,pos]=copy(ciplus.T)
                                 if me > 0:
-                                    ceY[:,pos]=info.ce.T
+                                    ceY[:,pos]=copy(ceplus.T)
                                     
                                 #  Swap points if included a successful point
 
@@ -1262,7 +1354,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                         #delta = gamma2 * norms;
                                         delta=gamma2 * delta
                                         
-                                #  Compute the associated polynomial interpolation model.
+                                #  Compute associated polynomial interpolation model.
 
                                 fcmodel=bcdfo_computeP_(QZ,RZ,Y,concatenate_\
                                                        ([fY.reshape(1,-1),ciY,ceY]),\
@@ -1277,11 +1369,15 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                 if mi > 0:
                                     gci=zeros_(mi,n)
                                     for i in range(0,mi):
-                                        gci[i,:]=bcdfo_gradP_(fcmodel[[1 + i],:],x,x,scale,shift_Y).T
+                                        gci[i,:]=\
+                                        bcdfo_gradP_(fcmodel[[1 +\
+                                                    i],:],x,x,scale,shift_Y).T
                                 if me > 0:
                                     gce=zeros_(me,n)
                                     for i in range(0,me):
-                                        gce[i,:]=bcdfo_gradP_(fcmodel[[1 + mi + i],:],x,x,scale,shift_Y).T
+                                        gce[i,:]=\
+                                        bcdfo_gradP_(fcmodel[[1 + mi +\
+                                                    i],:],x,x,scale,shift_Y).T
                                         
                     # Decrease the radius.
 
@@ -1298,35 +1394,40 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                         if (interpol_TR == 1):
                             curvature=- pred - gTs
-                            gam_inter=(eta2 - 1) * gTs / (fxplus - fx - gTs - eta2 * curvature)
-                            delta=max_(gamma1,min_(gam_inter,gamma2)) * min_(delta,norms)
+                            gam_inter=(eta2 - 1) * gTs / (fxplus - fx - gTs - \
+                                      eta2 * curvature)
+                            delta=max_(gamma1,min_(gam_inter,gamma2)) * \
+                                  min_(delta,norms)
                         else:
 #                           delta     = gamma2 * delta;
                             delta=gamma2 * norms
                             
                         itype='redD'
                         
-                        #  Check that the trust-region radius has not become so small that a step
-                        #  of this size will not be significant.
+                        #  Check that the trust-region radius has not become so small  
+                        #  that a step of this size will not be significant.
                         
                         if (delta < stallfact * norm_(x) or delta < epsilon * 1e-5):
                             msg='Algorithm stopped after '+str(neval)+\
-                                ' evaluations of the objective function because Delta small.'
+                           ' evaluations of the objective function because Delta small.'
                                 
                             info.flag=values.stop_on_small_trust_region
                             
                             # final printout
                             
-                            ecdfo_iter_printout_(info,delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit)
-                            return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
-                            cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
-                            ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
+                            ecdfo_iter_printout_(info,delta,norms,pc,itype,\
+                                      values,nb,mi,options,constrained_pbl,merit)
+                                      
+                            return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,\
+                            eps_current,cur_degree,fcmodel,gx,normgx,vstatus,\
+                            xstatus,sstatus,dstatus,M,ndummyY,sspace_save,\
+                            xspace_save,msg,CNTsin,neval,lm,info
                             
                 # Recover ce at the current iterate
 
-                info.ce=ce0
+                #info.ce=ce0
                 info.f=f0
-                
+
                 # Recompute Lagrange multiplier
 
                 lbounds=- inf * ones_(size_(x))
@@ -1335,16 +1436,18 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 iub=(abs(ub[indfree] - x) < 1e-05).reshape(-1)
                 lbounds[ilb]=lb[indfree[ilb]]
                 ubounds[iub]=ub[indfree[iub]]
-                lm,info=ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+                lm,info=\
+                ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,\
+                                         nargout=2)
                 
                 #  Compute / update Hessian
-
+                
                 M,pc,info=\
                 ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,\
                                      s,gx,gci,gce,info,options,values,fcmodel,Y,fY,\
                                      ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,\
                                      ind_Y,i_xbest,m,nargout=3)
-
+                
     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
     cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
     ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info

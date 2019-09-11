@@ -3,7 +3,7 @@
 from runtime import *
 import ecdfo_global_variables as glob
 from copy import copy
-from numpy import arange, logical_and, zeros, diag, ones, concatenate
+from numpy import arange, logical_and, zeros, diag, ones, concatenate, array
 
 
 def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
@@ -36,6 +36,7 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
         for i in range(0,n):
             fprintf_('%12.5e  %12.5e  %12.5e  %12.5e  %12.5e\n'%(lb[i],x[i],ub[i],\
             info.glag[i],lm[i]))
+            
     I=find_(bounds[0:n])
     info.glag[I]=info.glag[I] + lm[I]
 
@@ -47,10 +48,10 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
             gconstraints = concatenate((info.ae,hh1),axis=1)
             glag = concatenate((info.glag,zeros((nbr_slacks,1))))
             glag = glag + gconstraints.T.dot(lm[n:n+me])
-            info.glag=glag[1:n]
+            info.glag=array([glag.T[0][0:n]]).T
         else:
             info.glag=info.glag + info.ae.T.dot(lm[n + mi:n + mi + me])
-                    
+           
     # Feasibility (a vector)
 
     if nbr_slacks > 0:

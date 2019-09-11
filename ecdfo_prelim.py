@@ -351,6 +351,8 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
         ciX=array([])
         ceX=array([])
         ind_Y=array([])
+        info.ci=array([])
+        info.ce=array([])
         
         for i in range(0,cur_degree):
             X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=\
@@ -377,6 +379,11 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
                 getfY=0
             ind_Y=concatenate_([ind_Y,array([i])],axis=1)
             
+        # Check for infinity constraint values
+        
+        ceX[ceX>=1e25] = 10 * max_(ceX[ceX<1e25])
+        ceX[ceX<=-1e25] = 10 * min_(ceX[ceX>-1e25])
+                    
         fY=copy(fX)
         ciY=copy(ciX)
         ceY=copy(ceX)
@@ -479,12 +486,26 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
         info.ce=array([])
         info.ae=array([])
         
+    # Initialize slack variables if necessary
+    
+    if nbr_slacks > 0:
+    
+        ce = info.ce
+
+        for i in range(0,nbr_slacks):
+            if ce[-nbr_slacks+i] > 0:
+                sl[i] = min_(sqrt_(ce[-nbr_slacks+i]), sqrt_(ub[-nbr_slacks+i]))
+            else:
+                sl[i] = 0
+                
+        glob.set_slacks(sl)
+        
     # Initial printing (1)
 
     fprintf_('\n')
     fprintf_('**************************************************************************************\n')
     fprintf_('*                                                                                    *\n')
-    fprintf_('*       SQPDFO: Sequential Quadratic Programming Derivative-Free Optimization        *\n')
+    fprintf_('*       SQPDFO: Sequential-Quadratic-Programming Derivative-Free Optimization        *\n')
     fprintf_('*                                                                                    *\n')
     fprintf_('*                        (c)  A. Troeltzsch, 2013-2019                               *\n')
     fprintf_('*                                                                                    *\n')
@@ -579,19 +600,26 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
     # Initial printing (2)
 
     if options.verbose >= 4:
-        fprintf_(options.fout,'  . |g|_inf                         %8.2e\n'%(norm_(info.g,inf)))
+        fprintf_(options.fout,'  . |g|_inf                         %8.2e\n'\
+        %(norm_(info.g,inf)))
         if nb + mi + me > 0:
-            fprintf_(options.fout,'  . |glag|_inf                      %8.2e\n'%(norm_(info.glag,inf)))
+            fprintf_(options.fout,'  . |glag|_inf                      %8.2e\n'\
+            %(norm_(info.glag,inf)))
         if nb:
-            fprintf_(options.fout,'  . |x^#|_inf                       %8.2e\n'%(norm_(feas[0:n],inf)))
+            fprintf_(options.fout,'  . |x^#|_inf                       %8.2e\n'\
+            %(norm_(feas[0:n],inf)))
         if mi:
-            fprintf_(options.fout,'  . |ci^#|_inf                      %8.2e\n'%(norm_(feas[n:n + mi],inf)))
+            fprintf_(options.fout,'  . |ci^#|_inf                      %8.2e\n'\
+            %(norm_(feas[n:n + mi],inf)))
         if me:
-            fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'%(norm_(feas[n + mi:n + mi + me],inf)))
+            fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'\
+            %(norm_(feas[n + mi:n + mi + me],inf)))
         if nb + mi > 0:
-            fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'%(norm_(compl,inf)))
+            fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'\
+            %(norm_(compl,inf)))
         fprintf_(options.fout,'  tunings:\n')
-        fprintf_(options.fout,'  . printing level                  %0i\n'%(options.verbose))
+        fprintf_(options.fout,'  . printing level                  %0i\n'\
+        %(options.verbose))
 
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,\

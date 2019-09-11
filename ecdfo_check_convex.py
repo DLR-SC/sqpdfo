@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
+from copy import copy
 from numpy import diag, array,isreal,real, isnan, isinf, linalg, nan_to_num
 
-def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
+def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
     """
 #
 # Checks whether matrix A is not positive definite (has negative eigenvalues).
@@ -15,34 +16,28 @@ def ecdfo_check_convex_(A=None,options=None,*args,**kwargs):
 # programming: A. Troeltzsch, 2014 (nan_to_num: 06/2019)
 #
     """
+    A = copy(A_)
 
     # check whether A has Nan or Inf entries
     if (isnan(A).any() or isinf(A).any()):
-        if options.verbose >= 3:
+        if options.verbose >= 2:
             print('### ecdfo_check_convex: Matrix A has Nan or Inf entries !!!')
                
-    # compute eigenvalues
-    ev=linalg.eigvals(A)
-    
+    # compute eigenvalues of symmetrc matrix A
+    ev=linalg.eigvalsh(A)
+
     # check whether A has negative Eigenvalues
     evneg=ev[ev < 0]
     
     # remove neg. eigvals by eigendecomposition
     if not isempty_(evneg):
+        #print('eigendecomposition')
         ZERO=array([1e-10])
         EPS=array([1e-09])
-        d,v=linalg.eig(A)   # CALCULATE EIGENVECTOR AND EIGENVALUES 
+        d,v=linalg.eigh(A)   # CALCULATE EIGENVECTOR AND EIGENVALUES 
         d[d < ZERO]=EPS  # FIND ALL EIGENVALUES<=ZERO AND CHANGE THEM FOR EPS 
         d=diag(d)    # CONVERT VECTOR d INTO A MATRIX 
         A=v.dot( d .dot( v.T ))  # RECOMPOSE MATRIX USING EIGENDECOMPOSITION
-
-    # check for complex entries (non-symmetric matrix)
-    if not isempty_(not isreal(A).any()):
-        if options.verbose >= 3:
-            print('### ecdfo_check_convex: Matrix A is non symmetric. Resetting A !')
-            
-        # repair matrix
-        A = (A+A.T)*0.5
     
-    # remove still possible complex entries       
+    # return A
     return real(A)

@@ -35,8 +35,8 @@ class optionsClass:
         self.tol_grad  = 1e-5       # tolerance on the gradient of the Lagrangian
         self.tol_feas  = 1e-5       # tolerance on the feasibility
         self.tol_bnds  = 1e-5       # tolerance on the bounds
-        self.miter   = 500        # max iterations
-        self.msimul  = 500        # max evaluations
+        self.miter   = 200        # max iterations
+        self.msimul  = 200        # max evaluations
         self.verbose = 1          # verbosity level 0,...,3 (default: 1)
 
 def sqpdfo_academic_examples(prob=None):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # definition of function and constraints in ecdfo_func_()
     # definition of starting values in ecdfo_init_prob_()
     
-    prob = 15
+    prob = 16
     x, info = sqpdfo_academic_examples(prob)
     
     # final printout

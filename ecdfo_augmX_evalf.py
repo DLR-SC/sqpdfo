@@ -85,7 +85,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if (scaleX):
             yfull=yfull / scalefacX
         info.nsimul[1]=info.nsimul[1] + 1
-        msg,fvalue,info.ci,info.ce=f(2,yfull)
+        msg,fvalue,ci,ce=f(2,yfull)
         info.f=fvalue
     else:
         try:
@@ -95,8 +95,13 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if (scaleX):
             y=y / scalefacX
         info.nsimul[1]=info.nsimul[1] + 1
-        msg,fvalue,info.ci,info.ce=f(2,y)
+        msg,fvalue,ci,ce=f(2,y)
         info.f=fvalue
+        
+    # check ce for infinity values
+    
+    ce[ce > 1e25] = 1e25
+    ce[ce < -1e25] = -1e25
 
     # error handling
 
@@ -104,54 +109,71 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if isnan(fvalue) or isnan(info.ci).any() or isnan(info.ce).any():
+        
+    if isnan(fvalue):
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f or ce is NaN at the point x\n\n')
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
             print("x="+str(copy(y)))
             print('f='+str(fvalue))
-            print('ce='+str(info.ce))
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if isinf(fvalue) or isinf(info.ci).any() or isinf(info.ce).any():
+        
+    if isinf(fvalue):
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f or ce is Inf at the point x\n\n')
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
             print("x="+str(copy(y)))
             print('f='+str(fvalue))
-            print('ce='+str(info.ce))
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
+        
     if msg:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: failure in computation of f\n\n')
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if not isempty_(info.ci) and size_(info.ci,2) != 1:
+        
+    if not isempty_(ci) and size_(ci,2) != 1:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ci must be a column vector\n\n')
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-    if not isempty_(info.ce) and size_(info.ce,2) != 1:
+        
+    if not isempty_(ce) and size_(ce,2) != 1:
         if options.verbose:
             fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ce must be a column vector\n\n')
         info.flag=values.fail_on_simul
+        
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
-#  Augment fX, ciX, and ceX with new function and constraint value
+        
+    #  Augment fX, ciX, and ceX with new function and constraint value
 
     try:
         fX[m]=min_(fxmax,real_(fvalue))
     except IndexError:
         fX=append(fX, min_(fxmax,real_(fvalue)))
-    if not isempty_(info.ci):
+        
+    if not isempty_(ci):
         try:
-            ciX[:,m]=real_(info.ci)
+            ciX[:,m]=real_(ci)
         except IndexError:
-            ciX=concatenate_([ciX, real_(info.ci)],axis=1)
-    if not isempty_(info.ce):
+            ciX=concatenate_([ciX, real_(ci)],axis=1)
+            
+    if not isempty_(ce):
         try:
-            ceX[:,m]=real_(info.ce)
+            ceX[:,m]=real_(ce)
         except IndexError:
-            ceX=concatenate_([ceX, real_(info.ce)],axis=1)
-#  Update evaluation counter
+            ceX=concatenate_([ceX, real_(ce)],axis=1)
+            
+    #  Update evaluation counter
+
     neval=neval + 1
+    
+    # return values
+    
     return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
