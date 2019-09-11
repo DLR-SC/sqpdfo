@@ -927,12 +927,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     bcdfo_include_in_Y_(xplus,QZ,RZ,Y,arange(0,cur_degree),Lambda_XN,\
                                        criterion_S,x,whichmodel,succ,scale,shift_Y,\
                                        delta,normgx,kappa_ill,nargout=6)
-                                       
+                   
                     if (pos >= 0):
                         xstatus[ind_Y[pos]]=c.unused
                         
                 #  If xplus could/should be included in the interpolation set
-                
+
                 if (pos >= 0):
                 
                     itype='succ'
@@ -968,7 +968,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                     
                             sl = slplus
                             glob.set_slacks(slplus)
-    
+                            
                     #  Move it in the first position, redefining the base point.
 
                     QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
@@ -1181,7 +1181,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                            Lambda_FP,criterion_FPn,x,whichmodel,\
                                            succ,scale,shift_Y,delta,normgx,\
                                            kappa_ill,nargout=6)
-                                           
+                                          
                         if (pos >= 0):
                         
                             itype='repF'
@@ -1217,6 +1217,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                     info.ci=copy(ciY[:,[0]])
                                 if me > 0:
                                     info.ce=copy(ceY[:,[0]])
+                                    
+                                    if nbr_slacks:
+                                        # set slacks if any
+                                        for i in range(0,nbr_slacks):
+                                            if slplus[i]==0 \
+                                            and info.ce[me-nbr_slacks+i]>0.01:
+                                                slplus[i] = sqrt_(info.ce[\
+                                                            me-nbr_slacks+i])
+                                        sl = slplus
+                                        glob.set_slacks(slplus)
                                     
                                 i_xbest=copy(m)
                                 
@@ -1287,7 +1297,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                                Lambda_CPn,criterion_CPn,x,whichmodel,\
                                                succ,scale,shift_Y,delta,normgx,\
                                                kappa_ill,nargout=6)
-                                               
+                            
                             if (pos >= 0):
                             
                                 itype='repC'      
@@ -1330,6 +1340,16 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                                         
                                     if me > 0:
                                         info.ce=ceY[:,[0]]
+                                        
+                                        if nbr_slacks:
+                                            # set slacks if any
+                                            for i in range(0,nbr_slacks):
+                                                if slplus[i]==0 \
+                                                and info.ce[me-nbr_slacks+i]>0.01:
+                                                    slplus[i] = sqrt_(info.ce[\
+                                                                me-nbr_slacks+i])
+                                            sl = slplus
+                                            glob.set_slacks(slplus)
                                         
                                     i_xbest=copy(m)
                                     
