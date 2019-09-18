@@ -134,7 +134,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
 
     #  check that matrix AA is convex (otherwise convexify)
     
-    check_convex = 0
+    check_convex = 1
 
     if check_convex:
         AA = ecdfo_check_convex_(AA, options)
