@@ -97,11 +97,6 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         info.nsimul[1]=info.nsimul[1] + 1
         msg,fvalue,ci,ce=f(2,y)
         info.f=fvalue
-        
-    # check ce for infinity values
-    
-    ce[ce > 1e25] = 1e25
-    ce[ce < -1e25] = -1e25
 
     # error handling
 
@@ -129,6 +124,19 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         info.flag=values.fail_on_simul
         
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
+        
+    if isnan(ce).any():
+        if options.verbose:
+            fprintf_(options.fout,'### ecdfo_augmX_evalf: ce is NaN at the point x\n\n')
+            print("x="+str(copy(y)))
+            print('ce='+str(ce))
+        info.flag=values.fail_on_simul
+        
+        return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
+    else:
+        # check ce for infinity values    
+        ce[ce > 1e25] = 1e25
+        ce[ce < -1e25] = -1e25
         
     if msg:
         if options.verbose:

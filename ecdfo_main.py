@@ -735,6 +735,17 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             
         if sigma < sigmab:        
             sigma=max_(sigmab,1.5 * sigma)
+            
+            if sigma > 1e+250:
+                fprintf_(options.fout,'\n### ecdfo_main: Penalty parameter (sigma): %15.8e '\
+                     'is too big\n\n'%(sigma))
+                     
+                info.flag=values.fail_unexpected
+                
+                return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
+                cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
+                ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
+            
             # re-evaluate the merit function at x, since sigma has changed
             merit0=f0 + sigma * ce0n
             
@@ -841,7 +852,17 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                       concatenate((zeros((len(ceplus)-nbr_slacks,1)),slplus**2))) 
             else:
                 merit=fxplus + sigma * norm_(ceplus)
-            
+                
+            if np.isinf(merit):
+                fprintf_(options.fout,'  Merit function: %15.8e -> %15.8e\n'\
+                     %(merit0,merit))
+                     
+                info.flag=values.fail_unexpected
+                
+                return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
+                cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
+                ndummyY,sspace_save,xspace_save,msg,CNTsin,neval,lm,info
+
             if options.verbose >= 3:
                 fprintf_(options.fout,'  Merit function: %15.8e -> %15.8e\n'\
                 %(merit0,merit))
