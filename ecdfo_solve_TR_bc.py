@@ -400,7 +400,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                     disp_('lb ',str(i),' is active')
                     
             elif (xnew[i] - ub[i] > threshold):
-                x_viol[i]=i+1
+                x_viol[i]=-(i+1)
                 x_fix=concatenate_([x_fix, array([i])], axis=1) 
                 if options.verbose >= 3:
                     disp_('ub ',str(i),' is violated')
@@ -410,7 +410,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 break
                 
             elif (abs(xnew[i] - ub[i]) < 1e-07):
-                x_active[i]=i+1 
+                x_active[i]=-(i+1) 
                 if options.verbose >= 3:
                     disp_('ub ',str(i),' is active')
                     
