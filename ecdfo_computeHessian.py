@@ -97,7 +97,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                         norm_ceY[i] = norm_(ceY[:,i])
                         norm_lm[i] = lm[n:n+me].T.dot(ceY[:,i])
 
-                lagfY = fY + sigma * norm_ceY + norm_lm
+                lagfY = fY + norm_lm
 
                 # Compute model of the Lagrangian
                 
