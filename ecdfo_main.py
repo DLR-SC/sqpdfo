@@ -736,7 +736,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         if sigma < sigmab:        
             sigma=max_(sigmab,1.5 * sigma)
             
-            if sigma > 1e+250:
+            if sigma > 1e+299:
                 fprintf_(options.fout,'\n### ecdfo_main: Penalty parameter (sigma): %15.8e '\
                      'is too big\n\n'%(sigma))
                      
