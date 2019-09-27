@@ -434,26 +434,29 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                     ' limit exceeded ###')
                 return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info,slnew
                 
-            # compute new Lagrange multipliers
+            if len(x_fix) > 0:
+            
+              # compute new Lagrange multipliers
 
-            lbounds=- inf * ones_(size_(x))
-            ubounds=inf * ones_(size_(x))
-            ilb=(abs(lb[indfree] - xnew) < 1e-05).reshape(-1)
-            iub=(abs(ub[indfree] - xnew) < 1e-05).reshape(-1)
-            lbounds[ilb]=lb[indfree[ilb]]
-            ubounds[iub]=ub[indfree[iub]]
+              lbounds=- inf * ones_(size_(x))
+              ubounds=inf * ones_(size_(x))
+              ilb=(abs(lb[indfree] - xnew) < 1e-05).reshape(-1)
+              iub=(abs(ub[indfree] - xnew) < 1e-05).reshape(-1)
+              lbounds[ilb]=lb[indfree[ilb]]
+              ubounds[iub]=ub[indfree[iub]]
             
-            lm,info=\
-            ecdfo_compute_multiplier_(xnew,lbounds,ubounds,info,options,values,nargout=2)
+              lm,info=\
+              ecdfo_compute_multiplier_(xnew,lbounds,ubounds,info,options,values,\
+                                       nargout=2)
             
-            # compute smallest LM of the active bounds
+              # compute smallest LM of the active bounds
+                       
+              min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
 
-            min_lm,ind_min_lm=min_(lm[x_fix],nargout=2)
-            
-            if options.verbose >= 3:
+              if options.verbose >= 3:
                 disp_('smallest Lagrange multiplier (for the bounds) = ',str(min_lm))
                 
-            if min_lm < 0:
+              if min_lm < 0:
                 if options.verbose >= 3:
                     disp_('Zero step but not converged - release one bound!!')
                     
@@ -497,10 +500,15 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 if options.verbose >= 3:
                     print("x_fix="+str(x_fix))
                     
-            else:
+              else:
                 if options.verbose >= 3:
                     disp_('Zero step and converged - go back to TR-loop...')
                 finished=1
+                
+            else:
+                if options.verbose >= 3:
+                    disp_('Zero step and converged - go back to TR-loop...')
+                finished=1  
                 
         else:
             if violated == 0:
