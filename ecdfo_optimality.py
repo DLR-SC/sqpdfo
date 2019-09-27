@@ -61,21 +61,21 @@ def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*ar
 
     # Complementarity (a vector)
 
-    v=concatenate_([x,info.ci])
+    #v=concatenate_([x,info.ci])
     compl=zeros_(n + mi,1)
 
     # lower bounds on v
     
     #v(I) is inactive at its lower bounds
-    I=find_(logical_and(lb > - options.inf,abs(lb - v) > options.dxmin)) 
-    if not isempty_(I):  
-        compl[I]=max_(compl[I],max_(0,- lm[I])) # lm(I) must be >= 0
+    #I=find_(logical_and(lb > - options.inf,abs(lb - v) > options.dxmin)) 
+    #if not isempty_(I):  
+    #    compl[I]=max_(compl[I],max_(0,- lm[I])) # lm(I) must be >= 0
 
     # upper bounds on v
 
     # v(I) is inactive at its upper bounds
-    I=find_(logical_and(ub < options.inf,abs(ub - v) > options.dxmin)) 
-    if not isempty_(I):  
-        compl[I]=max_(compl[I],max_(0,lm[I])) # lm(I) must be <= 0
+    #I=find_(logical_and(ub < options.inf,abs(ub - v) > options.dxmin)) 
+    #if not isempty_(I):  
+    #    compl[I]=max_(compl[I],max_(0,lm[I])) # lm(I) must be <= 0
 
     return feas,compl,info
