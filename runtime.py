@@ -488,9 +488,16 @@ def concatenate_(arrs, axis=0):
     Concatenate the arrays horizontally if axis=0, vertically if axis=1
     """
     copy_arrs=copy(arrs)
-    for arr in arrs:
-        if isempty_(arr):
-            copy_arrs.remove(arr)
+    for i in range(0,len(copy_arrs)):
+        j=0
+        for arr in copy_arrs:
+            if isempty_(arr):
+                #copy_arrs.remove(arr)
+                # If warnings are 'on', list.remove()
+                # is stated as deprecated when running
+                del copy_arrs[j]
+                break
+            j=j+1
     #print(copy_arrs)
     #print(isinstance(copy_arrs,np.ndarray))
     #print(np.array(copy_arrs))
