@@ -88,10 +88,11 @@ def func_f(xvector):
 
 
 def func_c(xvector):
-    # solution on a disk
+    # equalities (ce == 0) first !!
     ce = np.zeros(2)
     ce[0] = xvector[0]**2 + xvector[1]**2 - 2
     ce[1] = - (xvector[0] - 1)**3 + xvector[1] - 1
+    # inequalities (ci >= 0)
     ci = np.zeros(1)
     ci[0] = - xvector[0] - xvector[1] + 2    
     c = concatenate((ce,ci))  # equalities first !!!
