@@ -61,6 +61,7 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.ceY = array([[ 2,     1,     1,     1],[ 3,     2,     1,     0]])
         self.ciY = array([])
         self.gx =array([[ 0, 1, 0]]).T
+        self.indfree = array([0, 1, 2])
         
         self.abs_tol=1e-9
         self.rel_tol=1e-9
@@ -71,10 +72,10 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         """
         set_check_condition(0)                
         set_threshold(1.000000000000000e-08)
-        xnew,delta,rpred,active_r,active_t,lm_computed,lm,info = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
+        xnew,delta,rpred,active_r,active_t,lm_computed,lm,info,slnew = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
         self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
         self.options,self.values,self.radius_has_been_rejected,self.lm,
-        self.ceY,self.ciY,self.gx)
+        self.ceY,self.ciY,self.gx,self.indfree)
         
         
         correctxnew =array([[  -3.054026564966283e-03, 0, 3.155214681258386e-01]]).T
