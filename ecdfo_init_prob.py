@@ -155,13 +155,13 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         m=cproblem.m
         me= sum(cproblem.is_eq_cons)
         mi=m-me
-        #x0=info['x'].reshape(-1,1)
-        #lx=info['bl'].reshape(-1,1)
-        #ux=info['bu'].reshape(-1,1)
         x0=cproblem.x0.reshape(-1,1)
         lx=cproblem.bl.reshape(-1,1)
         ux=cproblem.bu.reshape(-1,1)
+        li=cproblem.cl
+        ui=cproblem.cu
         nb=sum_(min_((lx[0:n]>-inf)+(inf > ux[0:n]),1))
+        #print(cproblem.eq_cons_first)
     else:
         sys.exit('Problem number is not set!\n'\
             'Please import ecdfo_global_variables and use set_prob(nbr)\n'\

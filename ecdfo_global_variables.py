@@ -48,14 +48,13 @@ def set_prob_cuter(prob_cuter, params):
     #https://jfowkes.github.io/pycutest/_build/html/index.html 
     #Thanks to Jaroslav Fowkes and Lindon Roberts
     import pycutest
-    print('params: ',params)
     len_params = len(params)
     if len_params == 0:
-        cproblem = pycutest.import_problem(prob_cuter)
+        cproblem = pycutest.import_problem(prob_cuter,efirst=True)
     elif len_params == 2:
-        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1])})
+        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1])},efirst=True)
     elif len_params == 4:
-        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1]),params[2]:float(params[3])})
+        cproblem = pycutest.import_problem(prob_cuter, sifParams={params[0]:float(params[1]),params[2]:float(params[3])},efirst=True)
     
 def set_threshold(value):
 	global threshold

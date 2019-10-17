@@ -31,21 +31,21 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
       self.options.tol_grad=1e-04
       self.options.tol_feas=1e-04
       self.options.tol_bnds=1e-04
-      self.options.miter=15000
-      self.options.msimul=15000
+      self.options.miter=5000
+      self.options.msimul=5000
       self.options.verbose=1
       self.options.whichmodel = 'subbasis'
       self.options.final_degree = 'quadratic'
 
       # open file with problem names and parameters
-      self.f = open('cuterprobs_eq_only.dat','r')
+      self.f = open('cuterprobs_ineq_and_may_have_eq.dat','r')
       for line in self.f: 
           self.props_list.append(line)
       self.f.close()
       
       if self.read_baseline_to_compare_with_new_test:
           # open file with baseline results of CUTEst problems
-          self.file = open('cutest_results_list.dat','r')
+          self.file = open('cutest_results_list_ineq.dat','r')
           self.results_from_file = self.file.readlines()
           self.file.close()      
 
@@ -60,17 +60,18 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
       
       # check list for parameters
       for i in range(0,len(self.props_list)):
-      #for i in range(0,5):
+      #for i in range(0,10):
       
           print('**************************************************')
           print('problem number '+str(i))
+          
           # unwrap problem names and parameters (in list from file)
           nl1 = self.props_list[i].split('\n')[0]
           nl2 = nl1.split('[')[1]
           nl3 = nl2.split(']')[0]
           nl4 = nl3.split(',')
           name = nl4[0].split('\'')[1]
-          print(name)
+
           if (len(nl4) == 1):
               params = []
           elif (len(nl4) == 3):
@@ -88,10 +89,26 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
           set_prob_cuter(name,params)
           x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob)
           print('CUTEst problem: ',name)
-          print('n: ',n,', me: ',me)
+          print('params: ',params)
+          print('n: ',n,', me: ',me,', mi: ',mi)
           self.options.dxmin=dxmin
           lm=np.array([])
           
+          # Handling of inequalities if any
+          if mi:
+    
+              # handling of two-sided inequalities in CUTEst
+              for i in range(0,mi+me):
+                  if li[i] < ui[i]: 
+                      if li[i] > -1e7 and ui[i] < 1e7:
+                          mi = mi+1
+                          print('n: ',n,', me: ',me,', mi: ',mi)
+    
+              set_nbr_slacks(mi)
+              set_slacks(np.zeros((mi,1)))
+              lb = np.concatenate((lb,np.zeros((mi,1))))
+              ub = np.concatenate((ub,1e20*np.ones((mi,1))))
+
           # run problem with ECDFO
           x,lm,info=ecdfo_(x,lm,lb,ub,self.options)
           
@@ -128,13 +145,13 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
           
       if self.write_baseline_test_to_file:
           # write results of CUTEst problems in file
-          file = open('cutest_results_list.dat','w')
+          file = open('cutest_results_list_ineq.dat','w')
           for i in range(0,len(self.results_list)):
               file.write(self.results_list[i])
           file.close()           
       
       # check number of problems
-      self.assertEqual(292,len(self.props_list))
+      self.assertEqual(184,len(self.props_list))
    
 if __name__ == '__main__':
     unittest.main()

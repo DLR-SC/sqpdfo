@@ -2,7 +2,7 @@
 
 from runtime import *
 import ecdfo_global_variables as glob
-from numpy import array, zeros, concatenate
+from numpy import array, zeros, concatenate, zeros_like
 import time
 
 def ecdfo_func_(x=None,*args,**kwargs):
@@ -182,7 +182,53 @@ def ecdfo_func_(x=None,*args,**kwargs):
         # CUTEr problems
         cproblem=glob.get_prob_cuter()
         (f, c)=cproblem.objcons(x.reshape(-1))
-        c=c.reshape(-1,1)
+        
+        if cproblem.m > 0:
+            me = sum(cproblem.is_eq_cons)
+            mi = cproblem.m - me
+            li = cproblem.cl
+            ui = cproblem.cu
+            ce_new = []
+            ci_new = []
+            cnew = []
+            
+            #re-order c such that ce first and then ci
+            if mi > 0:
+                
+                for i in range(0,cproblem.m):
+                    if li[i] == ui[i]:   # equalities
+                        ce_new.append(c[i] - li[i])
+                        #print('eq')
+                        
+                    else:                # inequalities
+                        if li[i]==-1e20 and ui[i]==0.0:
+                            ci_new.append(-c[i])
+                            #print('ineq to switch')
+                        elif li[i]==-1e20 and  ui[i]<1e7:
+                            ci_new.append(-c[i] + ui[i])
+                            #print('ineq to switch and to change')
+                        elif li[i]==0.0 and ui[i]==1e20:
+                            ci_new.append(c[i])
+                            #print('ineq good bounds')
+                        elif li[i]>-1e7 and ui[i]==1e20:
+                            ci_new.append(c[i] - li[i])
+                            #print('ineq to change')
+                        else:
+                            # Handling of two-sided inequalities !!!!
+                            #print('ineq two-sided')
+                            #print(li[i],ui[i])
+                            if li[i]>-1e7:
+                                ci_new.append(c[i] - li[i])
+                            if ui[i]<1e7:
+                                ci_new.append(-c[i] + ui[i])
+
+                cnew = concatenate((ce_new,ci_new))
+                c = cnew.reshape(-1,1)
+            else:
+                c=c.reshape(-1,1)
+                if sum(li)>0 or sum(ui)>0:
+                    msg = 'ecdfo_func: Warning! ce must not be zero!'
+                    print('ecdfo_func: Warning! ce must not be zero! Check li and ui!')
         
     else:
         msg = 'Error: Problem number prob='+str(prob)+' is not defined in ecdfo_func.py ! \nUserdefined problems have problem number prob=100.'
