@@ -463,7 +463,10 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
                 constraints=constraints[0:me]
                 gconstraints=gconstraints[0:me,:]
                 
-                xa=find_(x_active < 0).reshape(-1)
+                if not isempty_(find_(x_active < 0)):
+                    xa = find_(x_active < 0).reshape(-1)
+                else:
+                    xa = []
                 
                 if length_(xa) == length_(x_fix):
                     if (np.sort(xa) == np.sort(x_fix)).all():
