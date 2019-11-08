@@ -3,7 +3,7 @@ from runtime import isempty_
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from copy import copy
 
-def ecdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
+def sqpdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """
 #
 #  Swaps the position of interpolation points i and j in Y, and updates the
@@ -34,33 +34,9 @@ def ecdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y_=None,ind_Y_=None,fY_=None,
 #  scale       : the interpolation set scaling after the exchange
 #
 #  PROGRAMMING: Ph. Toint and A. Troeltzsch, January 2009. 
-#               ( This version 13 IX 2010  )
+#               A. Troeltzsch, Feb 2013.
 #
 #  DEPENDENCIES: bcdfo_build_QR_of_Y
-#
-#  TEST:
-
-#  Y = [ 0 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; ind_Y = [1 2 3 4 5 6];
-#  fY = [2 5 1 3 2 6];
-#  [QZ,RZ,xbase,scale] = bcdfo_build_QR_of_Y( Y, 0, 0, 1, 1, 1e15 );
-#  Z = QZ*RZ;
-#  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
-#     fY, [],[],xbase, 0, scale, 0, 1, 1, 1e15 )
-#  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
-#     fY, [],[],xbase, 0, scale, 0, 1, 1, 1e15 )
-#  norm( Z - QZ*RZ)
-#  should give something very small.
-#
-#  The same holds for the scaled version:
-#  Y = [ 0 1 0 2 1 0 ; 0 0 1 0 0.01 2 ]; ind_Y = [1 2 3 4 5 6];
-#  fY = [2 5 1 3 2 6];
-#  [QZ,RZ,xbase,scale] = bcdfo_build_QR_of_Y( Y, 0, 1, 1, 1, 1e15 );
-#  Z = QZ*RZ;
-#  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
-#     fY, [], [], xbase, 0, scale, 1, 1, 1, 1e15 )
-#  [ QZ, RZ, Y, ind_Y, fY, ciY, ceY,  xbase, scale ] = ecdfo_swap_in_Y( 1, 3, QZ, RZ, Y, ind_Y, ...
-#     fY, [],[],xbase, 0, scale, 1, 1, 1, 1e15 )
-#  norm( Z - QZ*RZ)
 #
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #

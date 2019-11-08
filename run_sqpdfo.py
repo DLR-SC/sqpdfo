@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from runtime import *
-import ecdfo_global_variables as glob
-from ecdfo import ecdfo_
+import sqpdfo_global_variables as glob
+from sqpdfo import sqpdfo_
 from numpy import array, zeros, ones, arange, shape, concatenate
 
 ###############################################################################
-#  Driver for the optimizer ECDFO.
-#  ECDFO can solve a minimization problem of the form
+#  Driver for the optimizer SQPDFO.
+#  SQPDFO can solve a minimization problem of the form
 #
 #      minimize     f(x)
 #      subject to   lx <= x <= ux
@@ -34,7 +34,7 @@ class optionsClass:
         self.msimul = 500  # max evaluations
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
-def sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *args, **kwargs):
+def run_sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *args, **kwargs):
 
     # Set options
     options = optionsClass()
@@ -71,9 +71,9 @@ def sqpdfo(func=None, x=None, lx=None, ux=None, me=None, mi=None, cfunc=None, *a
         lx = concatenate((lx,zeros((mi,1))))
         ux = concatenate((ux,1e20*ones((mi,1))))
 
-    # Call ECDFO
+    # Call SQPDFO
     lm = array([])
-    x,lm,info=ecdfo_(x,lm,lx,ux,options)
+    x,lm,info=sqpdfo_(x,lm,lx,ux,options)
 
     # Return values
     f = info.f
@@ -109,8 +109,8 @@ if __name__ == '__main__':
     me = 1; mi = 2
 
     # call sqpdfo
-    #x,f,c = sqpdfo(func_f,x0,lb,ub)
-    x,f,c = sqpdfo(func_f,x0,lb,ub,me,mi,func_c)
+    #x,f,c = run_sqpdfo(func_f,x0,lb,ub)
+    x,f,c = run_sqpdfo(func_f,x0,lb,ub,me,mi,func_c)
 
     # printout results
     print('')

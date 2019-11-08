@@ -5,7 +5,7 @@ from copy import copy
 from numpy import append, isnan, isinf
 import time
 
-def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
+def sqpdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
     """
     
 #
@@ -45,7 +45,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
 #  sstatus     : updated status vector if points in lie in current subspace
 #  dstatus     : updated status vector if points are dummy points
 #
-#  PROGRAMMING: A. Troeltzsch, August 2010. 
+#  PROGRAMMING: A. Troeltzsch, August 2018. 
 #
 #  DEPENDENCIES: -
 #
@@ -102,14 +102,14 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
 
     if msg == 1:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: initial point x is out of domain\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: initial point x is out of domain\n\n')
         info.flag=values.fail_on_simul
         
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
         
     if isnan(fvalue):
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is NaN at the point x\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: f is NaN at the point x\n\n')
             print("x="+str(copy(y)))
             print('f='+str(fvalue))
         info.flag=values.fail_on_simul
@@ -118,7 +118,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         
     if isinf(fvalue):
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: f is Inf at the point x\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: f is Inf at the point x\n\n')
             print("x="+str(copy(y)))
             print('f='+str(fvalue))
         info.flag=values.fail_on_simul
@@ -127,7 +127,7 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         
     if isnan(ce).any():
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: ce is NaN at the point x\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: ce is NaN at the point x\n\n')
             print("x="+str(copy(y)))
             print('ce='+str(ce))
         info.flag=values.fail_on_simul
@@ -140,21 +140,21 @@ def ecdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None
         
     if msg:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: failure in computation of f\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: failure in computation of f\n\n')
         info.flag=values.fail_on_simul
         
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
         
     if not isempty_(ci) and size_(ci,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ci must be a column vector\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: the computed ci must be a column vector\n\n')
         info.flag=values.fail_on_simul
         
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg
         
     if not isempty_(ce) and size_(ce,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo_augmX_evalf: the computed ce must be a column vector\n\n')
+            fprintf_(options.fout,'### sqpdfo_augmX_evalf: the computed ce must be a column vector\n\n')
         info.flag=values.fail_on_simul
         
         return X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,msg

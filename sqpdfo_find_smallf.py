@@ -2,11 +2,11 @@
 
 from runtime import *
 from copy import copy
-from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
+from sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
 from numpy import array, zeros, concatenate
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 
-def ecdfo_find_smallf_(c_=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,\
+def sqpdfo_find_smallf_(c_=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,\
     ind_Y_=None,i_xbest_=None,cur_degree_=None,indfree_=None,x_=None,\
     xl_=None,xu_=None,fx_=None,dstatus_=None,whichmodel_=None,scale_=None,\
     shift_Y_=None,Delta_=None,normgx_=None,kappa_ill_=None,sigma_=None,\
@@ -45,9 +45,9 @@ def ecdfo_find_smallf_(c_=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_
 #
 #  (possibly) updated INPUT values
 #
-#  PROGRAMMING: A. Troeltzsch, August 2010 + March 2013.
+#  PROGRAMMING: A. Troeltzsch, March 2013.
 #
-#  DEPENDENCIES: ecdfo_swap_in_Y
+#  DEPENDENCIES: sqpdfo_swap_in_Y
 #
 #  CONDITIONS OF USE: Use at your own risk! No guarantee of any kind given.
 #############################################################################
@@ -118,7 +118,7 @@ def ecdfo_find_smallf_(c_=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_
     if (imin != 1 and fmin < meritY[0]):
     
         QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
-        ecdfo_swap_in_Y_(0,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,\
+        sqpdfo_swap_in_Y_(0,imin,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,\
             scale,shift_Y,Delta,normgx,kappa_ill,nargout=9)
             
         fx=copy(fY[0])

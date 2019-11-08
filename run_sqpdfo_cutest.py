@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 from runtime import *
-import ecdfo_global_variables as glob
-from ecdfo import ecdfo_
+import sqpdfo_global_variables as glob
+from sqpdfo import sqpdfo_
 from numpy import array, ones_like, infty, zeros, ones, concatenate
-from ecdfo_init_prob import ecdfo_init_prob_
+from sqpdfo_init_prob import sqpdfo_init_prob_
 import pycutest
 import warnings
 
 ###############################################################################
-#  Driver for the optimizer ECDFO to solve problems from the CUTEst library.
+#  Driver for the optimizer SQPDFO to solve problems from the CUTEst library.
 #
 #  pycutest is downloadable from https://jfowkes.github.io/pycutest/
 #
 ###############################################################################
-#  ECDFO can solve a minimization problem of the form
+#  SQPDFO can solve a minimization problem of the form
 #
 #      minimize     f(x)
 #      subject to   lx <= x <= ux
@@ -23,10 +23,9 @@ import warnings
 #  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme.
 #
 #  -------------------------------------------------------------
-#  Example calls to ECDFO:
-#      x,f    = run_ecdfo(func_f, x0)
-#      x,f    = run_ecdfo(func_f, x0, lb, ub)
-#      x,f,ce = run_ecdfo(func_f, x0, lb, ub, func_c)
+#  Example calls to SQPDFO:
+#      x,f    = run_sqpdfo(func_f, x0, lb, ub, None, None, None, options)
+#      x,f,c = run_sqpdfo(func_f, x0, lb, ub, me, mi, func_c, options)
 ###############################################################################
 
 
@@ -45,7 +44,7 @@ class optionsClass:
         self.verbose = 1  # verbosity level 0,...,3 (default: 1)
 
 
-def run_ecdfo_cutest(*args, **kwargs):
+def run_sqpdfo_cutest(*args, **kwargs):
 
     # Set global variables
     glob.set_prob(1000)  # set problem number to 1000 (=problem from CUTEst library)
@@ -56,9 +55,7 @@ def run_ecdfo_cutest(*args, **kwargs):
     #---------------------------------------
     
     prob = glob.get_prob()
-    x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob)
-    print(li)
-    print(ui)
+    x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob)
     
     # initial Lagrange multipliers for the problem (not necessary)
     lm = array([])
@@ -82,10 +79,10 @@ def run_ecdfo_cutest(*args, **kwargs):
     
 
     #------------------------------------
-    # Call ECDFO
+    # Call SQPDFO
     #------------------------------------
 
-    x,lm,info = ecdfo_(x,lm,lx,ux,options)
+    x,lm,info = sqpdfo_(x,lm,lx,ux,options)
     return x,info
 
 if __name__ == '__main__':
@@ -96,8 +93,8 @@ if __name__ == '__main__':
     #glob.set_prob_cuter('BDRY2', ['N', 3])
     #glob.set_prob_cuter('ALLINQP',['N',10])
     
-    # call run_ecdfo_cutest
-    x,info = run_ecdfo_cutest()
+    # call run_sqpdfo_cutest
+    x,info = run_sqpdfo_cutest()
 
     # final printout
     print('')

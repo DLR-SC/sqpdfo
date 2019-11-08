@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_hessP import bcdfo_hessP_
-from ecdfo_bfgs_update import ecdfo_bfgs_update_
+from sqpdfo_bfgs_update import sqpdfo_bfgs_update_
 from copy import copy
 from numpy import zeros, ones, concatenate
 
-def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,\
+def sqpdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,\
     lm=None,M=None,n=None,me=None,mi=None,s=None,gx=None,gci=None,gce=None,\
     info_=None,options=None,values=None,fcmodel=None,Y=None,fY=None,ciY=None,\
     ceY=None,sigma=None,scale=None,shift_Y=None,QZ=None,RZ=None,\
@@ -64,13 +64,13 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
                 if info.niter == 1:
                     first=1
                 M,pc,info,values=\
-                ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
+                sqpdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
                 if info.flag == values.fail_unexpected:
                     M=eye_(size_(M)[0])
                     M,pc,info,values=\
-                    ecdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
+                    sqpdfo_bfgs_update_(M,y,s,first,info,options,values,nargout=4)
                     if info.flag == values.fail_unexpected:
-                        disp_('ecdfo_computeHessian: fail_unexpected ')
+                        disp_('sqpdfo_computeHessian: fail_unexpected ')
                         return M,pc,info
 
         elif options.hess_approx == values.model:
@@ -115,7 +115,7 @@ def ecdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,
 
         else:
             if options.verbose:
-                fprintf_(options.fout,'\n### ecdfo: options.hess_approx',\
+                fprintf_(options.fout,'\n### sqpdfo_computeHessian: options.hess_approx',\
                 ' not recognized\n\n')
             info.flag=values.fail_on_argument
             return M,pc,info

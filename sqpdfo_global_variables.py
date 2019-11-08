@@ -3,7 +3,7 @@ import sys
 import types
 
 """
-This file is used to set and get the global variables used in the ECDFO algorithm.
+This file is used to set and get the global variables used in the SQPDFO algorithm.
 
 List of variables :
     prob : the problem number
@@ -16,7 +16,7 @@ Variables are not initialized here so that we are sure that the user set them hi
 """
 
 
-class ecdfo_global_variables:
+class sqpdfo_global_variables:
     # default values, in case the global variable is not set by the user
     global prob
     prob = None
@@ -112,7 +112,7 @@ def set_slacks(value):
 def get_prob():
     if prob is None:
         sys.exit('Problem number is not set!\n'\
-            'Please import ecdfo_global_variables and use set_prob(nbr)\n'\
+            'Please import sqpdfo_global_variables and use set_prob(nbr)\n'\
             'where nbr is 1,...,5 for test examples or 100 for a user defined problem.')
     else:
         return prob

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from ecdfo_check_convex import *
-from ecdfo_check_cond import *
+from sqpdfo_check_convex import *
+from sqpdfo_check_cond import *
 from blls import *
 from copy import copy
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 from numpy import array, zeros, ones, concatenate
 
-def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
+def sqpdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     options=None,values=None,*args,**kwargs):
 
     ###############################################################################
@@ -17,8 +17,8 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     #   min || g+A'*lm ||^2
     #   subject to possible bounds on lm,
     #
-    # where g = gradient, lm = lm(1:n+mi+me) and A' = [ones(n) info.ai'
-    # info.ae'] the Jacobian of the problem.
+    # where g = gradient, lm = lm(1:n+me) and A' = [ones(n) info.ae'] 
+	# the Jacobian of the problem.
     #
     # A multiplier associated with an inequality constraint having
     # - infinite lower and upper bounds vanishes,
@@ -29,9 +29,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     # Output:
     #   lm: computed least-squares multiplier, more precisely
     #       lm(1:n): multiplier associated with the bounds on the variables
-    #       lm(n+1:n+mi): multiplier associated with the mi inequality
-    #           constraints
-    #       lm(n_mi+1:n+mi+me): multiplier associated with the me equality
+    #       lm(n+1:n+me): multiplier associated with the me equality
     #           constraints
     ###############################################################################
 
@@ -80,7 +78,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     else:
         lb = lb[:]
         if any_(size_(lb) != [n, 1]):
-            fprintf_('\n### ecdfo_compute_multiplier: incorrect size of lb\n\n')
+            fprintf_('\n### sqpdfo_compute_multiplier: incorrect size of lb\n\n')
             info.flag = values.fail_unexpected
             return lm, info
     if (nargin < 5) or isempty_(ub):
@@ -88,7 +86,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     else:
         ub = ub[:]
         if any_(size_(ub) != [n, 1]):
-            fprintf_('\n### ecdfo_compute_multiplier: incorrect size of ub\n\n')
+            fprintf_('\n### sqpdfo_compute_multiplier: incorrect size of ub\n\n')
             info.flag = values.fail_unexpected
             return lm, info
 
@@ -129,7 +127,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
 
     if check_condition:
         cthreshold = 1e+17
-        AA, badcond = ecdfo_check_cond_(AA, cthreshold, options, nargout=2)
+        AA, badcond = sqpdfo_check_cond_(AA, cthreshold, options, nargout=2)
 
 
     #  check that matrix AA is convex (otherwise convexify)
@@ -137,7 +135,7 @@ def ecdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     check_convex = 1
 
     if check_convex:
-        AA = ecdfo_check_convex_(AA, options)
+        AA = sqpdfo_check_convex_(AA, options)
         
     # compute A * g
     

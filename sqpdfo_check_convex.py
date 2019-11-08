@@ -4,7 +4,7 @@ from runtime import *
 from copy import copy
 from numpy import diag, array,isreal,real, isnan, isinf, linalg, nan_to_num
 
-def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
+def sqpdfo_check_convex_(A_=None,options=None,*args,**kwargs):
     """
 #
 # Checks whether matrix A is not positive definite (has negative eigenvalues).
@@ -21,7 +21,7 @@ def ecdfo_check_convex_(A_=None,options=None,*args,**kwargs):
     # check whether A has Nan or Inf entries
     if (isnan(A).any() or isinf(A).any()):
         if options.verbose >= 2:
-            print('### ecdfo_check_convex: Matrix A has Nan or Inf entries !!!')
+            print('### sqpdfo_check_convex: Matrix A has Nan or Inf entries !!!')
                
     # compute eigenvalues of symmetrc matrix A
     ev=linalg.eigvalsh(A)

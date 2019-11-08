@@ -3,14 +3,14 @@
 from runtime import *
 from numpy import inf, array
 from copy import copy
-from ecdfo_values import ecdfoValues
+from sqpdfo_values import sqpdfoValues
 
 
-def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
+def sqpdfo_options_(info_=None,options_=None,*args,**kwargs):
     """
-# [info,options,values] = ecdfo_options (info,options)
+# [info,options,values] = sqpdfo_options (info,options)
 #
-# Set the default options of the optimizer 'ecdfo'
+# Set the default options of the optimizer SQPDFO
     """
     info = copy(info_)
     if options_ is None:
@@ -19,9 +19,9 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     else:
         options = copy(options_)
 
-    # Define ecdfo constant values
+    # Define sqpdfo constant values
 
-    values = ecdfoValues()
+    values = sqpdfoValues()
 
     # Initialization
 
@@ -31,7 +31,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
 
     if isfield_(options, 'fout'):
         if options.fout < 0:
-            fprintf_('\n### ecdfo_options: options.fout = "%0i" is not a valid file identifier' % (options.fout))
+            fprintf_('\n### sqpdfo_options: options.fout = "%0i" is not a valid file identifier' % (options.fout))
             fprintf_('\n    options.fout is set to 1\n\n')
             options.fout = 1
     else:
@@ -40,7 +40,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'verbose'):
         if (options.verbose < 0) or (options.verbose > 6):
             fprintf_(options.fout,
-                     '\n### ecdfo_options: options.verbose = "%0i" and should be in [0,6], reset to 1\n\n' % (options.verbose))
+                     '\n### sqpdfo_options: options.verbose = "%0i" and should be in [0,6], reset to 1\n\n' % (options.verbose))
             options.verbose = 1
     else:
         options.verbose = 1  # default value
@@ -54,7 +54,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo_options: options.algo_descent "%s" not recognized\n\n' % (options.algo_descent))
+                         '\n### sqpdfo_options: options.algo_descent "%s" not recognized\n\n' % (options.algo_descent))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
@@ -63,7 +63,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'dxmin'):
         if (options.dxmin <= 0):
             if options.verbose:
-                fprintf_(options.fout, '\n### ecdfo_options: options.dxmin = %g must be > 0\n\n' % (options.dxmin))
+                fprintf_(options.fout, '\n### sqpdfo_options: options.dxmin = %g must be > 0\n\n' % (options.dxmin))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
@@ -72,7 +72,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'inf'):
         if options.inf <= 0:
             if options.verbose:
-                fprintf_('\n### ecdfo_options: incorrect value of options.inf %g (should be > 0)\n\n' % (options.inf))
+                fprintf_('\n### sqpdfo_options: incorrect value of options.inf %g (should be > 0)\n\n' % (options.inf))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
@@ -81,7 +81,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'miter'):
         if options.miter <= 0:
             if options.verbose:
-                fprintf_('\n### ecdfo_options: incorrect value of options.miter %g (should be > 0)\n\n' % (options.miter))
+                fprintf_('\n### sqpdfo_options: incorrect value of options.miter %g (should be > 0)\n\n' % (options.miter))
             info.flag = values.fail_on_argument
             return info, options, values
     else:
@@ -90,7 +90,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options,'msimul'):
         if options.msimul <= 0:
            if options.verbose:
-              fprintf_('\n### ecdfo_options: incorrect value of options.msimul %g (should be > 0)\n\n',options.msimul)
+              fprintf_('\n### sqpdfo_options: incorrect value of options.msimul %g (should be > 0)\n\n',options.msimul)
            info.flag = values.fail_on_argument;
            return info, options, values
     else:
@@ -99,7 +99,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'tol_grad'):
         if (options.tol_grad < 0):
             if options.verbose:
-                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_grad (should be > 0)\n\n')
+                fprintf_('\n### sqpdfo_options: incorrect value of some options.tol_grad (should be > 0)\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
         elif options.tol_grad==0:
@@ -110,7 +110,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'tol_feas'):
         if (options.tol_feas < 0):
             if options.verbose:
-                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_feas (should be > 0)\n\n')
+                fprintf_('\n### sqpdfo_options: incorrect value of some options.tol_feas (should be > 0)\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
         elif options.tol_feas==0:
@@ -121,7 +121,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
     if isfield_(options, 'tol_bnds'):
         if (options.tol_bnds < 0):
             if options.verbose:
-                fprintf_('\n### ecdfo_options: incorrect value of some options.tol_bnds (should be > 0)\n\n')
+                fprintf_('\n### sqpdfo_options: incorrect value of some options.tol_bnds (should be > 0)\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
         elif options.tol_bnds==0:
@@ -137,7 +137,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo_options: options.hess_approx "%s" not recognized' % (options.hess_approx))
+                         '\n### sqpdfo_options: options.hess_approx "%s" not recognized' % (options.hess_approx))
                 fprintf_('\n    options.hess_approx must be either "model" or "bfgs"\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
@@ -156,7 +156,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo_options: options.whichmodel "%s" not recognized' % (options.whichmodel))
+                         '\n### sqpdfo_options: options.whichmodel "%s" not recognized' % (options.whichmodel))
                 fprintf_('\n    options.whichmodel must be either "Subbasis", "Frobnorm", "L2norm" or "Regression"\n\n')
             info.flag = values.fail_on_argument
             return info, options, values
@@ -173,7 +173,7 @@ def ecdfo_options_(info_=None,options_=None,*args,**kwargs):
         else:
             if options.verbose:
                 fprintf_(options.fout,
-                         '\n### ecdfo_options: options.final_degree "%s" not recognized' % (options.final_degree))
+                         '\n### sqpdfo_options: options.final_degree "%s" not recognized' % (options.final_degree))
                 fprintf_('\n    options.final_degree must be either "linear", "diagonal" or "quadratic"\n\n')
             info.flag = values.fail_on_argument
             return info, options, values

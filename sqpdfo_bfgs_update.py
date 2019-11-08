@@ -3,10 +3,10 @@
 from runtime import *
 from copy import copy
 
-def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
+def sqpdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
 
 ###############################################################################
-# ecdfo_bfgs_update_(H,y,s,first,info,options,values)
+# sqpdfo_bfgs_update_(H,y,s,first,info,options,values)
 #
 # This procedure computes the BFGS update of the matrix H, which is
 # supposed to be a positive definite approximation of some Hessian.
@@ -32,7 +32,7 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
     if norm_(s) == 0:
         info.flag=values.fail_unexpected
         if options.verbose >= 3:
-            fprintf_(options.fout,'\n### ecdfo_bfgs_update: null step s\n\n')
+            fprintf_(options.fout,'\n### sqpdfo_bfgs_update: null step s\n\n')
         return H,pc,info,values
 
     ys=y.T .dot(s)
@@ -41,13 +41,13 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
     if sHs <= 0:
         info.flag=values.fail_unexpected
         if options.verbose >= 3:
-            fprintf_(options.fout,'\n### ecdfo_bfgs_update: BFGS Hessian approximation is not positive definite:\n')
+            fprintf_(options.fout,'\n### sqpdfo_bfgs_update: BFGS Hessian approximation is not positive definite:\n')
             fprintf_(options.fout,"            s'*H*s = %g <= 0\n\n"%(sHs))
         return H,pc,info,values
 
     if (ys < eta * sHs):
         if options.verbose >= 3:
-            fprintf_(options.fout,'\n### ecdfo_bfgs_update: curvature condition fails: ys < eta*sHs\n')
+            fprintf_(options.fout,'\n### sqpdfo_bfgs_update: curvature condition fails: ys < eta*sHs\n')
         # do Powell's correction
         pc=(1 - eta) * sHs / (sHs - ys)
         y=pc * y + (1 - pc) * Hs
@@ -55,13 +55,13 @@ def ecdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,v
         if ys <= 0:
             info.flag=values.fail_unexpected
             if options.verbose >= 3:
-                fprintf_(options.fout,"\n### ecdfo_bfgs_update: y'*s = %9.3e not positive despite correction:\n\n"%(ys).T)
+                fprintf_(options.fout,"\n### sqpdfo_bfgs_update: y'*s = %9.3e not positive despite correction:\n\n"%(ys).T)
             return H,pc,info,values
     else:
         if ys <= 0:
             info.flag=values.fail_unexpected
             if options.verbose >= 3:
-                fprintf_(options.fout,"\n### ecdfo_bfgs_update: y'*s = %9.3e is nonpositive\n\n"%(ys).T)
+                fprintf_(options.fout,"\n### sqpdfo_bfgs_update: y'*s = %9.3e is nonpositive\n\n"%(ys).T)
             return H,pc,info,values
 
     # when matrix H has to be initialized

@@ -2,35 +2,34 @@
 
 import helper
 import numpy as np
-from ecdfo_main import ecdfo_main_
-from ecdfo_global_variables import get_prob
-from ecdfo_prelim import ecdfo_prelim_
-from ecdfo_finish import ecdfo_finish_
+from sqpdfo_main import sqpdfo_main_
+from sqpdfo_global_variables import get_prob
+from sqpdfo_prelim import sqpdfo_prelim_
+from sqpdfo_finish import sqpdfo_finish_
 from runtime import *
-from evalfgh import evalfgh_
+from sqpdfo_evalfgh import sqpdfo_evalfgh_
 from copy import copy
 from numpy import array
 
 
-def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
+def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     """
-# [x,lm,info] = ecdfo (x0);
-# [x,lm,info] = ecdfo (x0,lm0);
-# [x,lm,info] = ecdfo (x0,lm0,lb);
-# [x,lm,info] = ecdfo (x0,lm0,lb,ub);
-# [x,lm,info] = ecdfo (x0,lm0,lb,ub,options);
+# [x,lm,info] = sqpdfo (x0,lm0,lb,ub);
+# [x,lm,info] = sqpdfo (x0,lm0,lb,ub,options);
 #
 # The function computes the solution to a smooth nonlinear optimization
 # problem possibly subject to bound constraints on the variables x(1:n)
-# and nonlinear equality constraints ce.
+# and nonlinear constraints.
 # The problem can be written in the form:
 #
 #   minimize    f(x)
 #   subject to  lb(1:n) <= x <= ub(1:n)
 #               ce(x) = 0
+#               ci(x) >= 0
 #
 # The constraints functions are ce: Rn -> Rme which means that there are
-# me (>=0) equality constraints. Lower and upper bounds can be infinite.
+# me (>=0) equality constraints and Rn -> Rmi which means that there are
+# mi (>=0) inequality constraints. Lower and upper bounds can be infinite.
 #
 # Inputs:
 #   x0: n vector giving the initial guess of the solution, the number
@@ -38,41 +37,30 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
 #   lm0 (optional): n+mi+me vector giving the initial guess of the
 #     dual solution (Lagrange or KKT multiplier),
 #     - lm0(1:n) is associated with the bound constraints on x
-#     - lm0(n+1:n+mi) is associated with the inequality constraints
-#     - lm0(n+mi+1:n+mi+me) is associated with the equality constraints
+#     - lm0(n+1:n+me) is associated with the equality constraints
 #     the default value is the least-squares multiplier; the dimensions
-#     mi, and me are known after the first call to the simulator.
+#     me are known after the first call to the simulator.
 #   lb (optional): n+mi vector giving the lower bound on x (first n
 #     components) and ci(x), it can have infinite components (default
 #     -inf)
 #   ub (optional): n+mi vector giving the upper bound on x (first n
 #     components) and ci(x), it can have infinite components (default
 #     inf)
-#   options (optional): structure for tuning the behavior of 'ecdfo'
+#   options (optional): structure for tuning the behavior of SQPDFO
 #     (when a string is required, both lower or uppercase letters can
 #     be used, multiple white spaces are considered as a single white
 #     space)
-#     - options.dxmin = positive number that specifies the precision to
-#       which the variables must be determined; if the solver
-#       needs to make a step smaller than 'dxmin' in the infinity-norm
-#       to progress to optimality, it will stop (default 1.e-20)
-#     - options.fout = FID for the printed output file (default 1,
-#       i.e., the screen)
-#     - options.inf = a lower bound lb(i) <= -options.inf will be
-#       considered to be absent and an upper bound ub(i) >= options.inf
-#       will be considered to be absent (default = inf)
-#     - options.miter = maximum number of iterations (default = 1000)
+#     - options.miter = maximum number of iterations 
 #     - options.tol = tolerance on optimality
 #       (1) = tolerance on the Lagrangian gradient
 #       (2) = tolerance on feasibility
-#       (3) = tolerance on complementarity
+#       (3) = tolerance on bounds
 #     - options.verbose = verbosity level for the outputs (default 1)
 #
 # Output:
 #   x: giving the computed solution
 #   lm: n+me vector giving the dual solution (Lagrange multiplier),
 #     - lm(1:n) is associated with the bound constraints on x
-#     - lm(n+1:n+mi) is associated with the inequality constraints
 #     - lm(n+1:n+me) is associated with the equality constraints
 #   info.flag: output status
 #      0: solution found
@@ -94,7 +82,7 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     # Check input arguments
 
     if x0 is None:
-        fprintf_('\n### ecdfo: x0 is required input!\n\n')
+        fprintf_('\n### sqpdfo: x0 is required input!\n\n')
         x = array([])
         lm = array([])
         info = helper.dummyUnionStruct()
@@ -123,7 +111,7 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
 
     #  Set some constants
 
-    func = evalfgh_
+    func = sqpdfo_evalfgh_
     c = helper.dummyUnionStruct()
 
     eps = 2.220446049250313e-16
@@ -244,12 +232,12 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
         fprintf_(fid,'function A=history \n A=[ \n')
         fclose_(fid)
         
-    # call to ecdfo_prelim
+    # call to sqpdfo_prelim
     n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,\
     sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,\
     ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,\
     cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values=\
-        ecdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,\
+        sqpdfo_prelim_(func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,\
         rep_degree,plin,pdiag,pquad,c,initial_Y,kappa_ill,factor_FPR,Lambda_FP,\
         Lambda_CP,eps_L,lSolver,hardcons,stratLam,xstatus,sstatus,dstatus,\
         options,nargout=47)
@@ -278,11 +266,11 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     # Call main optimization loop
     # -------------------------------------------------------------------------
 
-    # call ecdfo_main
+    # call sqpdfo_main
     nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,Delta,eps_current,cur_degree,fcmodel,\
     gx,normgx,vstatus,xstatus,sstatus,dstatus,M,ndummyY,sspace_save,xspace_save,\
     msg,CNTsin,neval,lm,info=\
-        ecdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,\
+        sqpdfo_main_(func,n,nb,mi,me,lm,nitold,nit,i_xbest,lb,ub,m,X,fX,ciX,ceX,\
         ind_Y,QZ,RZ,Delta,cur_degree,neval,maxeval,maxit,fcmodel,gx,normgx,\
         show_errg,pquad,pdiag,plin,stallfact,eps_rho,Deltamax,rep_degree,epsilon,\
         verbose,eta1,eta2,gamma1,gamma2,gamma3,interpol_TR,factor_CV,Lambda_XN,\
@@ -315,7 +303,7 @@ def ecdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     info_best=copy(info)
     info_best.f=fx
     x=X[:,i_xbest]
-    ecdfo_finish_(nb,mi,me,info_best,options,values)
+    sqpdfo_finish_(nb,mi,me,info_best,options,values)
 
     #---------------------------------------
     # Recover the results

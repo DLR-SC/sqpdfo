@@ -1,12 +1,28 @@
 SQPDFO Optimizer
-================
+(Sequential-Quadratic-Programming Derivative-Free Optimization)
+===============================================================
 
-This is a python implementation of the SQPDFO Optimizer which works using normal python arrays.
-A few bugs may remain but it is mainly functional.
+This is a Python implementation of the SQPDFO Optimizer 
+for generally constrained nonlinear optimization without derivatives.
+developed by A. Troeltzsch at German Aerospace Center (DLR).
 
-All the tests can be ran using the script 'runTests.py'.
+----------------------------------------------
 
-To add some functions, you have to :
--add the function by following other examples in ecdfo_init_prob and ecdfo_func
--change'set_prob('name_or_number_of_function')' in run_ecdfo
--finally launch run_ecdfo
+To run the optimizer just launch 
+>python run_sqpdfo.py 
+or 
+>python run_sqpdfo_academic_examples.py
+
+----------------------------------------------
+
+To add some optimization problems, there are two ways:
+(1)
+-add the function by following other examples in sqpdfo_init_prob and sqpdfo_func
+-change set_prob('number of the new problem') in run_sqpdfo_academic_examples
+-finally launch >python run_sqpdfo_academic_examples.py
+(2)
+-modify the function func_f() in run_sqpdfo.py for the objective function
+-modify the function func_c() in run_sqpdfo.py for the constraint functions
+-finally launch >python run_sqpdfo.py
+
+----------------------------------------------

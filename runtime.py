@@ -9,7 +9,6 @@ This file contains functions which serve mostly 2 purposes :
     outputs with the same shapes : S is a vector in python and a diagonal matrix in matlab, and V.transpose in python = V in matlab.
 
 """
-from __future__ import print_function
 import warnings
 from copy import copy
 import scipy
