@@ -88,6 +88,11 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
     info.ce=array([])
 
     # Check input arguments
+    
+    if me is None:
+        me = 0
+    if mi is None:
+        mi = 0
 
     # here we run an academic example from sqpdfo_func() or a Cutest example
     if func_f is None and x0 is None and lb is None and ub is None:
