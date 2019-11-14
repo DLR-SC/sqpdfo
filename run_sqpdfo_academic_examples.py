@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
-import sqpdfo_global_variables as glob
-from sqpdfo_init_prob import sqpdfo_init_prob_
-from sqpdfo import sqpdfo_
-from numpy import array, zeros, ones, concatenate
 from runtime import *
-import time
+import sqpdfo_global_variables as glob
+from sqpdfo import sqpdfo_
 
 ###############################################################################
-#  Driver for the optimizer SQPDFO
-#  (Sequential-Quadratic-Programming Derivative-Free Optimization).
+#  Driver for the optimizer SQPDFO.
+# (Sequential-Quadratic-Programming Derivative-Free Optimization).
 #
-#  SQPDFO can solve minimization problems of the form
+#  SQPDFO can solve optimization problems of the form
 #
 #      minimize     f(x)
-#      subject to   lx <=   x   <= ux
-#                   ce(x) == 0,
+#      subject to   lx <= x <= ux
+#      subject to   ce(x) == 0,
+#                   ci(x) >=0
 #
-#  where f: Rn -> R (hence x is the vector of n variables to optimize),
-#  lx and ux are lower and upper bounds on x and ce: Rn -> Rme are
-#  equality constraints.
+#  where f: Rn -> R (x is the vector of n variables to optimize),
+#  lx and ux are lower and upper bounds on x, and ce: Rn -> Rme
+#  are equality constraints and ci: Rn -> Rmi are inequality constraints.
 ###############################################################################
 
 class optionsClass:
@@ -35,38 +33,23 @@ class optionsClass:
         self.tol_grad  = 1e-5       # tolerance on the gradient of the Lagrangian
         self.tol_feas  = 1e-5       # tolerance on the feasibility
         self.tol_bnds  = 1e-5       # tolerance on the bounds
-        self.miter   = 8000        # max iterations
-        self.msimul  = 8000        # max evaluations
+        self.miter   = 500        # max iterations
+        self.msimul  = 500        # max evaluations
         self.verbose = 1          # verbosity level 0,...,3 (default: 1)
 
-def run_sqpdfo_academic_examples(prob=None):
-
-    options = optionsClass()
-
-    # Initialize problem
-    glob.set_prob(prob) 
-    x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
-
-    # Handling of inequalities if any
-    if mi:
-        glob.set_nbr_slacks(mi)
-        glob.set_slacks(zeros((mi,1)))
-        lb = concatenate((lb,zeros((mi,1))))
-        ub = concatenate((ub,1e20*ones((mi,1))))
-    
-    # Call SQPDFO
-    lm=array([])
-    x,lm,info=sqpdfo_(x, lm, lb, ub, options)
-    return x, info
-    
-if __name__ == '__main__':    
+if __name__ == '__main__':
     
     # call sqpdfo with academic example problems:
     # definition of function and constraints in sqpdfo_func_()
-    # definition of starting values in sqpdfo_init_prob_()
+    # definition of starting values and bounds in sqpdfo_init_prob_()
+
+    # set problem number (choose from 1...7 and 10...16)
+    prob = 10
+    glob.set_prob(prob)
+
+    opts = optionsClass()
     
-    prob = 13
-    x, info = run_sqpdfo_academic_examples(prob)
+    x, lm, info = sqpdfo_(opts)
     
     # final printout
     print('x* = '+str(x))

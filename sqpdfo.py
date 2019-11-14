@@ -2,8 +2,9 @@
 
 import helper
 import numpy as np
+from sqpdfo_init_prob import sqpdfo_init_prob_
 from sqpdfo_main import sqpdfo_main_
-from sqpdfo_global_variables import get_prob
+import sqpdfo_global_variables as glob
 from sqpdfo_prelim import sqpdfo_prelim_
 from sqpdfo_finish import sqpdfo_finish_
 from runtime import *
@@ -12,10 +13,11 @@ from copy import copy
 from numpy import array
 
 
-def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
+def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,func_c=None):
     """
-# [x,lm,info] = sqpdfo (x0,lm0,lb,ub);
-# [x,lm,info] = sqpdfo (x0,lm0,lb,ub,options);
+# [x,lm,info] = sqpdfo_(options)
+# [x,lm,info] = sqpdfo_(options,f,x0,lb,ub)
+# [x,lm,info] = sqpdfo_(options,f,x0,lb,ub,me,mi,cons)
 #
 # The function computes the solution to a smooth nonlinear optimization
 # problem possibly subject to bound constraints on the variables x(1:n)
@@ -34,12 +36,6 @@ def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
 # Inputs:
 #   x0: n vector giving the initial guess of the solution, the number
 #     of variables is assumed to be the length of the given x0
-#   lm0 (optional): n+mi+me vector giving the initial guess of the
-#     dual solution (Lagrange or KKT multiplier),
-#     - lm0(1:n) is associated with the bound constraints on x
-#     - lm0(n+1:n+me) is associated with the equality constraints
-#     the default value is the least-squares multiplier; the dimensions
-#     me are known after the first call to the simulator.
 #   lb (optional): n+mi vector giving the lower bound on x (first n
 #     components) and ci(x), it can have infinite components (default
 #     -inf)
@@ -78,30 +74,60 @@ def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
 #   info.nsimul[1]: number of function evaluations
 #-----------------------------------------------------------------------
 """
+    # Get problem number
+    
+    prob = glob.get_prob()
+    
+    # Some preliminary initializations
+    
+    x = array([])
+    lm = array([])
+    info = helper.dummyUnionStruct()
+    info.flag = 1
+    info.f = -np.infty
+    info.ce=array([])
 
     # Check input arguments
 
+    # here we run an academic example from sqpdfo_func() or a Cutest example
+    if func_f is None and x0 is None and lb is None and ub is None:
+
+        # Initialize problem
+        x0, lb, ub, dxmin, li, ui, dcimin, infb, n, nb, mi, me, info = sqpdfo_init_prob_(prob, nargout=13)
+
+    # here we run a userdefined example (prob=100)
+    else:
+        if func_f == None:
+            print('Error: Definition of the objective function (in func_f()) is missing !')
+            return x, lm, info
+        else:
+            glob.set_filename_f(func_f)
+        if func_c == None:
+            glob.set_filename_cons('')
+            if me+mi>0:
+                print('Error: me+mi > 0 but no function handle func_c() for constraints is given!')
+                return x, lm, info
+        else:
+            glob.set_filename_cons(func_c)
+
+    # Check right format of x and bounds lb and ub
+    
     if x0 is None:
-        fprintf_('\n### sqpdfo: x0 is required input!\n\n')
-        x = array([])
-        lm = array([])
-        info = helper.dummyUnionStruct()
-        info.flag = 1
-        info.f = -np.infty
-        info.ce=array([])
+        print('Error: No starting values of x given !')
         return x, lm, info
-    if lm0 is None:
-        lm0 = array([])
-    else:
-        lm0 = lm0[:]
+    elif not isinstance(x0, np.ndarray):
+        x0 = array([x0])
     if lb is None:
-        lb = array([])
-    else:
-        lb = lb[:]
+        lb = -1e20 * np.ones_like(x0).T
+    elif not isinstance(lb, np.ndarray):
+        lb = array([lb]).T
     if ub is None:
-        ub = array([])
-    else:
-        ub = ub[:]
+        ub = 1e20 * np.ones_like(x0).T
+    elif not isinstance(ub, np.ndarray):
+        ub = array([ub]).T
+
+	# check existence of options
+
     if options_ is None:
         print('No options are given by the user, default values are used.')
         class options:
@@ -109,13 +135,28 @@ def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     else:
         options = copy(options_)
 
+    # Handling of inequalities as slack variables
+
+    if mi:
+
+        # handling of two-sided inequalities in CUTEst
+        if prob == 1000:
+            for i in range(0, mi + me):
+                if li[i] < ui[i]:
+                    if li[i] > -1e7 and ui[i] < 1e7:
+                        mi = mi + 1
+
+        glob.set_nbr_slacks(mi)
+        glob.set_slacks(np.zeros((mi, 1)))
+        lb = np.concatenate((lb, np.zeros((mi, 1))))
+        ub = np.concatenate((ub, 1e20 * np.ones((mi, 1))))
+
     #  Set some constants
 
     func = sqpdfo_evalfgh_
     c = helper.dummyUnionStruct()
 
     eps = 2.220446049250313e-16
-    prob=get_prob()
     c.free=0
     c.fixed=1
     c.alwaysfixed=2
@@ -125,8 +166,9 @@ def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     c.inY=1
     c.dummy=1
     c.nodummy=0
+    
     #  Initialize to zero
-    x=copy(np.NaN)
+    
     fx=copy(np.NaN)
     gx=copy(np.NaN)
     nit=0
@@ -141,6 +183,7 @@ def sqpdfo_(x0=None,lm0=None,lb=None,ub=None,options_=None):
     sspace_save=array([])
     xspace_save=array([])
     ndummyY=0
+    lm0 = array([])
 
     #  Miscellaneous initializations
   
