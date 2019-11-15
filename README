@@ -14,7 +14,14 @@ SQPDFO is a further development of ECDFO and it uses parts of BCDFO.
 
 -------------------------------------------------------------------------------
 
-To run the optimizer just launch:
+To run the optimizer you will need the Python packages numpy and scipy:
+
+>pip install numpy
+>pip install scipy
+
+-------------------------------------------------------------------------------
+
+Then you launch SQPDFO by:
 
 >python run_sqpdfo.py 
 
@@ -24,19 +31,29 @@ or
 
 -------------------------------------------------------------------------------
 
-To add some optimization problems, there are two ways:
+To add your own optimization problems, there are two ways:
 
 (1)
--modify the function func_f() in run_sqpdfo.py for the objective function
--modify the function func_c() in run_sqpdfo.py for the constraint functions
--modify starting point and bounds information in run_sqpdfo.py
--finally launch >python run_sqpdfo.py
+- modify the function func_f() in run_sqpdfo.py for the objective function
+- modify the function func_c() in run_sqpdfo.py for the constraint functions
+- modify starting point and bounds information in run_sqpdfo.py
+- launch >python run_sqpdfo.py
 
 (2)
--add the problem by following other examples in sqpdfo_init_prob.py and sqpdfo_func.py
--give it a new problem number 
--change set_prob(number_of_the_new_problem) in run_sqpdfo_academic_examples.py
--finally launch >python run_sqpdfo_academic_examples.py
+- add the problem by following other examples in sqpdfo_init_prob.py and sqpdfo_func.py
+- give it a new problem number 
+- change set_prob(number_of_the_new_problem) in run_sqpdfo_academic_examples.py
+- launch >python run_sqpdfo_academic_examples.py
+
+-------------------------------------------------------------------------------
+
+If you want to use SQPDFO to solve problems from the CUTEst library:
+(tested only on Linux/Unix)
+
+- download and install CUTEst from https://github.com/ralna/CUTEst  
+- download pycutest with eg. >pip install pycutest
+- set all environment variables from CUTEst and pycutest
+- launch >python run_sqpdfo_cutest.py
 
 -------------------------------------------------------------------------------
 
