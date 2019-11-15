@@ -5,14 +5,14 @@ import numpy as np
 
 class dummyUnionStruct():
       """
-      Creates an empty object which can for instance later be used options, info in the ECDFO algorithm
+      Creates an empty object which can for instance later be used options, info in the SQPDFO algorithm
       """
       pass
 
 
 class dummyOptions():
       """
-      Those are some basics options for the ECDFO algorithm : they are used for the ECDFO tests
+      Those are some basics options for the SQPDFO algorithm : they are used for the SQPDFO tests
       """
       def __init__(self):
         self.hess_approx = 131
@@ -33,10 +33,10 @@ class dummyOptions():
 
 class dummyValues():
       """
-      Those are some basics options for the ECDFO algorithm : they are used for the ECDFO tests
+      Those are some basics options for the SQPDFO algorithm : they are used for the SQPDFO tests
       """
       def __init__(self):
-           # Define ecdfo constant values
+           # Define SQPDFO constant values
         
            self.success                =   0 # solution found
            self.fail_on_argument       =   1 # an argument is wrong

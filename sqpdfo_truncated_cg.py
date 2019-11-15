@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-from ecdfo_global_variables import *
+from sqpdfo_global_variables import *
 from numpy import array
 
 
@@ -13,9 +13,9 @@ class tcgInfo():
          self.curv = None
          self.plevel = 0
 
-def ecdfo_truncated_cg_(A=None,b=None,delta=None,max_iter=None,tol=None,*args,**kwargs):
+def sqpdfo_truncated_cg_(A=None,b=None,delta=None,max_iter=None,tol=None,*args,**kwargs):
     """
-    # [x,info] = ecdfo_truncated_cg (A,b,delta,max_iter,tol);
+    # [x,info] = sqpdfo_truncated_cg (A,b,delta,max_iter,tol);
     #
     # This function solves the system A x = b for x, by Steihaug's conjugate gradient method.
     # A is a symmetric (possibly indefinite) matrix.

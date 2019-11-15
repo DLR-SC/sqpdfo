@@ -4,14 +4,14 @@ import helper
 from bcdfo_solve_TR_MS_bc import *
 from minq import Minq
 
-from ecdfo_check_convex import *
-from ecdfo_compute_multiplier import *
-from ecdfo_truncated_cg import *
+from sqpdfo_check_convex import *
+from sqpdfo_compute_multiplier import *
+from sqpdfo_truncated_cg import *
 from copy import copy
 from numpy import zeros_like
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 
-def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=None,\
+def sqpdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=None,\
     M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,\
     radius_has_been_rejected=None,lm=None,ceY=None,ciY=None,gx=None,indfree=None,\
     *args,**kwargs):
@@ -19,11 +19,6 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
 #
 #  function to compute the new SQP-trust-region step inside delta and subject
 #  to simple bounds
-#
-#  inputs:
-#
-# 
-#  outputs:
 #
 ############################################################################
     
@@ -200,14 +195,14 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
 
             if check_condition:
                 cthreshold=1e+16
-                H1,badcond=ecdfo_check_cond_(H1,cthreshold,options,nargout=2)
+                H1,badcond=sqpdfo_check_cond_(H1,cthreshold,options,nargout=2)
                 
             check_convex=1
             
             #  check that matrix H1 is convex (otherwise convexify)
 
             if check_convex:
-                H1=ecdfo_check_convex_(H1,options)
+                H1=sqpdfo_check_convex_(H1,options)
                 
             # solve the LLS problem inside the variables bounds
             
@@ -262,7 +257,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             
             if rpred < 0:
                 if options.verbose >= 3:
-                    fprintf_(options.fout,'\n### ecdfo_solve_TR_bc:',\
+                    fprintf_(options.fout,'\n### sqpdfo_solve_TR_bc:',\
                     ' rpred = %9.2e should not be negative\n\n'%(rpred))
                     
             active_r=(info_r.flag == 1) or (info_r.flag == 2)
@@ -321,7 +316,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
             #  Compute minimizer of the model in the tangent space
 
             u_sl,info_t=\
-            ecdfo_truncated_cg_(M_t,- g_t,delta_t,20 * (n-me+nbr_slacks),\
+            sqpdfo_truncated_cg_(M_t,- g_t,delta_t,20 * (n-me+nbr_slacks),\
                                prec_t,nargout=2)
             
             t_sl=Z_.dot(u_sl)
@@ -430,7 +425,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
         if norm_(r + t) <= 1e-16:
             if (iter_active >= 10 * n or delta < delta_min):
                 if options.verbose >= 3:
-                    disp_('### ecdfo_solve_TR_bc: active-set iteration',\
+                    disp_('### sqpdfo_solve_TR_bc: active-set iteration',\
                     ' limit exceeded ###')
                 return xnew,delta,rpred,active_r,active_t,lm_computed,lm,info,slnew
                 
@@ -446,7 +441,7 @@ def ecdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=N
               ubounds[iub]=ub[indfree[iub]]
             
               lm,info=\
-              ecdfo_compute_multiplier_(xnew,lbounds,ubounds,info,options,values,\
+              sqpdfo_compute_multiplier_(xnew,lbounds,ubounds,info,options,values,\
                                        nargout=2)
             
               # compute smallest LM of the active bounds

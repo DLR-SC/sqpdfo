@@ -2,9 +2,9 @@
 
 from runtime import *
 from numpy import inf, array
-from ecdfo_global_variables import *
+from sqpdfo_global_variables import *
 
-def ecdfo_init_prob_(prob=None,*args,**kwargs):
+def sqpdfo_init_prob_(prob=None,*args,**kwargs):
     """
     # This function returns the dimensions of the problem:
 # . n  = number of variables,
@@ -164,7 +164,7 @@ def ecdfo_init_prob_(prob=None,*args,**kwargs):
         #print(cproblem.eq_cons_first)
     else:
         sys.exit('Problem number is not set!\n'\
-            'Please import ecdfo_global_variables and use set_prob(nbr)\n'\
+            'Please import sqpdfo_global_variables and use set_prob(nbr)\n'\
             'where nbr is 1,...,5 for test examples or 1000 for a CUTEst problem.')
     info=0
     return x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info

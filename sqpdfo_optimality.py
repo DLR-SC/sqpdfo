@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 from copy import copy
 from numpy import arange, logical_and, zeros, diag, ones, concatenate, array
 
 
-def ecdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
+def sqpdfo_optimality_(x=None,lm=None,lb=None,ub=None,info_=None,options=None,*args,**kwargs):
 
     ##############################################################
     #  check for optimality

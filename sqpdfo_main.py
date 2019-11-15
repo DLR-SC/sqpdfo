@@ -4,29 +4,29 @@ from runtime import *
 from numpy import inf, arange
 from copy import copy
 
-from ecdfo_compute_multiplier import ecdfo_compute_multiplier_
-from ecdfo_optimality import ecdfo_optimality_
-from ecdfo_iter_printout import ecdfo_iter_printout_
-from ecdfo_solve_TR_bc import ecdfo_solve_TR_bc_
-from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
+from sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
+from sqpdfo_optimality import sqpdfo_optimality_
+from sqpdfo_iter_printout import sqpdfo_iter_printout_
+from sqpdfo_solve_TR_bc import sqpdfo_solve_TR_bc_
+from sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
 from bcdfo_augment_Y import bcdfo_augment_Y_
-from ecdfo_swap_in_Y import ecdfo_swap_in_Y_
+from sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
-from ecdfo_computeHessian import ecdfo_computeHessian_
+from sqpdfo_computeHessian import sqpdfo_computeHessian_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_repair_Y import bcdfo_repair_Y_
 #from bcdfo_find_new_yj_bc import bcdfo_find_new_yj_bc_
 from bcdfo_find_new_yj import bcdfo_find_new_yj_
 from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
-from ecdfo_find_smallf import ecdfo_find_smallf_
+from sqpdfo_find_smallf import sqpdfo_find_smallf_
 from bcdfo_include_in_Y import bcdfo_include_in_Y_
 from numpy import array, zeros, concatenate, zeros_like
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 
 
-def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=None,nit_=None,\
+def sqpdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=None,nit_=None,\
     i_xbest_=None,lb_=None,ub_=None,m_=None,X_=None,fX_=None,ciX_=None,ceX_=None,\
     ind_Y_=None,QZ_=None,RZ_=None,delta_=None,cur_degree_=None,neval_=None,\
     maxeval_=None,maxit_=None,fcmodel_=None,gx_=None,normgx_=None,show_errg_=None,\
@@ -42,8 +42,9 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
     c_=None,level_=None,whichmodel_=None,hardcons_=None,noisy_=None,scaleX_=None,\
     scalefacX_=None,CNTsin_=None,shrink_Delta_=None,scale_=None,shift_Y_=None,\
     info_=None,options_=None,values_=None,*args,**kwargs):
+	
     ###############################################################################
-    # Main optimization loop for ECDFO.
+    # Main optimization loop for SQPDFO.
     ###############################################################################
 
     func=copy(func_)
@@ -160,7 +161,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
               norm_(ce - concatenate((zeros((len(ce)-nbr_slacks,1)),sl**2)))
     else:
         merit=info.f + sigma * norm_(info.ce)
-    msg='Unexpected message from ecdfo_main'
+    msg='Unexpected message from sqpdfo_main'
     m=size_(X,2)-1
     indfree=find_(vstatus == c.free)
     indfix=find_(vstatus >= c.fixed)
@@ -218,7 +219,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
             # Final printout
 
-            ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+            sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
                                  options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
             cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
@@ -230,7 +231,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
             # Final printout
 
-            ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+            sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
                                  options,constrained_pbl,merit)
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
             cur_degree,fcmodel,gx,normgx,vstatus,xstatus,sstatus,dstatus,M,\
@@ -254,10 +255,10 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         ubounds[iub]=ub[indfree[iub]]
         
         lm,info=\
-        ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+        sqpdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
         
         feas,comp,info=\
-        ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+        sqpdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
         
         if info.flag:
             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -319,7 +320,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                     # Final printout
 
-                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
+                    sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
                                         nb,mi,options,constrained_pbl,merit)
                     
                     info.flag=values.success
@@ -337,7 +338,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                     #iteration printout
                     
-                    ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
+                    sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,\
                                         nb,mi,options,constrained_pbl,merit)
 
             #  Not at a solution: improve the interpolation set.
@@ -458,7 +459,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     
                     # final printout
                     
-                    ecdfo_iter_printout_(info,radius,norms,pc,itype,values,nb,mi,\
+                    sqpdfo_iter_printout_(info,radius,norms,pc,itype,values,nb,mi,\
                           options,constrained_pbl,merit)
                     
                     return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -506,7 +507,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 #  Update X and evaluate function
 
                 X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=\
-                ecdfo_augmX_evalf_(func,Y[:,[j]],m,X,fX,ciX,ceX,nfix,xfix,\
+                sqpdfo_augmX_evalf_(func,Y[:,[j]],m,X,fX,ciX,ceX,nfix,xfix,\
                                    indfix,indfree,fxmax,neval,xstatus,c.inY,\
                                    sstatus,dstatus,scaleX,scalefacX,info,\
                                    options,values,nargout=10)
@@ -533,7 +534,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
             i_xold=copy(i_xbest)
             x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info=\
-            ecdfo_find_smallf_(c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,\
+            sqpdfo_find_smallf_(c,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,cur_degree,\
                               indfree,x,lb,ub,fx,dstatus,whichmodel,scale,shift_Y,\
                               delta,normgx,kappa_ill,sigma,info,nargout=12)
 
@@ -559,7 +560,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             # Update Hessian approximation (and gradients in info.g, info.ai, info.ae)
             
             M,pc,info=\
-            ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,\
+            sqpdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,s,\
                                  gx,gci,gce,info,options,values,fcmodel,Y,fY,ciY,\
                                  ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,ind_Y,\
                                  i_xbest,m,nargout=3)
@@ -578,12 +579,12 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             # compute multiplier
             
             lm,info=\
-            ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
+            sqpdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,nargout=2)
             
             # compute optimality
             
             feas,comp,info=\
-            ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+            sqpdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
             
             if info.flag:
                 return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,eps_current,\
@@ -621,7 +622,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 
                 itype='conv'                
                 
-                ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+                sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
                       options,constrained_pbl,merit)
                 
                 msg='Convergence in '+str(neval)+\
@@ -675,7 +676,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         # Iteration printout
         #-----------------------------------------------------------------------
         
-        ecdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
+        sqpdfo_iter_printout_(info,old_delta,norms,pc,itype,values,nb,mi,\
               options,constrained_pbl,merit)
         
         if options.verbose >= 5:
@@ -694,7 +695,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         old_delta=copy(delta)
 
         xnew,deltaTR,rpred,active_r,active_t,lm_computed,lm,info,slplus=\
-        ecdfo_solve_TR_bc_(func,x,lb,ub,delta,mi,me,M,\
+        sqpdfo_solve_TR_bc_(func,x,lb,ub,delta,mi,me,M,\
                            prec_r,prec_t,info,options,values,\
                            radius_has_been_rejected,lm,ceY,ciY,gx,indfree,\
                            nargout=9)
@@ -737,7 +738,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             sigma=max_(sigmab,1.5 * sigma)
             
             if sigma > 1e+299:
-                fprintf_(options.fout,'\n### ecdfo_main: Penalty parameter (sigma): %15.8e '\
+                fprintf_(options.fout,'\n### sqpdfo_main: Penalty parameter (sigma): %15.8e '\
                      'is too big\n\n'%(sigma))
                      
                 info.flag=values.fail_unexpected
@@ -772,7 +773,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
         # (xstatus(m) is set to 0 but is updated later on)
         
         X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,retval=\
-        ecdfo_augmX_evalf_(func,xplus,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,\
+        sqpdfo_augmX_evalf_(func,xplus,m,X,fX,ciX,ceX,nfix,xfix,indfix,indfree,\
                           fxmax,neval,xstatus,0,sstatus,dstatus,scaleX,\
                           scalefacX,info,options,values,nargout=10)
                          
@@ -805,7 +806,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             elif retval == 2:
             
                 if options.verbose > 1:
-                    fprintf_(options.fout,'\n### ecdfo_main: evaluation of the function stopped\n\n')
+                    fprintf_(options.fout,'\n### sqpdfo_main: evaluation of the function stopped\n\n')
                     
                 info.flag=values.stop_on_simul
                 
@@ -816,7 +817,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
             else: # unexpected
             
                 if options.verbose > 1:
-                    fprintf_(options.fout,'\n### ecdfo_main: error during evaluation of the function')
+                    fprintf_(options.fout,'\n### sqpdfo_main: error during evaluation of the function')
                     
                 info.flag=values.fail_on_simul
                 
@@ -881,7 +882,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 pred=-1.0
                             
                 if options.verbose >= 3:
-                    fprintf_(options.fout,'\n### ecdfo_main: pred = %9.2e should be positive\n\n'%(pred))
+                    fprintf_(options.fout,'\n### sqpdfo_main: pred = %9.2e should be positive\n\n'%(pred))
                 
             elif pred == 0:            
                 # here, stationarity is assumed but model maybe inaccurate to state 
@@ -889,7 +890,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 pred=- 1.0
                 
                 if options.verbose >= 3:
-                    disp_('### ecdfo_main : Warning : predicted reduction is 0 ###')
+                    disp_('### sqpdfo_main : Warning : predicted reduction is 0 ###')
                     
             rho=ared / pred
             
@@ -993,7 +994,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                     #  Move it in the first position, redefining the base point.
 
                     QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
-                    ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,\
+                    sqpdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,whichmodel,\
                                     scale,shift_Y,delta,normgx,kappa_ill,nargout=9)
                                     
                     fx=copy(fxplus)
@@ -1055,13 +1056,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                         ubounds[iub]=ub[indfree[iub]]
                         
                         lm,info=\
-                        ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,\
+                        sqpdfo_compute_multiplier_(x,lbounds,ubounds,info,options,\
                                                  values,nargout=2)
                         
                     # Update Hessian approximation
                     
                     M,pc,info=\
-                    ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,\
+                    sqpdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,\
                                          n,me,mi,s,gx,gci,gce,info,options,values,\
                                          fcmodel,Y,fY,ciY,ceY,sigma,scale,shift_Y,\
                                          QZ,RZ,whichmodel,ind_Y,i_xbest,m,nargout=3)
@@ -1227,7 +1228,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             if (rho >= eta1):
                             
                                 QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
-                                ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,\
+                                sqpdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,ceY,\
                                                 x,whichmodel,scale,shift_Y,delta,\
                                                 normgx,kappa_ill,nargout=9)
                                 
@@ -1349,7 +1350,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
 
                                 if (rho >= eta1):
                                     QZ,RZ,Y,ind_Y,fY,ciY,ceY,x,scale=\
-                                    ecdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,\
+                                    sqpdfo_swap_in_Y_(0,pos,QZ,RZ,Y,ind_Y,fY,ciY,\
                                                     ceY,x,whichmodel,scale,shift_Y,\
                                                     delta,normgx,kappa_ill,nargout=9)
                                                     
@@ -1456,7 +1457,7 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                             
                             # final printout
                             
-                            ecdfo_iter_printout_(info,delta,norms,pc,itype,\
+                            sqpdfo_iter_printout_(info,delta,norms,pc,itype,\
                                       values,nb,mi,options,constrained_pbl,merit)
                                       
                             return nit,i_xbest,x,fx,m,X,fX,ciX,ceX,ind_Y,delta,\
@@ -1478,13 +1479,13 @@ def ecdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=N
                 lbounds[ilb]=lb[indfree[ilb]]
                 ubounds[iub]=ub[indfree[iub]]
                 lm,info=\
-                ecdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,\
+                sqpdfo_compute_multiplier_(x,lbounds,ubounds,info,options,values,\
                                          nargout=2)
                 
                 #  Compute / update Hessian
                 
                 M,pc,info=\
-                ecdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,\
+                sqpdfo_computeHessian_(func,x,null_step,constrained_pbl,lm,M,n,me,mi,\
                                      s,gx,gci,gce,info,options,values,fcmodel,Y,fY,\
                                      ciY,ceY,sigma,scale,shift_Y,QZ,RZ,whichmodel,\
                                      ind_Y,i_xbest,m,nargout=3)

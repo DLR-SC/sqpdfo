@@ -5,21 +5,21 @@ from runtime import *
 import types
 import helper
 import numpy as np
-from ecdfo_options import *
+from sqpdfo_options import *
 from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
 from bcdfo_computeP import bcdfo_computeP_
 from bcdfo_gradP import bcdfo_gradP_
 from bcdfo_projgrad import bcdfo_projgrad_
 from bcdfo_repair_Y import bcdfo_repair_Y_
-from ecdfo_augmX_evalf import ecdfo_augmX_evalf_
-from ecdfo_compute_multiplier import ecdfo_compute_multiplier_
-from ecdfo_optimality import ecdfo_optimality_
-import ecdfo_global_variables as glob
+from sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
+from sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
+from sqpdfo_optimality import sqpdfo_optimality_
+import sqpdfo_global_variables as glob
 from copy import copy
 from numpy import array, arange
 
-def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
+def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
    scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,\
    pdiag_=None,pquad_=None,c_=None,initial_Y_=None,kappa_ill_=None,\
    factor_FPR_=None,Lambda_FP_=None,Lambda_CP_=None,eps_L_=None,lSolver_=None,\
@@ -125,7 +125,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
 
     # check user options or get default values if no values given by the user
 
-    info,options,values=ecdfo_options_(info,options,nargout=3)
+    info,options,values=sqpdfo_options_(info,options,nargout=3)
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,\
            sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,\
@@ -139,7 +139,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
     n=size_(x0,1)
     if size_(x0,2) != 1:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo: the initial x must be an n-vector\n\n')
+            fprintf_(options.fout,'### sqpdfo_prelim: the initial x must be an n-vector\n\n')
         info.flag=values.fail_on_argument
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,\
            sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,\
@@ -147,7 +147,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
            cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
     if n < 1:
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo: the initial x must be an n-vector with n > 0\n\n')
+            fprintf_(options.fout,'### sqpdfo_prelim: the initial x must be an n-vector with n > 0\n\n')
         info.flag=values.fail_on_argument
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,xstatus,\
            sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,\
@@ -356,7 +356,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
         
         for i in range(0,cur_degree):
             X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic=\
-            ecdfo_augmX_evalf_(func,Y[:,[i]],i,X,fX,ciX,ceX,nfix,xfix,indfix,\
+            sqpdfo_augmX_evalf_(func,Y[:,[i]],i,X,fX,ciX,ceX,nfix,xfix,indfix,\
                 indfree,1e+25,info.nsimul[1],xstatus,c.inY,sstatus,\
                 dstatus,scaleX,scalefacX,info,options,values,nargout=9)
                 
@@ -427,7 +427,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
     #  ATTENTION for constrained problems...! Check merit function value!
     
     #[x, fx, QZ, RZ, Y, fY, ciY, ceY, ind_Y, i_xbest, scale] = ...
-    #   ecdfo_find_smallf(c, QZ, RZ, Y, fY, ciY, ceY,...
+    #   sqpdfo_find_smallf(c, QZ, RZ, Y, fY, ciY, ceY,...
     #   1:cur_degree, 1, cur_degree, indfree, x, lb, ub, fx0, ...
     #   zeros(cur_degree,1), whichmodel, scale, shift_Y, Delta0, 1, kappa_ill);
     
@@ -444,7 +444,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
     
     if any_(size_(gx) != [n,1]):
         if options.verbose:
-            fprintf_(options.fout,'### ecdfo: the computed gradient g has a wrong ',\
+            fprintf_(options.fout,'### sqpdfo: the computed gradient g has a wrong ',\
             'size, (%0i,%0i) instead of (%0i,1)\n\n'%(size_(gx),n))
             
         info.flag=values.fail_on_simul
@@ -531,7 +531,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
         fprintf_(options.fout,'  \n')
     if options.verbose >= 4:
         fprintf_(options.fout,'%s'%(values.sline))
-        fprintf_(options.fout,'ecdfo optimization solver\n\n')
+        fprintf_(options.fout,'sqpdfo optimization solver\n\n')
         if isinstance(func, types.FunctionType):
             func_name=str(func)
         else:
@@ -569,7 +569,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
 
     if (nb + mi + me > 0):
         if isempty_(lm0):
-            lm,info=ecdfo_compute_multiplier_(x,[],[],info,options,values,nargout=2)
+            lm,info=sqpdfo_compute_multiplier_(x,[],[],info,options,values,nargout=2)
             
             if info.flag:
                 return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,\
@@ -589,7 +589,7 @@ def ecdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
     # Initial optimality
 
     feas,compl,info=\
-    ecdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
+    sqpdfo_optimality_(x,lm,lb[indfree],ub[indfree],info,options,nargout=3)
     
     if info.flag:
         return n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta0,nfix,indfix,xfix,vstatus,\

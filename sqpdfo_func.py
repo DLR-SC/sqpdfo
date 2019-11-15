@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-import ecdfo_global_variables as glob
+import sqpdfo_global_variables as glob
 from numpy import array, zeros, concatenate, zeros_like
 import time
 
-def ecdfo_func_(x=None,*args,**kwargs):
+def sqpdfo_func_(x=None,*args,**kwargs):
     """
     #-----------------------------------------------------------------------
     # Computation of f, ci, ce
@@ -227,11 +227,11 @@ def ecdfo_func_(x=None,*args,**kwargs):
             else:
                 c=c.reshape(-1,1)
                 if sum(li)>0 or sum(ui)>0:
-                    msg = 'ecdfo_func: Warning! ce must not be zero!'
-                    print('ecdfo_func: Warning! ce must not be zero! Check li and ui!')
+                    msg = 'sqpdfo_func: Warning! ce must not be zero!'
+                    print('sqpdfo_func: Warning! ce must not be zero! Check li and ui!')
         
     else:
-        msg = 'Error: Problem number prob='+str(prob)+' is not defined in ecdfo_func.py ! \nUserdefined problems have problem number prob=100.'
+        msg = 'Error: Problem number prob='+str(prob)+' is not defined in sqpdfo_func.py ! \nUserdefined problems have problem number prob=100.'
         f = np.inf
 
     return msg,f,dummy,c

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-class ecdfoValues():
+class sqpdfoValues():
     def __init__(self):
-        # Define ecdfo constant values
+        # Define sqpdfo constant values
 
         self.success = 0  # solution found
         self.fail_on_argument = 1  # an argument is wrong

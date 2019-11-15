@@ -3,15 +3,10 @@
 from runtime import *
 
 
-def ecdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,values=None,nb=None,mi=None,options=None,constrained_pbl=None,merit=None,*args,**kwargs):
+def sqpdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,values=None,nb=None,mi=None,options=None,constrained_pbl=None,merit=None,*args,**kwargs):
     """
-#  iteration printout
-#
-    
+#  iteration printout    
     """
-
-#    varargin = cellarray(args)
-#    nargin = 11-[info,old_delta,norms,pc,itype,values,nb,mi,options,constrained_pbl,merit].count(None)+len(args)
 
     if options.verbose < 4 and options.verbose >= 1:
         fprintf_(options.fout,'%4i  %4i'%(info.niter,info.nsimul[1] + info.nsimul[3]))

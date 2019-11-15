@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-from ecdfo_func import *
-from ecdfo_global_variables import *
+from sqpdfo_func import *
+from sqpdfo_global_variables import *
 from numpy import array
 
 
-def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
+def sqpdfo_evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
     """
-# [msg,f,ci,ce] = evalfgh (key,xy,lm)
+# [msg,f,dummy,ce] = evalfgh (key,xy,lm)
 #
 # Inputs:
 #   key switches options, possible values are:
-#      2: compute f, ci, and ce
+#      2: compute f and ce
 #   xy: variables to optimize
 #   lm: KKT (or Lagrange) multiplier associated with the constraints
 #     lm(1:n) is associated with bound constraints on xy 
-#     lm(n+1:n+mi) is associated with the inequality constraints 
-#     lm(n+mi+1:n+mi+me) is associated with the equality constraints 
+#     lm(n+mi+1:n+me) is associated with the equality constraints 
 #
 # Outputs:
 #   msg describes the result of the simulation
@@ -25,7 +24,6 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
 #    -1: xy is out of an implicit domain
 #    -2: stop the optimization
 #   f: function value
-#   ci: inequality constraint values
 #   ce: equality constraint values
     """
 
@@ -44,7 +42,7 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
 
     msg=0
     outf=array([])
-    outci=array([])
+    dummy=array([])
     outce=array([])
 
     # Set global and persistent variables (only once)
@@ -58,16 +56,16 @@ def evalfgh_(key=None,xy=None,lm=None,*args,**kwargs):
         # initialisation has been done
         set_simul_not_initialized(0)
 
-    # call to ecdfo_func() to compute functions : f, ci, ce
+    # call to sqpdfo_func() to compute functions : f, ci, ce
 
     if key == 2:
         if nargin < 2:
             fprintf_(fileoutput,'\nevalfgh.py : not enough input arguments (%0i < 2) with key = %0i\n\n'%(nargin,key))
             msg=- 2
-            return msg,outf,outci,outce
-        msg,outf,outci,outce=ecdfo_func_(xy,nargout=4)
+            return msg,outf,dummy,outce
+        msg,outf,dummy,outce=sqpdfo_func_(xy,nargout=4)
     else:
         fprintf_(fileoutput,'\nevalfgh.py : unexpected value of key (=%i)\n\n'%(key))
         msg=- 2
-        return msg,outf,outci,outce
-    return msg,outf,outci,outce
+        return msg,outf,dummy,outce
+    return msg,outf,dummy,outce

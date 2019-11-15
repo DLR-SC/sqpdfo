@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from runtime import *
-def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
+def sqpdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
 
 ###############################################################################
 # Prints output status
@@ -44,7 +44,7 @@ def ecdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*ar
         fprintf_(options.fout,'%s\n'%(values.dline))
         fprintf_(options.fout,'  Final function value                     %12.5e\n'%(info.f))
         fprintf_(options.fout,'  Optimality conditions:\n')
-        if nb + mi + me > 0:
+        if nb + me > 0:
             fprintf_(options.fout,'  . gradient of the Lagrangian (inf norm)  %11.5e\n'%(info.glagn))
             fprintf_(options.fout,'  . feasibility                            %11.5e\n'%(info.feasn))
         else:
