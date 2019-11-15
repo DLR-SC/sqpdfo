@@ -45,7 +45,7 @@ if __name__ == '__main__':
     glob.set_prob(1000)  # Do not modify this number!
 
     # set Cutest problem with name and parameters of the problem
-    glob.set_prob_cuter('TRUSPYR2',[])
+    glob.set_prob_cuter('AVGASA',[])
     #glob.set_prob_cuter('ALJAZZAF', ['N', 3, 'N1', 2])
     #glob.set_prob_cuter('BDRY2', ['N', 3])
     #glob.set_prob_cuter('ALLINQP',['N',10])
@@ -54,8 +54,8 @@ if __name__ == '__main__':
     opts = optionsClass()
     
     # call run_sqpdfo_cutest
-    x,info = sqpdfo_(opts)
-
+    x,lm,info = sqpdfo_(opts)
+    print(glob.get_nbr_slacks())
     # final printout
     print('')
     print('x* = '+str(x))
