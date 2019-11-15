@@ -91,10 +91,10 @@ def run_ecdfo_cutest(*args, **kwargs):
 if __name__ == '__main__':
 
     #glob.set_prob_cuter(name,params)
-    glob.set_prob_cuter('TRUSPYR2',[])
+    #glob.set_prob_cuter('ALLINITA',[])
     #glob.set_prob_cuter('ALJAZZAF', ['N', 3, 'N1', 2])
     #glob.set_prob_cuter('BDRY2', ['N', 3])
-    #glob.set_prob_cuter('ALLINQP',['N',10])
+    glob.set_prob_cuter('ALLINQP',['N',10])
     
     # call run_ecdfo_cutest
     x,info = run_ecdfo_cutest()
@@ -105,3 +105,6 @@ if __name__ == '__main__':
     print('f* = '+str(info.f))
     if info.ce.size>0:
         print('c* = '+str(info.ce.T[0]))
+        
+    sla=glob.get_slacks()
+    print('sl* = '+str(sla.T[0]**2))
