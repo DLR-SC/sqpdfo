@@ -55,7 +55,7 @@ if __name__ == '__main__':
     
     # call run_sqpdfo_cutest
     x,lm,info = sqpdfo_(opts)
-    print(glob.get_nbr_slacks())
+
     # final printout
     print('')
     print('x* = '+str(x))
