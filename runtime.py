@@ -29,37 +29,7 @@ def isvector_or_scalar_(a):
         return a.size and a.ndim-a.shape.count(1) <= 1
     except:
         return False
-def isvector_(a):
-    """
-    one-dimensional arrays having shape [N],
-    row and column matrices having shape [1 N] and
-    [N 1] correspondingly, and their generalizations
-    having shape [1 1 ... N ... 1 1 1]
-    """
-    try:
-        return a.ndim-a.shape.count(1) == 1
-    except:
-        return False
-
-def disp_(*args):
-    """
-    function printing out arguments
-    """
-    out = ""
-    for arg in args:
-        try:
-            out = out + str(arg)
-        except Exception as e:
-            print("Display Error:", e.message())
-    print(out)#(args)
     
-def false_(*args):
-    """
-    function creating an array of false
-    """
-    if len(args) == 1:
-        args += args
-    return np.zeros(args,dtype=bool,order="F")
 
 def find_(a,n=None,d=None,nargout=1):
     """
@@ -90,11 +60,6 @@ def find_(a,n=None,d=None,nargout=1):
     else:
         raise NotImplementedError
 
-def floor_(a):
-    """
-    function floor
-    """
-    return np.floor(a)
 
 def fopen_(*args):
     """
@@ -145,23 +110,6 @@ def isempty_(a):
     except AttributeError:
         return False
 
-
-def isequal_(a,b):
-    """
-    function which tests if 2 arrays have the same values
-    """
-    return np.array_equal(a,
-                          b)
-
-                          
-def isscalar_(a):
-    """np.isscalar returns True if a.__class__ is a scalar
-    type (i.e., int, and also immutable containers str and
-    tuple, but not list.) Our requirements are different"""
-    try:
-        return a.size == 1
-    except AttributeError:
-        return np.isscalar(a)
 
 def length_(a):
     """
@@ -233,20 +181,6 @@ def min_(a, d=None, nargout=None):#, nargout=0):
         warnings.simplefilter('default', RuntimeWarning)
         return ret                                
 
-def mod_(a,b):
-    """
-    function which returns a modulo b
-    """
-    try:
-        return a % b
-    except ZeroDivisionError:
-        return a
-        
-def ndims_(a):
-    """
-    function which returns the number of dimension of a
-    """
-    return a.ndim
 
 def numel_(a):
     """
@@ -254,31 +188,7 @@ def numel_(a):
     """
     return a.size
 
-def rand_(*args,**kwargs):
-    """
-    function which returns a matrix of random numbers, according to matlab definition
-    """
-    if not args:
-        return np.random.rand()
-    if len(args) == 1:
-        args += args
-    try:
-        return np.random.rand(np.prod(args)).reshape(args,order="F")
-    except:
-        pass
 
-#Unused functions
-#def ravel_(a):
-#    return a.reshape(-1,1)
-#
-#def round_(a):
-#    return np.round(a)
-#
-#def rows_(a):
-#    return a.shape[0]
-#
-#def columns_(a):
-#    return a.shape[1]
 
 def size_(a, b=0, nargout=1):
     """
@@ -301,18 +211,10 @@ def sum_(a, dim=None):
     """
     function which sums the elements of a in the corresponding dimension
     """
-    if dim is None:
-        return a.sum(0)
-    else:
-        return a.sum(dim-1)
+    assert (dim is None)
 
-def true_(*args):
-    """
-    function which creates an array of True
-    """
-    if len(args) == 1:
-        args += args
-    return np.ones(args,dtype=bool,order="F")
+    return a.sum(0)
+
 
 
 def zeros_(*args,**kwargs):
@@ -438,11 +340,6 @@ def pinv_(A):
     """
     return np.linalg.pinv(A)
     
-def solve_(A,b):
-    """
-    Returns x in problem A.dot(x)=b
-    """
-    return np.linalg.solve(A,b)
 
 def fprintf_(fid,*args, **kwargs):
     """This is supposed to work approximately like the matlab fprintf function in the following case in the cases where
@@ -470,11 +367,6 @@ def fprintf_(fid,*args, **kwargs):
         print(fid + out, end=' ')
         print('### Warning from runtime.py: unknown file identifier type (int, str and file are known) ###')
         
-def poly1d_(A, r=0):
-    """
-    A one dimension polynomial class
-    """
-    return np.poly1d(A,r) 
     
 def eye_(n):
     """

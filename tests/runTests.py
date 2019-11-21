@@ -4,9 +4,6 @@ import warnings
 warnings.simplefilter('ignore', FutureWarning)
 sys.path.append("../")
 
-#Import runtime  test
-import runtime_test
-
 #Import of BCDFO Tests
 import bcdfo_evalZ_test
 import bcdfo_build_QR_of_Y_test
