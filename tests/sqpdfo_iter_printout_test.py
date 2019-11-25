@@ -152,7 +152,7 @@ none
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_iter_printout import *
+from sqpdfo_iter_printout import *
 from numpy import array
 import helper
 
@@ -173,10 +173,10 @@ class dummyInfo():
         self.feasn = 3
         self.compl = 0
         
-class Test_ecdfo_iter_printout(unittest.TestCase):
+class Test_sqpdfo_iter_printout(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_iter_printout which prints out iteration
+      This class is a test for sqpdfo_iter_printout which prints out iteration
     """
     def setUp(self):
         self.info = dummyInfo()
@@ -191,8 +191,8 @@ class Test_ecdfo_iter_printout(unittest.TestCase):
         self.constrained_pbl =  2
         self.merit =   5.105551275463990
 
-    def test_ecdfo_iter_printout(self):
-        ecdfo_iter_printout_(self.info,self.old_delta,self.norms,self.pc,
+    def test_sqpdfo_iter_printout(self):
+        sqpdfo_iter_printout_(self.info,self.old_delta,self.norms,self.pc,
         self.itype,self.values,self.nb, self.mi,self.options,self.constrained_pbl,self.merit)
 
 if __name__ == '__main__':

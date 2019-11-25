@@ -7,10 +7,10 @@ Created on Tue Dec 02 17:23:18 2014
 import sys
 sys.path.append("../")
 import unittest
-from evalfgh import evalfgh_
+from sqpdfo_evalfgh import sqpdfo_evalfgh_
 from runtime import compare_array, isempty_
-from ecdfo import ecdfo_
-from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
+from sqpdfo import sqpdfo_
+from sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 from numpy import array
 
@@ -31,10 +31,10 @@ class myOptions():
         self.final_degree = 'quadratic'
 
 
-class Test_ecdfo(unittest.TestCase):
+class Test_sqpdfo(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo 
+      This class is a test for sqpdfo 
     """
     def setUp(self):
 
@@ -43,7 +43,7 @@ class Test_ecdfo(unittest.TestCase):
         set_fileoutput(1)
         set_simul_not_initialized(1)
         set_check_condition(0)
-        self.func = evalfgh_
+        self.func = sqpdfo_evalfgh_
         self.x0 = array([[0, 0, 0.500000000000000]]).T
         self.lm0 = array( [])
         self.lb = array([[ -0.500000000000000, 0, -np.Inf]]).T
@@ -54,12 +54,12 @@ class Test_ecdfo(unittest.TestCase):
 
         pass
 
-    def test_ecdfo(self):
+    def test_sqpdfo(self):
         """
          Test which compare python and matlab results
-         test runs with whichmodel = 0 in ecdfo.py
+         test runs with whichmodel = 0 in sqpdfo.py
         """
-        x,lm,info = ecdfo_(self.x0,self.lm0,self.lb,self.ub,self.options)
+        x,lm,info = sqpdfo_(self.x0,self.lm0,self.lb,self.ub,self.options)
         correctx = array([[ -0.500000000000000, 0,0.500000000000000]])
         correctlm = array([[0,-0.000005713064576,0,2.,-1.]])
 

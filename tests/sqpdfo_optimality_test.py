@@ -141,7 +141,7 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_optimality import *
+from sqpdfo_optimality import *
 #import numpy as np
 import helper
 from numpy import array
@@ -163,10 +163,10 @@ class dummyInfo():
         self.ce = array( [[     2,  3]]).T
         self.f = 1.500000000000000        
 
-class Test_ecdfo_optimality(unittest.TestCase):
+class Test_sqpdfo_optimality(unittest.TestCase):
     """
     #Reminder :
-    #This class is a test for ecdfo_optimality
+    #This class is a test for sqpdfo_optimality
     """ 
     def setUp(self):
         self.options = helper.dummyOptions()
@@ -179,11 +179,11 @@ class Test_ecdfo_optimality(unittest.TestCase):
         self.ub = array([[ np.Inf, np.Inf, np.Inf]]).T
         #self.values = helper.dummyValues()
 
-    def test_ecdfo_optimality(self):
+    def test_sqpdfo_optimality(self):
         """
          Test with some values, results compared with matlab
          """
-        feas,compl,info = ecdfo_optimality_(self.x,self.lm,self.lb,self.ub,self.info,self.options)
+        feas,compl,info = sqpdfo_optimality_(self.x,self.lm,self.lb,self.ub,self.info,self.options)
         
         correctfeas = array([ 0, 0, 0, 2, 3]).T
         correctcompl = array([0, 0, 0]).T

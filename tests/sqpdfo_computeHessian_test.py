@@ -5,7 +5,7 @@ INPUT VALUES
 
 simul = 
 
-    @evalfgh
+    @sqpdfo_evalfgh
 
 
 x =
@@ -337,8 +337,8 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_computeHessian import *
-from evalfgh import *
+from sqpdfo_computeHessian import *
+from sqpdfo_evalfgh import *
 #import numpy as np
 import helper
 from numpy import array
@@ -360,13 +360,13 @@ class dummyInfo():
         self.feasn = 3
         self.compl = 0
         
-class Test_ecdfo_computeHessian(unittest.TestCase):
+class Test_sqpdfo_computeHessian(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_computeHessian which computes an approximation of the Hessian of the Lagrangian
+      This class is a test for sqpdfo_computeHessian which computes an approximation of the Hessian of the Lagrangian
     """ 
     def setUp(self):
-        self.simul = evalfgh_
+        self.simul = sqpdfo_evalfgh_
         self.x = array([[-0.003054026564966, 0, 0.315521468125839]]).T
         self.null_step = 0
         self.constrained_pbl = 2
@@ -421,11 +421,11 @@ class Test_ecdfo_computeHessian(unittest.TestCase):
         self.abs_tol=1e-14
         self.rel_tol=1e-14
 
-    def test_ecdfo_computeHessian(self):
+    def test_sqpdfo_computeHessian(self):
         """ 
          Test with some values, results compared with matlab 
         """
-        M,pc,info = ecdfo_computeHessian_(self.simul,self.x,self.null_step,self.constrained_pbl,
+        M,pc,info = sqpdfo_computeHessian_(self.simul,self.x,self.null_step,self.constrained_pbl,
             self.lm,self.M,self.n,self.me,self.mi,self.s,self.gx,self.gci,self.gce,self.info,
             self.options,self.values,self.fcmodel,self.Y,self.fY,self.ciY,self.ceY,
             self.sigma,self.scale,self.shift_Y,self.QZ,self.RZ,self.whichmodel,

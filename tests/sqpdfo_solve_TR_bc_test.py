@@ -8,10 +8,10 @@ Created on Wed Nov 19 10:22:26 2014
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_solve_TR_bc import *
-from evalfgh import evalfgh_
+from sqpdfo_solve_TR_bc import *
+from sqpdfo_evalfgh import sqpdfo_evalfgh_
 import helper
-from ecdfo_global_variables import set_threshold
+from sqpdfo_global_variables import set_threshold
 from numpy import array
 
 
@@ -33,15 +33,15 @@ class dummyInfo():
         self.compl = 0
 
 
-class Test_ecdfo_solve_TR_bc(unittest.TestCase):
+class Test_sqpdfo_solve_TR_bc(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_solve_TR_bc which compute the new SQP-trust-region step inside delta and subject to simple bounds
+      This class is a test for sqpdfo_solve_TR_bc which compute the new SQP-trust-region step inside delta and subject to simple bounds
       accordingly.
     """ 
     def setUp(self):
 
-        self.simul = evalfgh_
+        self.simul = sqpdfo_evalfgh_
         self.x = array([[0.500000000000000, 1.000000000000000, 0.500000000000000]]).T
         self.lb = array([[ -0.500000000000000, 0, -np.Inf]]).T
         self.ub = array([[np.Inf, np.Inf, np.Inf]]).T
@@ -66,13 +66,13 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.abs_tol=1e-9
         self.rel_tol=1e-9
 
-    def test_ecdfo_solve_TR_bc(self):
+    def test_sqpdfo_solve_TR_bc(self):
         """
             This is a test with some values and compared with matlab results.
         """
         set_check_condition(0)                
         set_threshold(1.000000000000000e-08)
-        xnew,delta,rpred,active_r,active_t,lm_computed,lm,info,slnew = ecdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
+        xnew,delta,rpred,active_r,active_t,lm_computed,lm,info,slnew = sqpdfo_solve_TR_bc_(self.simul,self.x,self.lb,self.ub,self.delta,
         self.mi,self.me,self.M,self.prec_r,self.prec_t,self.info,
         self.options,self.values,self.radius_has_been_rejected,self.lm,
         self.ceY,self.ciY,self.gx,self.indfree)
@@ -95,9 +95,4 @@ class Test_ecdfo_solve_TR_bc(unittest.TestCase):
         self.assertTrue(compare_array(correctlm,lm, self.abs_tol, self.rel_tol))
 
 if __name__ == '__main__':
-#<<<<<<< HEAD
     unittest.main()
-#
-#=======
-#    unittest.main()
-#>>>>>>> a959f16419e1ef0052e0d04109e5c0b7e711e3f0

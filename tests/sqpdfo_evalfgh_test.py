@@ -7,16 +7,16 @@ Created on Fri Nov 14 16:28:06 2014
 import sys
 sys.path.append("../")
 import unittest
-from evalfgh import *
-from ecdfo_func import *
-from ecdfo_global_variables import set_prob
+from sqpdfo_evalfgh import *
+from sqpdfo_func import *
+from sqpdfo_global_variables import set_prob
 from numpy import array, double
 
 
-class Test_evalfgh(unittest.TestCase):
+class Test_sqpdfo_evalfgh(unittest.TestCase):
     """
       Reminder :
-      This class is a test for evalfgh
+      This class is a test for sqpdfo_evalfgh
     """ 
     def setUp(self):
         self.key = 2
@@ -28,7 +28,7 @@ class Test_evalfgh(unittest.TestCase):
         """
         Test with some values, results compared with matlab
         """
-        msg,out2,out3,out4 = evalfgh_(self.key,self.xy,lm=None)
+        msg,out2,out3,out4 = sqpdfo_evalfgh_(self.key,self.xy,lm=None)
 
         correctmsg = 0
         correctout2 = 3.354626279025119e-04

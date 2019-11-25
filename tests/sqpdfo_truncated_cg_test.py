@@ -4,14 +4,14 @@ import sys
 
 sys.path.append("../")
 import unittest
-from ecdfo_truncated_cg import *
+from sqpdfo_truncated_cg import *
 from numpy import array
 
 
-class Test_ecdfo_truncated_cg(unittest.TestCase):
+class Test_sqpdfo_truncated_cg(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_truncated_cg which solves A x = b for x, by Steihaug's conjugate gradient (CG) method,
+      This class is a test for sqpdfo_truncated_cg which solves A x = b for x, by Steihaug's conjugate gradient (CG) method,
        where A is a symmetric (possibly indefinite) matrix.
     """
 
@@ -27,11 +27,11 @@ class Test_ecdfo_truncated_cg(unittest.TestCase):
         self.plevel = 0
         self.fout = 1
 
-    def test_ecdfo_truncated_cg(self):
+    def test_sqpdfo_truncated_cg(self):
         """
                Test comparing matlab results with python results
         """
-        u, info_t = ecdfo_truncated_cg_(self.A, self.b, self.delta, self.max_iter, self.tol)
+        u, info_t = sqpdfo_truncated_cg_(self.A, self.b, self.delta, self.max_iter, self.tol)
 
         self.assertEqual(u, 0.816496580927725)
 

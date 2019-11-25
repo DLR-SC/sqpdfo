@@ -10,17 +10,17 @@ sys.path.append("../")
 #sys.path.append("tests/")
 
 import unittest
-from ecdfo_check_convex import *
+from sqpdfo_check_convex import *
 import helper
 import numpy as np
 from runtime import compare_array, eig_
 from random import random
 from numpy import array
 
-class Test_ecdfo_check_convex(unittest.TestCase):
+class Test_sqpdfo_check_convex(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_check_convex which check if the matrix is convex and if not modify it so it becomes convex.
+      This class is a test for sqpdfo_check_convex which check if the matrix is convex and if not modify it so it becomes convex.
       The returned matrix is also symmetric when either original matrix is symmetric or when it has been modified.
     """ 
     def setUp(self):
@@ -28,41 +28,41 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         self.abs_tol=1e-15;
         self.rel_tol=1e-15;
 
-    def test_ecdfo_check_convex1(self):
+    def test_sqpdfo_check_convex1(self):
         """
         With a convex matrix
         """
         A = array([[ 2,  -1, 0], [ -1,  2,  -1], [ 0,  -1,  2]])
 
-        res = ecdfo_check_convex_(A)
+        res = sqpdfo_check_convex_(A)
         #print "A", A
-        #print "ecdfo  check cond", str(res)
+        #print "sqpdfo  check cond", str(res)
 
         self.assertTrue(compare_array(A, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(res, A, self.abs_tol, self.rel_tol))
 #
-    def test_ecdfo_check_convex2(self): 
+    def test_sqpdfo_check_convex2(self): 
         """
         With a non convex matrix
         """
         B =  array([[ 1,  2], [ 2,  1]])
 
-        res = ecdfo_check_convex_(B)
+        res = sqpdfo_check_convex_(B)
         #print "B", B
-        #print "ecdfo  check cond", str(res)
+        #print "sqpdfo  check cond", str(res)
         self.assertFalse(compare_array(B, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
         
         matlabres=array([[3.000000000000000,  0.000000001000000]])
         self.assertTrue(compare_array(matlabres, eig_(res), 1e-09, 1e-09))
         
-    def test_ecdfo_check_convex3(self):
+    def test_sqpdfo_check_convex3(self):
         """
         With a non symmetric matrix non convex
         """
         C = array([[1,2,3],[4,5,6],[7,8,9]])
         
-        res = ecdfo_check_convex_(C, helper.dummyOptions())
+        res = sqpdfo_check_convex_(C, helper.dummyOptions())
 
         self.assertFalse(compare_array(C, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
@@ -73,6 +73,6 @@ class Test_ecdfo_check_convex(unittest.TestCase):
         
 
 if __name__ == '__main__':
-#    suite = unittest.TestLoader().loadTestsFromTestCase(Test_ecdfo_check_convex)
+#    suite = unittest.TestLoader().loadTestsFromTestCase(Test_sqpdfo_check_convex)
 #    unittest.TextTestRunner(verbosity=2).run(suite)
     unittest.main()

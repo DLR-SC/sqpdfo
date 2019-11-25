@@ -7,15 +7,15 @@ Created on Thu Nov 13 14:55:53 2014
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_func import *
-from ecdfo_global_variables import set_prob
+from sqpdfo_func import *
+from sqpdfo_global_variables import set_prob
 from numpy import array, double
 
 
-class Test_ecdfo_func(unittest.TestCase):
+class Test_sqpdfo_func(unittest.TestCase):
     """
           Reminder :
-          This class is a test for ecdfo_func which computes f, ci and ce according to a given problem
+          This class is a test for sqpdfo_func which computes f, ci and ce according to a given problem
     """
     def setUp(self):
         self.x =  array([[ -1.717000000000000],   [1.595700000000000],   [1.827200000000000],  [-0.763600000000000],  [-0.763600000000000]])
@@ -24,13 +24,13 @@ class Test_ecdfo_func(unittest.TestCase):
         pass
 
     
-    def test_ecdfo_func(self):
+    def test_sqpdfo_func(self):
         """
           Test with problem 5, results compared with matlab
         """
         set_prob(5)
         
-        msg,f,ci,ce = ecdfo_func_(self.x)
+        msg,f,ci,ce = sqpdfo_func_(self.x)
         
         correctmsg = 0
         correctf =0.053985698962084

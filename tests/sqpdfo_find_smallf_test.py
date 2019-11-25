@@ -361,7 +361,7 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_find_smallf import *
+from sqpdfo_find_smallf import *
 from numpy import array
 #import numpy as np
 #import helper
@@ -398,10 +398,10 @@ class dummyInfo():
         self.compl = 0
 
 
-class Test_ecdfo_find_smallf(unittest.TestCase):
+class Test_sqpdfo_find_smallf(unittest.TestCase):
     """
     Reminder :
-    This class is a test for ecdfo_find_smallf which
+    This class is a test for sqpdfo_find_smallf which
   Subroutine finds the smallest value in fY, which are the associated function
   values of the set Y
     """
@@ -456,12 +456,12 @@ class Test_ecdfo_find_smallf(unittest.TestCase):
         self.abs_tol=1e-15
         self.rel_tol=1e-15
 
-    def test_ecdfo_find_smallf(self):
+    def test_sqpdfo_find_smallf(self):
         """
         Test with some values, compare the results with matlab
         """
             
-        x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info = ecdfo_find_smallf_(self.c,self.QZ,self.RZ,self.Y,self.fY,self.ciY,self.ceY,self.ind_Y,
+        x,fx,QZ,RZ,Y,fY,ciY,ceY,ind_Y,i_xbest,scale,info = sqpdfo_find_smallf_(self.c,self.QZ,self.RZ,self.Y,self.fY,self.ciY,self.ceY,self.ind_Y,
                     self.i_xbest,self.cur_degree,self.indfree,self.x,self.xl,
                     self.xu,self.fx,self.dstatus,self.whichmodel,self.scale,
                     self.shift_Y,self.Delta,self.normgx,self.kappa_ill,self.sigma,

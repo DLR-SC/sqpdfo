@@ -128,7 +128,7 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_finish import *
+from sqpdfo_finish import *
 from numpy import array
 import helper
 
@@ -143,10 +143,10 @@ class dummyInfo():
         self.niter=  4
         self.nsimul = array([[0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
-class Test_ecdfo_finish(unittest.TestCase):
+class Test_sqpdfo_finish(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_finish which prints output status
+      This class is a test for sqpdfo_finish which prints output status
     """ 
     def setUp(self):
         self.options = helper.dummyOptions()
@@ -154,8 +154,8 @@ class Test_ecdfo_finish(unittest.TestCase):
 
         pass
 
-    def test_ecdfo_finish(self):
-        ecdfo_finish_(nb=2,mi=0,me=2,info=dummyInfo(),options=self.options,values=self.values)
+    def test_sqpdfo_finish(self):
+        sqpdfo_finish_(nb=2,mi=0,me=2,info=dummyInfo(),options=self.options,values=self.values)
 
 if __name__ == '__main__':
     unittest.main()

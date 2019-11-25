@@ -6,7 +6,7 @@ Created on Tue Dec 02 17:27:08 2014
 
 func = 
 
-    @evalfgh
+    @sqpdfo_evalfgh
 
 
 n =
@@ -847,9 +847,9 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from evalfgh import evalfgh_
-from ecdfo_main import *
-from ecdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
+from sqpdfo_evalfgh import sqpdfo_evalfgh_
+from sqpdfo_main import *
+from sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 import helper
 from numpy import array, infty
@@ -898,10 +898,10 @@ class correctInfo():
         self.feasn = 2.220446049250313e-16
         self.compl = 0
 
-class Test_ecdfo_main(unittest.TestCase):
+class Test_sqpdfo_main(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_main realizes the optimization loop
+      This class is a test for sqpdfo_main realizes the optimization loop
     """
     def setUp(self):
         
@@ -911,7 +911,7 @@ class Test_ecdfo_main(unittest.TestCase):
         set_simul_not_initialized(1)
         set_check_condition(0)
 
-        self.func = evalfgh_
+        self.func = sqpdfo_evalfgh_
         self.n = 3
         self.nb = 2
         self.mi = 0
@@ -1068,12 +1068,12 @@ class Test_ecdfo_main(unittest.TestCase):
         self.rel_tol=1e-5
 
 
-    def test_ecdfo_main(self):
+    def test_sqpdfo_main(self):
              
         """
             Test with some values, results compared with matlab
         """
-        nit, i_xbest, x, fx, m, X, fX, ciX, ceX, ind_Y, Delta, eps_current, cur_degree, fcmodel, gx, normgx, vstatus, xstatus, sstatus, dstatus, M, ndummyY, sspace_save, xspace_save, msg, CNTsin, neval, lm, info = ecdfo_main_(self.func,self.n,self.nb,self.mi,self.me,self.lm,self.nitold, self.nit, self.i_xbest, self.lb, self.ub, self.m, self.X, self.fX, self.ciX, self.ceX, self.ind_Y, self.QZ, self.RZ, self.delta, self.cur_degree, self.neval, self.maxeval, self.maxit, self.fcmodel, self.gx, self.normgx, self.show_errg, self.pquad, self.pdiag, self.plin, self.stallfact, self.eps_rho, self.Deltamax, self.rep_degree, self.epsilon, self.verbose, self.eta1, self.eta2, self.gamma1, self.gamma2, self.gamma3, self.interpol_TR, self.factor_CV, self.Lambda_XN, self.Lambda_CP, self.factor_FPU, self.factor_FPR, self.Lambda_FP, self.criterion_S, self.criterion_FP, self.criterion_CP, self.mu, self.theta, self.eps_TR, self.eps_L, self.lSolver, self.stratLam, self.eps_current, self.vstatus, self.xstatus, self.sstatus, self.dstatus, self.ndummyY, self.sspace_save, self.xspace_save, self.xfix, self.fxmax, self.poised_model, self.M, self.kappa_ill, self.kappa_th, self.eps_bnd, self.poised, self.Y_radius, self.c, self.level, self.whichmodel, self.hardcons, self.noisy, self.scaleX, self.scalefacX, self.CNTsin, self.shrink_Delta, self.scale, self.shift_Y,self.info,self.options,self.values)
+        nit, i_xbest, x, fx, m, X, fX, ciX, ceX, ind_Y, Delta, eps_current, cur_degree, fcmodel, gx, normgx, vstatus, xstatus, sstatus, dstatus, M, ndummyY, sspace_save, xspace_save, msg, CNTsin, neval, lm, info = sqpdfo_main_(self.func,self.n,self.nb,self.mi,self.me,self.lm,self.nitold, self.nit, self.i_xbest, self.lb, self.ub, self.m, self.X, self.fX, self.ciX, self.ceX, self.ind_Y, self.QZ, self.RZ, self.delta, self.cur_degree, self.neval, self.maxeval, self.maxit, self.fcmodel, self.gx, self.normgx, self.show_errg, self.pquad, self.pdiag, self.plin, self.stallfact, self.eps_rho, self.Deltamax, self.rep_degree, self.epsilon, self.verbose, self.eta1, self.eta2, self.gamma1, self.gamma2, self.gamma3, self.interpol_TR, self.factor_CV, self.Lambda_XN, self.Lambda_CP, self.factor_FPU, self.factor_FPR, self.Lambda_FP, self.criterion_S, self.criterion_FP, self.criterion_CP, self.mu, self.theta, self.eps_TR, self.eps_L, self.lSolver, self.stratLam, self.eps_current, self.vstatus, self.xstatus, self.sstatus, self.dstatus, self.ndummyY, self.sspace_save, self.xspace_save, self.xfix, self.fxmax, self.poised_model, self.M, self.kappa_ill, self.kappa_th, self.eps_bnd, self.poised, self.Y_radius, self.c, self.level, self.whichmodel, self.hardcons, self.noisy, self.scaleX, self.scalefacX, self.CNTsin, self.shrink_Delta, self.scale, self.shift_Y,self.info,self.options,self.values)
 
         correctnit = 0
         correcti_xbest = 5

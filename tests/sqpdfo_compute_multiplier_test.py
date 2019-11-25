@@ -5,8 +5,8 @@
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_compute_multiplier import *
-from ecdfo_global_variables import set_check_condition
+from sqpdfo_compute_multiplier import *
+from sqpdfo_global_variables import set_check_condition
 import helper
 from numpy import array
 
@@ -27,10 +27,10 @@ class dummyInfo():
         self.ce = array([[2, 3]]).T
         self.f = 1.5
 
-class Test_ecdfo_compute_multiplier(unittest.TestCase):
+class Test_sqpdfo_compute_multiplier(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_compute_multiplier which computes exact least-squares multipliers 'lm'.
+      This class is a test for sqpdfo_compute_multiplier which computes exact least-squares multipliers 'lm'.
       It solves in lm the quadratic optimization problem:
            min || g+A'*lm ||^2
       subject to possible bounds on lm.
@@ -46,11 +46,11 @@ class Test_ecdfo_compute_multiplier(unittest.TestCase):
         self.abs_tol=1e-8;
         self.rel_tol=1e-8;
 
-    def test_ecdfo_compute_multiplier(self):
+    def test_sqpdfo_compute_multiplier(self):
         """
             Test comparing python results with the matlab results
         """
-        lm,info = ecdfo_compute_multiplier_(self.x,self.lb,self.ub,self.info,self.options,self.values)
+        lm,info = sqpdfo_compute_multiplier_(self.x,self.lb,self.ub,self.info,self.options,self.values)
 
         correctlm = array([0, 0, 0, -0.333333332763891, -0.000000000249999]).T
 

@@ -7,7 +7,7 @@ prob=5
 
 OUTPUT VALUES
 
- [x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info] = ecdfo_init_prob(5)
+ [x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info] = sqpdfo_init_prob(5)
 
 x0 =
 
@@ -91,15 +91,15 @@ info =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_init_prob import *
+from sqpdfo_init_prob import *
 from numpy import array
 #import numpy as np
 #import helper
 
-class Test_ecdfo_init_prob(unittest.TestCase):
+class Test_sqpdfo_init_prob(unittest.TestCase):
     """
         Reminder :
-        This class is a test for ecdfo_init_prob which initializes the problem
+        This class is a test for sqpdfo_init_prob which initializes the problem
     """ 
     #def setUp(self):
         #self.options = helper.dummyOptions()
@@ -107,11 +107,11 @@ class Test_ecdfo_init_prob(unittest.TestCase):
 
     #    pass
 
-    def test_ecdfo_init_prob(self):
+    def test_sqpdfo_init_prob(self):
         """
             Test with some values, results compared with matlab
         """
-        x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info = ecdfo_init_prob_(5)
+        x0,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info = sqpdfo_init_prob_(5)
         
         correctx0 = array([[-2, 2, 2, 1, 1]]).T
         correctlx = array( [[ -np.Inf, -np.Inf, -np.Inf, -np.Inf, -np.Inf]]).T

@@ -3,7 +3,7 @@
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_options import *
+from sqpdfo_options import *
 from numpy import array
 import helper
 
@@ -16,10 +16,10 @@ class dummyInfo():
         self.niter= 0
 
 
-class Test_ecdfo_options(unittest.TestCase):
+class Test_sqpdfo_options(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_options which sets the options of the optimization solver 'ecdfo'
+      This class is a test for sqpdfo_options which sets the options of the optimization solver 'sqpdfo'
     """
 
     def setUp(self):
@@ -35,7 +35,7 @@ class Test_ecdfo_options(unittest.TestCase):
         """
         First little test
         """
-        info, options, values = ecdfo_options_(self.info, self.options)
+        info, options, values = sqpdfo_options_(self.info, self.options)
         self.assertEqual(options.dxmin, 1e-6)
         self.assertEqual(options.fout, 1)
 
@@ -44,7 +44,7 @@ class Test_ecdfo_options(unittest.TestCase):
         Second little test
         """
         self.options.fout = 1
-        info, options, values = ecdfo_options_(self.info, self.options)
+        info, options, values = sqpdfo_options_(self.info, self.options)
         self.assertEqual(options.algo_descent, values.powell)
         self.assertEqual(options.hess_approx, values.bfgs)
 

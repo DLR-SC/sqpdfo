@@ -7,7 +7,7 @@ TEST:
 %  y = [ 2; 4 ];
 %
 %  To put y on 4-th position in the set X call:
-%  [X, fX, neval, xstatus, sstatus, dstatus] = ecdfo_augmX_evalf(@banana, ...
+%  [X, fX, neval, xstatus, sstatus, dstatus] = sqpdfo_augmX_evalf(@banana, ...
 %     y, 4, X, fX, 0, [0;0], [], [1 2 3], 1e25, 3, 100, 1, ...
 %     0, [1 1 1], 1, [1 1 1], [ 0 0 0], 0, [ 1, 1])
 %  where
@@ -33,7 +33,7 @@ TEST:
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_augmX_evalf import *
+from sqpdfo_augmX_evalf import *
 #import numpy as np
 import helper
 from numpy import array
@@ -46,10 +46,10 @@ class dummyInfo():
         self.ci = array([])
         self.ce = array([])
 
-class Test_ecdfo_augmX_evalf(unittest.TestCase):
+class Test_sqpdfo_augmX_evalf(unittest.TestCase):
     """
           Reminder :
-          This class is a test for ecdfo_augmX_evalf which adds a new points y to the set of all points X.
+          This class is a test for sqpdfo_augmX_evalf which adds a new points y to the set of all points X.
     """
     def setUp(self):
         self.X = array([[ 0, 1, 0],[0, 0, 1] ])
@@ -90,7 +90,7 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
 
 
     #@unittest.expectedFailure
-    def test_ecdfo_augmX_evalf(self):
+    def test_sqpdfo_augmX_evalf(self):
         """
           This is the matlab test.
         """
@@ -99,7 +99,7 @@ class Test_ecdfo_augmX_evalf(unittest.TestCase):
         #scaleX=None,scalefacX=None,info=None,options=None,values=None)
         #returns X, fX, neval, xstatus, sstatus, dstatus
     
-        X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic = ecdfo_augmX_evalf_(
+        X,fX,ciX,ceX,neval,xstatus,sstatus,dstatus,info,outdic = sqpdfo_augmX_evalf_(
         self.banana,self.y, 3,self.X,
         self.fX,self.ciX, self.ceX, 0, array([[0],[0]]), array([]), array([[0, 1, 2]]), 
         1e25, 3, array([1, 1, 1]), 1,

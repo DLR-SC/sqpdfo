@@ -8,7 +8,7 @@ K>> func,x0,lm0,Delta0,lb,ub,scaleX,scalefacX,cur_degree,...
 
 func = 
 
-    @evalfgh
+    @sqpdfo_evalfgh
 
 
 x0 =
@@ -537,11 +537,11 @@ ans =
 import sys
 sys.path.append("../")
 import unittest
-from ecdfo_prelim import *
-from evalfgh import *
+from sqpdfo_prelim import *
+from sqpdfo_evalfgh import *
 import numpy as np
 import helper
-from ecdfo_global_variables import set_prob, set_check_condition, set_simul_not_initialized
+from sqpdfo_global_variables import set_prob, set_check_condition, set_simul_not_initialized
 from numpy import array
 
 class myDummyOptions():
@@ -555,10 +555,10 @@ class myDummyOptions():
         self.msimul = 500
         self.verbose = 0
         
-class Test_ecdfo_prelim(unittest.TestCase):
+class Test_sqpdfo_prelim(unittest.TestCase):
     """
       Reminder :
-      This class is a test for ecdfo_prelim which realizes the following preliminary jobs:
+      This class is a test for sqpdfo_prelim which realizes the following preliminary jobs:
 % - set default output arguments
 % - set options (default values if absent, numeric values for lexical options)
 % - check the given options
@@ -569,7 +569,7 @@ class Test_ecdfo_prelim(unittest.TestCase):
     """ 
     def setUp(self):
         
-        self.func = evalfgh_
+        self.func = sqpdfo_evalfgh_
         self.x0 = array([[0, 0, 0.500000000000000]]).T
         self.lm0 =array([])#   Empty matrix: 0-by-1
         self.Delta0 = 1
@@ -615,12 +615,12 @@ class Test_ecdfo_prelim(unittest.TestCase):
         self.abs_tol=1e-8
         self.rel_tol=1e-8
 
-    def test_ecdfo_prelim(self):
+    def test_sqpdfo_prelim(self):
         """
         Test with somes values, results compared with matlab
         """
         n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values = \
-            ecdfo_prelim_(self.func,self.x0,self.lm0,self.Delta0,
+            sqpdfo_prelim_(self.func,self.x0,self.lm0,self.Delta0,
         self.lb,self.ub,self.scaleX,self.scalefacX,self.cur_degree,self.rep_degree,
         self.plin,self.pdiag,self.pquad,self.c,self.initial_Y,self.kappa_ill,
         self.factor_FPR,self.Lambda_FP,self.Lambda_CP,
@@ -693,7 +693,7 @@ class Test_ecdfo_prelim(unittest.TestCase):
         correctpquad = 10
         correctindfree = array([  0,     1,     2])
         
-        #print "ecdfo_prelim outputs"
+        #print "sqpdfo_prelim outputs"
         #print n,nb,mi,me,x,lm,lb,ub,scalefacX,Delta,nfix,indfix,xfix,vstatus,xstatus,sstatus,dstatus,QZ,RZ,scale,poised,Y_radius,poised_model,X,fX,Y,fY,ciX,ciY,ceX,ceY,poisedness_known,m,gx,normgx,fcmodel,ind_Y,i_xbest,cur_degree,rep_degree,plin,pdiag,pquad,indfree,info,options,values
         
         self.assertEqual(n, correctn)

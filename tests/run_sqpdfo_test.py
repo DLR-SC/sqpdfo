@@ -9,25 +9,25 @@ import sys
 sys.path.append("../")
 import helper
 from runtime import *
-from ecdfo_init_prob import ecdfo_init_prob_
-from ecdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
-from ecdfo import ecdfo_
+from sqpdfo_init_prob import sqpdfo_init_prob_
+from sqpdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
+from sqpdfo import sqpdfo_
 import unittest
 from numpy import array, zeros, arange, double
 
 
-class Test_run_ecdfo(unittest.TestCase):
+class Test_run_sqpdfo(unittest.TestCase):
     """
       Reminder :
-      This class is a test for run_ecdfo
-      these tests are run with whichmodel=0 and pquad=(n+1)(n+2)/2 in ecdfo_() !!
+      This class is a test for run_sqpdfo
+      these tests are run with whichmodel=0 and pquad=(n+1)(n+2)/2 in sqpdfo_() !!
     """
     def setUp(self):
         self.abs_tol=1e-5
         self.rel_tol=1e-8
         pass
 
-    def test_run_ecdfo_prob1(self):
+    def test_run_sqpdfo_prob1(self):
         """
          Test which compare python and matlab results
         """
@@ -36,7 +36,7 @@ class Test_run_ecdfo(unittest.TestCase):
         prob=get_prob()
         options = helper.dummyUnionStruct()
 
-        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
@@ -51,7 +51,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
         lm=array([])
-        x,lm,info=ecdfo_(x,lm,lb,ub,options)
+        x,lm,info=sqpdfo_(options)
 
         self.assertTrue(compare_array(x, array([[1.950000000000000,0.262499999999991]]), 1e-5, 1e-5))
         self.assertTrue(compare_array(lm, array([[-0.6375,0,  0.7375]]), self.abs_tol, self.rel_tol))
@@ -66,7 +66,7 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
         self.assertTrue(compare_array(info.glag, 1e-10*array([0.76387451919401,-0.381947806715743]), self.abs_tol, self.rel_tol))
         
-    def test_run_ecdfo_prob2(self):
+    def test_run_sqpdfo_prob2(self):
         """
          Test which compare python and matlab results
         """
@@ -75,7 +75,7 @@ class Test_run_ecdfo(unittest.TestCase):
         prob=get_prob()
         options = helper.dummyUnionStruct()
 
-        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
@@ -90,7 +90,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
         lm=array([])
-        x,lm,info=ecdfo_(x,lm,lb,ub,options)
+        x,lm,info=sqpdfo_(options)
         self.assertTrue(compare_array(x, array([[   0.333326758778846,  0.666659126169760]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[0,0,    -1.333312643708242]]), self.abs_tol, self.rel_tol))
 
@@ -105,7 +105,7 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
         self.assertTrue(compare_array(info.glag, 1e-05*array([  -0.560839309260430,0.560883753109032]), self.abs_tol, self.rel_tol))
 #        
-    def test_run_ecdfo_prob3(self):
+    def test_run_sqpdfo_prob3(self):
         """
          Test which compare python and matlab results
         """
@@ -114,7 +114,7 @@ class Test_run_ecdfo(unittest.TestCase):
         prob=get_prob()
         options = helper.dummyUnionStruct()
 
-        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+        x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
         set_threshold(1e-08)
         options.hess_approx='model'
         options.bfgs_restart=0
@@ -129,7 +129,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
         lm=array([])
-        x,lm,info=ecdfo_(x,lm,lb,ub,options)
+        x,lm,info=sqpdfo_(options)
 
         self.assertTrue(compare_array(x, array([[-0.5,0,0.5]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[ 0, -0.000005713064576 ,0,   1.999997749517402,  -0.999996152071198]]), self.abs_tol, self.abs_tol))
@@ -144,7 +144,7 @@ class Test_run_ecdfo(unittest.TestCase):
         self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
         self.assertTrue(compare_array(info.glag, 1e-07*array([0.062859997207454,  0.188580686583393,-0.188580611126810]), self.abs_tol, self.rel_tol))
 
-    # def test_run_ecdfo_prob4(self):
+    # def test_run_sqpdfo_prob4(self):
     #     """
     #      Test which compare python and matlab results
     #     """
@@ -153,7 +153,7 @@ class Test_run_ecdfo(unittest.TestCase):
     #     prob=get_prob()
     #     options = helper.dummyUnionStruct()
     #
-    #     x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+    #     x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
     #     set_threshold(1e-08)
     #     options.hess_approx='model'
     #     options.bfgs_restart=0
@@ -168,7 +168,7 @@ class Test_run_ecdfo(unittest.TestCase):
     #     options.whichmodel = 'subbasis'
     #     options.final_degree = 'quadratic'
     #     lm=array([])
-    #     x,lm,info=ecdfo_(x,lm,lb,ub,options)
+    #     x,lm,info=sqpdfo_(options)
     #
     #     self.assertTrue(compare_array(x, array([[ -0.499998511434003,  -0.000002977131994,   0.500001488565997,   0.999999998348743]]), self.abs_tol, 1e-6))
     #     self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
@@ -183,7 +183,7 @@ class Test_run_ecdfo(unittest.TestCase):
     #     self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
     #     self.assertTrue(compare_array(info.glag, 1e-05*array([0.284297517494370,-0.598060297747812,0.305862976301974,-0.000319574466889]), self.abs_tol, self.rel_tol))
 #
-    def test_run_ecdfo_prob5(self):
+    def test_run_sqpdfo_prob5(self):
         """
          Test which compare python and matlab results
         """
@@ -192,7 +192,7 @@ class Test_run_ecdfo(unittest.TestCase):
         prob=get_prob()
         options = helper.dummyUnionStruct()
 
-        x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=ecdfo_init_prob_(prob,nargout=13)
+        x,lx,ux,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
         lb=zeros_(n,1)
         ub=zeros_(n,1)
         lb[arange(0,n)]=lx
@@ -216,7 +216,7 @@ class Test_run_ecdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
         lm=array([])
-        x,lm,info=ecdfo_(x,lm,lb,ub,options)
+        x,lm,info=sqpdfo_(options)
         
         self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1e-3, 1e-4))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]), 1e-3, 1e-4))
