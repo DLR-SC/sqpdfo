@@ -185,10 +185,10 @@ class Test_sqpdfo_optimality(unittest.TestCase):
          """
         feas,compl,info = sqpdfo_optimality_(self.x,self.lm,self.lb,self.ub,self.info,self.options)
         
-        correctfeas = array([ 0, 0, 0, 2, 3]).T
+        correctfeas = array([[2, 3]]).T
         correctcompl = array([0, 0, 0]).T
         correctglag = array([-0.333333333013890, 0.666666666736111, -0.333333333513889]).T
-        
+
         self.assertTrue(compare_array(feas, correctfeas, 1e-15,1e-15))
         self.assertTrue(compare_array(compl, correctcompl,1e-15,1e-15))
         self.assertTrue(compare_array(info.glag, correctglag, 1e-14, 1e-14))

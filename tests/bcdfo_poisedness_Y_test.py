@@ -39,7 +39,7 @@ class Test_bcdfo_poisedness_Y(unittest.TestCase):
         correctlambda = 2.048585522856004e+02
         correctY_radius = 2
         self.assertAlmostEqual(Y_radius, correctY_radius, places=15)
-        self.assertAlmostEqual(double(lambd), correctlambda, places=11)
+        self.assertAlmostEqual(double(lambd), correctlambda, places=9)
         
         #Same test without the shift  in interpolation points
         QZ, RZ, xbase, scale = bcdfo_build_QR_of_Y_( Y, 0, 0, 1, 1, 1e15 )

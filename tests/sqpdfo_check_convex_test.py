@@ -61,15 +61,16 @@ class Test_sqpdfo_check_convex(unittest.TestCase):
         With a non symmetric matrix non convex
         """
         C = array([[1,2,3],[4,5,6],[7,8,9]])
-        
+
         res = sqpdfo_check_convex_(C, helper.dummyOptions())
 
         self.assertFalse(compare_array(C, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
 
-        matlabres=array([[  16.116843969881806, 0.000000000925233,  0.000000001000001]])        
-        self.assertTrue(compare_array(matlabres, eig_(res), 1e-8, 1e-8))
-        
+        correctres=array([[1.88302358e+01, 0.000000000925233,  0.000000001000001]])
+        self.assertTrue(compare_array(correctres, eig_(res), 1e-8, 1e-8))
+
+
         
 
 if __name__ == '__main__':
