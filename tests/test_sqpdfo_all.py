@@ -2,7 +2,7 @@ import unittest
 import sys
 import warnings
 warnings.simplefilter('ignore', FutureWarning)
-sys.path.append("../")
+sys.path.append("../sqpdfo")
 
 #Import of BCDFO Tests
 import bcdfo_evalZ_test

@@ -8,9 +8,9 @@ import sys
 sys.path.append("../")
 
 import unittest
-from bcdfo_augment_Y import bcdfo_augment_Y_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from runtime import compare_array
+from sqpdfo.bcdfo_augment_Y import bcdfo_augment_Y_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.runtime import compare_array
 from numpy import array
 #import numpy as np
 #import helper
