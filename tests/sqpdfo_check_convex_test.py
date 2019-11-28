@@ -67,8 +67,8 @@ class Test_sqpdfo_check_convex(unittest.TestCase):
         self.assertFalse(compare_array(C, res, self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(res, res.T, self.abs_tol, self.rel_tol))
 
-        correctres=array([[1.88302358e+01, 0.000000000925233,  0.000000001000001]])
-        self.assertTrue(compare_array(correctres, eig_(res), 1e-8, 1e-8))
+        correctres=array([[0.000000000925233, 0.000000001000001, 1.88302358e+01]])
+        self.assertTrue(compare_array(correctres, np.sort(eig_(res)), 1e-8, 1e-8))
 
 
         
