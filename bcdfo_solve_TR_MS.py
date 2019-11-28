@@ -4,6 +4,18 @@ import numpy
 from numpy import *
 from copy import copy
 
+def _bcdfo_solve_tridiag(M, b, trans='N'):
+    """
+    Solves a triangular system of equations
+    """
+
+    if trans is 'N':
+        x = numpy.linalg.solve(M, b)
+    else:
+        x =  numpy.linalg.solve(M.T, b)
+
+    return x
+
 def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     """
 #
@@ -195,7 +207,8 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 
             if (p == 0):
             
-                s=numpy.linalg.solve(- R,(numpy.linalg.solve(R.T,g)))
+                s = _bcdfo_solve_tridiag(- R, _bcdfo_solve_tridiag(R, g, trans='T'))
+
                 sfound=1
                 norms=norm_(s)
                 
@@ -226,7 +239,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
                     
                 #  Newton's iteration on the secular equation
 
-                w=numpy.linalg.solve(R.T,s)
+                w = _bcdfo_solve_tridiag(R, s, trans='T')
                 normw2=w.T.dot(w)
                 new_lambda=_lambda + ((norms - Delta) / Delta) * (norms ** 2 / normw2)
                 
