@@ -157,7 +157,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.final_degree = 'quadratic'
 
         x,lm,info=sqpdfo_(options)
-        print('x : ', x)
+
         self.assertTrue(compare_array(x, array([[ -0.5,  0.0,   0.5,   1.0]]), self.abs_tol, 1e-5))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
         self.assertTrue(compare_array(info.g, array([[   -1.0,   0.0 ,    1.0,   1.0]]), 1e-4, 1e-4))
