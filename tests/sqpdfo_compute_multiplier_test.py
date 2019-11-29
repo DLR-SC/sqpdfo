@@ -2,13 +2,12 @@
 """
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_compute_multiplier import *
-from sqpdfo_global_variables import set_check_condition
-import helper
+from sqpdfo.sqpdfo_compute_multiplier import *
+from sqpdfo.sqpdfo_global_variables import set_check_condition
 from numpy import array
+from sqpdfo import helper
 
 
 class dummyInfo():

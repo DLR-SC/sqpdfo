@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-from runtime import *
-
-
-
-from bcdfo_evalZ import bcdfo_evalZ_
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_evalZ import bcdfo_evalZ_
 
 def bcdfo_evalP_(P=None,x=None,xbase=None,scale=None,shift_Y=None,*args,**kwargs):
     """

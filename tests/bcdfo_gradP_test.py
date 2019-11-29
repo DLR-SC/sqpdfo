@@ -5,16 +5,14 @@ Created on Tue Dec 02 11:59:20 2014
 @author: jaco_da
 """
 
-import sys
-sys.path.append("../")
 import unittest
-from bcdfo_gradP import bcdfo_gradP_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from runtime import compare_array
+from sqpdfo.bcdfo_gradP import bcdfo_gradP_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.runtime import compare_array
 from random import random
 import numpy as np
 from numpy import array
-#import helper
+
 
 class Test_bcdfo_gradP(unittest.TestCase):
     """

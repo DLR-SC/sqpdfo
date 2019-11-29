@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import sys
-sys.path.append("../")
 import unittest
-from sqpdfo_options import *
+from sqpdfo.sqpdfo_options import *
 from numpy import array
-import helper
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

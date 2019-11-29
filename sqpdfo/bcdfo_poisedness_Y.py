@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_find_new_yj import bcdfo_find_new_yj_
 
-    
-from bcdfo_find_new_yj import bcdfo_find_new_yj_
     
 def bcdfo_poisedness_Y_(QZ=None,RZ=None,Y=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,*args,**kwargs):
     

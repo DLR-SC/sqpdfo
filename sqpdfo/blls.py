@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-#try:
-from runtime import *
+from sqpdfo.runtime import *
 from numpy import arange,append
-#except ImportError:
-    #from smop.runtime import *
+
+
 def blls_(A=None,b=None,lb=None,ub=None,*args,**kwargs):
     """
 

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from sqpdfo_check_convex import *
-from sqpdfo_check_cond import *
-from blls import *
+from sqpdfo.sqpdfo_check_convex import *
+from sqpdfo.sqpdfo_check_cond import *
+from sqpdfo.blls import *
 from copy import copy
-import sqpdfo_global_variables as glob
+import sqpdfo.sqpdfo_global_variables as glob
 from numpy import array, zeros, ones, concatenate
+
 
 def sqpdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
     options=None,values=None,*args,**kwargs):
@@ -119,7 +120,7 @@ def sqpdfo_compute_multiplier_(x=None,lb=None,ub=None,info_=None,\
         lo[i] = 0
         up[i] = 0
 
-    AA = numpy.dot(A,A.T)
+    AA = np.dot(A,A.T)
     
     # check condition of matrix AA
     

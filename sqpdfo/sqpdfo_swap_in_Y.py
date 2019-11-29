@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from runtime import isempty_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+
+from sqpdfo.runtime import isempty_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from copy import copy
+
 
 def sqpdfo_swap_in_Y_(i=None,j=None,QZ=None,RZ=None,Y_=None,ind_Y_=None,fY_=None,ciY_=None,ceY_=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """

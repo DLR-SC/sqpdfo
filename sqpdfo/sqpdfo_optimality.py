@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-import sqpdfo_global_variables as glob
+from sqpdfo.runtime import *
+import sqpdfo.sqpdfo_global_variables as glob
 from copy import copy
 from numpy import arange, logical_and, zeros, diag, ones, concatenate, array
 

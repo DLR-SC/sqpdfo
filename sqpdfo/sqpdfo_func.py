@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-import sqpdfo_global_variables as glob
+from sqpdfo.runtime import *
+import sqpdfo.sqpdfo_global_variables as glob
 from numpy import array, zeros, concatenate, zeros_like
-import time
+
 
 def sqpdfo_func_(x=None,*args,**kwargs):
     """

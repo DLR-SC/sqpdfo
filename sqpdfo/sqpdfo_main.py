@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from numpy import inf, arange
 from copy import copy
 
-from sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
-from sqpdfo_optimality import sqpdfo_optimality_
-from sqpdfo_iter_printout import sqpdfo_iter_printout_
-from sqpdfo_solve_TR_bc import sqpdfo_solve_TR_bc_
-from sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
-from bcdfo_augment_Y import bcdfo_augment_Y_
-from sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
-from bcdfo_computeP import bcdfo_computeP_
-from bcdfo_gradP import bcdfo_gradP_
-from bcdfo_projgrad import bcdfo_projgrad_
-from sqpdfo_computeHessian import sqpdfo_computeHessian_
-from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
-from bcdfo_repair_Y import bcdfo_repair_Y_
-#from bcdfo_find_new_yj_bc import bcdfo_find_new_yj_bc_
-from bcdfo_find_new_yj import bcdfo_find_new_yj_
-from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
-from sqpdfo_find_smallf import sqpdfo_find_smallf_
-from bcdfo_include_in_Y import bcdfo_include_in_Y_
+from sqpdfo.sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
+from sqpdfo.sqpdfo_optimality import sqpdfo_optimality_
+from sqpdfo.sqpdfo_iter_printout import sqpdfo_iter_printout_
+from sqpdfo.sqpdfo_solve_TR_bc import sqpdfo_solve_TR_bc_
+from sqpdfo.sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
+from sqpdfo.bcdfo_augment_Y import bcdfo_augment_Y_
+from sqpdfo.sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
+from sqpdfo.bcdfo_computeP import bcdfo_computeP_
+from sqpdfo.bcdfo_gradP import bcdfo_gradP_
+from sqpdfo.bcdfo_projgrad import bcdfo_projgrad_
+from sqpdfo.sqpdfo_computeHessian import sqpdfo_computeHessian_
+from sqpdfo.bcdfo_poisedness_Y import bcdfo_poisedness_Y_
+from sqpdfo.bcdfo_repair_Y import bcdfo_repair_Y_
+from sqpdfo.bcdfo_find_new_yj import bcdfo_find_new_yj_
+from sqpdfo.bcdfo_replace_in_Y import bcdfo_replace_in_Y_
+from sqpdfo.sqpdfo_find_smallf import sqpdfo_find_smallf_
+from sqpdfo.bcdfo_include_in_Y import bcdfo_include_in_Y_
 from numpy import array, zeros, concatenate, zeros_like
-import sqpdfo_global_variables as glob
+import sqpdfo.sqpdfo_global_variables as glob
 
 
 def sqpdfo_main_(func_=None,n_=None,nb_=None,mi_=None,me_=None,lm_=None,nitold_=None,nit_=None,\

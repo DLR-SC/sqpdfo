@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
-sys.path.append("../")
 import unittest
-from sqpdfo_truncated_cg import *
+from sqpdfo.sqpdfo_truncated_cg import *
 from numpy import array
 
 

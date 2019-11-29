@@ -844,15 +844,14 @@ ans =
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_evalfgh import sqpdfo_evalfgh_
-from sqpdfo_main import *
-from sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
+from sqpdfo.sqpdfo_evalfgh import sqpdfo_evalfgh_
+from sqpdfo.sqpdfo_main import *
+from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
-import helper
 from numpy import array, infty
+from sqpdfo import helper
 
 
 class dummyInfo():

@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
-from bcdfo_computeLj import bcdfo_computeLj_
-from bcdfo_gradP import bcdfo_gradP_
-from bcdfo_hessP import bcdfo_hessP_
-from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_computeLj import bcdfo_computeLj_
+from sqpdfo.bcdfo_gradP import bcdfo_gradP_
+from sqpdfo.bcdfo_hessP import bcdfo_hessP_
+from sqpdfo.bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 from numpy import *
-
 
 
 def bcdfo_find_new_yj_(QZ=None,RZ=None,Y=None,j=None,Delta=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):

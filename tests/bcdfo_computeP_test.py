@@ -5,15 +5,12 @@ Created on Tue Nov 25 13:39:12 2014
 @author: jaco_da
 """
 
-
-import sys
-sys.path.append("../")
 import unittest
-from bcdfo_computeP import *
-from bcdfo_build_QR_of_Y import *
-from bcdfo_evalP import *
+from sqpdfo.bcdfo_computeP import *
+from sqpdfo.bcdfo_build_QR_of_Y import *
+from sqpdfo.bcdfo_evalP import *
 from random import random
-from runtime import compare_array
+from sqpdfo.runtime import compare_array
 from numpy import array
 
 
@@ -23,8 +20,8 @@ class Test_bcdfo_computeP(unittest.TestCase):
     This class is a test for computeP which computes the coefficients of the polynomial model
     """ 
     def setUp(self):      
-        self.abs_tol=1e-14;
-        self.rel_tol=1e-14;
+        self.abs_tol=1e-10;
+        self.rel_tol=1e-10;
         pass
     
     def test_bcdfo_computeP_0(self):

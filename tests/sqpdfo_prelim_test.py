@@ -534,15 +534,15 @@ ans =
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_prelim import *
-from sqpdfo_evalfgh import *
+from sqpdfo.sqpdfo_prelim import *
+from sqpdfo.sqpdfo_evalfgh import *
 import numpy as np
-import helper
-from sqpdfo_global_variables import set_prob, set_check_condition, set_simul_not_initialized
+from sqpdfo.sqpdfo_global_variables import set_prob, set_check_condition, set_simul_not_initialized
 from numpy import array
+from sqpdfo import helper
+
 
 class myDummyOptions():
     def __init__(self):

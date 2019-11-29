@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from copy import copy
-from sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
+from sqpdfo.sqpdfo_swap_in_Y import sqpdfo_swap_in_Y_
 from numpy import array, zeros, concatenate
-import sqpdfo_global_variables as glob
+import sqpdfo.sqpdfo_global_variables as glob
+
 
 def sqpdfo_find_smallf_(c_=None,QZ_=None,RZ_=None,Y_=None,fY_=None,ciY_=None,ceY_=None,\
     ind_Y_=None,i_xbest_=None,cur_degree_=None,indfree_=None,x_=None,\

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from copy import copy
 from numpy import diag, array,isreal,real, isnan, isinf, linalg, nan_to_num
+
 
 def sqpdfo_check_convex_(A_=None,options=None,*args,**kwargs):
     """

@@ -4,14 +4,11 @@ Created on Tue Dec 02 17:23:18 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_evalfgh import sqpdfo_evalfgh_
-from runtime import compare_array, isempty_
-from sqpdfo import sqpdfo_
-from sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
-import numpy as np
+from sqpdfo.runtime import compare_array, isempty_
+from sqpdfo.sqpdfo import sqpdfo_
+from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 from numpy import array
 
 

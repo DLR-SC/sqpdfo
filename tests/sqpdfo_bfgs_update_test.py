@@ -4,15 +4,13 @@ Created on Tue Nov 11 11:22:07 2014
 
 @author: jaco_da + troe_an
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from sqpdfo_bfgs_update import sqpdfo_bfgs_update_
+from sqpdfo.sqpdfo_bfgs_update import sqpdfo_bfgs_update_
 import numpy as np
-import helper
 from numpy import array, double
-from runtime import compare_array
+from sqpdfo.runtime import compare_array
+from sqpdfo import helper
 
 
 class dummyInfo():

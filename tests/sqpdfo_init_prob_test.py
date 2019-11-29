@@ -88,13 +88,11 @@ info =
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_init_prob import *
+from sqpdfo.sqpdfo_init_prob import *
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class Test_sqpdfo_init_prob(unittest.TestCase):
     """

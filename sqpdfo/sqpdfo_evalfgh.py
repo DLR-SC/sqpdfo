@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-from sqpdfo_func import *
-from sqpdfo_global_variables import *
+from sqpdfo.sqpdfo_func import *
+from sqpdfo.sqpdfo_global_variables import *
 from numpy import array
 
 

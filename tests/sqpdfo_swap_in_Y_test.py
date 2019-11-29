@@ -27,16 +27,12 @@ Created on Fri Nov 14 18:53:38 2014
 %  norm( Z - QZ*RZ)
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
-import unittest
-from sqpdfo_swap_in_Y import *
-from runtime import *
 
-from bcdfo_build_QR_of_Y import *
+import unittest
+from sqpdfo.sqpdfo_swap_in_Y import *
+from sqpdfo.bcdfo_build_QR_of_Y import *
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class Test_sqpdfo_swap_in_Y(unittest.TestCase):
     """

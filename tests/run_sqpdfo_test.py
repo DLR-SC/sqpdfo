@@ -5,15 +5,13 @@ Created on Tue Dec 02 17:32:15 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
-import helper
-from runtime import *
-from sqpdfo_init_prob import sqpdfo_init_prob_
-from sqpdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
-from sqpdfo import sqpdfo_
+
 import unittest
+from sqpdfo.runtime import *
+from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
+from sqpdfo.sqpdfo import sqpdfo_
 from numpy import array, zeros, arange, double
+from sqpdfo import helper
 
 
 class Test_run_sqpdfo(unittest.TestCase):
@@ -24,7 +22,7 @@ class Test_run_sqpdfo(unittest.TestCase):
     """
     def setUp(self):
         self.abs_tol=1e-5
-        self.rel_tol=1e-8
+        self.rel_tol=1e-5
         pass
 
     def test_run_sqpdfo_prob1(self):
@@ -136,45 +134,40 @@ class Test_run_sqpdfo(unittest.TestCase):
         self.assertEqual(info.compl,0)
         self.assertTrue(compare_array(info.glag, 1e-07*array([0.062859997207454,  0.188580686583393,-0.188580611126810]), self.abs_tol, self.rel_tol))
 
-    # def test_run_sqpdfo_prob4(self):
-    #     """
-    #      Test which compare python and matlab results
-    #     """
-    #     set_check_condition(1)
-    #     set_prob(4)
-    #     prob=get_prob()
-    #     options = helper.dummyUnionStruct()
-    #
-    #     x,lb,ub,dxmin,li,ui,dcimin,infb,n,nb,mi,me,info=sqpdfo_init_prob_(prob,nargout=13)
-    #     set_threshold(1e-08)
-    #     options.hess_approx='model'
-    #     options.bfgs_restart=0
-    #     options.algo_descent='Powell'
-    #     options.tol_grad=1e-05
-    #     options.tol_feas=1e-05
-    #     options.tol_bnds=1e-05
-    #     options.dxmin=dxmin
-    #     options.miter=500
-    #     options.msimul=500
-    #     options.verbose=0
-    #     options.whichmodel = 'subbasis'
-    #     options.final_degree = 'quadratic'
-    #     lm=array([])
-    #     x,lm,info=sqpdfo_(options)
-    #
-    #     self.assertTrue(compare_array(x, array([[ -0.499998511434003,  -0.000002977131994,   0.500001488565997,   0.999999998348743]]), self.abs_tol, 1e-6))
-    #     self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
-    #     self.assertTrue(compare_array(info.g, array([[   -0.999997022863534,   -0.000005954272170 ,    1.000002977136998,   0.999999999997250]]), self.abs_tol, 1e-6))
-    #     self.assertTrue(compare_array(info.ae, array([[1.00000000000119,	1.00000000000153,	1.00000000000242,	1.09566597368092e-12],[1.00000000000310,	1.99999999999671,	3.00000000000154,	5.36746539189640e-12],[1.43689077548211e-12,	3.68227391508966e-12,	-3.71857711253322e-12,	2.99999999015165]]), self.abs_tol, 1e-6))
-    #     self.assertEqual(info.niter,21)
-    #     self.assertTrue(compare_array(info.ce,    1.0e-08 *array([ 0 , 0.000000022204460, -0.495377106002337]),self.abs_tol, self.rel_tol))
-    #     self.assertEqual(info.flag,0)
-    #     self.assertTrue(compare_array(info.nsimul, array([[0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 ]]), self.abs_tol, self.rel_tol))
-    #     self.assertAlmostEqual(info.f,   1.499999998362038,places=9)
-    #     self.assertEqual(info.compl,0)
-    #     self.assertAlmostEqual(dcimin, 1.490116119384766e-08,places=10)
-    #     self.assertTrue(compare_array(info.glag, 1e-05*array([0.284297517494370,-0.598060297747812,0.305862976301974,-0.000319574466889]), self.abs_tol, self.rel_tol))
-#
+    def test_run_sqpdfo_prob4(self):
+        """
+         Test which compare python and matlab results
+        """
+        set_check_condition(0)
+        set_prob(4)
+        set_threshold(1e-08)
+
+        options = helper.dummyUnionStruct()
+        options.hess_approx='model'
+        options.bfgs_restart=0
+        options.algo_descent='Powell'
+        options.tol_grad=1e-05
+        options.tol_feas=1e-05
+        options.tol_bnds=1e-05
+        options.dxmin=1e-6
+        options.miter=500
+        options.msimul=500
+        options.verbose=0
+        options.whichmodel = 'subbasis'
+        options.final_degree = 'quadratic'
+
+        x,lm,info=sqpdfo_(options)
+        print('x : ', x)
+        self.assertTrue(compare_array(x, array([[ -0.5,  0.0,   0.5,   1.0]]), self.abs_tol, 1e-5))
+        self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
+        self.assertTrue(compare_array(info.g, array([[   -1.0,   0.0 ,    1.0,   1.0]]), 1e-4, 1e-4))
+        self.assertTrue(compare_array(info.ae, array([[1.00000000000119,	1.00000000000153,	1.00000000000242,	1.09566597368092e-12],[1.00000000000310,	1.99999999999671,	3.00000000000154,	5.36746539189640e-12],[1.43689077548211e-12,	3.68227391508966e-12,	-3.71857711253322e-12,	2.99999999015165]]), self.abs_tol, 1e-6))
+        self.assertTrue(compare_array(info.ce,  array([ 0., 0., 0.]), 1e-4, 1e-4))
+        self.assertEqual(info.flag,0)
+        self.assertAlmostEqual(info.f, 1.5, places=6)
+        self.assertEqual(info.compl,0)
+        self.assertTrue(compare_array(info.glag, array([0.,0.,0.,0.]), 1e-4, 1e-4))
+
     def test_run_sqpdfo_prob5(self):
         """
          Test which compare python and matlab results

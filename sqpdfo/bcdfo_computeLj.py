@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
-from bcdfo_evalZ import *
+from sqpdfo.bcdfo_evalZ import *
 from copy import copy
-from numpy import array
 import numpy
+
 def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,shift_Y=None,*args,**kwargs):
     """
 #
@@ -59,14 +57,14 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,s
     if (whichmodel == 0):
 #    build (sub-basis) Lagrange polynomials (p1 = q)
 #    (QZ and RZ are the factors of Z = M')
-        Lj=(QZ.dot((numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
+        Lj=(QZ.dot((numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
     elif (whichmodel == 1):
 #    build mixed Lagrange polynomials:
 #    Minimum Frobenius norm Lagrange polynomials (p1 <= q) or
 #    L2-norm Lagrange polynomials (p1 == n+1 or p1 == q )
         if (p1 == n + 1 or p1 == q):
 #       build linear/quadratic Lagrange polynomials 
-           Lj=(numpy.linalg.solve(RZ,QZ.T).dot(concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 - j,1)],axis=0))).T
+           Lj=(numpy.linalg.solve(RZ,QZ.T).dot(concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 - j,1)],axis=0))).T
            if (p1 == n + 1):
                 Lj[n + 1:q]=0
         else:
@@ -82,7 +80,7 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,s
                     scaleY=max_(scaleY,norm_(Y[:,i]))
                 Y=Y / scaleY
 #       compute the right-hand side of the system
-            rhs=concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 + n +1 - j,1)],axis=0)
+            rhs=concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 + n +1 - j,1)],axis=0)
             mualpha=(numpy.linalg.solve(RZ,(QZ.T.dot(rhs)))).T
 #       constant and linear part of P
             Lj[0:n + 1]=mualpha[p1:p1 + n + 1].T
@@ -95,11 +93,11 @@ def bcdfo_computeLj_(QZ=None,RZ=None,j=None,Y_=None,whichmodel=None,scale=None,s
 #    Take pseudo-inverse for underdetermined system because the result
 #    is different from using backslash-operator
         if (p1 < q):
-            Lj=(QZ.dot((pinv_(RZ.T).dot(concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
+            Lj=(QZ.dot((pinv_(RZ.T).dot(concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
         else:
-            Lj=(QZ.dot((numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
+            Lj=(QZ.dot((numpy.linalg.solve(RZ.T,concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 - j,1)],axis=0))))).T
     elif (whichmodel == 3):
 #    build Regression Lagrange polynomials (p1 >= q)
 #    (QZ and RZ are the factors of Z = M)
-        Lj=(pinv_(RZ).dot( QZ.T.dot( concatenate_([zeros_(j - 1,1),array([[1]]),zeros_(p1 - j,1)],axis=0)))).T
+        Lj=(pinv_(RZ).dot( QZ.T.dot( concatenate_([zeros_(j - 1,1),numpy.array([[1]]),zeros_(p1 - j,1)],axis=0)))).T
     return Lj

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
-from bcdfo_evalL import bcdfo_evalL_
-from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_evalL import bcdfo_evalL_
+from sqpdfo.bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy
+
 
 def bcdfo_include_in_Y_(x=None,QZ=None,RZ=None,Y=None,choice_set=None,poisedness_threshold=None,criterion=None,xbase=None,whichmodel=None,succ=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
 

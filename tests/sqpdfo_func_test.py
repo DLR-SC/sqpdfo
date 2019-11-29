@@ -4,11 +4,10 @@ Created on Thu Nov 13 14:55:53 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_func import *
-from sqpdfo_global_variables import set_prob
+from sqpdfo.sqpdfo_func import *
+from sqpdfo.sqpdfo_global_variables import set_prob
 from numpy import array, double
 
 

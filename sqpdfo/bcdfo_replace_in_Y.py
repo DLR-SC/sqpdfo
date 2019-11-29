@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from copy import copy
+
 
 def bcdfo_replace_in_Y_(QZ=None,RZ=None,ynew=None,Y_=None,j=None,xbase=None,whichmodel=None,scale=None,shift_Y=None,Delta=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """

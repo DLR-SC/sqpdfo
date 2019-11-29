@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from copy import copy
 from numpy import append, isnan, isinf
-import time
+
 
 def sqpdfo_augmX_evalf_(f=None,y=None,m=None,X_=None,fX_=None,ciX_=None,ceX_=None,nfix=None,xfix=None,indfix=None,indfree=None,fxmax=None,neval=None,xstatus_=None,xstatus_val=None,sstatus_=None,dstatus_=None,scaleX=None,scalefacX=None,info_=None,options=None,values=None,*args,**kwargs):
     """

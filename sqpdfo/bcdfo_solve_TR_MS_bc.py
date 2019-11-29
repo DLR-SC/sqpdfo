@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
+from sqpdfo.runtime import *
 from copy import copy
 from numpy import *
-import numpy
-from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
+from sqpdfo.bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
 
 def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,stratLam=None,options=None,*args,**kwargs):
@@ -240,7 +238,7 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
              #  Successful factorization 
  
                 if (p == 0 and hardcase == 0):
-                    s_deltaH=numpy.linalg.solve(- R,(numpy.linalg.solve(R.T,g[ind_free])))
+                    s_deltaH=np.linalg.solve(- R,(np.linalg.solve(R.T,g[ind_free])))
                     s_duringH=s + I[:,ind_free].dot( s_deltaH )
                  #  Find components which are at its bound and became active
                     ind_u_crit=find_(logical_and(ub[ind_free] - s_duringH[ind_free] <= eps_bound, ub[ind_free] <= 1e-10))
@@ -387,8 +385,8 @@ def bcdfo_solve_TR_MS_bc_(g=None,H=None,lb=None,ub=None,Delta=None,eps_D=None,st
                             new_lambda=(lower + upper) / 2
                         else:
                            #  Newton step
-                            w1=numpy.linalg.solve(R.T,unitvec)
-                            w2=numpy.linalg.solve(R.T,s_deltaH)
+                            w1=np.linalg.solve(R.T,unitvec)
+                            w2=np.linalg.solve(R.T,s_deltaH)
                             new_lambda=_lambda + ((norms_b - delta_b) / delta_b) * (norms_b ** 2 / (es .dot( (w1.T .dot( w2)))))
                             if (back_inside == 0 and upper <= new_lambda):
                                 upper=2 * new_lambda

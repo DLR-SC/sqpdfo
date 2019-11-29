@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 
 
 def sqpdfo_iter_printout_(info=None,old_delta=None,norms=None,pc=None,itype=None,values=None,nb=None,mi=None,options=None,constrained_pbl=None,merit=None,*args,**kwargs):

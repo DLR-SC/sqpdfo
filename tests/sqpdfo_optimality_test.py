@@ -138,13 +138,12 @@ ans =
   -0.333333333513889
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_optimality import *
-#import numpy as np
-import helper
+from sqpdfo.sqpdfo_optimality import *
 from numpy import array
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

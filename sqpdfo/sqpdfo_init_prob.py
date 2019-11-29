@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from numpy import inf, array
-from sqpdfo_global_variables import *
+from sqpdfo.sqpdfo_global_variables import *
+
 
 def sqpdfo_init_prob_(prob=None,*args,**kwargs):
     """

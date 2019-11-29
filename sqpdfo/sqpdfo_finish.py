@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
+
+
 def sqpdfo_finish_(nb=None,mi=None,me=None,info=None,options=None,values=None,*args,**kwargs):
 
 ###############################################################################

@@ -358,13 +358,11 @@ ans =
   -0.153898338517422                    
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_find_smallf import *
+from sqpdfo.sqpdfo_find_smallf import *
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class dummyC():
     def __init__(self):

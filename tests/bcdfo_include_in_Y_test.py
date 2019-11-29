@@ -4,16 +4,14 @@ Created on Tue Dec 02 14:41:23 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from bcdfo_include_in_Y import bcdfo_include_in_Y_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from runtime import compare_array, ones_
-from bcdfo_evalZ import *
+from sqpdfo.bcdfo_include_in_Y import bcdfo_include_in_Y_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.bcdfo_evalZ import *
 import numpy as np
 from numpy import array
+
 
 class Test_bcdfo_include_in_Y(unittest.TestCase):
     """

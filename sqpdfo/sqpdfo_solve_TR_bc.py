@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from runtime import *
-import helper
-from bcdfo_solve_TR_MS_bc import *
-from minq import Minq
 
-from sqpdfo_check_convex import *
-from sqpdfo_compute_multiplier import *
-from sqpdfo_truncated_cg import *
+from sqpdfo.bcdfo_solve_TR_MS_bc import *
+from sqpdfo.minq import Minq
+from sqpdfo.sqpdfo_compute_multiplier import *
+from sqpdfo.sqpdfo_truncated_cg import *
 from copy import copy
 from numpy import zeros_like
-import sqpdfo_global_variables as glob
+import sqpdfo.sqpdfo_global_variables as glob
+from sqpdfo.helper import *
+
 
 def sqpdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=None,\
     M=None,prec_r=None,prec_t=None,info_=None,options=None,values=None,\
@@ -22,7 +21,7 @@ def sqpdfo_solve_TR_bc_(simul=None,x=None,lb=None,ub=None,delta=None,mi=None,me=
 #
 ############################################################################
     
-    info_r=helper.dummyUnionStruct()
+    info_r=dummyUnionStruct()
     
     info=copy(info_)
 

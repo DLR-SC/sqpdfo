@@ -5,17 +5,12 @@ check if function returns convex matrix for convex matrix (1) and non convex mat
 @author: jaco_da
 """
 
-import sys
-sys.path.append("../")
-#sys.path.append("tests/")
-
 import unittest
-from sqpdfo_check_convex import *
-import helper
+from sqpdfo.sqpdfo_check_convex import *
 import numpy as np
-from runtime import compare_array, eig_
-from random import random
-from numpy import array
+from sqpdfo.runtime import compare_array, eig_
+from sqpdfo import helper
+
 
 class Test_sqpdfo_check_convex(unittest.TestCase):
     """
@@ -74,6 +69,4 @@ class Test_sqpdfo_check_convex(unittest.TestCase):
         
 
 if __name__ == '__main__':
-#    suite = unittest.TestLoader().loadTestsFromTestCase(Test_sqpdfo_check_convex)
-#    unittest.TextTestRunner(verbosity=2).run(suite)
     unittest.main()

@@ -334,14 +334,13 @@ ans =
   -0.333333333513889                    
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_computeHessian import *
-from sqpdfo_evalfgh import *
-#import numpy as np
-import helper
+from sqpdfo.sqpdfo_computeHessian import *
+from sqpdfo.sqpdfo_evalfgh import *
 from numpy import array
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

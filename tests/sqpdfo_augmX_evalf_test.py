@@ -30,15 +30,14 @@ TEST:
 %     0     0     0     0
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_augmX_evalf import *
-#import numpy as np
-import helper
+from sqpdfo.sqpdfo_augmX_evalf import *
 from numpy import array
 from copy import copy
-from runtime import compare_array
+from sqpdfo.runtime import compare_array
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

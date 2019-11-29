@@ -4,13 +4,13 @@ Created on Thu Nov 20 13:25:23 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from bcdfo_solve_TR_MS_bc import *
-from runtime import compare_array
+from sqpdfo.bcdfo_solve_TR_MS_bc import *
+from sqpdfo.runtime import compare_array
 from numpy import array
-import helper
+from sqpdfo import helper
+
 
 class Test_bcdfo_solve_TR_MS_bc(unittest.TestCase):
 

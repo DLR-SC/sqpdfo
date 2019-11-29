@@ -149,12 +149,12 @@ OUTPUT VALUES
 none
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_iter_printout import *
+from sqpdfo.sqpdfo_iter_printout import *
 from numpy import array
-import helper
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

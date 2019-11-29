@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from numpy import inf, array
 from copy import copy
-from sqpdfo_values import sqpdfoValues
+from sqpdfo.sqpdfo_values import sqpdfoValues
 
 
 def sqpdfo_options_(info_=None,options_=None,*args,**kwargs):

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from runtime import *
+
+from sqpdfo.runtime import *
 import numpy
-from numpy import *
 from copy import copy
+
 
 def _bcdfo_solve_tridiag(M, b, trans='N'):
     """
@@ -77,7 +78,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     if (verbose):
         disp_(' bcdfo_solve_TR_MS : ============ enter')
         
-    if (length_(find_(isnan(H))) != 0):
+    if (length_(find_(numpy.isnan(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains NaNs!')
         msg='error1'
         
@@ -86,7 +87,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
         
-    if (length_(find_( ~isreal(H))) != 0):
+    if (length_(find_( ~numpy.isreal(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains imaginary parts!')
         msg='error2'
         
@@ -95,7 +96,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             
         return s,_lambda,norms,value,gplus,nfact,neigd,msg,hardcase
         
-    if (length_(find_(isinf(H))) != 0):
+    if (length_(find_(numpy.isinf(H))) != 0):
         disp_(' bcdfo_solve_TR_MS : H contains infinite elements!')
         msg='error3'
         
@@ -108,7 +109,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
 
     gnorm=norm_(g)
     goverD=gnorm / Delta
-    Hnorminf=norm_(H,inf)
+    Hnorminf=norm_(H,numpy.inf)
     
     if (Hnorminf > 0): # because Octave generates a NaN for null matrices.
         HnormF=norm_(H,'fro')
@@ -192,7 +193,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
             
             R,p=chol_(H + _lambda * eye_(n),nargout=2)
             
-            if (length_(find_(isnan(R))) != 0):
+            if (length_(find_(numpy.isnan(R))) != 0):
                 disp_(' bcdfo_solve_TR_MS : NaNs in Cholesky factorization')
                 msg='error4'
                 
@@ -275,10 +276,10 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     #  Find eigen decomposition and the minimal eigenvalue.
     
     V,D=eig_(H,nargout=2)
-    V = real(V)
-    D = real(D)
+    V = numpy.real(V)
+    D = numpy.real(D)
     neigd=neigd + 1
-    mu,imu=min_(diag(D),nargout=2)
+    mu,imu=min_(numpy.diag(D),nargout=2)
     
     if (verbose):
         gamma=abs_(V[:,imu].reshape(1,-1).dot( g))
@@ -288,8 +289,8 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
     #  eigenvectors corresponding to the most negative eigenvalue
     
     D=D - mu * eye_(n)
-    maxdiag=max_(diag(D))
-    ii=find_(abs(diag(D)) < 1e-10 * maxdiag)
+    maxdiag=max_(numpy.diag(D))
+    ii=find_(abs(numpy.diag(D)) < 1e-10 * maxdiag)
     
     if (length_(ii) < n and  not(isempty_(ii))):
         D[ii,ii.T]=0.5 * maxdiag * eye_(length_(ii))
@@ -302,7 +303,7 @@ def bcdfo_solve_TR_MS_(g=None,H=None,Delta=None,eps_D=None,*args,**kwargs):
         nscri=0
         
     if (nscri <= Delta):
-        p2=poly1d([norm_(V[:,imu]) ** 2,2 * V[:,imu].reshape(1,-1).dot( scri),nscri ** 2 - Delta ** 2])
+        p2=numpy.poly1d([norm_(V[:,imu]) ** 2,2 * V[:,imu].reshape(1,-1).dot( scri),nscri ** 2 - Delta ** 2])
         root=max(p2.r)
         s=scri + root * V[:,imu].reshape(-1,1)
     else:

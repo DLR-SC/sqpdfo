@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-from bcdfo_evalZ import *
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_evalZ import *
 from copy import copy
 from numpy import *
     

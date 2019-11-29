@@ -5,15 +5,13 @@ Created on Mon Dec 01 11:12:48 2014
 @author: jaco_da
 """
 import sys
-sys.path.append("../")
 
 import unittest
 from sqpdfo.bcdfo_augment_Y import bcdfo_augment_Y_
 from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from sqpdfo.runtime import compare_array
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class Test_bcdfo_augment_Y(unittest.TestCase):
     """

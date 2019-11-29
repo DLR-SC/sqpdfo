@@ -4,15 +4,13 @@ Created on Thu Nov 06 11:53:25 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from sqpdfo_check_cond import *
-import numpy as np
-from runtime import compare_array, cond_
-import helper
+from sqpdfo.sqpdfo_check_cond import *
+from sqpdfo.runtime import compare_array, cond_
+from sqpdfo import helper
 from numpy import array
+
 
 class Test_sqpdfo_check_cond(unittest.TestCase):
     """

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-import sqpdfo_global_variables as glob
-from bcdfo_computeP import bcdfo_computeP_
-from bcdfo_hessP import bcdfo_hessP_
-from sqpdfo_bfgs_update import sqpdfo_bfgs_update_
+from sqpdfo.runtime import *
+import sqpdfo.sqpdfo_global_variables as glob
+from sqpdfo.bcdfo_computeP import bcdfo_computeP_
+from sqpdfo.bcdfo_hessP import bcdfo_hessP_
+from sqpdfo.sqpdfo_bfgs_update import sqpdfo_bfgs_update_
 from copy import copy
 from numpy import zeros, ones, concatenate
+
 
 def sqpdfo_computeHessian_(simul=None,x=None,null_step=None,constrained_pbl=None,\
     lm=None,M=None,n=None,me=None,mi=None,s=None,gx=None,gci=None,gce=None,\

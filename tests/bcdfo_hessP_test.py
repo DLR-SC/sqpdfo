@@ -4,16 +4,15 @@ Created on Tue Dec 02 12:24:11 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
 from numpy import array
-from runtime import compare_array
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from bcdfo_hessP import bcdfo_hessP_
+from sqpdfo.runtime import compare_array
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.bcdfo_hessP import bcdfo_hessP_
 import numpy as np
 from random import random
-#import helper
+
 
 class Test_bcdfo_hessP(unittest.TestCase):
     """

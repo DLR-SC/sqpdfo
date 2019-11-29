@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-from numpy import inf,diag, isnan, isinf
-import numpy
-#except ImportError:
-#    from smop.runtime import *
+from sqpdfo.runtime import *
+from numpy import inf,diag, isnan, isinf, nan_to_num, linalg
+
 
 def sqpdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
     """
@@ -35,7 +33,7 @@ def sqpdfo_check_cond_(A=None,cthreshold=None,options=None,*args,**kwargs):
         badcond=1
     
     if (badcond):
-        U,Sdiag,V=numpy.linalg.svd(A)
+        U,Sdiag,V=linalg.svd(A)
         V=V.T
         a=Sdiag < 1e-07
         Sdiag[a]=1e-07

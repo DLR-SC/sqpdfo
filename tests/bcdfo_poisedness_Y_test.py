@@ -4,13 +4,10 @@ Created on Wed Nov 26 13:54:53 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
-sys.path.append("tests/")
 
 import unittest
-from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.bcdfo_poisedness_Y import bcdfo_poisedness_Y_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
 from numpy import array, double
 
 

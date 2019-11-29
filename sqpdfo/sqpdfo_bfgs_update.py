@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
+from sqpdfo.runtime import *
 from copy import copy
+
 
 def sqpdfo_bfgs_update_(H=None,y=None,s=None,first=None,info_=None,options=None,values=None,*args,**kwargs):
 

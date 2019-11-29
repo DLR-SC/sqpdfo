@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
 import types
-import helper
-import numpy as np
-from sqpdfo_options import *
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from bcdfo_poisedness_Y import bcdfo_poisedness_Y_
-from bcdfo_computeP import bcdfo_computeP_
-from bcdfo_gradP import bcdfo_gradP_
-from bcdfo_projgrad import bcdfo_projgrad_
-from bcdfo_repair_Y import bcdfo_repair_Y_
-from sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
-from sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
-from sqpdfo_optimality import sqpdfo_optimality_
-import sqpdfo_global_variables as glob
+from sqpdfo.sqpdfo_options import *
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.bcdfo_poisedness_Y import bcdfo_poisedness_Y_
+from sqpdfo.bcdfo_computeP import bcdfo_computeP_
+from sqpdfo.bcdfo_gradP import bcdfo_gradP_
+from sqpdfo.bcdfo_projgrad import bcdfo_projgrad_
+from sqpdfo.bcdfo_repair_Y import bcdfo_repair_Y_
+from sqpdfo.sqpdfo_augmX_evalf import sqpdfo_augmX_evalf_
+from sqpdfo.sqpdfo_compute_multiplier import sqpdfo_compute_multiplier_
+from sqpdfo.sqpdfo_optimality import sqpdfo_optimality_
+import sqpdfo.sqpdfo_global_variables as glob
 from copy import copy
 from numpy import array, arange
+from sqpdfo.helper import *
+
 
 def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,\
    scaleX_=None,scalefacX_=None,cur_degree_=None,rep_degree_=None,plin_=None,\
@@ -64,7 +62,7 @@ def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,
     dstatus=copy(dstatus_)
     options=copy(options_)
 
-    info = helper.dummyUnionStruct()
+    info = dummyUnionStruct()
     info.nsimul = array([])
     
     nbr_slacks = glob.get_nbr_slacks()

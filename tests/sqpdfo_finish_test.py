@@ -125,12 +125,12 @@ ans =
   -0.555111512312578
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
+
 import unittest
-from sqpdfo_finish import *
+from sqpdfo.sqpdfo_finish import *
 from numpy import array
-import helper
+from sqpdfo import helper
+
 
 class dummyInfo():
     def __init__(self):

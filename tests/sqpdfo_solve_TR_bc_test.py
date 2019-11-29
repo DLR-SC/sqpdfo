@@ -5,14 +5,12 @@ Created on Wed Nov 19 10:22:26 2014
 @author: jaco_da
 """
 
-import sys
-sys.path.append("../")
 import unittest
-from sqpdfo_solve_TR_bc import *
-from sqpdfo_evalfgh import sqpdfo_evalfgh_
-import helper
-from sqpdfo_global_variables import set_threshold
+from sqpdfo.sqpdfo_solve_TR_bc import *
+from sqpdfo.sqpdfo_evalfgh import sqpdfo_evalfgh_
+from sqpdfo.sqpdfo_global_variables import set_threshold
 from numpy import array
+from sqpdfo.helper import *
 
 
 class dummyInfo():
@@ -53,8 +51,8 @@ class Test_sqpdfo_solve_TR_bc(unittest.TestCase):
         self.prec_t = 1.000000000000000e-06
         
         self.info = dummyInfo()
-        self.options = helper.dummyOptions()
-        self.values = helper.dummyValues()
+        self.options = dummyOptions()
+        self.values = dummyValues()
     
         self.radius_has_been_rejected = 0
         self.lm = array([[0, 0, 0, -0.333333332763891, -0.000000000249999]]).T

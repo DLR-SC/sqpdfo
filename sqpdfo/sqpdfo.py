@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import helper
-import numpy as np
-from sqpdfo_init_prob import sqpdfo_init_prob_
-from sqpdfo_main import sqpdfo_main_
-import sqpdfo_global_variables as glob
-from sqpdfo_prelim import sqpdfo_prelim_
-from sqpdfo_finish import sqpdfo_finish_
-from runtime import *
-from sqpdfo_evalfgh import sqpdfo_evalfgh_
+from sqpdfo.sqpdfo_init_prob import sqpdfo_init_prob_
+from sqpdfo.sqpdfo_main import sqpdfo_main_
+import sqpdfo.sqpdfo_global_variables as glob
+from sqpdfo.sqpdfo_prelim import sqpdfo_prelim_
+from sqpdfo.sqpdfo_finish import sqpdfo_finish_
+from sqpdfo.runtime import *
+from sqpdfo.sqpdfo_evalfgh import sqpdfo_evalfgh_
 from copy import copy
 from numpy import array
+from sqpdfo.helper import *
 
 
 def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,func_c=None):
@@ -82,7 +81,7 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
     
     x = array([])
     lm = array([])
-    info = helper.dummyUnionStruct()
+    info = dummyUnionStruct()
     info.flag = 1
     info.f = -np.infty
     info.ce=array([])
@@ -159,7 +158,7 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
     #  Set some constants
 
     func = sqpdfo_evalfgh_
-    c = helper.dummyUnionStruct()
+    c = dummyUnionStruct()
 
     eps = 2.220446049250313e-16
     c.free=0

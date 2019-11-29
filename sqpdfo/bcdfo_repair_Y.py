@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from runtime import *
-
-from bcdfo_find_new_yj import bcdfo_find_new_yj_
-from bcdfo_replace_in_Y import bcdfo_replace_in_Y_
+from sqpdfo.runtime import *
+from sqpdfo.bcdfo_find_new_yj import bcdfo_find_new_yj_
+from sqpdfo.bcdfo_replace_in_Y import bcdfo_replace_in_Y_
 from copy import copy
-    
+
+
 def bcdfo_repair_Y_(QZ=None,RZ=None,Y=None,Delta=None,farfact=None,farthr=None,closethr=None,eps_L=None,xbase=None,lSolver=None,whichmodel=None,hardcons=None,xl=None,xu=None,indfree=None,stratLam=None,scale=None,shift_Y=None,normgx=None,kappa_ill=None,*args,**kwargs):
     """
 #
