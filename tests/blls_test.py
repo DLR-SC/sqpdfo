@@ -4,13 +4,11 @@ Created on Fri Nov 07 11:52:38 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from blls import *
+from sqpdfo.blls import *
 from numpy import array
-#import helper
+
 
 class Test_blls(unittest.TestCase):
     """

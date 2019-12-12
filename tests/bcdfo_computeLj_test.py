@@ -5,17 +5,14 @@ Created on Mon Dec 01 13:41:32 2014
 @author: jaco_da
 """
 
-import sys
-sys.path.append("../")
 import unittest
-from bcdfo_computeLj import *#bcdfo_computeLj_
-from bcdfo_build_QR_of_Y import *#bcdfo_build_QR_of_Y_
-from runtime import compare_array
-from bcdfo_evalP import bcdfo_evalP_
-import numpy as np
-from numpy import array
+from sqpdfo.bcdfo_computeLj import *
+from sqpdfo.bcdfo_build_QR_of_Y import *
+from sqpdfo.runtime import compare_array
+from sqpdfo.bcdfo_evalP import bcdfo_evalP_
+from numpy import array, allclose
 from random import random
-#import helper
+
 
 class Test_bcdfo_computeLj(unittest.TestCase):
     """
@@ -23,10 +20,8 @@ class Test_bcdfo_computeLj(unittest.TestCase):
       This class is a test for computeLj which computes the coefficients of the j-th Lagrange polynomial
     """ 
     def setUp(self):
-        #self.options = helper.dummyOptions()
-        #self.values = helper.dummyValues()
-        self.abs_tol=1e-14;
-        self.rel_tol=1e-14;
+        self.abs_tol=1e-10;
+        self.rel_tol=1e-10;
         pass
 
     def test_bcdfo_computeLj_1(self):
@@ -45,9 +40,9 @@ class Test_bcdfo_computeLj(unittest.TestCase):
                 for j in range(0,6):
                     value=bcdfo_evalP_( L, array([[x1_coord[j]],[x2_coord[j]]]), xbase, scale, 1 )
                     if i==j:
-                        self.assertTrue(np.allclose(value, 1., atol=1e-10))
+                        self.assertTrue(allclose(value, 1., atol=1e-10))
                     else:
-                        self.assertTrue(np.allclose(value, 0., atol=1e-10))
+                        self.assertTrue(allclose(value, 0., atol=1e-10))
 
     def test_bcdfo_computeLj_2(self):
         """

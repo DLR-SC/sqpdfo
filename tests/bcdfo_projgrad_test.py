@@ -5,14 +5,11 @@ Created on Tue Dec 02 15:13:04 2014
 @author: jaco_da
 """
 
-import sys
-sys.path.append("../")
 import unittest
-from bcdfo_projgrad import bcdfo_projgrad_
-from runtime import compare_array
+from sqpdfo.bcdfo_projgrad import bcdfo_projgrad_
+from sqpdfo.runtime import compare_array
 from numpy import array
-#import numpy as np
-#import helper
+
 
 class Test_bcdfo_projgrad(unittest.TestCase):
     """

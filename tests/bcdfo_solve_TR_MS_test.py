@@ -4,12 +4,10 @@ Created on Tue Dec 02 16:15:18 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
-import unittest
-from bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
 
-from runtime import compare_array
+import unittest
+from sqpdfo.bcdfo_solve_TR_MS import bcdfo_solve_TR_MS_
+from sqpdfo.runtime import compare_array
 from numpy import array, double
 
 

@@ -4,14 +4,12 @@ Created on Wed Nov 26 13:35:53 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
- 
+
 import unittest
-from bcdfo_evalZ import bcdfo_evalZ_
+from sqpdfo.bcdfo_evalZ import bcdfo_evalZ_
 from numpy import *
-from runtime import  compare_array
-#import helper
+from sqpdfo.runtime import  compare_array
+
 
 class Test_bcdfo_evalZ(unittest.TestCase):
     """

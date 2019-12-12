@@ -4,13 +4,11 @@ Created on Tue Dec 02 11:17:28 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from bcdfo_find_new_yj import bcdfo_find_new_yj_
-from bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
-from runtime import compare_array
+from sqpdfo.bcdfo_find_new_yj import bcdfo_find_new_yj_
+from sqpdfo.bcdfo_build_QR_of_Y import bcdfo_build_QR_of_Y_
+from sqpdfo.runtime import compare_array
 from numpy import array, double
 
 

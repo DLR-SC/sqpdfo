@@ -4,16 +4,13 @@ Created on Tue Dec 02 15:23:24 2014
 
 @author: jaco_da
 """
-import sys
-sys.path.append("../")
 
 import unittest
-from bcdfo_replace_in_Y import *#bcdfo_replace_in_Y_
-from bcdfo_build_QR_of_Y import *#bcdfo_build_QR_of_Y_
-from runtime import  compare_array
-import numpy as np
+from sqpdfo.bcdfo_replace_in_Y import *#bcdfo_replace_in_Y_
+from sqpdfo.bcdfo_build_QR_of_Y import *#bcdfo_build_QR_of_Y_
+from sqpdfo.runtime import  compare_array
 from numpy import array
-#import helper
+
 
 class Test_bcdfo_replace_in_Y(unittest.TestCase):
     """

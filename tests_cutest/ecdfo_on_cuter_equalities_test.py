@@ -12,7 +12,7 @@ import numpy as np
 class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
 
    def setUp(self):
-      self.write_baseline_test_to_file = 0
+      self.write_baseline_test_to_file = 1
       if self.write_baseline_test_to_file == 1:
           self.read_baseline_to_compare_with_new_test = 0
       else:
@@ -31,8 +31,8 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
       self.options.tol_grad=1e-04
       self.options.tol_feas=1e-04
       self.options.tol_bnds=1e-04
-      self.options.miter=5000
-      self.options.msimul=5000
+      self.options.miter=15000
+      self.options.msimul=15000
       self.options.verbose=1
       self.options.whichmodel = 'subbasis'
       self.options.final_degree = 'quadratic'
@@ -45,7 +45,7 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
       
       if self.read_baseline_to_compare_with_new_test:
           # open file with baseline results of CUTEst problems
-          self.file = open('cutest_results_list_5000.dat','r')
+          self.file = open('cutest_results_list.dat','r')
           self.results_from_file = self.file.readlines()
           self.file.close()      
 
@@ -59,8 +59,8 @@ class Test_ecdfo_on_cuter_equalities(unittest.TestCase):
       set_check_condition(0)     
       
       # check list for parameters
-      #for i in range(0,len(self.props_list)):
-      for i in range(0,5):
+      for i in range(0,len(self.props_list)):
+      #for i in range(0,5):
       
           print('**************************************************')
           print('problem number '+str(i))
