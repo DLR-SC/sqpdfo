@@ -8,8 +8,9 @@ Created on Tue Dec 02 17:23:18 2014
 import unittest
 from sqpdfo.runtime import compare_array, isempty_
 from sqpdfo.sqpdfo import sqpdfo_
-from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
+from sqpdfo.sqpdfo_global_variables import set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 from numpy import array
+import tests.benchmarks
 
 
 class myOptions():
@@ -35,7 +36,7 @@ class Test_sqpdfo(unittest.TestCase):
     """
     def setUp(self):
 
-        set_prob(3)
+        self.args = tests.benchmarks.get(3)
         set_threshold(1e-08)
         set_fileoutput(1)
         set_simul_not_initialized(1)
@@ -51,7 +52,7 @@ class Test_sqpdfo(unittest.TestCase):
          Test which compare python and matlab results
          test runs with whichmodel = 0 in sqpdfo.py
         """
-        x,lm,info = sqpdfo_(self.options)
+        x,lm,info = sqpdfo_(self.options, *self.args)
         correctx = array([ -0.5, 0.0, 0.5])
         correctlm = array([[0,-0.000005713064576,0,2.,-1.]])
 

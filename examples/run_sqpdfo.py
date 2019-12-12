@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from runtime import *
-import sqpdfo_global_variables as glob
-from sqpdfo import sqpdfo_
+
+from sqpdfo.sqpdfo import sqpdfo_
 import numpy as np
 
 ###############################################################################
@@ -41,8 +40,7 @@ class optionsClass:
 def func_f(xvector):
     # 2D Rosenbrock function
     f =  (1-xvector[0])**2 + 100*(xvector[1]-xvector[0]**2)**2
-    msg = 0
-    return f,msg
+    return f
 
 
 def func_c(xvector):
@@ -54,13 +52,9 @@ def func_c(xvector):
     ci = np.zeros(1)
     ci[0] = - xvector[0] - xvector[1] + 2    
     c = np.concatenate((ce,ci))  # equalities first !!!
-    msg = 0
-    return c, msg
+    return c
 
 if __name__ == '__main__':
-
-    # set problem number (100 is userdefined problem)
-    glob.set_prob(100)  # do not modify this number!
 
     # initialize start values
     x0 = np.array([[-1.2,1.0]])
@@ -76,7 +70,7 @@ if __name__ == '__main__':
     if me+mi > 0:
         x, lm, info = sqpdfo_(options, func_f, x0, lb, ub, me, mi, func_c)
     else:
-        x, lm, info = sqpdfo_(options, func_f, x0, lb, ub, None, None, None)
+        x, lm, info = sqpdfo_(options, func_f, x0, lb, ub)
 
     # printout results
     print('')

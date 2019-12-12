@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sqpdfo.sqpdfo_init_prob import sqpdfo_init_prob_
 from sqpdfo.sqpdfo_main import sqpdfo_main_
 import sqpdfo.sqpdfo_global_variables as glob
 from sqpdfo.sqpdfo_prelim import sqpdfo_prelim_
@@ -12,7 +11,7 @@ from numpy import array
 from sqpdfo.helper import *
 
 
-def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,func_c=None):
+def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,func_c=None, li=None, ui=None):
     """
 # [x,lm,info] = sqpdfo_(options)
 # [x,lm,info] = sqpdfo_(options,f,x0,lb,ub)
@@ -73,10 +72,7 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
 #   info.nsimul[1]: number of function evaluations
 #-----------------------------------------------------------------------
 """
-    # Get problem number
-    
-    prob = glob.get_prob()
-    
+
     # Some preliminary initializations
     
     x = array([])
@@ -93,26 +89,18 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
     if mi is None:
         mi = 0
 
-    # here we run an academic example from sqpdfo_func() or a Cutest example
-    if func_f is None and x0 is None and lb is None and ub is None:
-
-        # Initialize problem
-        x0, lb, ub, dxmin, li, ui, dcimin, infb, n, nb, mi, me, info = sqpdfo_init_prob_(prob, nargout=13)
-
-    # here we run a userdefined example (prob=100)
+    if func_f == None:
+        print('Error: Definition of the objective function (in func_f()) is missing !')
+        return x, lm, info
     else:
-        if func_f == None:
-            print('Error: Definition of the objective function (in func_f()) is missing !')
+        glob.set_filename_f(func_f)
+    if func_c == None:
+        glob.set_filename_cons('')
+        if me+mi>0:
+            print('Error: me+mi > 0 but no function handle func_c() for constraints is given!')
             return x, lm, info
-        else:
-            glob.set_filename_f(func_f)
-        if func_c == None:
-            glob.set_filename_cons('')
-            if me+mi>0:
-                print('Error: me+mi > 0 but no function handle func_c() for constraints is given!')
-                return x, lm, info
-        else:
-            glob.set_filename_cons(func_c)
+    else:
+        glob.set_filename_cons(func_c)
 
     # Check right format of x and bounds lb and ub
     
@@ -143,12 +131,16 @@ def sqpdfo_(options_=None,func_f=None,x0=None,lb=None,ub=None,me=None,mi=None,fu
 
     if mi:
 
+        if li is None:
+            li = -np.ones(mi + me)*1e9
+        if ui is None:
+            ui = np.ones(mi + me) * 1e9
+
         # handling of two-sided inequalities in CUTEst
-        if prob == 1000:
-            for i in range(0, mi + me):
-                if li[i] < ui[i]:
-                    if li[i] > -1e7 and ui[i] < 1e7:
-                        mi = mi + 1
+        for i in range(0, mi + me):
+            if li[i] < ui[i]:
+                if li[i] > -1e7 and ui[i] < 1e7:
+                    mi = mi + 1
 
         glob.set_nbr_slacks(mi)
         glob.set_slacks(np.zeros((mi, 1)))

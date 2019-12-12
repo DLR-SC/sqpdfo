@@ -7,9 +7,9 @@ Created on Thu Nov 13 14:55:53 2014
 
 import unittest
 from sqpdfo.sqpdfo_func import *
-from sqpdfo.sqpdfo_global_variables import set_prob
+import sqpdfo.sqpdfo_global_variables as glob
 from numpy import array, double
-
+from tests.benchmarks import set_test_prob
 
 class Test_sqpdfo_func(unittest.TestCase):
     """
@@ -27,7 +27,7 @@ class Test_sqpdfo_func(unittest.TestCase):
         """
           Test with problem 5, results compared with matlab
         """
-        set_prob(5)
+        set_test_prob(5)
         
         msg,f,ci,ce = sqpdfo_func_(self.x)
         

@@ -539,9 +539,10 @@ import unittest
 from sqpdfo.sqpdfo_prelim import *
 from sqpdfo.sqpdfo_evalfgh import *
 import numpy as np
-from sqpdfo.sqpdfo_global_variables import set_prob, set_check_condition, set_simul_not_initialized
+from sqpdfo.sqpdfo_global_variables import set_check_condition, set_simul_not_initialized
 from numpy import array
 from sqpdfo import helper
+from tests.benchmarks import set_test_prob
 
 
 class myDummyOptions():
@@ -609,7 +610,7 @@ class Test_sqpdfo_prelim(unittest.TestCase):
         self.dstatus = array([])
         
         self.options = myDummyOptions()
-        set_prob(3)
+        set_test_prob(3)
         set_check_condition(0)
         set_simul_not_initialized(1)
         self.abs_tol=1e-8

@@ -848,10 +848,11 @@ ans =
 import unittest
 from sqpdfo.sqpdfo_evalfgh import sqpdfo_evalfgh_
 from sqpdfo.sqpdfo_main import *
-from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
+from sqpdfo.sqpdfo_global_variables import set_threshold, set_fileoutput,set_simul_not_initialized, set_check_condition
 import numpy as np
 from numpy import array, infty
 from sqpdfo import helper
+from tests.benchmarks import set_test_prob
 
 
 class dummyInfo():
@@ -905,7 +906,7 @@ class Test_sqpdfo_main(unittest.TestCase):
     def setUp(self):
         
         set_threshold(1.000000000000000e-08)
-        set_prob(3)     
+        set_test_prob(3)
         set_fileoutput(1)
         set_simul_not_initialized(1)
         set_check_condition(0)

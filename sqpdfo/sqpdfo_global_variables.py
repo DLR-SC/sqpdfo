@@ -37,10 +37,6 @@ class sqpdfo_global_variables:
     global slacks
     slacks = None
 
-def set_prob(value):
-	global prob
-	prob = value
-
 def set_prob_cuter(prob_cuter, params):
     global cproblem
     #Warning : here the pyCUTEst interface from this website has to be 
@@ -107,15 +103,6 @@ def set_nbr_slacks(value):
 def set_slacks(value):
     global slacks
     slacks = value
-    
-
-def get_prob():
-    if prob is None:
-        sys.exit('Problem number is not set!\n'\
-            'Please import sqpdfo_global_variables and use set_prob(nbr)\n'\
-            'where nbr is 1,...,5 for test examples or 100 for a user defined problem.')
-    else:
-        return prob
 
 def get_prob_cuter():
     return cproblem

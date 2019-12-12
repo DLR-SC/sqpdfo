@@ -8,10 +8,11 @@ Created on Tue Dec 02 17:32:15 2014
 
 import unittest
 from sqpdfo.runtime import *
-from sqpdfo.sqpdfo_global_variables import set_prob, set_threshold,get_prob, set_check_condition
+from sqpdfo.sqpdfo_global_variables import set_threshold, set_check_condition
 from sqpdfo.sqpdfo import sqpdfo_
 from numpy import array, zeros, arange, double
 from sqpdfo import helper
+import tests.benchmarks
 
 
 class Test_run_sqpdfo(unittest.TestCase):
@@ -29,7 +30,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         """
          Test which compare python and matlab results
         """
-        set_prob(1)
+        args = tests.benchmarks.get(1)
         set_check_condition(0)
         set_threshold(1e-08)
 
@@ -47,7 +48,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
 
-        x,lm,info=sqpdfo_(options)
+        x,lm,info=sqpdfo_(options, *args)
 
         self.assertTrue(compare_array(x, array([[1.950000000000000,0.262499999999991]]), 1e-5, 1e-5))
         self.assertTrue(compare_array(lm, array([[-0.6375,0,  0.7375]]), self.abs_tol, self.rel_tol))
@@ -65,7 +66,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         """
          Test which compare python and matlab results
         """
-        set_prob(2) 
+        args = tests.benchmarks.get(2)
         set_check_condition(0)
         set_threshold(1e-08)
 
@@ -83,7 +84,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
 
-        x,lm,info=sqpdfo_(options)
+        x,lm,info=sqpdfo_(options, *args)
 
         self.assertTrue(compare_array(x, array([[   0.333326758778846,  0.666659126169760]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[0,0,    -1.333312643708242]]), self.abs_tol, self.rel_tol))
@@ -103,7 +104,7 @@ class Test_run_sqpdfo(unittest.TestCase):
          Test which compare python and matlab results
         """
         set_check_condition(0)
-        set_prob(3)
+        args = tests.benchmarks.get(3)
         set_threshold(1e-08)
 
         options = helper.dummyUnionStruct()
@@ -120,7 +121,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
 
-        x,lm,info=sqpdfo_(options)
+        x,lm,info=sqpdfo_(options, *args)
 
         self.assertTrue(compare_array(x, array([[-0.5,0,0.5]]), self.abs_tol, self.rel_tol))
         self.assertTrue(compare_array(lm, array([[ 0, -0.000005713064576 ,0,   1.999997749517402,  -0.999996152071198]]), self.abs_tol, self.abs_tol))
@@ -139,7 +140,7 @@ class Test_run_sqpdfo(unittest.TestCase):
          Test which compare python and matlab results
         """
         set_check_condition(0)
-        set_prob(4)
+        args = tests.benchmarks.get(4)
         set_threshold(1e-08)
 
         options = helper.dummyUnionStruct()
@@ -156,7 +157,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
 
-        x,lm,info=sqpdfo_(options)
+        x,lm,info=sqpdfo_(options, *args)
 
         self.assertTrue(compare_array(x, array([[ -0.5,  0.0,   0.5,   1.0]]), self.abs_tol, 1e-5))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,1.999999758015728,-0.999999892175830,-0.333333335490867]]), self.abs_tol, 1e-6))
@@ -173,7 +174,6 @@ class Test_run_sqpdfo(unittest.TestCase):
          Test which compare python and matlab results
         """
         set_check_condition(0)
-        set_prob(5)
         set_threshold(1e-08)
 
         options = helper.dummyUnionStruct()
@@ -190,7 +190,7 @@ class Test_run_sqpdfo(unittest.TestCase):
         options.whichmodel = 'subbasis'
         options.final_degree = 'quadratic'
 
-        x,lm,info=sqpdfo_(options)
+        x,lm,info=sqpdfo_(options, *tests.benchmarks.get(5))
 
         self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1e-3, 1e-4))
         self.assertTrue(compare_array(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]), 1e-3, 1e-4))

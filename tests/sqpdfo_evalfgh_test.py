@@ -8,9 +8,8 @@ Created on Fri Nov 14 16:28:06 2014
 import unittest
 from sqpdfo.sqpdfo_evalfgh import *
 from sqpdfo.sqpdfo_func import *
-from sqpdfo.sqpdfo_global_variables import set_prob
 from numpy import array, double
-
+from tests.benchmarks import set_test_prob
 
 class Test_sqpdfo_evalfgh(unittest.TestCase):
     """
@@ -21,7 +20,7 @@ class Test_sqpdfo_evalfgh(unittest.TestCase):
         self.key = 2
         self.xy = array([[-2, 2, 2, 1, 1]]).T
         set_simul_not_initialized(0)
-        set_prob(5)
+        set_test_prob(5)
 
     def test_evalfgh(self):
         """
