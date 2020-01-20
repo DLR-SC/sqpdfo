@@ -29,6 +29,10 @@ def isvector_or_scalar_(a):
         return a.size and a.ndim-a.shape.count(1) <= 1
     except:
         return False
+
+
+def disp_(*args):
+    print(strcat_(*args))
     
 
 def find_(a,n=None,d=None,nargout=1):

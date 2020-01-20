@@ -528,13 +528,12 @@ def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,
             fprintf_(options.fout,'  \n')
         fprintf_(options.fout,'  \n')
     if options.verbose >= 4:
-        fprintf_(options.fout,'%s'%(values.sline))
-        fprintf_(options.fout,'sqpdfo optimization solver\n\n')
+        fprintf_(options.fout,'\nSQPDFO optimization solver\n\n')
         if isinstance(func, types.FunctionType):
             func_name=str(func)
         else:
             func_name=copy(func)
-        fprintf_(options.fout,'  name: "%s"\n'%(func_name))
+        fprintf_(options.fout,'  function name: "%s"\n'%(func_name))
         fprintf_(options.fout,'  dimensions:\n')
         fprintf_(options.fout,'  . variables (n):               %4i\n'%(n))
         if nb > 0:
@@ -545,10 +544,8 @@ def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,
             fprintf_(options.fout,'  . equality constraints (me):   %4i\n'%(me))
         fprintf_(options.fout,'  required tolerances for optimality:\n')
         if nb + mi + me > 0:
-            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol[0]))
-            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol[1]))
-            if nb + mi > 0:
-                fprintf_(options.fout,'  . complementarity                 %8.2e\n'%(options.tol[2]))
+            fprintf_(options.fout,'  . gradient of the Lagrangian      %8.2e\n'%(options.tol_grad))
+            fprintf_(options.fout,'  . feasibility                     %8.2e\n'%(options.tol_feas))
         else:
             fprintf_(options.fout,'  . gradient of the cost function   %8.2e\n'%(options.tol[0]))
         fprintf_(options.fout,'  counters:\n')
@@ -557,7 +554,7 @@ def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,
         fprintf_(options.fout,'  algorithm:\n')
         fprintf_(options.fout,'  . globalization by trust regions\n')
         fprintf_(options.fout,'  various input/initial values:\n')
-        if (options.algo_method == values.quasi_newton) and (nb + mi + me == 0) and (options.df1 > 0) and (info.f > 0):
+        if  (nb + mi + me == 0) and (options.df1 > 0) and (info.f > 0):
             fprintf_(options.fout,'  . expected initial decrease       %8.2e\n'%(options.df1 * info.f))
         if nb + mi > 0:
             fprintf_(options.fout,'  . infinite bound threshold        %8.2e\n'%(options.inf))
@@ -612,9 +609,6 @@ def sqpdfo_prelim_(func_=None,x0_=None,lm0_=None,Delta0_=None,lb_=None,ub_=None,
         if me:
             fprintf_(options.fout,'  . |ce|_inf                        %8.2e\n'\
             %(norm_(feas[n + mi:n + mi + me],inf)))
-        if nb + mi > 0:
-            fprintf_(options.fout,'  . |complementarity|_inf           %8.2e\n'\
-            %(norm_(compl,inf)))
         fprintf_(options.fout,'  tunings:\n')
         fprintf_(options.fout,'  . printing level                  %0i\n'\
         %(options.verbose))
