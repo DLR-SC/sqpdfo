@@ -3,6 +3,7 @@ SQPDFO Optimizer
 ================
 
 [![Build](https://github.com/dlr-sc/sqpdfo/workflows/sqpdfo/badge.svg)](https://github.com/DLR-SC/sqpdfo/actions?query=workflow%3Asqpdfo+branch%3Amaster)
+[![Cite](https://img.shields.io/badge/doi-10.1007%2Fs11590--014--0830--y%20-blue)](https://doi.org/10.1007/s11590-014-0830-y)
 
 This is the SQPDFO (Sequential-Quadratic-Programming Derivative-Free Optimization) 
 Optimizer for generally  constrained nonlinear optimization without derivatives,
