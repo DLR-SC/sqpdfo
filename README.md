@@ -1,14 +1,12 @@
 
 SQPDFO Optimizer
+================
 
-(Sequential-Quadratic-Programming Derivative-Free Optimization)
 
-===============================================================================
-
-This is a Python implementation of the SQPDFO Optimizer 
-for generally constrained nonlinear optimization without derivatives,
+This is the SQPDFO (Sequential-Quadratic-Programming Derivative-Free Optimization) 
+Optimizer for generally  constrained nonlinear optimization without derivatives,
 developed by A. Troeltzsch at German Aerospace Center (DLR).
-See license information in SQPDFO_license.txt.
+See license information in LICENSE.
 
 SQPDFO is a further development of ECDFO and it uses parts of BCDFO.
 
