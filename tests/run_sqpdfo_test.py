@@ -11,6 +11,7 @@ from sqpdfo.runtime import *
 from sqpdfo.sqpdfo_global_variables import set_threshold, set_check_condition
 from sqpdfo.sqpdfo import sqpdfo_
 from numpy import array, zeros, arange, double
+from numpy.testing import assert_almost_equal
 from sqpdfo import helper
 import tests.benchmarks
 
@@ -192,17 +193,17 @@ class Test_run_sqpdfo(unittest.TestCase):
 
         x,lm,info=sqpdfo_(options, *tests.benchmarks.get(5))
 
-        self.assertTrue(compare_array(x, array([[   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]]), 1e-3, 1e-4))
-        self.assertTrue(compare_array(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]), 1e-3, 1e-4))
-        self.assertTrue(compare_array(info.g, array([[ 0.091732656086263,  -0.098713648653029,  -0.086204099493362,     -0.206254630841206,  -0.206286791111375]]), 1e-4, 1e-4))
-        self.assertTrue(compare_array(info.ae, array([[-3.43427074714240,	3.19140039544429,	3.65452199155318,	1.52740705050108	,1.52716892687853],
+        assert_almost_equal(x, array([   -1.717135373541669,1.595700197732079,1.827260995778992,0.763703525309065,0.763584463389690]), decimal=3)
+        assert_almost_equal(lm, array([[ 0,0,0,0,0, 0.040162755804678,-0.037957678618516, 0.005222725990309]]).T, decimal=3)
+        assert_almost_equal(info.g.T, array([[ 0.091732656086263,  -0.098713648653029,  -0.086204099493362,     -0.206254630841206,  -0.206286791111375]]), decimal=4)
+        assert_almost_equal(info.ae, array([[-3.43427074714240,	3.19140039544429,	3.65452199155318,	1.52740705050108	,1.52716892687853],
 [-1.50249321407029e-11,	1.82726099577928	,1.59570019773225	,-3.81792231695518	,-3.81851762654697],
-[8.84566167319830,	7.63877736315284,	2.39648693851626e-11	,3.91573621289396e-11,	1.95315487528657e-11]]), 1,1e-4))
-        self.assertTrue(compare_array(info.ce,    1.0e-07 *array([  0.661051284822634,  -0.005370299760443, -0.042228007757217]),self.abs_tol, self.rel_tol))
+[8.84566167319830,	7.63877736315284,	2.39648693851626e-11	,3.91573621289396e-11,	1.95315487528657e-11]]), decimal=3)
+        assert_almost_equal(info.ce.T,    1.0e-07 *array([[  0.661051284822634,  -0.005370299760443, -0.042228007757217]]), decimal=5)
         self.assertEqual(info.flag,0)
-        self.assertAlmostEqual(info.f,      0.053949845718415,places=7)
+        assert_almost_equal(info.f,      0.053949845718415, decimal=7)
         self.assertEqual(info.compl,0)
-        self.assertTrue(compare_array(info.glag, array([0.,0.,0.,0.,0.]), 1e-4, 1e-4))
+        assert_almost_equal(info.glag, array([[0.,0.,0.,0.,0.]]).T, decimal=4)
     
 if __name__ == '__main__':
     unittest.main()
