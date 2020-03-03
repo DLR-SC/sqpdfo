@@ -15,18 +15,23 @@ SQPDFO is a further development of ECDFO and it uses parts of BCDFO.
 
 To run the optimizer you will need the Python packages numpy and scipy:
 
->pip install numpy
->pip install scipy
+```
+ pip install numpy scipy
+```
 
 -------------------------------------------------------------------------------
 
-Then you launch SQPDFO by:
+Then you launch the SQPDFO examples by:
 
->python run_sqpdfo.py 
+```
+ python run_sqpdfo.py
+```
 
 or 
 
->python run_sqpdfo_academic_examples.py
+```
+ python run_sqpdfo_academic_examples.py
+```
 
 -------------------------------------------------------------------------------
 
@@ -58,14 +63,14 @@ If you want to use SQPDFO to solve problems from the CUTEst library:
 
 If this code is of any use to you, please cite the following papers:
 
-Tröltzsch, Anke (2016) 
-A Sequential Quadratic Programming Algorithm for Equality-Constrained Optimization 
-without Derivatives. Optimization Letters, 10 (2), pages 383-399. Springer. 
-DOI: 10.1007/s11590-014-0830-y ISSN 1862-4472 
+Tröltzsch, Anke (2016):
+*A Sequential Quadratic Programming Algorithm for Equality-Constrained Optimization 
+without Derivatives.* Optimization Letters, 10 (2), pages 383-399. Springer. 
+[DOI: 10.1007/s11590-014-0830-y](https://doi.org/10.1007/s11590-014-0830-y) ISSN 1862-4472
 
-Serge Gratton, Philippe L. Toint, and Anke Tröltzsch (2011) 
-An active-set trust-region method for derivative-free nonlinear bound-constrained 
-optimization. Optimization Methods and Software, 26 (4-5), pages 873-894. 
-DOI: 10.1080/10556788.2010.549231 
+Serge Gratton, Philippe L. Toint, and Anke Tröltzsch (2011):
+*An active-set trust-region method for derivative-free nonlinear bound-constrained 
+optimization.* Optimization Methods and Software, 26 (4-5), pages 873-894. 
+[DOI: 10.1080/10556788.2010.549231](https://doi.org/10.1080/10556788.2010.549231)
 
 -------------------------------------------------------------------------------
