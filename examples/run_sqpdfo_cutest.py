@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from runtime import *
+#from runtime import *
 import sqpdfo_global_variables as glob
-from sqpdfo import sqpdfo_
+import sqpdfo
 import pycutest
 
 ###############################################################################
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     opts = optionsClass()
     
     # call run_sqpdfo_cutest
-    x,lm,info = sqpdfo_(opts)
+    x,lm,info = sqpdfo.optimize(opts)
 
     # final printout
     print('')

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqpdfo.sqpdfo import sqpdfo_
+import sqpdfo
 import tests.benchmarks
 
 ###############################################################################
@@ -50,9 +50,9 @@ if __name__ == '__main__':
     opts = optionsClass()
    
     args = tests.benchmarks.get(prob)
-    x, lm, info = sqpdfo_(opts, *args)
+    x, lm, info = sqpdfo.optimize(opts, *args)
    
-    # x, lm, info = sqpdfo_(opts)
+    # x, lm, info = sqpdfo.optimize(opts)
     
     # final printout
     print('x* = '+str(x))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqpdfo.sqpdfo import sqpdfo_
+import sqpdfo
 import numpy as np
 
 ###############################################################################
@@ -68,9 +68,9 @@ if __name__ == '__main__':
 
     # call SQPDFO
     if me+mi > 0:
-        x, lm, info = sqpdfo_(options, func_f, x0, lb, ub, me, mi, func_c)
+        x, lm, info = sqpdfo.optimize(options, func_f, x0, lb, ub, me, mi, func_c)
     else:
-        x, lm, info = sqpdfo_(options, func_f, x0, lb, ub)
+        x, lm, info = sqpdfo.optimize(options, func_f, x0, lb, ub)
 
     # printout results
     print('')
